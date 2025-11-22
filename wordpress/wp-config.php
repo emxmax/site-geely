@@ -26,7 +26,7 @@ define( 'DB_NAME', 'geely' );
 define( 'DB_USER', 'root' );
 
 /** Database password */
-define( 'DB_PASSWORD', 'root' );
+define( 'DB_PASSWORD', 'root@123' );
 
 /** Database hostname */
 define( 'DB_HOST', 'localhost' );
@@ -56,6 +56,7 @@ define( 'AUTH_SALT',        'j5!ii?SFAwOq+guiRg|H ETIzY*epD4w+6`i@Rk9?wWZ>?$gTVZ
 define( 'SECURE_AUTH_SALT', 'Xbl6ZCWsdIioxfaVB^|-tIkAz~Jfjud~K2i?.e3 U8PgFYULX~B<bW9;1L]D7Z*i' );
 define( 'LOGGED_IN_SALT',   'lV!.AYmGk&k.,d%[_Pe-/lnm^G.|6`oQq63dAW+*!+{A8P-;V^YpLku[{O^?VK>[' );
 define( 'NONCE_SALT',       'fp|nO}<qFu!g`yxG|D8,4-PEtJ,BGh >=fbzVJ2U@#:@*1e*j;8hmI2/Z,?1#:Ug' );
+define( 'ACF_PRO_LICENSE', 'MjhkMTQ5ODIyY2IyNWRmOTlhNjEwMDg0MGUwNmI4NTU3OTQyNWEwOTZhN2M4MjJlOGQ0Mzll' );
 
 /**#@-*/
 
