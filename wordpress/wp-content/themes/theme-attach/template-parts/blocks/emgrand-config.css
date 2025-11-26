@@ -1,0 +1,412 @@
+/* ================================
+   EMGRAND – Configurador
+================================ */
+
+.emg-config {
+  position: relative;
+  width: 100%;
+  padding: 72px 24px 80px;
+  color: #03050f;
+
+  /* Fondo por defecto si no hay imagen */
+  background-color: #e3e3e3;
+
+  /* Imágenes desde CSS vars (inline style en PHP) */
+  background-image: var(--emg-config-bg-desktop);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.emg-config__inner {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+/* Top: título + tabs arriba */
+
+.emg-config__top {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+  align-items: flex-start;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.emg-config__header {
+  max-width: 420px;
+}
+
+.emg-config__eyebrow {
+  font-size: 14px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin: 0 0 10px;
+  opacity: 0.8;
+}
+
+.emg-config__title {
+  font-size: 36px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* Tabs de versiones (flotando arriba a la derecha tipo Figma) */
+
+.emg-config__versions {
+  position: absolute;
+  top: 6px;
+  right: 0;
+  display: inline-flex;
+  gap: 10px;
+  background-color: rgba(255, 255, 255, 0.96);
+  border-radius: 999px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
+}
+
+.emg-config__version {
+  border: none;
+  padding: 8px 22px;
+  border-radius: 999px;
+  font-size: 13px;
+  cursor: pointer;
+  background: transparent;
+  color: #444;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.emg-config__version.is-active {
+  background: #03050f;
+  color: #fff;
+}
+
+/* Paneles */
+
+.emg-config__panels {
+  position: relative;
+}
+
+.emg-config__panel {
+  display: none;
+}
+
+.emg-config__panel.is-active {
+  display: block;
+}
+
+/* Layout principal: auto a la izquierda, info a la derecha */
+
+.emg-config__layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: 72px;
+  align-items: center;
+}
+
+/* Visual (imagen + colores + 360) */
+
+.emg-config__visual {
+  position: relative;
+}
+
+.emg-config__image-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+.emg-config__image {
+  display: none;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 32px 40px rgba(0, 0, 0, 0.35));
+}
+
+.emg-config__image.is-active {
+  display: block;
+}
+
+/* Tarjeta de colores tipo maqueta */
+
+.emg-config__colors {
+  position: absolute;
+  left: 40px;
+  top: 90px;
+  padding: 32px 16px;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 18px;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22);
+  max-height: fit-content;
+}
+
+.emg-config__colors-label {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.emg-config__colors-list {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.emg-config__color-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: var(--emg-color, #ccc);
+  cursor: pointer;
+  padding: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.16);
+}
+
+.emg-config__color-dot.is-active {
+  border-color: #03050f;
+}
+
+/* Icono 360 centrado bajo el auto */
+
+.emg-config__360 {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+}
+
+.emg-config__360-img {
+  width: 76px;
+  height: auto;
+  opacity: 0.9;
+}
+
+/* Info derecha */
+
+.emg-config__info {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 24px;
+}
+
+/* El título de modelo solo se usa en mobile;
+   en desktop ya tenemos el título grande arriba */
+@media (min-width: 769px) {
+  .emg-config__model-title {
+    display: none;
+  }
+}
+
+.emg-config__model-title {
+  font-size: 22px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin: 0 0 10px;
+}
+
+/* Franja inferior: 3 bloques (Precio, Aros, Hasta) */
+
+.emg-config__bottom-grid {
+  margin-top: 56px;
+  display: grid;
+  grid-template-columns: 1.8fr 1.1fr 1.1fr; /* bloque de precio más ancho */
+  column-gap: 64px;
+  row-gap: 24px;
+}
+
+.emg-config__prices {
+  margin-top: 4px;
+}
+
+.emg-config__price-label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  margin: 0 0 6px;
+  opacity: 0.75;
+}
+
+.emg-config__price-line {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.emg-config__price-usd,
+.emg-config__price-local {
+  display: block;
+  font-weight: 700;
+  font-size: 26px;
+}
+
+/* Specs: Aros y Hasta como bloques separados */
+
+.emg-config__specs {
+  display: flex;
+  gap: 64px;
+}
+
+.emg-config__spec {
+  min-width: 0;
+}
+
+.emg-config__spec-label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  opacity: 0.7;
+}
+
+.emg-config__spec-main {
+  display: block;
+  font-size: 24px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.emg-config__spec-sub {
+  display: block;
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+/* Botones */
+
+.emg-config__cta-row {
+  margin-top: 26px;
+  display: flex;
+  gap: 18px;
+}
+
+.emg-config__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 28px;
+  font-size: 14px;
+  text-decoration: none;
+  border-radius: 0;
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.emg-config__btn--primary {
+  background: #03050f;
+  color: #fff;
+  border-color: #03050f;
+}
+
+.emg-config__btn--primary:hover {
+  background: #202430;
+}
+
+.emg-config__btn--secondary {
+  background: transparent;
+  color: #03050f;
+  border-color: #03050f;
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 1200px) {
+  .emg-config__layout {
+    column-gap: 48px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .emg-config__layout {
+    grid-template-columns: 1fr;
+    row-gap: 40px;
+  }
+
+  .emg-config__top {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  /* Tabs dejan de ser flotantes y pasan a ser normales */
+  .emg-config__versions {
+    position: static;
+    justify-self: flex-start;
+  }
+
+  .emg-config__colors {
+    left: 40px;
+    bottom: 40px;
+  }
+
+  .emg-config__360 {
+    bottom: 6px;
+  }
+
+  .emg-config__bottom-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .emg-config__specs {
+    flex-direction: column;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .emg-config {
+    padding: 40px 16px 52px;
+    /* En mobile usamos la imagen mobile si existe */
+    background-image: var(--emg-config-bg-mobile, var(--emg-config-bg-desktop));
+  }
+
+  .emg-config__inner {
+    max-width: 100%;
+  }
+
+  .emg-config__title {
+    font-size: 24px;
+  }
+
+  .emg-config__versions {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .emg-config__image-wrapper {
+    margin-left: 0;
+  }
+
+  .emg-config__colors {
+    position: static;
+    margin-top: 16px;
+  }
+
+  .emg-config__360 {
+    position: static;
+    transform: none;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .emg-config__bottom-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .emg-config__cta-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .emg-config__btn {
+    width: 100%;
+  }
+}

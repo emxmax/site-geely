@@ -9,7 +9,7 @@ if (! defined('ABSPATH')) {
 }
 
 /**
- * Encolar estilos y scripts del tema
+ * Encolar estilos y scripts generales del tema
  */
 function theme_attach_assets()
 {
@@ -21,7 +21,7 @@ function theme_attach_assets()
         wp_get_theme()->get('Version')
     );
 
-    // Swiper CSS
+    // Swiper CSS (para el hero)
     wp_enqueue_style(
         'swiper',
         'https://unpkg.com/swiper/swiper-bundle.min.css',
@@ -29,7 +29,7 @@ function theme_attach_assets()
         '11.0.0'
     );
 
-    // Swiper JS
+    // Swiper JS (para el hero)
     wp_enqueue_script(
         'swiper',
         'https://unpkg.com/swiper/swiper-bundle.min.js',
@@ -71,11 +71,30 @@ function theme_attach_register_acf_blocks()
             'align' => false,
         ],
     ]);
+
+    // 🆕 Bloque EMGRAND – Configurador
+    acf_register_block_type([
+        'name'            => 'emgrand-config',
+        'title'           => __('Emgrand - Configurador', 'theme-attach'),
+        'description'     => __('Configurador de versiones, colores y precios del modelo Emgrand', 'theme-attach'),
+        'render_template' => 'template-parts/blocks/emgrand-config.php',
+        'category'        => 'layout',
+        'icon'            => 'admin-generic',
+        'keywords'        => ['emgrand', 'config', 'versiones', 'colores'],
+        'supports'        => [
+            'align' => false,
+        ],
+    ]);
 }
 add_action('acf/init', 'theme_attach_register_acf_blocks');
 
+/**
+ * Assets específicos del HERO Emgrand
+ */
 function emg_hero_assets()
 {
+    // (OJO: aquí ya usas otros handles para Swiper; puedes dejarlo así
+    // o unificar luego si quieres.)
 
     wp_enqueue_style(
         'swiper-css',
@@ -103,5 +122,26 @@ function emg_hero_assets()
         true
     );
 }
-
 add_action('wp_enqueue_scripts', 'emg_hero_assets');
+
+/**
+ * 🆕 Assets específicos del bloque EMGRAND – Configurador
+ */
+function emg_config_assets()
+{
+    wp_enqueue_style(
+        'emg-config-css',
+        get_stylesheet_directory_uri() . '/template-parts/blocks/emgrand-config.css',
+        [],
+        null
+    );
+
+    wp_enqueue_script(
+        'emg-config-js',
+        get_stylesheet_directory_uri() . '/assets/js/emg-config.js',
+        [],
+        null,
+        true
+    );
+}
+add_action('wp_enqueue_scripts', 'emg_config_assets');
