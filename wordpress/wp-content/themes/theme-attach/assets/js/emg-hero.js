@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loop: true,
         effect: 'fade',
         speed: 1200,
+        autoHeight: true,
         autoplay: {
             delay: 5000,
             disableOnInteraction: false,

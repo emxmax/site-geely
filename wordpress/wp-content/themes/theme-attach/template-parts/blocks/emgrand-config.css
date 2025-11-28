@@ -4,9 +4,11 @@
 
 .emg-config {
   position: relative;
-  width: 100%;
-  padding: 72px 24px 80px;
+  max-width: 100%;
+  padding: 80px 24px 88px;
   color: #03050f;
+
+  margin-top: 0px !important;
 
   /* Fondo por defecto si no hay imagen */
   background-color: #e3e3e3;
@@ -31,7 +33,7 @@
   grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
   align-items: flex-start;
   gap: 40px;
-  margin-bottom: 40px;
+  margin: 0px 40px 40px 40px;
 }
 
 .emg-config__header {
@@ -47,10 +49,14 @@
 }
 
 .emg-config__title {
-  font-size: 36px;
-  letter-spacing: 0.18em;
   text-transform: uppercase;
   margin: 0;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 40px;
+  letter-spacing: 4px;
+  vertical-align: middle;
+  color: #333333;
 }
 
 /* Tabs de versiones (flotando arriba a la derecha tipo Figma) */
@@ -167,7 +173,7 @@
 }
 
 .emg-config__color-dot.is-active {
-  border-color: #03050f;
+  border-color: #027bff;
 }
 
 /* Icono 360 centrado bajo el auto */
@@ -175,7 +181,7 @@
 .emg-config__360 {
   position: absolute;
   left: 50%;
-  bottom: 18px;
+  bottom: -26px;
   transform: translateX(-50%);
 }
 
@@ -193,6 +199,7 @@
   flex-direction: column;
   justify-content: center;
   gap: 24px;
+  margin: 0 97px;
 }
 
 /* El título de modelo solo se usa en mobile;
@@ -215,7 +222,7 @@
 .emg-config__bottom-grid {
   margin-top: 56px;
   display: grid;
-  grid-template-columns: 1.8fr 1.1fr 1.1fr; /* bloque de precio más ancho */
+  grid-template-columns: 1fr 2fr; /* bloque de precio más ancho */
   column-gap: 64px;
   row-gap: 24px;
 }
@@ -225,11 +232,14 @@
 }
 
 .emg-config__price-label {
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
   margin: 0 0 6px;
   opacity: 0.75;
+
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 32px;
+  letter-spacing: 0px;
+  vertical-align: middle;
 }
 
 .emg-config__price-line {
@@ -243,7 +253,19 @@
 .emg-config__price-local {
   display: block;
   font-weight: 700;
-  font-size: 26px;
+  font-size: 48px;
+  line-height: 40px;
+  letter-spacing: 0px;
+}
+
+.emg-config__price-or {
+  font-family: Inter;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 0px;
+  text-align: center;
+  vertical-align: middle;
 }
 
 /* Specs: Aros y Hasta como bloques separados */
@@ -258,23 +280,48 @@
 }
 
 .emg-config__spec-label {
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  opacity: 0.7;
+  font-family: Inter;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 32px;
+  letter-spacing: 0px;
+  vertical-align: middle;
+  color: #212529;
 }
 
 .emg-config__spec-main {
   display: block;
-  font-size: 24px;
-  font-weight: 700;
   margin-top: 4px;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 40px;
+  letter-spacing: 0px;
 }
 
 .emg-config__spec-sub {
   display: block;
-  font-size: 13px;
   margin-top: 2px;
+  font-family: Inter;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 32px;
+  letter-spacing: 0px;
+}
+
+.emg-config__price-di {
+  font-family: Inter;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 32px;
+  letter-spacing: 0px;
+}
+
+.emg-config__spec-ve {
+  font-family: Inter;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 32px;
+  letter-spacing: 0px;
 }
 
 /* Botones */

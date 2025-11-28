@@ -21,7 +21,7 @@ function theme_attach_assets()
         wp_get_theme()->get('Version')
     );
 
-    // Swiper CSS (para el hero)
+    // Swiper CSS (para sliders globales)
     wp_enqueue_style(
         'swiper',
         'https://unpkg.com/swiper/swiper-bundle.min.css',
@@ -29,7 +29,7 @@ function theme_attach_assets()
         '11.0.0'
     );
 
-    // Swiper JS (para el hero)
+    // Swiper JS (para sliders globales)
     wp_enqueue_script(
         'swiper',
         'https://unpkg.com/swiper/swiper-bundle.min.js',
@@ -72,7 +72,7 @@ function theme_attach_register_acf_blocks()
         ],
     ]);
 
-    // 🆕 Bloque EMGRAND – Configurador
+    // Bloque EMGRAND – Configurador
     acf_register_block_type([
         'name'            => 'emgrand-config',
         'title'           => __('Emgrand - Configurador', 'theme-attach'),
@@ -85,17 +85,43 @@ function theme_attach_register_acf_blocks()
             'align' => false,
         ],
     ]);
+
+    // Nuevo bloque: Momentos Emgrand
+    acf_register_block_type([
+        'name'            => 'emgrand-moments',
+        'title'           => __('Emgrand - Momentos', 'theme-attach'),
+        'description'     => __('Sección "Hecho para cada momento" con galería de imágenes del producto', 'theme-attach'),
+        'render_template' => 'template-parts/blocks/emgrand-moments.php',
+        'category'        => 'layout',
+        'icon'            => 'images-alt2',
+        'keywords'        => ['emgrand', 'momentos', 'galeria', 'geely'],
+        'supports'        => [
+            'align' => false,
+        ],
+    ]);
+
+    // NUEVO BLOQUE: Diseño Emgrand (Exterior / Interior)
+    acf_register_block_type([
+        'name'            => 'emgrand-design',
+        'title'           => __('Emgrand - Diseño', 'theme-attach'),
+        'description'     => __('Sección de diseño con pestañas Exterior / Interior y slider de imágenes', 'theme-attach'),
+        'render_template' => 'template-parts/blocks/emgrand-design.php',
+        'category'        => 'layout',
+        'icon'            => 'format-gallery',
+        'keywords'        => ['emgrand', 'diseno', 'design', 'exterior', 'interior'],
+        'supports'        => [
+            'align' => false,
+        ],
+    ]);
 }
 add_action('acf/init', 'theme_attach_register_acf_blocks');
 
 /**
- * Assets específicos del HERO Emgrand
+ * Assets específicos de bloques Emgrand
  */
 function emg_hero_assets()
 {
-    // (OJO: aquí ya usas otros handles para Swiper; puedes dejarlo así
-    // o unificar luego si quieres.)
-
+    // Swiper (fallback si no viene del otro handle, pero lo mantenemos como lo tienes)
     wp_enqueue_style(
         'swiper-css',
         'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css'
@@ -109,26 +135,13 @@ function emg_hero_assets()
         true
     );
 
+    // HERO
     wp_enqueue_style(
         'emg-hero-css',
         get_stylesheet_directory_uri() . '/template-parts/blocks/emgrand-hero.css'
     );
 
-    wp_enqueue_script(
-        'emg-hero-js',
-        get_stylesheet_directory_uri() . '/assets/js/emg-hero.js',
-        ['swiper-js'],
-        null,
-        true
-    );
-}
-add_action('wp_enqueue_scripts', 'emg_hero_assets');
-
-/**
- * 🆕 Assets específicos del bloque EMGRAND – Configurador
- */
-function emg_config_assets()
-{
+    // CONFIGURADOR
     wp_enqueue_style(
         'emg-config-css',
         get_stylesheet_directory_uri() . '/template-parts/blocks/emgrand-config.css',
@@ -136,6 +149,32 @@ function emg_config_assets()
         null
     );
 
+    // MOMENTOS
+    wp_enqueue_style(
+        'emg-moments-css',
+        get_stylesheet_directory_uri() . '/template-parts/blocks/emgrand-moments.css',
+        [],
+        null
+    );
+
+    // NUEVO: DISEÑO
+    wp_enqueue_style(
+        'emg-design-css',
+        get_stylesheet_directory_uri() . '/template-parts/blocks/emgrand-design.css',
+        [],
+        null
+    );
+
+    // JS HERO
+    wp_enqueue_script(
+        'emg-hero-js',
+        get_stylesheet_directory_uri() . '/assets/js/emg-hero.js',
+        ['swiper-js'],
+        null,
+        true
+    );
+
+    // JS CONFIGURADOR
     wp_enqueue_script(
         'emg-config-js',
         get_stylesheet_directory_uri() . '/assets/js/emg-config.js',
@@ -143,5 +182,23 @@ function emg_config_assets()
         null,
         true
     );
+
+    // JS MOMENTOS
+    wp_enqueue_script(
+        'emg-moments-js',
+        get_stylesheet_directory_uri() . '/assets/js/emg-moments.js',
+        ['swiper-js'],
+        null,
+        true
+    );
+
+    // NUEVO: JS DISEÑO
+    wp_enqueue_script(
+        'emg-design-js',
+        get_stylesheet_directory_uri() . '/assets/js/emg-design.js',
+        ['swiper-js'],
+        null,
+        true
+    );
 }
-add_action('wp_enqueue_scripts', 'emg_config_assets');
+add_action('wp_enqueue_scripts', 'emg_hero_assets');
