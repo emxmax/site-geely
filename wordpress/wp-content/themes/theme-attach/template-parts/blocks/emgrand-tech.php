@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Block: EMGRAND – Tecnología Avanzada
  *
@@ -12,31 +13,16 @@
 
 if (!function_exists('get_field')) return;
 
-// Campos base del bloque
-$sub   = get_field('block_tech_subtitle');
+$sub = get_field('block_tech_subtitle');
 $title = get_field('block_tech_title');
-$desc  = get_field('block_tech_description');
+$desc = get_field('block_tech_description');
 $image = get_field('block_tech_image');
 $cards = get_field('block_tech_cards');
-
-// Fondos
-$bg_desktop = get_field('block_tech_bg_desktop');
-$bg_mobile  = get_field('block_tech_bg_mobile');
-
-// Generar variables CSS
-$style_attr = '';
-
-if (!empty($bg_desktop['url'])) {
-    $style_attr .= "--emg-tech-bg-desktop:url('". esc_url($bg_desktop['url']) ."');";
-}
-if (!empty($bg_mobile['url'])) {
-    $style_attr .= "--emg-tech-bg-mobile:url('". esc_url($bg_mobile['url']) ."');";
-}
 
 if (!$title) return;
 ?>
 
-<section class="emg-tech" style="<?php echo esc_attr($style_attr); ?>">
+<section class="emg-tech">
     <div class="emg-tech__inner">
 
         <!-- Header -->
@@ -55,29 +41,27 @@ if (!$title) return;
         <!-- Imagen principal -->
         <?php if (!empty($image['url'])): ?>
             <figure class="emg-tech__image-wrapper">
-                <img 
-                    src="<?php echo esc_url($image['url']); ?>" 
+                <img
+                    src="<?php echo esc_url($image['url']); ?>"
                     alt="<?php echo esc_attr($image['alt']); ?>"
                     class="emg-tech__image"
-                    loading="lazy"
-                >
+                    loading="lazy">
             </figure>
         <?php endif; ?>
 
         <!-- Cards -->
         <?php if (!empty($cards)): ?>
             <div class="emg-tech__cards">
-                <?php foreach ($cards as $card): 
-                    $icon   = $card['card_icon'];
+                <?php foreach ($cards as $card):
+                    $icon  = $card['card_icon'];
                     $ctitle = $card['card_title'];
                     $cdesc  = $card['card_description'];
                 ?>
                     <div class="emg-tech__card">
-
                         <?php if (!empty($icon['url'])): ?>
-                            <img src="<?php echo esc_url($icon['url']); ?>" 
-                                 alt="<?php echo esc_attr($icon['alt']); ?>"
-                                 class="emg-tech__card-icon">
+                            <img src="<?php echo esc_url($icon['url']); ?>"
+                                alt="<?php echo esc_attr($icon['alt']); ?>"
+                                class="emg-tech__card-icon">
                         <?php endif; ?>
 
                         <?php if ($ctitle): ?>
@@ -87,7 +71,6 @@ if (!$title) return;
                         <?php if ($cdesc): ?>
                             <p class="emg-tech__card-text"><?php echo esc_html($cdesc); ?></p>
                         <?php endif; ?>
-
                     </div>
                 <?php endforeach; ?>
             </div>
