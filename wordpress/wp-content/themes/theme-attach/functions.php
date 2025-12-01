@@ -86,7 +86,7 @@ function theme_attach_register_acf_blocks()
         ],
     ]);
 
-    // Nuevo bloque: Momentos Emgrand
+    // bloque: Momentos Emgrand
     acf_register_block_type([
         'name'            => 'emgrand-moments',
         'title'           => __('Emgrand - Momentos', 'theme-attach'),
@@ -109,6 +109,60 @@ function theme_attach_register_acf_blocks()
         'category'        => 'layout',
         'icon'            => 'format-gallery',
         'keywords'        => ['emgrand', 'diseno', 'design', 'exterior', 'interior'],
+        'supports'        => [
+            'align' => false,
+        ],
+    ]);
+
+    // Bloque EMGRAND – Tecnología Avanzada
+    acf_register_block_type([
+        'name'            => 'emgrand-tech',
+        'title'           => __('Emgrand - Tecnología Avanzada', 'theme-attach'),
+        'description'     => __('Bloque de tecnología con imagen y cards', 'theme-attach'),
+        'render_template' => 'template-parts/blocks/emgrand-tech.php',
+        'category'        => 'layout',
+        'icon'            => 'admin-generic',
+        'keywords'        => ['emgrand', 'tech', 'tecnologia'],
+        'supports'        => ['align' => false],
+    ]);
+
+    // Bloque: Experiencia Única
+    acf_register_block_type([
+        'name'            => 'emgrand-experience',
+        'title'           => __('Emgrand - Experiencia', 'theme-attach'),
+        'description'     => __('Sección "Una experiencia única" con cards de imagen + título y fondo admin.', 'theme-attach'),
+        'render_template' => 'template-parts/blocks/emgrand-experience.php',
+        'category'        => 'layout',
+        'icon'            => 'format-image',
+        'keywords'        => ['emgrand', 'experience', 'experiencia', 'cards'],
+        'supports'        => [
+            'align' => false,
+        ],
+    ]);
+
+    // Bloque EMGRAND – Seguridad
+    acf_register_block_type([
+        'name'            => 'emgrand-safety',
+        'title'           => __('Emgrand - Seguridad', 'theme-attach'),
+        'description'     => __('Sección de seguridad con tabs y slider de tarjetas', 'theme-attach'),
+        'render_template' => 'template-parts/blocks/emgrand-safety.php',
+        'category'        => 'layout',
+        'icon'            => 'shield',
+        'keywords'        => ['emgrand', 'seguridad', 'safety'],
+        'supports'        => [
+            'align' => false,
+        ],
+    ]);
+
+    // Bloque EMGRAND – CTA final "El momento es ahora"
+    acf_register_block_type([
+        'name'            => 'emgrand-cta',
+        'title'           => __('Emgrand - CTA Final', 'theme-attach'),
+        'description'     => __('Bloque CTA con imagen de fondo, título, descripción y botón Cotizar', 'theme-attach'),
+        'render_template' => 'template-parts/blocks/emgrand-cta.php',
+        'category'        => 'layout',
+        'icon'            => 'megaphone',
+        'keywords'        => ['emgrand', 'cta', 'cotizar', 'geely'],
         'supports'        => [
             'align' => false,
         ],
@@ -157,13 +211,46 @@ function emg_hero_assets()
         null
     );
 
-    // NUEVO: DISEÑO
+    // DISEÑO
     wp_enqueue_style(
         'emg-design-css',
         get_stylesheet_directory_uri() . '/template-parts/blocks/emgrand-design.css',
         [],
         null
     );
+
+    // TECNOLOGÍA
+    wp_enqueue_style(
+        'emg-tech-css',
+        get_stylesheet_directory_uri() . '/template-parts/blocks/emgrand-tech.css',
+        [],
+        null
+    );
+
+    // EXPERIENCIA ÚNICA
+    wp_enqueue_style(
+        'emg-experience-css',
+        get_stylesheet_directory_uri() . '/template-parts/blocks/emgrand-experience.css',
+        [],
+        null
+    );
+
+    // SEGURIDAD
+    wp_enqueue_style(
+        'emg-safety-css',
+        get_stylesheet_directory_uri() . '/template-parts/blocks/emgrand-safety.css',
+        [],
+        null
+    );
+
+    // CTA FINAL
+    wp_enqueue_style(
+        'emg-cta-css',
+        get_stylesheet_directory_uri() . '/template-parts/blocks/emgrand-cta.css',
+        [],
+        null
+    );
+
 
     // JS HERO
     wp_enqueue_script(
@@ -192,10 +279,19 @@ function emg_hero_assets()
         true
     );
 
-    // NUEVO: JS DISEÑO
+    // JS DISEÑO
     wp_enqueue_script(
         'emg-design-js',
         get_stylesheet_directory_uri() . '/assets/js/emg-design.js',
+        ['swiper-js'],
+        null,
+        true
+    );
+
+    // JS SEGURIDAD
+    wp_enqueue_script(
+        'emg-safety-js',
+        get_stylesheet_directory_uri() . '/assets/js/emg-safety.js',
         ['swiper-js'],
         null,
         true

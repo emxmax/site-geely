@@ -1,0 +1,169 @@
+/* =======================================
+   EMGRAND – CTA Final "El momento es ahora"
+======================================= */
+
+.emg-cta {
+  position: relative;
+  max-width: 100%;
+  min-height: 480px;
+  padding: 72px 24px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  margin-top: 0px !important;
+  /* Fondo desde ACF */
+  background-image: var(--emg-cta-bg-desktop);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #ffffff;
+}
+
+/* capa de degradado para mejorar lectura */
+.emg-cta__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.75) 0%,
+    rgba(0, 0, 0, 0.35) 40%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  pointer-events: none;
+}
+
+.emg-cta__inner {
+  position: relative;
+  max-width: 1240px;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  transform: translateX(60%);
+}
+
+.emg-cta__content {
+  text-align: right;
+}
+
+/* Título */
+
+.emg-cta__title {
+  margin: 0 0 24px;
+  text-transform: none;
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 40px;
+  letter-spacing: 0px;
+}
+
+/* Descripción */
+
+.emg-cta__description {
+  margin: 0 0 24px;
+  font-family: Inter;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 32px;
+  letter-spacing: 0px;
+  vertical-align: middle;
+}
+
+/* Botón */
+
+.emg-cta__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  border: 1px solid #ffffff;
+  background: transparent;
+  color: #ffffff;
+  text-decoration: none;
+  text-transform: none;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 40px;
+  letter-spacing: 0px;
+  text-align: center;
+  vertical-align: middle;
+  width: 177px;
+  height: 48px;
+}
+
+.emg-cta__button:hover {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media (max-width: 1024px) {
+  .emg-cta {
+    padding: 64px 16px;
+  }
+
+  .emg-cta__title {
+    font-size: 42px;
+  }
+
+  .emg-cta__description {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .emg-cta {
+    /* Fondo mobile si existe; si no, desktop */
+    background-image: var(--emg-cta-bg-mobile, var(--emg-cta-bg-desktop));
+    padding: 40px 16px 48px;
+    min-height: 434px;
+    align-items: end;
+  }
+
+  .emg-cta__inner {
+    justify-content: center;
+    transform: translateX(0);
+    margin: 32px 16px;
+  }
+
+  .emg-cta__content {
+    text-align: start;
+  }
+
+  .emg-cta__title {
+    font-size: 48px;
+    line-height: 40px;
+    letter-spacing: 0px;
+    margin-bottom: 20px;
+  }
+
+  .emg-cta__description {
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0px;
+    margin-bottom: 20px;
+  }
+
+  .emg-cta__button {
+    width: auto;
+    padding-inline: 28px;
+    width: 142px;
+  }
+
+  /* Degradado más centrado en mobile */
+  .emg-cta__overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.85) 0%,
+      rgba(0, 0, 0, 0.6) 40%,
+      rgba(0, 0, 0, 0.3) 100%
+    );
+  }
+}

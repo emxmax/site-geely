@@ -409,48 +409,157 @@
 
 @media (max-width: 768px) {
   .emg-config {
-    padding: 40px 16px 52px;
+    padding: 40px 16px 16px;
     /* En mobile usamos la imagen mobile si existe */
     background-image: var(--emg-config-bg-mobile, var(--emg-config-bg-desktop));
+    background-size: cover;
+    background-position: center top;
   }
 
+  /* El contenido se limita y centra, como en el diseño */
   .emg-config__inner {
-    max-width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  /* Título + tabs arriba */
+  .emg-config__top {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 0 0 8px;
   }
 
   .emg-config__title {
-    font-size: 24px;
+    font-size: 32px;
+    line-height: 40px;
+  }
+
+  .emg-config__version {
+    border-radius: 8px;
+    height: 44px;
+    font-size: 14px;
+    line-height: 20px;
   }
 
   .emg-config__versions {
-    width: 100%;
+    width: fit-content;
     justify-content: center;
     flex-wrap: wrap;
+    border-radius: 8px;
   }
 
+  /* === TARJETA BLANCA === */
+  .emg-config__panel {
+    padding: 0px 0px 24px;
+  }
+
+  /* La tarjeta se apila en columna:
+     primero INFO, luego VISUAL (auto + colores) */
+  .emg-config__layout {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+  }
+
+  .emg-config__info {
+    order: 1;
+    margin: 0;
+  }
+
+  .emg-config__visual {
+    order: 2;
+  }
+
+  /* Título de modelo visible en mobile */
+  .emg-config__model-title {
+    display: block;
+    font-size: 16px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin: 0 0 8px;
+  }
+
+  /* Bloque precio + specs más compacto */
+  .emg-config__bottom-grid {
+    margin-top: 12px;
+    grid-template-columns: 1fr;
+    column-gap: 18px;
+    row-gap: 18px;
+  }
+
+  .emg-config__price-label {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .emg-config__price-usd,
+  .emg-config__price-local,
+  .emg-config__spec-main {
+    font-size: 32px;
+    line-height: 40px;
+  }
+
+  .emg-config__price-or,
+  .emg-config__spec-label,
+  .emg-config__spec-sub,
+  .emg-config__price-di,
+  .emg-config__spec-ve {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  /* Auto centrado y más pequeño */
   .emg-config__image-wrapper {
-    margin-left: 0;
+    max-width: 100%;
+    margin: 8px auto 50px;
+    transform: translateX(0);
   }
 
+  /* Colores debajo del auto, dentro de la tarjeta */
   .emg-config__colors {
     position: static;
-    margin-top: 16px;
-  }
-
-  .emg-config__360 {
-    position: static;
-    transform: none;
+    margin: 16px auto;
+    padding: 14px 18px;
+    max-width: 116px;
     text-align: center;
-    margin-top: 10px;
   }
 
-  .emg-config__bottom-grid {
-    grid-template-columns: 1fr;
+  .emg-config__colors-label {
+    font-size: 12px;
+    margin-bottom: 8px;
   }
 
+  .emg-config__colors-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    justify-items: flex-start;
+  }
+
+  /* 360 debajo del selector de colores */
+  .emg-config__360 {
+    position: absolute;
+    text-align: center;
+    top: 190px;
+    transform: translateX(-50%);
+  }
+
+  .emg-config__360-img {
+    width: 64px;
+  }
+
+  .emg-config__specs {
+    flex-direction: row;
+    gap: 24px;
+  }
+
+  .emg-config__spec {
+    flex: 1;
+  }
+
+  /* CTAs en columna, full width (por si luego los activas) */
   .emg-config__cta-row {
     flex-direction: column;
     align-items: stretch;
+    margin-top: 20px;
   }
 
   .emg-config__btn {

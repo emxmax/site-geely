@@ -1,24 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const designBlocks = document.querySelectorAll('.emg-design');
+    const safetyBlocks = document.querySelectorAll('.emg-safety');
+    if (!safetyBlocks.length || typeof Swiper === 'undefined') return;
 
-    if (!designBlocks.length) return;
+    safetyBlocks.forEach((block) => {
+        const tabButtons = block.querySelectorAll('.emg-safety__tab');
+        const panels = block.querySelectorAll('.emg-safety__tab-panel');
 
-    designBlocks.forEach((block) => {
-        const tabButtons = block.querySelectorAll('.emg-design__tab');
-        const panels = block.querySelectorAll('.emg-design__tab-panel');
-
-        // Helper para actualizar estado de flechas
+        // --- Helper para actualizar estado de flechas ---
         const updateNavState = (swiper, prevBtn, nextBtn) => {
             if (!swiper || !prevBtn || !nextBtn) return;
 
-            // izquierda deshabilitada en el primer slide
+            // Izquierda deshabilitada en el primer slide
             if (swiper.isBeginning) {
                 prevBtn.classList.add('is-disabled');
             } else {
                 prevBtn.classList.remove('is-disabled');
             }
 
-            // derecha deshabilitada en el último slide
+            // Derecha deshabilitada en el último slide
             if (swiper.isEnd) {
                 nextBtn.classList.add('is-disabled');
             } else {
@@ -26,43 +25,35 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        // ---- Inicializar Swipers por panel ----
         const swipers = [];
 
+        // --- Crear Swiper por panel ---
         panels.forEach((panel) => {
-            const swiperEl = panel.querySelector('.emg-design__swiper');
+            const swiperEl = panel.querySelector('.emg-safety__swiper');
             if (!swiperEl) {
                 swipers.push(null);
                 return;
             }
 
-            const prevBtn = panel.querySelector('.emg-design__nav-btn--prev');
-            const nextBtn = panel.querySelector('.emg-design__nav-btn--next');
-
-            if (typeof Swiper === 'undefined') {
-                swipers.push(null);
-                return;
-            }
+            const prevBtn = panel.querySelector('.emg-safety__nav-btn--prev');
+            const nextBtn = panel.querySelector('.emg-safety__nav-btn--next');
+            const paginationEl = panel.querySelector('.emg-safety__pagination');
 
             const swiperInstance = new Swiper(swiperEl, {
-                slidesPerView: 1.05,
-                spaceBetween: 16,
-                centeredSlides: true,
+                slidesPerView: 1,
+                spaceBetween: 24,
                 speed: 600,
                 loop: false,
+                pagination: {
+                    el: paginationEl,
+                    clickable: true,
+                },
                 navigation: {
                     prevEl: prevBtn,
                     nextEl: nextBtn,
                 },
                 breakpoints: {
-                    768: {
-                        slidesPerView: 1,
-                        centeredSlides: false,
-                        spaceBetween: 24,
-                    },
-                    1200: {
-                        slidesPerView: 1,
-                        centeredSlides: false,
+                    1024: {
                         spaceBetween: 32,
                     },
                 },
@@ -76,38 +67,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
             });
 
-            // Estado inicial por si Swiper ya está listo inmediatamente
+            // Por si acaso, forzamos el estado inicial
             updateNavState(swiperInstance, prevBtn, nextBtn);
 
             swipers.push(swiperInstance);
         });
 
-        // ---- Tabs click ----
+        // --- Tabs ---
         tabButtons.forEach((btn) => {
             btn.addEventListener('click', () => {
-                const targetSlug = btn.getAttribute('data-design-tab');
-                if (!targetSlug) return;
+                const slug = btn.getAttribute('data-safety-tab');
+                if (!slug) return;
 
-                // Actualizar estado de tabs
+                // Marcar tab activa
                 tabButtons.forEach((b) => {
                     const isActive = b === btn;
                     b.classList.toggle('is-active', isActive);
                     b.setAttribute('aria-selected', isActive ? 'true' : 'false');
                 });
 
-                // Mostrar/ocultar paneles
+                // Mostrar panel correspondiente
                 panels.forEach((panel, index) => {
-                    const panelSlug = panel.getAttribute('data-design-panel');
-                    const isActive = panelSlug === targetSlug;
+                    const panelSlug = panel.getAttribute('data-safety-panel');
+                    const isActive = panelSlug === slug;
                     panel.classList.toggle('is-active', isActive);
 
-                    // Refrescar swiper del panel activo y actualizar flechas
+                    // Refrescar swiper y actualizar flechas del panel activo
                     if (isActive && swipers[index]) {
                         const swiper = swipers[index];
                         swiper.update();
 
-                        const prevBtn = panel.querySelector('.emg-design__nav-btn--prev');
-                        const nextBtn = panel.querySelector('.emg-design__nav-btn--next');
+                        const prevBtn = panel.querySelector('.emg-safety__nav-btn--prev');
+                        const nextBtn = panel.querySelector('.emg-safety__nav-btn--next');
                         updateNavState(swiper, prevBtn, nextBtn);
                     }
                 });

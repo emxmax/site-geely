@@ -1,0 +1,384 @@
+/* =======================================
+   EMGRAND – Seguridad (ajustado Figma)
+======================================= */
+
+.emg-safety {
+  position: relative;
+  padding: 72px 24px 80px;
+  color: #03050f;
+  margin-top: 0 !important;
+  max-width: 100%;
+  overflow: hidden;
+
+  /* Fondo desde ACF */
+  background-image: var(--emg-safety-bg-desktop);
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+}
+
+.emg-safety__inner {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+/* Header principal */
+
+.emg-safety__header {
+  margin-bottom: 40px;
+}
+
+.emg-safety__title {
+  margin: 0 0 12px;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 64px;
+  text-transform: uppercase;
+}
+
+.emg-safety__description {
+  margin: 0;
+  font-family: Inter;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 32px;
+  letter-spacing: 0px;
+  vertical-align: middle;
+}
+
+/* Tabs */
+
+/* Tabs – barra con título + descripción */
+
+.emg-safety__tabs {
+  display: flex;
+  margin-top: 28px;
+  border-radius: 0;
+  overflow: hidden;
+  background: transparent;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 0;
+}
+
+/* cada tab ocupa la mitad (o 1/N) del ancho */
+.emg-safety__tab {
+  flex: 1 1 0;
+  position: relative;
+  padding: 10px 24px 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  border-top: 2px solid transparent;
+}
+
+/* etiqueta INTERIOR / EXTERIOR */
+.emg-safety__tab-label {
+  display: block;
+  text-transform: uppercase;
+  color: #b0b7c0;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 33px;
+  letter-spacing: 5px;
+}
+
+/* descripción corta debajo del título */
+.emg-safety__tab-desc {
+  display: block;
+  margin-top: 4px;
+  font-family: Inter;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #9098a4;
+}
+
+/* estado activo: título azul, línea inferior azul, fondo un poco más claro */
+.emg-safety__tab.is-active {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  border-top-color: #027bff;
+}
+
+.emg-safety__tab.is-active .emg-safety__tab-label {
+  color: #027bff;
+}
+
+.emg-safety__tab.is-active .emg-safety__tab-desc {
+  color: #555f6b;
+}
+
+/* Paneles */
+
+.emg-safety__panels {
+  margin-top: 24px;
+}
+
+.emg-safety__tab-panel {
+  display: none;
+}
+
+.emg-safety__tab-panel.is-active {
+  display: block;
+}
+
+/* Subheader de cada tab */
+
+.emg-safety__subheader {
+  margin-bottom: 20px;
+}
+
+.emg-safety__sub-title {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.emg-safety__sub-description {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Slider */
+
+.emg-safety__slider-wrapper {
+  position: relative;
+  margin-top: 10px;
+}
+
+/* === IMPORTANTE: limitamos el ancho del card para que
+   se vea como en el diseño (no a todo el ancho) === */
+.emg-safety__swiper {
+  overflow: hidden;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.emg-safety__slide {
+  height: 100%;
+}
+
+.emg-safety__card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 36px;
+  align-items: center;
+}
+
+/* Imagen */
+
+.emg-safety__media {
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.23);
+  background: #000;
+}
+
+.emg-safety__image {
+  width: 100%;
+  height: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Texto derecha */
+
+.emg-safety__card-body {
+  padding: 8px 10%;
+}
+
+.emg-safety__card-title {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.emg-safety__card-text {
+  margin: 0;
+  font-family: Inter;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: 0px;
+  vertical-align: middle;
+}
+
+/* Controles slider (flechas + bullets) */
+
+.emg-safety__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  margin-top: 24px;
+}
+
+.emg-safety__pagination {
+  position: static;
+}
+
+/* bullets Swiper */
+.emg-safety__pagination .swiper-pagination-bullet {
+  width: 7px;
+  height: 7px;
+  margin: 0 3px !important;
+  opacity: 0.35;
+  background: #7c8693;
+}
+
+.emg-safety__pagination .swiper-pagination-bullet-active {
+  opacity: 1;
+  background: #027bff;
+}
+
+.emg-safety__nav-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 0px;
+  border: 0;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.emg-safety__nav-btn img {
+  width: 40px;
+  height: 40px;
+}
+
+.emg-safety__nav-btn--prev {
+  transform: rotate(180deg);
+}
+
+.emg-safety__nav-btn:hover:not(.is-disabled) {
+  background: transparent;
+  color: #ffffff;
+}
+
+/* estado deshabilitado (primera / última slide) */
+.emg-safety__nav-btn.is-disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media (max-width: 1024px) {
+  .emg-safety {
+    padding: 56px 16px 64px;
+  }
+
+  .emg-safety__title {
+    font-size: 36px;
+  }
+
+  .emg-safety__swiper {
+    max-width: 100%;
+  }
+
+  .emg-safety__card {
+    grid-template-columns: 1fr;
+    row-gap: 18px;
+  }
+
+  .emg-safety__image {
+    max-height: 360px;
+  }
+
+  .emg-safety__controls {
+    margin-top: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+    .emg-safety {
+        padding: 40px 16px 80px;
+    }
+
+  /* Fondo mobile administrable */
+  .emg-safety {
+    background-image: var(--emg-safety-bg-mobile, var(--emg-safety-bg-desktop));
+    background-position: center top;
+  }
+
+  .emg-safety__title {
+    font-size: 28px;
+    line-height: 48px;
+  }
+
+  .emg-safety__description {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .emg-safety__tabs {
+    margin-top: 20px;
+    padding: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .emg-safety__tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .emg-safety__tab {
+    flex: 0 0 auto;
+    max-width: 80%;
+    padding: 8px 14px 10px;
+  }
+
+  .emg-safety__tab-label {
+    font-size: 12px;
+    line-height: 24px;
+    letter-spacing: 0;
+  }
+
+  .emg-safety__tab-desc {
+    font-size: 14px;
+    white-space: normal;
+    line-height: 24px;
+    letter-spacing: 0;
+  }
+
+  .emg-safety__sub-description {
+    font-size: 12px;
+  }
+
+  .emg-safety__card-text {
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0;
+  }
+
+  .emg-safety__image {
+    max-height: 320px;
+  }
+
+  .emg-safety__controls {
+    gap: 20px;
+  }
+
+  .emg-safety__nav-btn {
+    display: none;
+  }
+}

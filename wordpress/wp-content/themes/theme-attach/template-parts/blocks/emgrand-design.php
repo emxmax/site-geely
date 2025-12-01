@@ -180,13 +180,19 @@ if ( empty( $tabs ) ) {
                                 type="button"
                                 class="emg-design__nav-btn emg-design__nav-btn--prev"
                                 aria-label="<?php esc_attr_e( 'Anterior', 'theme-textdomain' ); ?>">
-                                <span>&larr;</span>
+                                    <img
+                                    src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-arrow.png'); ?>"
+                                    alt="icon-arrow"
+                                    class="emg-config__icon-arrow-img">
                             </button>
                             <button
                                 type="button"
                                 class="emg-design__nav-btn emg-design__nav-btn--next"
                                 aria-label="<?php esc_attr_e( 'Siguiente', 'theme-textdomain' ); ?>">
-                                <span>&rarr;</span>
+                                    <img
+                                    src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-arrow.png'); ?>"
+                                    alt="icon-arrow"
+                                    class="emg-config__icon-arrow-img">
                             </button>
                         </div>
                     </div>

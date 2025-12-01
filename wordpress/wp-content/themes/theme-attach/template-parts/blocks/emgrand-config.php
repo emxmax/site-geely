@@ -257,10 +257,6 @@ if (! function_exists('emg_get_file_url')) {
 
                         <!-- Info: precios + especificaciones + CTAs -->
                         <div class="emg-config__info">
-                            <h3 class="emg-config__model-title">
-                                <?php echo esc_html($display_title); ?>
-                            </h3>
-
                             <div class="emg-config__bottom-grid">
                                 <div class="emg-config__prices">
                                     <p class="emg-config__price-label">
