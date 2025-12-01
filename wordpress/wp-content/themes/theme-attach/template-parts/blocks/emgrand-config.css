@@ -540,6 +540,7 @@
     text-align: center;
     top: 190px;
     transform: translateX(-50%);
+    height: fit-content;
   }
 
   .emg-config__360-img {
