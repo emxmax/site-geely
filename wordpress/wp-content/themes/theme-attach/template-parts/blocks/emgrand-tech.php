@@ -4,6 +4,7 @@
  * Block: EMGRAND – Tecnología Avanzada
  *
  * Campos:
+ * - block_tech_id
  * - block_tech_subtitle
  * - block_tech_title
  * - block_tech_description
@@ -13,6 +14,7 @@
 
 if (!function_exists('get_field')) return;
 
+$block_id = get_field('block_tech_id');
 $sub = get_field('block_tech_subtitle');
 $title = get_field('block_tech_title');
 $desc = get_field('block_tech_description');
@@ -22,7 +24,7 @@ $cards = get_field('block_tech_cards');
 if (!$title) return;
 ?>
 
-<section class="emg-tech">
+<section class="emg-tech" id="<?php echo esc_attr($block_id); ?>">
     <div class="emg-tech__inner">
 
         <!-- Header -->

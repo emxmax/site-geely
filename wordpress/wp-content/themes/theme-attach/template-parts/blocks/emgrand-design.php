@@ -3,6 +3,7 @@
  * Block: EMGRAND – Diseño
  *
  * Campos del BLOQUE (ACF):
+ *  - block_design_id        (Text)
  *  - block_design_title        (Text)
  *  - block_design_description  (Textarea)
  *  - block_design_tabs         (Repeater)
@@ -26,6 +27,7 @@ if ( ! $post_id ) {
 }
 
 // Título y descripción del bloque
+$block_id = get_field( 'block_design_id' );
 $block_title = get_field( 'block_design_title' );
 $block_desc  = get_field( 'block_design_description' );
 
@@ -53,7 +55,7 @@ if ( empty( $tabs ) ) {
     return;
 }
 ?>
-<section class="emg-design">
+<section class="emg-design" id="<?php echo esc_attr($block_id); ?>">
     <div class="emg-design__inner">
 
         <!-- Header bloque -->

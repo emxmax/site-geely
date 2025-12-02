@@ -4,6 +4,7 @@
  * Block: EMGRAND – Momentos
  *
  * Campos del BLOQUE:
+ *  - block_moments_id      (Text)
  *  - block_moments_title         (Text)
  *  - block_moments_description   (Textarea)
  *  - block_moments_bg_desktop    (Image)
@@ -23,6 +24,7 @@ if (! $post_id) {
 }
 
 // Título + descripción del bloque
+$block_id = get_field('block_moments_id');
 $block_title = get_field('block_moments_title');
 $block_desc  = get_field('block_moments_description');
 
@@ -63,7 +65,7 @@ if (empty($images)) {
 // Para desktop usamos solo 5 imágenes como mosaico
 $desktop_images = array_slice($images, 0, 5);
 ?>
-<section class="emg-moments" style="<?php echo esc_attr($style_attr); ?>">
+<section class="emg-moments" id="<?php echo esc_attr($block_id); ?>" style="<?php echo esc_attr($style_attr); ?>">
     <div class="emg-moments__inner">
 
         <!-- Cabecera -->

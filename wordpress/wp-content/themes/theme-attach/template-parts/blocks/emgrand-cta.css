@@ -40,7 +40,7 @@
   display: flex;
   align-items: center;
   justify-content: end;
-  transform: translateX(60%);
+  transform: translateX(50%);
 }
 
 .emg-cta__content {

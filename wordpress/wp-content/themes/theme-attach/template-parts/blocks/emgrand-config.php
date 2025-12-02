@@ -4,6 +4,7 @@
  * Block: EMGRAND – Configurador
  *
  * Campos del BLOQUE:
+ *  - block_config_id      (Text)
  *  - block_config_main_title      (Text)
  *  - block_config_main_bg_desktop (Image)
  *  - block_config_main_bg_mobile  (Image)
@@ -59,6 +60,7 @@ $product_sheet = get_field('product_datasheet_url', $post_id);
 /**
  * BLOQUE: título + fondos
  */
+$block_id = get_field('block_config_id');
 $block_title = get_field('block_config_main_title');
 if (! $block_title) {
     $block_title = $product_title;
@@ -113,6 +115,7 @@ if (! function_exists('emg_get_file_url')) {
 ?>
 <section
     class="emg-config"
+    id="<?php echo esc_attr($block_id); ?>"
     data-product="<?php echo esc_attr($product_slug); ?>"
     style="<?php echo esc_attr($style_attr); ?>">
     <div class="emg-config__inner">

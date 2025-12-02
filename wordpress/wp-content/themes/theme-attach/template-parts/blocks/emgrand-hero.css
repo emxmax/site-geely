@@ -7,21 +7,21 @@
   width: 100%;
   color: #fff;
   background: #000;
-  overflow: hidden;
+  overflow: visible; /* importante para que el dropdown pueda salir del bloque */
 }
 
-/* Swiper */
+/* Swiper sólo como fondo */
 .emg-hero__swiper {
   width: 100%;
+  position: relative;
+  z-index: 0;
 }
 
 .emg-hero__slide {
   position: relative;
-  min-height: 580px; /* Alto tipo banner desktop */
+  min-height: 580px;
   background-size: cover;
   background-position: center;
-  display: flex;
-  align-items: stretch;
 }
 
 /* Degradado negro a la izquierda (desktop) */
@@ -38,28 +38,37 @@
   z-index: 1;
 }
 
+/* Video de fondo */
+.emg-hero__bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* OVERLAY encima de todo */
 .emg-hero__overlay {
-  position: relative;
+  position: absolute;
+  inset: 0;
   z-index: 2;
-  flex: 1;
-  max-width: 100%;
-  margin: 0 auto;
   padding: 56px 40px 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  overflow: visible;
 }
 
 /* -----------------------------
-   ZONA SUPERIOR (desktop)
+   ZONA SUPERIOR
 ------------------------------ */
 
 .emg-hero__top {
   position: relative;
   max-width: 1120px;
   width: 100%;
-  left: 50%;
-  transform: translateX(-50%);
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -70,24 +79,16 @@
   max-width: 420px;
 }
 
-.emg-hero__label {
-  font-size: 14px;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  margin: 0 0 8px;
-  opacity: 0.8;
-}
-
 .emg-hero__title {
-  font-size: 60px;
-  line-height: 1;
-  font-weight: 700;
   text-transform: uppercase;
   margin: 0 0 10px;
+  font-family: var(--font-geely);
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 40px;
 }
 
 .emg-hero__subtitle {
-  font-size: 18px;
   line-height: 1.5;
   margin: 0;
   max-width: 360px;
@@ -97,13 +98,27 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 26px;
-  font-size: 14px;
   border-radius: 0;
   text-decoration: none;
   border: 1px solid transparent;
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  font-family: var(--font-geely);
+  font-weight: 700;
+  font-size: 16px;
+  width: 126px;
+  height: 48px;
+}
+
+.emg-hero__btn--header {
+  width: 177px;
+  height: 48px;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 40px;
+  letter-spacing: 0px;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .emg-hero__btn--light {
@@ -117,7 +132,7 @@
 }
 
 /* -----------------------------
-   BARRA NEGRA INFERIOR (desktop)
+   BARRA NEGRA INFERIOR
 ------------------------------ */
 
 .emg-hero__bottom {
@@ -130,14 +145,38 @@
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 32px;
+  position: relative;
+}
+
+/* Botón marca + flecha (se usa en desktop y mobile) */
+.emg-hero__nav-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: #ffffff;
+  cursor: default; /* sólo clickeable en mobile */
 }
 
 .emg-hero__brand {
-  font-size: 14px;
-  letter-spacing: 0.25em;
+  font-family: var(--font-geely);
   text-transform: uppercase;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 40px;
+  letter-spacing: 8px;
+  vertical-align: middle;
+  color: #c9c0b7;
 }
 
+/* Icono flecha */
+.emg-hero__nav-icon {
+  display: none; /* sólo mobile */
+}
+
+/* Navegación desktop */
 .emg-hero__nav {
   display: flex;
   flex-wrap: wrap;
@@ -146,11 +185,16 @@
 }
 
 .emg-hero__nav-link {
-  font-size: 13px;
   text-decoration: none;
   color: #ffffff;
   opacity: 0.75;
-  transition: opacity 0.2s ease, color 0.2s ease;
+  transition: opacity 0.2s ease, color 0.2s ease, background 0.2s ease;
+  font-family: var(--font-inter);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 0px;
+  vertical-align: middle;
 }
 
 .emg-hero__nav-link:hover {
@@ -166,29 +210,6 @@
 .emg-hero__btn--outline:hover {
   background: #ffffff;
   color: #000000;
-}
-
-/* -----------------------------
-   VIDEO DE FONDO
------------------------------- */
-
-.emg-hero__bg-video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
-}
-
-/* El degradado va encima del video */
-.emg-hero__slide::before {
-  z-index: 1;
-}
-
-/* El contenido va por encima del degradado */
-.emg-hero__overlay {
-  z-index: 2;
 }
 
 /* ================================
@@ -215,10 +236,10 @@
 /* Mobile */
 @media (max-width: 768px) {
   .emg-hero__slide {
-    min-height: 580px; /* un poco más alto en mobile */
+    min-height: 580px;
   }
 
-  /* Degradado vertical para mobile */
+  /* Degradado vertical mobile */
   .emg-hero__slide::before {
     background: linear-gradient(
       180deg,
@@ -232,13 +253,9 @@
     padding: 32px 16px 0;
   }
 
-  /* Reseteamos el centrado por transform y usamos padding lateral */
   .emg-hero__top {
-    position: static;
     max-width: 100%;
-    width: 100%;
-    transform: none;
-    left: auto;
+    margin: 0;
     flex-direction: column;
     align-items: flex-start;
     gap: 20px;
@@ -253,54 +270,116 @@
     max-width: 100%;
   }
 
-  /* El botón de Cotizar queda justo debajo del texto y hacia la izquierda,
-     como en el diseño mobile */
+  .emg-hero__brand {
+    font-size: 16px;
+    line-height: 40px;
+  }
+
   .emg-hero__btn--light {
     align-self: flex-start;
   }
 
-  /* Barra negra inferior pegada al borde y ocupando todo el ancho */
+  /* Barra negra inferior mobile */
   .emg-hero__bottom {
     margin-top: 40px;
     margin-left: -16px;
     margin-right: -16px;
-    padding: 16px 20px;
-    grid-template-columns: auto 1fr auto;
+    padding: 14px 20px;
+    grid-template-columns: 1fr auto;
     align-items: center;
-    gap: 16px;
-  }
-
-  .emg-hero__brand {
-    font-size: 13px;
+    gap: 12px;
   }
 
   .emg-hero__nav {
+    gap: 0px;
+  }
+
+  /* Botón marca + flecha SÍ es clickeable en mobile */
+  .emg-hero__nav-toggle {
+    cursor: pointer;
     justify-content: flex-start;
-    gap: 16px;
+  }
+
+  .emg-hero__nav-icon {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+    transform: rotate(45deg); /* flecha hacia abajo */
+    transition: transform 0.2s ease;
+    margin-top: -2px;
+  }
+
+  .emg-hero__bottom.is-nav-open .emg-hero__nav-icon {
+    transform: rotate(-135deg); /* flecha hacia arriba */
+  }
+
+  /* Menú desplegable flotante */
+  .emg-hero__nav {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    margin-top: 0;
+    background: #ffffff;
+    display: none;
+    flex-direction: column;
+    padding: 0;
+    z-index: 5;
+  }
+
+  .emg-hero__bottom.is-nav-open .emg-hero__nav {
+    display: flex;
   }
 
   .emg-hero__nav-link {
+    color: #000000;
+    opacity: 1;
+    padding: 14px 20px;
+    border-bottom: 1px solid #e3e3e3;
     font-size: 12px;
+    line-height: 18px;
+  }
+
+  .emg-hero__nav-link:hover {
+    background: #f5f5f5;
+    color: #000000;
   }
 
   .emg-hero__btn--outline {
     white-space: nowrap;
     padding-inline: 18px;
+    font-size: 14px;
+    line-height: 40px;
+    width: 142px;
   }
 }
 
-/* Mobile pequeño (detalle fino) */
+/* Mobile pequeño */
 @media (max-width: 480px) {
   .emg-hero__title {
-    font-size: 34px;
+    font-size: 40px;
   }
 
   .emg-hero__bottom {
     padding-inline: 16px;
-    gap: 12px;
   }
 
-  .emg-hero__nav {
-    gap: 12px;
+  .emg-hero__brand {
+    font-size: 14px;
+    line-height: 40px;
+  }
+
+  .emg-hero__btn--light {
+    font-size: 14px;
+    line-height: 40px;
+    width: 110px;
+  }
+
+  .emg-hero__btn--outline {
+    font-size: 12px;
+    line-height: 40px;
+    width: fit-content;
   }
 }

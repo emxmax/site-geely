@@ -4,6 +4,7 @@
  * Block: EMGRAND – CTA Final
  *
  * Campos del BLOQUE (ACF):
+ *  - cta_id               (Text)
  *  - cta_title               (Text)
  *  - cta_description         (Textarea)
  *  - cta_button_text         (Text)
@@ -24,6 +25,7 @@ if (! $post_id) {
 }
 
 // Contenidos del bloque
+$cta_id       = get_field('cta_id');
 $cta_title       = get_field('cta_title') ?: 'El momento es ahora';
 $cta_description = get_field('cta_description') ?: '';
 $cta_btn_text    = get_field('cta_button_text') ?: 'Cotizar';
@@ -54,7 +56,7 @@ if ($bg_mobile_url) {
     $style_attr .= "--emg-cta-bg-mobile:url('" . esc_url($bg_mobile_url) . "');";
 }
 ?>
-<section class="emg-cta" style="<?php echo esc_attr($style_attr); ?>">
+<section class="emg-cta" id="<?php echo esc_attr($cta_id); ?>" style="<?php echo esc_attr($style_attr); ?>">
     <div class="emg-cta__overlay"></div>
 
     <div class="emg-cta__inner">

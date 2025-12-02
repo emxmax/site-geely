@@ -13,3 +13,8 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: theme-attach
 Tags: 
 */
+
+:root {
+    --font-inter: 'Inter', sans-serif;
+    --font-geely: 'Geely', sans-serif;
+}

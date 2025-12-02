@@ -3,6 +3,7 @@
  * Block: EMGRAND – Experiencia
  *
  * Campos del BLOQUE (ACF):
+ *  - block_experience_id        (Text)
  *  - block_experience_title        (Text)
  *  - block_experience_bg_desktop   (Image)
  *  - block_experience_bg_mobile    (Image)
@@ -21,6 +22,7 @@ if (! $post_id) {
 }
 
 // Título del bloque
+$block_id = get_field('block_experience_id');
 $block_title = get_field('block_experience_title');
 if (! $block_title) {
     $block_title = 'Una experiencia única';
@@ -55,7 +57,7 @@ if (empty($items)) {
     return;
 }
 ?>
-<section class="emg-experience" style="<?php echo esc_attr($style_attr); ?>">
+<section class="emg-experience" id="<?php echo esc_attr($block_id); ?>" style="<?php echo esc_attr($style_attr); ?>">
     <div class="emg-experience__inner">
 
         <header class="emg-experience__header">

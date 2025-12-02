@@ -298,3 +298,13 @@ function emg_hero_assets()
     );
 }
 add_action('wp_enqueue_scripts', 'emg_hero_assets');
+
+function attach_enqueue_fonts() {
+    wp_enqueue_style(
+        'attach-fonts',
+        get_template_directory_uri() . '/assets/css/fonts.css',
+        array(),
+        filemtime(get_template_directory() . '/assets/css/fonts.css')
+    );
+}
+add_action('wp_enqueue_scripts', 'attach_enqueue_fonts');

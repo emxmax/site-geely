@@ -4,6 +4,7 @@
  * Block: EMGRAND – Seguridad
  *
  * Campos del BLOQUE (ACF):
+ *  - block_safety_id            (Text)
  *  - block_safety_title            (Text)
  *  - block_safety_description      (Textarea)
  *  - block_safety_bg_desktop       (Image)
@@ -24,6 +25,7 @@ if (! function_exists('get_field')) return;
 $post_id = get_the_ID();
 
 // Texto principal del bloque
+$block_id = get_field('block_safety_id');
 $block_title = get_field('block_safety_title') ?: 'Seguridad';
 $block_desc  = get_field('block_safety_description');
 
@@ -59,7 +61,7 @@ $tabs = array_values(array_filter($tabs, function ($t) {
 
 if (empty($tabs)) return;
 ?>
-<section class="emg-safety" style="<?php echo esc_attr($style_attr); ?>">
+<section class="emg-safety" id="<?php echo esc_attr($block_id); ?>" style="<?php echo esc_attr($style_attr); ?>">
     <div class="emg-safety__inner">
 
         <header class="emg-safety__header">
