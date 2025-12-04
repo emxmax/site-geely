@@ -25,27 +25,29 @@
 }
 
 .emg-design__title {
-  margin: 0 0 12px;
+  font-family: var(--font-geely);
+  margin: 0 0 24px;
   text-transform: uppercase;
   font-weight: 700;
-  font-size: 48px;
-  line-height: 1.1;
+  font-size: 64px;
+  line-height: 40px;
   letter-spacing: 0.06em;
+  color: #212529;
 }
 
 .emg-design__description {
   margin: 0;
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 20px;
+  line-height: 32px;
+  font-family: var(--font-inter);
+  color: #212529;
 }
 
 /* Tabs */
 
 .emg-design__tabs {
   display: inline-flex;
-  gap: 32px;
   margin-top: 24px;
-  border-bottom: 1px solid #d5d9dd;
 }
 
 .emg-design__tab {
@@ -54,13 +56,14 @@
   border: none;
   background: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 500;
-  color: #7a828b;
+  color: #212529;
+  min-width: 123px;
 }
 
 .emg-design__tab.is-active {
-  color: #03050f;
+  color: #212529;
 }
 
 .emg-design__tab.is-active::after {
@@ -70,7 +73,7 @@
   bottom: -1px;
   width: 100%;
   height: 2px;
-  background: #03050f;
+  background: #0b0c0c;
 }
 
 /* Paneles */
@@ -122,7 +125,7 @@
 .emg-design__card {
   position: relative;
   overflow: hidden;
-  border-radius: 22px;
+  border-radius: 16px;
   background: #000;
 }
 
@@ -156,27 +159,31 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 40%;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.75), transparent);
+  height: 100%;
+  background: #00000033;
   z-index: 1;
 }
 
 .emg-design__overlay-title {
-  margin: 0 0 6px;
-  font-size: 20px;
+  font-family: var(--font-inter);
+  margin: 0 0 16px;
+  font-size: 32px;
   font-weight: 600;
+  line-height: 40px;
 }
 
 .emg-design__overlay-text {
+  font-family: var(--font-inter);
   margin: 0;
-  font-size: 13px;
-  line-height: 1.5;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 32px;
 }
 
 /* Navegación (flechas) */
 
 .emg-design__nav {
-  margin-top: 16px;
+  margin-top: 10px;
   display: none;
   justify-content: flex-end;
   gap: 30px;
@@ -235,16 +242,29 @@
 
 @media (max-width: 768px) {
   .emg-design__title {
-    font-size: 28px;
+    font-size: 32px;
+    line-height: 48px;
     letter-spacing: 0.04em;
   }
 
   .emg-design__description {
-    font-size: 13px;
+    font-size: 16px;
+    line-height: 24px;
   }
 
   .emg-design__tabs {
     gap: 24px;
+    margin-top: 0px;
+  }
+
+  .emg-design__tab {
+    font-size: 16px;
+    line-height: 22px;
+    min-width: 92px;
+  }
+
+  .emg-design__panels {
+    margin-top: 40px;
   }
 
   .emg-design__subheader {
@@ -252,15 +272,18 @@
   }
 
   .emg-design__image {
-    max-height: 320px;
+    height: 448px;
+    max-height: 448px;
   }
 
   .emg-design__overlay-title {
     font-size: 16px;
+    line-height: 24px;
   }
 
   .emg-design__overlay-text {
     font-size: 12px;
+    line-height: 20px;
   }
 
   .emg-design__nav {

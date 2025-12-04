@@ -11,6 +11,9 @@
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
+  margin-top: 0px !important;
+
+  color: #212529;
 }
 
 .emg-tech__inner {
@@ -20,10 +23,12 @@
 
 /* Header */
 .emg-tech__subtitle {
+  font-family: var(--font-geely);
   margin-bottom: 6px;
+  margin-top: 0;
   opacity: 0.75;
   font-weight: 700;
-  font-size: 24px;
+  font-size: 18px;
   line-height: 24px;
   letter-spacing: 4px;
   vertical-align: middle;
@@ -37,7 +42,7 @@
 }
 
 .emg-tech__description {
-  font-family: Inter;
+  font-family: var(--font-inter);
   font-weight: 500;
   font-size: 20px;
   line-height: 32px;
@@ -75,6 +80,7 @@
 }
 
 .emg-tech__card-title {
+  font-family: var(--font-geely);
   font-weight: 700;
   font-size: 22px;
   line-height: 26.4px;
@@ -84,7 +90,7 @@
 }
 
 .emg-tech__card-text {
-  font-family: Inter;
+  font-family: var(--font-inter);
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
@@ -97,28 +103,32 @@
 ============================= */
 @media (max-width: 768px) {
   .emg-tech {
-    padding: 56px 16px;
+    padding: 40px 16px 76px;
 
     /* Fondo mobile */
     background-image: var(--emg-tech-bg-mobile, var(--emg-tech-bg-desktop));
   }
 
   .emg-tech__title {
+    font-family: var(--font-geely);
     font-size: 32px;
-    line-height: 1.2;
+    line-height: 40px;
   }
 
   .emg-tech__subtitle {
     font-size: 18px;
-    line-height: 1.2;
+    line-height: 24px;
   }
 
   .emg-tech__description {
     font-size: 16px;
+    line-height: 22.4px;
   }
 
-  .emg-tech__image-wrapper {
-    margin: 32px 0;
+  .emg-tech__image {
+    border-radius: 12px;
+    min-height: 304px;
+    object-fit: cover;
   }
 
   .emg-tech__cards {
@@ -128,5 +138,12 @@
 
   .emg-tech__card-title {
     font-size: 20px;
+    line-height: 24px;
+  }
+
+  .emg-tech__card-text {
+    font-size: 14px;
+    line-height: 19.6px;
+    margin-bottom: 24px;
   }
 }

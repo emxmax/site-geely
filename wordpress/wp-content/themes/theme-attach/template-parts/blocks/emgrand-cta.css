@@ -50,8 +50,9 @@
 /* Título */
 
 .emg-cta__title {
+  font-family: var(--font-geely);
   margin: 0 0 24px;
-  text-transform: none;
+  text-transform: uppercase;
   font-weight: 700;
   font-size: 64px;
   line-height: 40px;
@@ -62,7 +63,7 @@
 
 .emg-cta__description {
   margin: 0 0 24px;
-  font-family: Inter;
+  font-family: var(--font-inter);
   font-weight: 500;
   font-size: 20px;
   line-height: 32px;
@@ -73,6 +74,7 @@
 /* Botón */
 
 .emg-cta__button {
+  font-family: var(--font-geely);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -130,7 +132,7 @@
   .emg-cta__inner {
     justify-content: center;
     transform: translateX(0);
-    margin: 32px 16px;
+    margin: 0;
   }
 
   .emg-cta__content {
@@ -139,7 +141,7 @@
 
   .emg-cta__title {
     font-size: 48px;
-    line-height: 40px;
+    line-height: normal;
     letter-spacing: 0px;
     margin-bottom: 20px;
   }

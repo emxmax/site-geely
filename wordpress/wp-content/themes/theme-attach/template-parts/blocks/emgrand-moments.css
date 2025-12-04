@@ -32,18 +32,18 @@
 }
 
 .emg-moments__title {
+  font-family: var(--font-geely);
   margin: 0 0 16px;
   text-transform: uppercase;
   font-weight: 700;
   font-size: 64px;
-  line-height: 64px;
+  line-height: 40px;
   letter-spacing: 0;
 }
 
 .emg-moments__description {
   margin: 0;
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
+  font-family: var(--font-inter);
   font-weight: 500;
   font-size: 20px;
   line-height: 32px;
@@ -123,6 +123,7 @@
 .emg-moments__pagination {
   margin-top: 14px;
   text-align: center;
+  /* bottom: var(--swiper-pagination-bottom, -30px) !important; */
 }
 
 /* Swiper bullets */
@@ -163,25 +164,30 @@
   }
 
   .emg-moments__title {
-    font-size: 22px;
-    line-height: 28px;
+    font-size: 32px;
+    line-height: 48px;
+    margin: 0 0 24px;
   }
 
   .emg-moments__description {
-    font-size: 13px;
-    line-height: 20px;
+    font-size: 16px;
+    line-height: 24px;
   }
 
   /* En mobile ocultamos el mosaico y usamos solo el slider */
   .emg-moments__grid {
     display: none;
   }
+  .emg-moments__slider {
+    /* overflow: visible; */
+  }
 
   .emg-moments__slider--mobile {
     display: block;
+    /* overflow: visible; */
   }
 
-   .emg-moments__slider {
+  .emg-moments__slider {
     width: 100%;
   }
 
