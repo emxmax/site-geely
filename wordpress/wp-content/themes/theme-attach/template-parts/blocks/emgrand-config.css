@@ -139,6 +139,28 @@
   display: block;
 }
 
+/* Específico para el viewer 360 */
+.emg-config__image-360 {
+  position: relative;
+  min-height: 260px; /* ajusta según altura del auto */
+  background: transparent;
+}
+
+.emg-config__visual {
+  max-width: 100% !important;
+  width: 100%;
+}
+
+/* Garantizar que el canvas/imagen interna ocupen el ancho */
+.emg-config__image-360 canvas,
+.emg-config__image-360 img {
+  max-width: 100% !important;
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 16 / 9;
+}
+
 /* Tarjeta de colores tipo maqueta */
 
 .emg-config__colors {

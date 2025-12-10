@@ -201,28 +201,113 @@ if (! function_exists('emg_get_file_url')) {
                             <div class="emg-config__image-wrapper">
                                 <?php
                                 $first_color_index = 0;
+
                                 foreach ($colors as $c_idx => $color) :
 
                                     $color_name = $color['color_name'] ?? '';
                                     $color_hex  = $color['color_hex'] ?? '#cccccc';
                                     $color_id   = $model_slug_model . '-color-' . $c_idx;
 
+                                    // Imagen estática actual (fallback si no hay 360)
+                                    // Imagen estática actual (fallback si no hay 360)
                                     $img_field = $color['color_image_desktop'] ?? null;
                                     $img_url   = is_array($img_field)
                                         ? ($img_field['url'] ?? '')
                                         : ($img_field ?: '');
 
-                                    if (! $img_url) {
-                                        continue;
+                                    /**
+                                     * ========================
+                                     *  DATOS 360 DESDE EL ZIP
+                                     * ========================
+                                     */
+                                    // Puede venir como ID o como array (según ACF)
+                                    $zip_field = $color['color_360_zip'] ?? null;
+
+                                    if (is_array($zip_field)) {
+                                        $zip_id = isset($zip_field['ID'])
+                                            ? (int) $zip_field['ID']
+                                            : (int) ($zip_field['id'] ?? 0);
+                                    } else {
+                                        $zip_id = (int) $zip_field;
                                     }
 
+                                    $ci_folder  = '';
+                                    $ci_pattern = '';
+                                    $ci_amount  = 0;
+
+                                    if ($zip_id) {
+                                        $zip_path = get_attached_file($zip_id);
+
+                                        if ($zip_path && file_exists($zip_path)) {
+                                            $upload   = wp_upload_dir();
+                                            $base_dir = trailingslashit($upload['basedir']);
+                                            $base_url = trailingslashit($upload['baseurl']);
+
+                                            $root_360_dir = $base_dir . 'emgrand-360/';
+
+                                            $zip_filename      = pathinfo($zip_path, PATHINFO_FILENAME);
+                                            $color_folder_slug = sanitize_title($zip_filename);
+
+                                            $post_id    = get_the_ID(); // ya lo tienes arriba, pero no molesta
+                                            $target_dir = trailingslashit($root_360_dir . $post_id . '-' . $color_folder_slug . '/');
+
+                                            $files = glob($target_dir . '*.{jpg,jpeg,png,webp}', GLOB_BRACE);
+
+                                            if (!empty($files)) {
+                                                natsort($files);
+                                                $files     = array_values($files);
+                                                $ci_amount = count($files);
+
+                                                $first_name = basename($files[0]);
+
+                                                if (preg_match('/^(.+?)(\d+)\.(jpe?g|png|webp)$/i', $first_name, $m)) {
+                                                    $prefix = $m[1];
+                                                    $ext    = $m[3];
+                                                    $ci_pattern = $prefix . '{index}.' . $ext;
+                                                } else {
+                                                    $ext        = pathinfo($first_name, PATHINFO_EXTENSION);
+                                                    $ci_pattern = 'frame-{index}.' . $ext;
+                                                }
+
+                                                $ci_folder = trailingslashit(
+                                                    $base_url . 'emgrand-360/' . $post_id . '-' . $color_folder_slug . '/'
+                                                );
+                                            }
+                                        }
+                                    }
+
+                                    $has_360 = ($ci_folder && $ci_pattern && $ci_amount > 0);
+
+
                                     $is_color_active = ($c_idx === $first_color_index);
+                                    $active_class    = $is_color_active ? ' is-active' : '';
                                 ?>
-                                    <img
-                                        src="<?php echo esc_url($img_url); ?>"
-                                        alt="<?php echo esc_attr($color_name ?: $display_title); ?>"
-                                        class="emg-config__image<?php echo $is_color_active ? ' is-active' : ''; ?>"
-                                        data-color="<?php echo esc_attr($color_id); ?>">
+
+                                    <?php if ($has_360) : ?>
+                                        <!-- Viewer 360° -->
+                                        <div
+                                            class="emg-config__image emg-config__image-360 cloudimage-360<?php echo $active_class; ?>"
+                                            data-color="<?php echo esc_attr($color_id); ?>"
+
+                                            data-folder="<?php echo esc_attr($ci_folder); ?>"
+                                            data-filename-x="<?php echo esc_attr($ci_pattern); ?>"
+                                            data-amount-x="<?php echo esc_attr($ci_amount); ?>"
+
+                                            data-autoplay="0"
+                                            data-full-screen="0"
+                                            data-mouse-wheel-step="1"
+                                            >
+                                        </div>
+                                    <?php elseif ($img_url) : ?>
+                                        <!-- Fallback: imagen estática -->
+                                        <img
+                                            src="<?php echo esc_url($img_url); ?>"
+                                            alt="<?php echo esc_attr($color_name ?: $display_title); ?>"
+                                            class="emg-config__image<?php echo $active_class; ?>"
+                                            data-color="<?php echo esc_attr($color_id); ?>">
+                                    <?php endif; ?>
+
+
                                 <?php endforeach; ?>
                             </div>
 
