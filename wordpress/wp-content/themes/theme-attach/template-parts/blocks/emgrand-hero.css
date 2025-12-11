@@ -5,6 +5,7 @@
 .emg-hero {
   position: relative;
   width: 100%;
+  max-width: 100%;
   color: #fff;
   background: #000;
   overflow: visible; /* importante para que el dropdown pueda salir del bloque */
