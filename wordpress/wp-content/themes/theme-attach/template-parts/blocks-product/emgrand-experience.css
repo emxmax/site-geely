@@ -1,0 +1,168 @@
+/* =======================================
+   EMGRAND – Experiencia Única
+======================================= */
+
+.emg-experience {
+  position: relative;
+  max-width: 100%;
+  padding: 94px 24px 80px;
+  color: #212529;
+
+  /* Fondo base */
+  background-color: #ffffff;
+
+  /* Fondos desde ACF */
+  background-image: var(--emg-experience-bg-desktop);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-top: 0px !important;
+}
+
+.emg-experience__inner {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+/* Header */
+
+.emg-experience__header {
+  margin-bottom: 40px;
+}
+
+.emg-experience__title {
+  font-family: var(--font-geely);
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 64px;
+  letter-spacing: 0px;
+  vertical-align: middle;
+}
+
+/* Grid de cards */
+
+.emg-experience__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.emg-experience__card {
+  position: relative;
+}
+
+.emg-experience__figure {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  background: #000;
+  height: 260px;
+}
+
+.emg-experience__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.emg-experience__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 320px;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.emg-experience__figure:hover .emg-experience__image {
+  transform: scale(1.03);
+}
+
+/* Título sobre la imagen */
+
+.emg-experience__caption {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 20px;
+  z-index: 2;
+}
+
+.emg-experience__caption-text {
+  font-family: var(--font-geely);
+  display: block;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+  vertical-align: middle;
+  text-transform: uppercase;
+}
+
+/* Degradado para mejorar lectura del texto */
+
+.emg-experience__figure::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 40%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+  z-index: 1;
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media (max-width: 1024px) {
+  .emg-experience {
+    padding: 40px 16px 40px;
+  }
+
+  .emg-experience__title {
+    font-size: 36px;
+  }
+
+  .emg-experience__grid {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .emg-experience {
+    /* Fondo mobile si existe; sino, desktop */
+    background-image: var(
+      --emg-experience-bg-mobile,
+      var(--emg-experience-bg-desktop)
+    );
+  }
+
+  .emg-experience__title {
+    font-size: 32px;
+    line-height: 48px;
+  }
+
+  .emg-experience__grid {
+    grid-template-columns: 1fr; /* una card debajo de otra en mobile */
+  }
+
+  .emg-experience__image {
+    max-height: 280px;
+  }
+
+  .emg-experience__caption {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .emg-experience__figure {
+    height: 220px;
+  }
+}

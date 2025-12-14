@@ -1,6 +1,6 @@
 (function () {
     function log(...args) {
-        console.log('[EMG-CONFIG]', ...args);
+        //console.log('[EMG-CONFIG]', ...args);
     }
 
     window.CI360 =

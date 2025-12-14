@@ -1,0 +1,299 @@
+/* =======================================
+   EMGRAND – Diseño
+======================================= */
+
+.emg-design {
+  position: relative;
+  max-width: 100%;
+  padding: 72px 24px 80px;
+  background-color: #ffffff;
+  color: #03050f;
+  margin-top: 0 !important;
+  overflow: hidden;
+  margin-top: 0px !important;
+}
+
+.emg-design__inner {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+/* Header principal */
+
+.emg-design__header {
+  margin-bottom: 24px;
+}
+
+.emg-design__title {
+  font-family: var(--font-geely);
+  margin: 0 0 24px;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 40px;
+  letter-spacing: 0.06em;
+  color: #212529;
+}
+
+.emg-design__description {
+  margin: 0;
+  font-size: 20px;
+  line-height: 32px;
+  font-family: var(--font-inter);
+  color: #212529;
+}
+
+/* Tabs */
+
+.emg-design__tabs {
+  display: inline-flex;
+  margin-top: 24px;
+}
+
+.emg-design__tab {
+  position: relative;
+  padding: 10px 0 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 500;
+  color: #212529;
+  min-width: 123px;
+}
+
+.emg-design__tab.is-active {
+  color: #212529;
+}
+
+.emg-design__tab.is-active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 2px;
+  background: #0b0c0c;
+}
+
+/* Paneles */
+
+.emg-design__panels {
+  margin-top: 32px;
+}
+
+.emg-design__tab-panel {
+  display: none;
+}
+
+.emg-design__tab-panel.is-active {
+  display: block;
+}
+
+/* Subheader de cada tab */
+
+.emg-design__subheader {
+  margin-bottom: 24px;
+}
+
+.emg-design__sub-title {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.emg-design__sub-description {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Slider */
+
+.emg-design__slider-wrapper {
+  position: relative;
+}
+
+.emg-design__swiper {
+  overflow: visible; /* para ver un poquito el siguiente slide en mobile si se desea */
+}
+
+.emg-design__slide {
+  height: 100%;
+}
+
+.emg-design__card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #000;
+}
+
+.emg-design__image {
+  width: 100%;
+  height: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.emg-design__card:hover .emg-design__image {
+  transform: scale(1.03);
+}
+
+/* Overlay de texto sobre la imagen */
+
+.emg-design__overlay {
+  position: absolute;
+  left: 32px;
+  bottom: 32px;
+  right: 32px;
+  color: #ffffff;
+  z-index: 2;
+}
+
+.emg-design__card::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  background: #00000033;
+  z-index: 1;
+}
+
+.emg-design__overlay-title {
+  font-family: var(--font-inter);
+  margin: 0 0 16px;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 40px;
+}
+
+.emg-design__overlay-text {
+  font-family: var(--font-inter);
+  margin: 0;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 32px;
+}
+
+/* Navegación (flechas) */
+
+.emg-design__nav {
+  margin-top: 10px;
+  display: none;
+  justify-content: flex-end;
+  gap: 30px;
+}
+
+.emg-design__nav-btn.is-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.emg-design__nav-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 0px;
+  border: 0px;
+  background: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.emg-design__nav-btn--prev {
+  transform: rotate(180deg);
+}
+
+.emg-design__nav-btn:hover {
+  background: #ffffff;
+  color: #ffffff;
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media (max-width: 1024px) {
+  .emg-design {
+    padding: 56px 16px 50px;
+  }
+
+  .emg-design__title {
+    font-size: 36px;
+  }
+
+  .emg-design__image {
+    max-height: 380px;
+  }
+
+  .emg-design__overlay {
+    left: 24px;
+    right: 24px;
+    bottom: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .emg-design__title {
+    font-size: 32px;
+    line-height: 48px;
+    letter-spacing: 0.04em;
+  }
+
+  .emg-design__description {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .emg-design__tabs {
+    gap: 24px;
+    margin-top: 0px;
+  }
+
+  .emg-design__tab {
+    font-size: 16px;
+    line-height: 22px;
+    min-width: 92px;
+  }
+
+  .emg-design__panels {
+    margin-top: 40px;
+  }
+
+  .emg-design__subheader {
+    margin-bottom: 16px;
+  }
+
+  .emg-design__image {
+    height: 448px;
+    max-height: 448px;
+  }
+
+  .emg-design__overlay-title {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .emg-design__overlay-text {
+    font-size: 12px;
+    line-height: 20px;
+  }
+
+  .emg-design__nav {
+    display: flex;
+    justify-content: end;
+    margin-top: 20px;
+  }
+
+  .emg-design__nav-btn {
+    width: 44px;
+    height: 44px;
+  }
+}

@@ -1,0 +1,292 @@
+/* =====================================================
+   IMAGE COMMITMENTS – PAGE BLOCK (CORREGIDO FINAL)
+===================================================== */
+
+.ic-block {
+  background-image: var(--ic-bg-desktop);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 56px 24px;
+  overflow: hidden;
+}
+
+.ic-block__inner {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+/* =========================
+   GRID DESKTOP
+========================= */
+
+.ic-block__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 48px;
+  align-items: stretch;
+}
+
+/* Evita overflow / colapsos raros dentro de grid */
+.ic-block__left,
+.ic-block__right {
+  min-width: 0;
+}
+
+/* =========================
+   LEFT COLUMN
+========================= */
+
+.ic-block__left {
+  display: flex;
+  flex-direction: column;
+  /* ❌ NO width acá: rompe el grid */
+}
+
+/* Texts */
+
+.ic-block__subtitle {
+  margin: 0 0 8px;
+  font-family: var(--font-inter);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #03050f;
+  opacity: 0.85;
+}
+
+.ic-block__title {
+  margin: 0 0 14px;
+  font-family: var(--font-geely);
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: #03050f;
+}
+
+.ic-block__desc {
+  margin: 0 0 18px;
+  font-family: var(--font-inter);
+  font-size: 14px;
+  line-height: 20px;
+  max-width: 520px;
+  color: #212529;
+}
+
+.ic-block__btn {
+  align-self: flex-start;
+  background: #000;
+  color: #fff;
+  font-size: 12px;
+  font-family: var(--font-geely);
+  font-weight: 600;
+  text-decoration: none;
+  margin-bottom: 28px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+}
+
+/* =========================
+   “NUESTRO COMPROMISO”
+========================= */
+
+.ic-block__section-title {
+  margin: 0 0 14px;
+  font-family: var(--font-geely);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #03050f;
+}
+
+/* Slider wrapper */
+.ic-block__slider-wrap {
+  width: 100%;
+}
+
+/* Swiper */
+.ic-block__swiper {
+  overflow: hidden;
+}
+
+.ic-block__swiper .swiper-wrapper {
+  align-items: stretch;
+}
+
+/* Importante: permite que el slide crezca por su contenido */
+.ic-block__swiper .swiper-slide {
+  height: auto;
+}
+
+/* Cards */
+.ic-block__card {
+  max-width: none;
+}
+
+.ic-block__card-media {
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.ic-block__card-img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  display: block;
+}
+
+.ic-block__card-title {
+  margin: 0 0 6px;
+  font-family: var(--font-geely);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #03050f;
+}
+
+.ic-block__card-desc {
+  margin: 0;
+  font-family: var(--font-inter);
+  font-size: 12px;
+  line-height: 16px;
+  color: #212529;
+}
+
+/* =========================
+   CONTROLES (SOLO FLECHAS)
+========================= */
+
+.ic-block__controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.ic-block__nav {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+.ic-block__nav img {
+  width: 40px;
+  height: 40px;
+}
+
+.ic-block__prev {
+  transform: rotate(180deg);
+}
+
+.ic-block__nav.is-disabled {
+  opacity: 0.45;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* =========================
+   RIGHT COLUMN (VIDEO)
+========================= */
+
+.ic-block__right {
+  display: flex;
+}
+
+.ic-block__hero {
+  width: 100%;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #000;
+  /* ✅ define altura desde el contenedor */
+  min-height: 560px;
+}
+
+.ic-block__hero-video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 1024px) {
+  .ic-block__grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .ic-block__hero {
+    min-height: 420px;
+  }
+
+  .ic-block__title {
+    font-size: 36px;
+    line-height: 44px;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+  .ic-block {
+    padding: 32px 16px;
+    background-image: var(--ic-bg-mobile, var(--ic-bg-desktop));
+  }
+
+  .ic-block__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .ic-block__right {
+    order: 1;
+  }
+
+  .ic-block__left {
+    order: 2;
+  }
+
+  .ic-block__hero {
+    min-height: 320px;
+  }
+
+  .ic-block__title {
+    font-size: 28px;
+    line-height: 1.1;
+  }
+
+  .ic-block__desc {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .ic-block__btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .ic-block__controls {
+    justify-content: space-between;
+  }
+}

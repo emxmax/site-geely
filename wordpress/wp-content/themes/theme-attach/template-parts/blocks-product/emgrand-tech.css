@@ -1,0 +1,151 @@
+/* =======================================
+   EMGRAND – Tecnología Avanzada
+======================================= */
+
+.emg-tech {
+  padding: 80px 24px;
+  background-color: #f3f7fa;
+  max-width: 100%;
+  
+  /* Fondos administrables desde ACF */
+  background-image: var(--emg-tech-bg-desktop);
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  margin-top: 0px !important;
+
+  color: #212529;
+}
+
+.emg-tech__inner {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+/* Header */
+.emg-tech__subtitle {
+  font-family: var(--font-geely);
+  margin-bottom: 6px;
+  margin-top: 0;
+  opacity: 0.75;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: 4px;
+  vertical-align: middle;
+}
+
+.emg-tech__title {
+  margin: 16px 0;
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 64px;
+  font-family: var(--font-geely);
+}
+
+.emg-tech__description {
+  font-family: var(--font-inter);
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 32px;
+  letter-spacing: 0px;
+  margin: 0;
+}
+
+/* Imagen principal */
+.emg-tech__image-wrapper {
+  margin: 40px 0 50px;
+}
+
+.emg-tech__image {
+  width: 100%;
+  border-radius: 16px;
+  display: block;
+}
+
+/* Cards */
+.emg-tech__cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px 80px;
+}
+
+.emg-tech__card {
+  display: flex;
+  flex-direction: column;
+  max-width: 530px;
+}
+
+.emg-tech__card-icon {
+  width: 48px;
+  margin-bottom: 16px;
+}
+
+.emg-tech__card-title {
+  font-family: var(--font-geely);
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 26.4px;
+  letter-spacing: 4.4px;
+  vertical-align: middle;
+  margin: 0 0 16px;
+}
+
+.emg-tech__card-text {
+  font-family: var(--font-inter);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  vertical-align: middle;
+  margin: 0;
+}
+
+/* =============================
+   MOBILE
+============================= */
+@media (max-width: 768px) {
+  .emg-tech {
+    padding: 40px 16px 76px;
+
+    /* Fondo mobile */
+    background-image: var(--emg-tech-bg-mobile, var(--emg-tech-bg-desktop));
+  }
+
+  .emg-tech__title {
+    font-family: var(--font-geely);
+    font-size: 32px;
+    line-height: 40px;
+  }
+
+  .emg-tech__subtitle {
+    font-size: 18px;
+    line-height: 24px;
+  }
+
+  .emg-tech__description {
+    font-size: 16px;
+    line-height: 22.4px;
+  }
+
+  .emg-tech__image {
+    border-radius: 12px;
+    min-height: 304px;
+    object-fit: cover;
+  }
+
+  .emg-tech__cards {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .emg-tech__card-title {
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  .emg-tech__card-text {
+    font-size: 14px;
+    line-height: 19.6px;
+    margin-bottom: 24px;
+  }
+}

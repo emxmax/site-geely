@@ -1,0 +1,212 @@
+.exp-carousel {
+  padding: 72px 24px 80px;
+  color: #03050f;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.exp-carousel__inner {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.exp-carousel__title {
+  font-family: var(--font-geely);
+  margin: 0 0 16px;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 64px;
+  text-transform: uppercase;
+  color: #212529;
+}
+
+.exp-carousel__subtitle {
+  margin: 0;
+  font-family: var(--font-inter);
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 32px;
+  counter-reset: #212529;
+}
+
+.exp-carousel__slider-wrapper {
+  margin-top: 40px;
+}
+
+.exp-carousel__swiper {
+  overflow: hidden;
+}
+
+.exp-carousel__card {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 36px;
+  align-items: center;
+  background: #c9c0b71a;
+}
+
+.exp-carousel__media {
+  overflow: hidden;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+  background: #000;
+}
+
+.exp-carousel__image {
+  width: 100%;
+  height: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  display: block;
+}
+
+.exp-carousel__content {
+  padding: 8px 10%;
+}
+
+.exp-carousel__card-title {
+  font-family: var(--font-geely);
+  margin: 0 0 16px;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1.1;
+}
+
+.exp-carousel__card-desc {
+  margin: 0 0 24x;
+  font-family: var(--font-inter);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+  color: #212529;
+}
+
+.exp-carousel__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+  font-family: var(--font-inter);
+  font-weight: 600;
+  font-size: 14px;
+  width: 150px;
+  height: 48px;
+}
+
+.exp-carousel__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  margin-top: 24px;
+}
+
+.exp-carousel__pagination {
+  position: static;
+  text-align: center;
+}
+
+.exp-carousel__pagination .swiper-pagination-bullet {
+  width: 7px;
+  height: 7px;
+  margin: 0 3px !important;
+  opacity: 0.35;
+  background: #7c8693;
+}
+.exp-carousel__pagination .swiper-pagination-bullet-active {
+  opacity: 1;
+  background: #027bff;
+}
+
+.exp-carousel__nav {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+}
+
+.exp-carousel__prev::before,
+.exp-carousel__next::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 18px;
+  height: 18px;
+  border-right: 3px solid #000;
+  border-bottom: 3px solid #000;
+  transform: rotate(-45deg);
+}
+.exp-carousel__prev::before {
+  transform: rotate(135deg);
+}
+
+@media (max-width: 1024px) {
+  .exp-carousel {
+    padding: 56px 16px 64px;
+  }
+  .exp-carousel__title {
+    font-size: 36px;
+    line-height: 44px;
+  }
+  .exp-carousel__card {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .exp-carousel__image {
+    max-height: 360px;
+  }
+}
+
+@media (max-width: 768px) {
+  .exp-carousel {
+    padding: 40px 16px 64px;
+  }
+  .exp-carousel__title {
+    font-size: 32px;
+    line-height: 40px;
+    margin-bottom: 24px;
+  }
+  .exp-carousel__subtitle {
+    font-size: 16px;
+    line-height: 22px;
+  }
+  .exp-carousel__nav {
+    display: none;
+  }
+  .exp-carousel__card {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    grid-template-areas:
+      "content"
+      "media";
+  }
+
+  .exp-carousel__content {
+    grid-area: content;
+    padding: 12px 16px 4px;
+  }
+
+  .exp-carousel__media {
+    grid-area: media;
+  }
+
+  .exp-carousel__card-title {
+    margin-top: 12px;
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  .exp-carousel__card-desc {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .exp-carousel__btn {
+    margin-top: 8px;
+  }
+}
