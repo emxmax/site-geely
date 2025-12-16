@@ -146,9 +146,12 @@ $rel    = $btn_newtab ? 'noopener noreferrer' : '';
 
                         </div>
                     </div>
+                    
+                    <div class="swiper-pagination ic-block__pagination"></div>
+
 
                     <div class="ic-block__controls">
-                        <button class="ic-block__nav ic-block__prev is-disabled" type="button">
+                        <button class="ic-block__nav ic-block__prev" type="button">
                             <img
                                 src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-arrow.png'); ?>"
                                 alt="Prev">

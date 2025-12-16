@@ -40,10 +40,7 @@
 .ic-block__left {
   display: flex;
   flex-direction: column;
-  /* ❌ NO width acá: rompe el grid */
 }
-
-/* Texts */
 
 .ic-block__subtitle {
   margin: 0 0 8px;
@@ -172,6 +169,10 @@
   margin-top: 12px;
 }
 
+.swiper-pagination {
+  display: none;
+}
+
 .ic-block__nav {
   width: 40px;
   height: 40px;
@@ -212,7 +213,6 @@
   border-radius: 18px;
   overflow: hidden;
   background: #000;
-  /* ✅ define altura desde el contenedor */
   min-height: 560px;
 }
 
@@ -248,6 +248,16 @@
 ========================= */
 
 @media (max-width: 768px) {
+
+  /* Swiper grid: 2 filas en mobile (Swiper Grid module) */
+  .ic-block__swiper .swiper-wrapper {
+    align-items: stretch;
+  }
+
+  .ic-block__swiper .swiper-slide {
+    height: auto !important;
+  }
+
   .ic-block {
     padding: 32px 16px;
     background-image: var(--ic-bg-mobile, var(--ic-bg-desktop));
@@ -286,7 +296,15 @@
     text-align: center;
   }
 
-  .ic-block__controls {
-    justify-content: space-between;
+  /* .ic-block__controls {
+    display: none !important;
+  } */
+
+  /* Mostrar bullets en mobile */
+  .swiper-pagination {
+    display: block !important;
+    margin-top: 14px;
+    text-align: center;
   }
 }
+
