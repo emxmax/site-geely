@@ -1,0 +1,169 @@
+.hero-carousel {
+  margin: 0 !important;
+  padding: 0;
+  background: #f8f9fa;
+  padding-bottom: 0px;
+  position: relative;
+}
+
+.hero-carousel__inner {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.hero-carousel__swiper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0 0 100px 100px;
+  background: #0b0b0b;
+}
+
+/* altura desktop similar al diseño */
+.hero-carousel__slide {
+  position: relative;
+}
+
+.hero-carousel__link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.hero-carousel__picture,
+.hero-carousel__img {
+  display: block;
+  width: 100%;
+}
+
+.hero-carousel__img {
+  height: 800px;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* =========================
+   NAV (Desktop)
+========================= */
+.hero-carousel__nav {
+  position: absolute;
+  left: 64px;
+  bottom: 100px;
+  z-index: 5;
+
+  width: 34px;
+  height: 34px;
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 20px;
+  line-height: 1;
+  padding: 0;
+}
+
+.hero-carousel__nav--next {
+  left: 114px;
+}
+
+.hero-carousel__nav:hover {
+  color: #fff;
+}
+
+/* =========================
+   PAGINATION (Mobile)
+========================= */
+.hero-carousel__pagination {
+  position: absolute;
+  z-index: 6;
+}
+
+/* Horizontal bottom bullets */
+.hero-carousel__pagination--h {
+  left: 0;
+  right: 0;
+  bottom: 18px;
+  display: none; /* solo mobile */
+  text-align: center;
+}
+
+/* Swiper bullets look (horizontal) */
+.hero-carousel__pagination--h .swiper-pagination-bullet {
+  width: 7px;
+  height: 7px;
+  margin: 0 4px !important;
+  opacity: 1;
+  background: #E7E6E6
+}
+
+.hero-carousel__pagination--h .swiper-pagination-bullet-active {
+  background: #027bff;
+}
+
+/* Vertical bullets (right) */
+.hero-carousel__pagination--v {
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: none; /* solo mobile */
+  gap: 24px;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Botones verticales creados por JS */
+.hero-carousel__vbullet {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  cursor: pointer;
+  padding: 0;
+}
+
+.hero-carousel__vbullet.is-active {
+  background: #027bff;
+  border-color: #027bff;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 1024px) {
+  .hero-carousel__img {
+    height: 480px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-carousel {
+    padding-bottom: 40px;
+  }
+
+  .hero-carousel__swiper {
+    border-radius: 0 0 32px 32px;
+  }
+
+  .hero-carousel__img {
+    height: 560px;
+  }
+
+  /* En mobile NO queremos flechas */
+  .hero-carousel__nav {
+    display: none;
+  }
+
+  .hero-carousel__pagination--h {
+    display: block;
+    bottom: 12px  !important;
+  }
+
+  .hero-carousel__pagination--v {
+    display: flex;
+  }
+}

@@ -2,6 +2,8 @@
 if (!defined('ABSPATH')) exit;
 
 $block_title = get_field('blog_news_title') ?: 'NOTICIAS GEELY';
+$block_description = get_field('blog_news_description') ?: '';
+$blog_btn_text = get_field('blog_news_btn_text') ?: 'Más noticias';
 $posts_per_page = 3;
 
 $q = new WP_Query([
@@ -21,6 +23,8 @@ $total_pages = (int) $q->max_num_pages;
 
     <h2 class="blog-news__title"><?php echo esc_html($block_title); ?></h2>
 
+    <div class="blog-news__description"><?php echo esc_html($block_description); ?></div>
+
     <div class="blog-news__grid js-blog-news-grid">
       <?php while ($q->have_posts()) : $q->the_post(); ?>
         <?php get_template_part('template-parts/blocks-blog/partials/blog-news-card'); ?>
@@ -30,7 +34,7 @@ $total_pages = (int) $q->max_num_pages;
     <?php if ($total_pages > 1): ?>
       <div class="blog-news__cta">
         <button type="button" class="blog-news__btn js-blog-news-loadmore" data-page="1">
-          Ver más
+          <?php echo esc_html($blog_btn_text); ?>
         </button>
       </div>
     <?php endif; ?>

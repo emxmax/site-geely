@@ -1,0 +1,128 @@
+.faq-block {
+  padding: 80px 24px;
+  background: #fff;
+}
+
+.faq-block__inner {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.faq-block__title {
+  font-family: var(--font-geely);
+  font-size: 48px;
+  line-height: 40px;
+  font-weight: 700;
+  margin: 0 0 40px;
+  letter-spacing: 0.02em;
+}
+
+/* LIST */
+.faq-block__list {
+  border-top: 1px solid #d1d5db;
+}
+
+/* ITEM */
+.faq-item {
+  border-bottom: 1px solid #d1d5db;
+}
+
+/* QUESTION ROW */
+.faq-item__question {
+  width: 100%;
+  background: none;
+  border: 0;
+  padding: 24px 24px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.faq-item__question-text {
+  font-family: var(--font-geely);
+  font-size: 24px;
+  font-weight: 600;
+  color: #212529;
+  line-height: 32px;
+}
+
+/* ICON (+ / −) */
+.faq-item__icon {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #027bff;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.faq-item__icon-minus {
+  display: none;
+}
+
+/* ANSWER */
+.faq-item__answer {
+  display: none;
+  padding: 0 24px 24px;
+  max-width: 980px;
+}
+
+.faq-item__answer p {
+  margin: 0;
+  font-family: var(--font-inter);
+  font-size: 16px;
+  line-height: 24px;
+  color: #212529;
+}
+
+/* OPEN STATE */
+.faq-item.is-open .faq-item__answer {
+  display: block;
+}
+
+.faq-item.is-open .faq-item__icon-plus {
+  display: none;
+}
+
+.faq-item.is-open .faq-item__icon-minus {
+  display: inline;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .faq-block {
+    padding: 56px 16px;
+  }
+
+  .faq-block__title {
+    font-size: 28px;
+    margin-bottom: 18px;
+  }
+
+  .faq-block__list {
+    border-top: 0;
+  }
+
+  .faq-item__question {
+    padding: 24px 24px 16px;
+  }
+
+  .faq-item__question-text {
+    font-size: 18px;
+  }
+
+  .faq-item__answer {
+    padding: 0 24px 24px;
+  }
+
+  .faq-item__answer p {
+    font-size: 13px;
+    line-height: 20px;
+  }
+}

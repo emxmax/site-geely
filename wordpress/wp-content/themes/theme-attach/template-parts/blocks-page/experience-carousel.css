@@ -166,6 +166,9 @@
   .exp-carousel {
     padding: 40px 16px 64px;
   }
+  .ic-block .swiper-pagination {
+    display: none !important;
+  }
   .exp-carousel__title {
     font-size: 32px;
     line-height: 40px;

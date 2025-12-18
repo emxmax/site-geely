@@ -1,12 +1,13 @@
 <?php
-if ( ! defined('ABSPATH') ) exit;
+if (! defined('ABSPATH')) exit;
 
 /**
  * Registrar bloques ACF (Page / Reutilizables)
  */
-function theme_attach_register_page_blocks() {
+function theme_attach_register_page_blocks()
+{
 
-  if ( ! function_exists('acf_register_block_type') ) {
+  if (! function_exists('acf_register_block_type')) {
     return;
   }
 
@@ -26,14 +27,55 @@ function theme_attach_register_page_blocks() {
 
   // Bloque: Sección con Imagen y Compromisos (reutilizable)
   acf_register_block_type([
-  'name'            => 'page-image-commitments',
-  'title'           => __('Pagina - Sección con Imagen y Compromisos', 'theme-attach'),
-  'description'     => __('Sección reusable con imagen grande, fondo y carrusel de compromisos.', 'theme-attach'),
-  'render_template' => 'template-parts/blocks-page/image-commitments.php',
-  'category'        => 'layout',
-  'icon'            => 'align-pull-left',
-  'keywords'        => ['compromiso', 'imagen', 'seccion', 'slider', 'cards'],
-  'supports'        => ['align' => false],
-]);
+    'name'            => 'page-image-commitments',
+    'title'           => __('Pagina - Sección con Imagen y Compromisos', 'theme-attach'),
+    'description'     => __('Sección reusable con imagen grande, fondo y carrusel de compromisos.', 'theme-attach'),
+    'render_template' => 'template-parts/blocks-page/image-commitments.php',
+    'category'        => 'layout',
+    'icon'            => 'align-pull-left',
+    'keywords'        => ['compromiso', 'imagen', 'seccion', 'slider', 'cards'],
+    'supports'        => ['align' => false],
+  ]);
 
+  // Bloque: Encuentra tu Geely hoy
+  acf_register_block_type([
+    'name'            => 'page-find-geely',
+    'title'           => __('Pagina - Encuentra tu Geely', 'theme-attach'),
+    'description'     => __('Bloque con texto, botón e imagen decorativa', 'theme-attach'),
+    'render_template' => 'template-parts/blocks-page/find-geely.php',
+    'category'        => 'layout',
+    'icon'            => 'location-alt',
+    'keywords'        => ['geely', 'mapa', 'ubicacion', 'cta'],
+    'supports'        => [
+      'align' => false,
+    ],
+  ]);
+
+  // Bloque: Preguntas Frecuentes (FAQ)
+  acf_register_block_type([
+    'name'            => 'page-faq',
+    'title'           => __('Pagina - Preguntas Frecuentes', 'theme-attach'),
+    'description'     => __('Bloque de preguntas frecuentes tipo acordeón', 'theme-attach'),
+    'render_template' => 'template-parts/blocks-page/faq.php',
+    'category'        => 'layout',
+    'icon'            => 'editor-help',
+    'keywords'        => ['faq', 'preguntas', 'accordion'],
+    'supports'        => [
+      'align' => false,
+    ],
+  ]);
+
+  //  Bloque: Carrusel Hero
+  acf_register_block_type([
+    'name'            => 'hero-carousel',
+    'title'           => __('Pagina - Carrusel Hero', 'theme-attach'),
+    'description'     => __('Carrusel principal con imágenes desktop y mobile', 'theme-attach'),
+    'render_template' => 'template-parts/blocks-page/hero-carousel.php',
+    'category'        => 'layout',
+    'icon'            => 'images-alt2',
+    'keywords'        => ['hero', 'carousel', 'slider'],
+    'supports'        => [
+      'align' => false,
+    ],
+  ]);
 }

@@ -286,6 +286,8 @@ class CBT_Theme_Templates {
 		$template_blocks          = parse_blocks( $template->content );
 		$localized_blocks         = CBT_Theme_Locale::escape_text_content_of_blocks( $template_blocks );
 		$updated_template_content = serialize_blocks( $localized_blocks );
+		// Process block attributes after serialization to avoid JSON encoding of PHP tags
+		$updated_template_content = CBT_Theme_Locale::escape_block_attribute_strings( $updated_template_content );
 		$template->content        = $updated_template_content;
 		return $template;
 	}
@@ -320,9 +322,9 @@ class CBT_Theme_Templates {
 			}
 		}
 
-		// remove taxQuery attribute from query blocks
-		if ( 'core/query' === $block['blockName'] ) {
-			if ( isset( $block['attrs']['query']['taxQuery'] ) ) {
+		// (optionally) remove taxQuery attribute from query blocks
+		if ( 'core/query' === $block['blockName'] && isset( $block['attrs']['query']['taxQuery'] ) ) {
+			if ( ! $options || ( array_key_exists( 'removeTaxQuery', $options ) && $options['removeTaxQuery'] ) ) {
 				unset( $block['attrs']['query']['taxQuery'] );
 			}
 		}

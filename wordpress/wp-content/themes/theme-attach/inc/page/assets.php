@@ -16,6 +16,9 @@ function page_blocks_assets() {
     $css_blocks = [
         'experience-carousel',
         'image-commitments',
+        'find-geely',
+        'faq',
+        'hero-carousel',
     ];
 
     foreach ($css_blocks as $handle) {
@@ -40,6 +43,8 @@ function page_blocks_assets() {
     $js_blocks = [
         'experience-carousel',
         'image-commitments',
+        'faq',
+        'hero-carousel',
     ];
 
     foreach ($js_blocks as $handle) {
