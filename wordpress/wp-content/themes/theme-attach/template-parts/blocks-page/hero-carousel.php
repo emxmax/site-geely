@@ -9,29 +9,31 @@ if (! defined('ABSPATH')) exit;
  * - hero_link
  */
 
-function geely_hc_img_url($value, $size = 'full')
-{
-  if (empty($value)) return '';
+if (!function_exists('geely_hc_img_url')) {
+  function geely_hc_img_url($value, $size = 'full')
+  {
+    if (empty($value)) return '';
 
-  // ACF image array
-  if (is_array($value)) {
-    if (!empty($value['sizes'][$size])) return $value['sizes'][$size];
-    if (!empty($value['url'])) return $value['url'];
-    if (!empty($value['ID'])) return wp_get_attachment_image_url((int)$value['ID'], $size) ?: '';
+    // ACF image array
+    if (is_array($value)) {
+      if (!empty($value['sizes'][$size])) return $value['sizes'][$size];
+      if (!empty($value['url'])) return $value['url'];
+      if (!empty($value['ID'])) return wp_get_attachment_image_url((int)$value['ID'], $size) ?: '';
+      return '';
+    }
+
+    // Attachment ID
+    if (is_numeric($value)) {
+      return wp_get_attachment_image_url((int)$value, $size) ?: '';
+    }
+
+    // URL string
+    if (is_string($value)) {
+      return $value;
+    }
+
     return '';
   }
-
-  // Attachment ID
-  if (is_numeric($value)) {
-    return wp_get_attachment_image_url((int)$value, $size) ?: '';
-  }
-
-  // URL string
-  if (is_string($value)) {
-    return $value;
-  }
-
-  return '';
 }
 
 $slides = get_field('slides');

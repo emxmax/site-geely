@@ -120,4 +120,20 @@ function theme_attach_register_product_blocks()
             'align' => false,
         ],
     ]);
+
+    // Bloque MODELOS GEELY
+    acf_register_block_type([
+        'name'            => 'models-geely',
+        'title'           => __('Producto Bloque - Modelos', 'theme-attach'),
+        'description'     => __('Bloque Modelos por Categorías', 'theme-attach'),
+        'render_template' => 'template-parts/blocks-product/models-geely.php',
+        'category'        => 'layout', 
+        'icon'            => 'megaphone',
+        'keywords'        => ['producto', 'modelos', 'categorias'],
+        'supports'        => [
+            'align'  => false,
+            'anchor' => true,
+            'jsx'    => true,
+        ],
+    ]);
 }
