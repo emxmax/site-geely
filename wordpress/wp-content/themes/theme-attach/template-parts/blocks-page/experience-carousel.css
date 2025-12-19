@@ -3,6 +3,7 @@
   color: #03050f;
   max-width: 100%;
   overflow: hidden;
+  margin-top: 0px !important;
 }
 
 .exp-carousel__inner {

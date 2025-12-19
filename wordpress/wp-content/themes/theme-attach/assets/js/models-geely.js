@@ -45,6 +45,8 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             if (mobileEl) {
+                const prevM = panel.querySelector(".mg-models__nav--prev-m");
+                const nextM = panel.querySelector(".mg-models__nav--next-m");
                 const pag = panel.querySelector(".mg-models__pagination--mobile");
 
                 mobileSwiper = new Swiper(mobileEl, {
@@ -52,7 +54,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     speed: 600,
                     loop: false,
                     pagination: { el: pag, clickable: true },
+                    navigation: { prevEl: prevM, nextEl: nextM },
+                    on: {
+                        init(sw) { updateNav(sw, prevM, nextM); },
+                        slideChange(sw) { updateNav(sw, prevM, nextM); },
+                    },
                 });
+
+                updateNav(mobileSwiper, prevM, nextM);
             }
 
             panelState.set(panel, { desktopSwiper, mobileSwiper });
