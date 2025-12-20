@@ -106,28 +106,30 @@ $desktop_images = array_slice($images, 0, 5);
         </div>
 
         <!-- Galería mobile (slider Swiper) -->
-        <div class="emg-moments__slider emg-moments__slider--mobile swiper emg-moments__swiper">
-            <div class="swiper-wrapper">
-                <?php foreach ($images as $image) :
-                    $url   = isset($image['url'])   ? $image['url']   : '';
-                    $alt   = isset($image['alt'])   ? $image['alt']   : '';
-                    $title = isset($image['title']) ? $image['title'] : '';
-
-                    if (! $url) {
-                        continue;
-                    }
-                ?>
-                    <div class="swiper-slide emg-moments__slide">
-                        <img
-                            src="<?php echo esc_url($url); ?>"
-                            alt="<?php echo esc_attr($alt ?: $title); ?>"
-                            class="emg-moments__image emg-moments__image--mobile"
-                            loading="lazy">
-                    </div>
-                <?php endforeach; ?>
+        <div class="emg-moments__mobile">
+            <div class="emg-moments__slider emg-moments__slider--mobile swiper emg-moments__swiper">
+                <div class="swiper-wrapper">
+                    <?php foreach ($images as $image) : ?>
+                        <?php
+                        $url   = $image['url'] ?? '';
+                        $alt   = $image['alt'] ?? '';
+                        $title = $image['title'] ?? '';
+                        if (! $url) continue;
+                        ?>
+                        <div class="swiper-slide emg-moments__slide">
+                            <img
+                                src="<?php echo esc_url($url); ?>"
+                                alt="<?php echo esc_attr($alt ?: $title); ?>"
+                                class="emg-moments__image emg-moments__image--mobile"
+                                loading="lazy">
+                        </div>
+                    <?php endforeach; ?>
+                </div>
             </div>
+
             <div class="swiper-pagination emg-moments__pagination"></div>
         </div>
+
 
     </div>
 </section>

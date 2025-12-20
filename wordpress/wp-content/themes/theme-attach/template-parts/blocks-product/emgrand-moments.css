@@ -33,12 +33,13 @@
 
 .emg-moments__title {
   font-family: var(--font-geely);
-  margin: 0 0 16px;
+  margin: 0 0 24px;
   text-transform: uppercase;
   font-weight: 700;
-  font-size: 64px;
-  line-height: 40px;
+  font-size: 48px;
+  line-height: 44px;
   letter-spacing: 0;
+  color: #0B0C0C;
 }
 
 .emg-moments__description {
@@ -46,7 +47,8 @@
   font-family: var(--font-inter);
   font-weight: 500;
   font-size: 20px;
-  line-height: 32px;
+  line-height: 30px;
+  color: #0B0C0C;
 }
 
 /* ===== DESKTOP GRID (5 imágenes) ===== */
@@ -126,6 +128,12 @@
   /* bottom: var(--swiper-pagination-bottom, -30px) !important; */
 }
 
+.emg-moments__mobile .swiper-pagination {
+  display: block !important;
+  bottom: 34px !important;
+  text-align: center;
+}
+
 /* Swiper bullets */
 .emg-moments__pagination .swiper-pagination-bullet {
   width: 8px;
@@ -146,7 +154,7 @@
 
 @media (max-width: 1024px) {
   .emg-moments {
-    padding: 56px 16px 64px;
+    padding: 56px 16px 68px;
   }
 
   .emg-moments__grid {
@@ -165,13 +173,13 @@
 
   .emg-moments__title {
     font-size: 32px;
-    line-height: 48px;
+    line-height: 40px;
     margin: 0 0 24px;
   }
 
   .emg-moments__description {
     font-size: 16px;
-    line-height: 24px;
+    line-height: 22px;
   }
 
   /* En mobile ocultamos el mosaico y usamos solo el slider */

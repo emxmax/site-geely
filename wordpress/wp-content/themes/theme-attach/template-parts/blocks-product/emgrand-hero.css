@@ -1,6 +1,9 @@
 /* ================================
    HERO EMGRAND – CARRUSEL
 ================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
 
 .emg-hero {
   position: relative;
@@ -9,6 +12,7 @@
   color: #fff;
   background: #000;
   overflow: visible; /* importante para que el dropdown pueda salir del bloque */
+  overflow-x: clip;
 }
 
 /* Swiper sólo como fondo */
@@ -54,7 +58,7 @@
   position: absolute;
   inset: 0;
   z-index: 2;
-  padding: 56px 40px 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -120,6 +124,8 @@
   letter-spacing: 0px;
   text-align: center;
   vertical-align: middle;
+  max-width: 100%;
+  white-space: nowrap;
 }
 
 .emg-hero__btn--light {
@@ -135,18 +141,32 @@
 /* -----------------------------
    BARRA NEGRA INFERIOR
 ------------------------------ */
+.emg-hero__bottom-contain {
+  width: 100%;
+  background: #0b0c0c;
+  margin-top: 80px;
+  /* margin-left: -40px;
+  margin-right: -40px; */
+}
 
 .emg-hero__bottom {
-  margin-top: 80px;
-  margin-left: -40px;
-  margin-right: -40px;
-  padding: 14px 56px;
+  max-width: 1120px;
+  width: 100%;
+  margin: 0 auto;
+
+  padding: 14px 0;
+
   background: #000;
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 32px;
+
   position: relative;
+}
+
+.emg-hero__bottom > a {
+  justify-self: end;
 }
 
 /* Botón marca + flecha (se usa en desktop y mobile) */
@@ -170,6 +190,11 @@
   letter-spacing: 8px;
   vertical-align: middle;
   color: #c9c0b7;
+
+  max-width: 260px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Icono flecha */
@@ -182,6 +207,9 @@
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
+  justify-content: center;
+  min-width: 0;
+  overflow: hidden;
   justify-content: center;
 }
 
@@ -216,11 +244,15 @@
 /* ================================
    RESPONSIVE
 ================================ */
+@media (max-width: 1232px) {  
+  .emg-hero__bottom {
+  }
+}
 
 /* Tablet */
 @media (max-width: 1024px) {
-  .emg-hero__overlay {
-    padding: 48px 24px 0;
+  .emg-hero__top {
+    padding-inline: 24px;
   }
 
   .emg-hero__title {
@@ -228,14 +260,20 @@
   }
 
   .emg-hero__bottom {
-    margin-left: -24px;
-    margin-right: -24px;
-    padding-inline: 32px;
+    padding-inline: 24px;
+  }
+
+  .emg-hero__brand {
+    max-width: 340px;
   }
 }
 
 /* Mobile */
 @media (max-width: 768px) {
+  .emg-hero__bottom-contain {
+    margin-top: 40px;
+  }
+
   .emg-hero__slide {
     min-height: 580px;
   }
@@ -248,10 +286,6 @@
       rgba(0, 0, 0, 0.75) 40%,
       rgba(0, 0, 0, 0.95) 100%
     );
-  }
-
-  .emg-hero__overlay {
-    padding: 32px 16px 0;
   }
 
   .emg-hero__top {
@@ -282,12 +316,9 @@
 
   /* Barra negra inferior mobile */
   .emg-hero__bottom {
-    margin-top: 40px;
-    margin-left: -16px;
-    margin-right: -16px;
+    margin-top: 40px; /* OJO: esto estaba en .emg-hero__bottom, pero tu margin-top real está en __bottom-contain */
     padding: 14px 20px;
     grid-template-columns: 1fr auto;
-    align-items: center;
     gap: 12px;
   }
 

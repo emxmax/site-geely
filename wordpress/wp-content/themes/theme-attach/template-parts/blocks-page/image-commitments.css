@@ -169,7 +169,7 @@
   margin-top: 12px;
 }
 
-.swiper-pagination {
+.ic-block__slider-wrap .swiper-pagination {
   display: none;
 }
 
@@ -301,7 +301,7 @@
   } */
 
   /* Mostrar bullets en mobile */
-  .swiper-pagination {
+  .ic-block__slider-wrap .swiper-pagination {
     display: block !important;
     margin-top: 14px;
     text-align: center;

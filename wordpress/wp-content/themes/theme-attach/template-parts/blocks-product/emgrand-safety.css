@@ -30,11 +30,11 @@
 
 .emg-safety__title {
   font-family: var(--font-geely);
-  margin: 0 0 12px;
+  margin: 0 0 16px;
   letter-spacing: 0.08em;
   font-weight: 700;
-  font-size: 64px;
-  line-height: 64px;
+  font-size: 48px;
+  line-height: 44px;
   text-transform: uppercase;
 }
 
@@ -43,7 +43,7 @@
   font-family: var(--font-inter);
   font-weight: 500;
   font-size: 20px;
-  line-height: 32px;
+  line-height: 30px;
   letter-spacing: 0px;
   vertical-align: middle;
 }
@@ -80,7 +80,7 @@
   font-family: var(--font-geely);
   display: block;
   text-transform: uppercase;
-  color: #AFB6B9;
+  color: #afb6b9;
   font-weight: 700;
   font-size: 22px;
   line-height: 33px;
@@ -309,9 +309,9 @@
 }
 
 @media (max-width: 768px) {
-    .emg-safety {
-        padding: 40px 16px 80px;
-    }
+  .emg-safety {
+    padding: 40px 16px 80px;
+  }
 
   /* Fondo mobile administrable */
   .emg-safety {

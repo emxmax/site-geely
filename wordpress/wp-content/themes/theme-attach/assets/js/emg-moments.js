@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     const sliders = document.querySelectorAll('.emg-moments__swiper');
-
     if (!sliders.length || typeof Swiper === 'undefined') return;
 
     sliders.forEach((slider) => {
-        const paginationEl = slider.querySelector('.emg-moments__pagination');
+        const wrapper = slider.closest('.emg-moments__mobile');
+        const paginationEl = wrapper?.querySelector('.emg-moments__pagination');
+        if (!paginationEl) return;
 
         new Swiper(slider, {
             slidesPerView: 1,
