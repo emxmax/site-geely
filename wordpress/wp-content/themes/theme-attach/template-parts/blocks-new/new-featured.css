@@ -23,7 +23,7 @@
 .new-featured__title {
   font-family: var(--font-geely);
   font-weight: 700;
-  color: #0b0c0c;
+  color: var(--c-black);
   text-transform: uppercase;
   margin-bottom: 50px;
 }
@@ -64,6 +64,12 @@
   flex-direction: column;
   gap: 24px;
 }
+@media (max-width: 1439px) {
+  .new-featured__content {
+    padding: 67px 32px;
+  }
+}
+
 .new-featured__text-content {
   display: flex;
   flex-direction: column;
@@ -72,20 +78,20 @@
 
 .new-featured__date {
   font-family: var(--font-inter);
-  color: #212529;
+  color: var(--c-urban-graphite);
   font-weight: 500;
 }
 
 .new-featured__post-title {
   font-family: var(--font-geely);
   font-weight: 700;
-  color: #0b0c0c;
+  color: var(--c-black);
 }
 
 .new-featured__excerpt {
   font-family: var(--font-inter);
   font-weight: 500;
-  color: #0b0c0c;
+  color: var(--c-black);
   line-height: 1.6;
 }
 
@@ -93,7 +99,7 @@
   display: inline-block;
   font-family: var(--font-inter);
   font-weight: 700;
-  color: #0b0c0c;
+  color: var(--c-black);
   text-decoration: underline;
   text-underline-offset: 4px;
   transition: opacity 0.3s ease;
@@ -123,6 +129,11 @@
   display: block;
   max-height: 392px;
 }
+@media (max-width: 1439px) {
+  .new-featured__image {
+    max-height: none;
+  }
+}
 /* =========================
    CONTROLS
 =========================
@@ -147,7 +158,7 @@
   height: 44px;
   border: 0;
   background: transparent;
-  color: #212529;
+  color: var(--c-urban-graphite);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -157,8 +168,10 @@
 }
 
 .new-featured__nav img {
-  width: 24px;
-  height: 24px;
+  /* width: 24px;
+  height: 24px; */
+  width: 40px;
+  height: 40px;
   display: block;
 }
 
@@ -208,6 +221,14 @@
   background-color: #027bff;
 }
 
+/* =========================
+   DESKTOP (≤1328px)
+========================= */
+@media (max-width: 1328px) {
+  .new-featured__inner {
+    padding-inline: 24px;
+  }
+}
 /* =========================
    TABLET (≤1024px)
 ========================= */

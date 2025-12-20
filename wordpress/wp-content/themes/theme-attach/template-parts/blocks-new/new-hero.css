@@ -42,7 +42,7 @@ p {
 .new-hero__title {
   font-family: var(--font-geely);
   font-weight: 700;
-  color: #0b0c0c;
+  color: var(--c-black);
   text-transform: uppercase;
 }
 
@@ -52,9 +52,18 @@ p {
 
 .new-hero__description {
   font-family: var(--font-inter);
-  font-weight: 400;
-  color: #0b0c0c;
+  font-weight: 500;
+  color: var(--c-black);
   margin-top: 24px;
+}
+
+/* =========================
+   DESKTOP (≤1328px)
+========================= */
+@media (max-width: 1328px) {
+  .new-hero__inner {
+    padding-inline: 24px;
+  }
 }
 
 /* =========================

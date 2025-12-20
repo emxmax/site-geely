@@ -72,6 +72,7 @@
   height: 220px;
   object-fit: cover;
   display: block; */
+  height: 238px;
 }
 
 .new-about__grid .blog-news__meta {
@@ -250,4 +251,13 @@
 .new-about__grid.is-loading {
   opacity: 0.5;
   pointer-events: none;
+}
+
+/* =========================
+   DESKTOP (≤1328px)
+========================= */
+@media (max-width: 1328px) {
+  .new-about__inner {
+    padding-inline: 24px;
+  }
 }
