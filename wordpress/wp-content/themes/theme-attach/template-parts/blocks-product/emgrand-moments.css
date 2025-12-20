@@ -39,7 +39,7 @@
   font-size: 48px;
   line-height: 44px;
   letter-spacing: 0;
-  color: #0B0C0C;
+  color: #0b0c0c;
 }
 
 .emg-moments__description {
@@ -48,7 +48,7 @@
   font-weight: 500;
   font-size: 20px;
   line-height: 30px;
-  color: #0B0C0C;
+  color: #0b0c0c;
 }
 
 /* ===== DESKTOP GRID (5 imágenes) ===== */
@@ -129,7 +129,7 @@
 }
 
 .emg-moments__mobile .swiper-pagination {
-  display: block !important;
+  display: none;
   bottom: 34px !important;
   text-align: center;
 }
@@ -186,8 +186,9 @@
   .emg-moments__grid {
     display: none;
   }
-  .emg-moments__slider {
-    /* overflow: visible; */
+  
+  .emg-moments__mobile .swiper-pagination {
+    display: block !important;
   }
 
   .emg-moments__slider--mobile {
