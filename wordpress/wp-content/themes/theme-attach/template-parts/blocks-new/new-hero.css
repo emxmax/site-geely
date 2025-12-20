@@ -1,0 +1,140 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+/* =====================================================
+   NEWS HERO – BLOCK
+===================================================== */
+
+.new-hero {
+  padding-block: 120px 40px;
+  background: #ffffff;
+  margin-block-start: 0 !important;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.new-hero__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.new-hero__content {
+  max-width: 100%;
+}
+
+/* =========================
+   TITLE
+========================= */
+
+.new-hero__title {
+  font-family: var(--font-geely);
+  font-weight: 700;
+  color: #0b0c0c;
+  text-transform: uppercase;
+}
+
+/* =========================
+   DESCRIPTION
+========================= */
+
+.new-hero__description {
+  font-family: var(--font-inter);
+  font-weight: 400;
+  color: #0b0c0c;
+  margin-top: 24px;
+}
+
+/* =========================
+   TABLET (≤1024px)
+========================= */
+
+@media (max-width: 1024px) {
+  .new-hero {
+    padding: 80px 24px 48px;
+  }
+
+  .new-hero__inner {
+    padding: 0 40px;
+  }
+
+  .new-hero__title {
+    font-size: 72px;
+  }
+
+  .new-hero__description {
+  }
+
+  .new-hero__section-title {
+    font-size: 40px;
+  }
+}
+
+/* =========================
+   MOBILE (≤768px)
+========================= */
+
+@media (max-width: 768px) {
+  .new-hero {
+    padding: 64px 24px 40px;
+  }
+
+  .new-hero__inner {
+    padding: 0 20px;
+  }
+
+  .new-hero__title {
+    font-size: 48px;
+    margin-bottom: 20px;
+  }
+
+  .new-hero__description {
+    font-size: 16px;
+    margin-bottom: 48px;
+    line-height: 1.5;
+  }
+
+  .new-hero__section-title {
+    font-size: 32px;
+  }
+}
+
+/* =========================
+   SMALL MOBILE (≤480px)
+========================= */
+
+@media (max-width: 480px) {
+  .new-hero {
+    padding: 48px 16px 32px;
+  }
+
+  .new-hero__inner {
+    padding: 0;
+  }
+
+  .new-hero__title {
+    font-size: 40px;
+    line-height: 1.15;
+  }
+
+  .new-hero__description {
+    font-size: 15px;
+    margin-bottom: 40px;
+  }
+
+  .new-hero__section-title {
+    font-size: 28px;
+  }
+}

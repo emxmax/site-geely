@@ -2,7 +2,7 @@
 /**
  * Theme Attach - functions.php
  */
-if ( ! defined('ABSPATH') ) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
@@ -19,6 +19,9 @@ require_once get_stylesheet_directory() . '/inc/product/zip-360.php';
 
 // Page domain
 require_once get_stylesheet_directory() . '/inc/page/assets.php';
+
+// News Page 
+require_once get_stylesheet_directory() . '/inc/new/assets.php';
 
 // Blog domain
 require_once get_stylesheet_directory() . '/inc/blog/assets.php';

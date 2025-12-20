@@ -23,13 +23,13 @@
 define( 'DB_NAME', 'geely' );
 
 /** Database username */
-define( 'DB_USER', 'root' );
+define( 'DB_USER', 'admin' );
 
 /** Database password */
-define( 'DB_PASSWORD', 'root@123' );
+define( 'DB_PASSWORD', 'NOTEPADmax12!' );
 
 /** Database hostname */
-define( 'DB_HOST', 'localhost' );
+define( 'DB_HOST', 'geely-database.cbo8w4ekwbz1.sa-east-1.rds.amazonaws.com' );
 
 /** Database charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8mb4' );

@@ -1,0 +1,85 @@
+/* =====================================================
+   NEW INNOVATION – INNOVACIÓN QUE MUEVE
+===================================================== */
+
+.new-innovation {
+  padding: 0;
+  margin-block-start: 0 !important;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  overflow: hidden;
+
+  /* Background image */
+  background-size: cover;
+  background-position: top right;
+  background-repeat: no-repeat;
+  min-height: 424px;
+}
+@media (max-width: 1439px) {
+  .new-innovation {
+    /* background-size: contain; */
+    background-size: 120%;
+    background-position-x: 20%;
+  }
+}
+
+.new-innovation__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  min-height: 424px;
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================
+   CONTENT (Left Side)
+========================= */
+
+.new-innovation__content {
+  /* padding: 80px 120px 80px 160px; */
+  /* max-width: 720px; */
+  max-width: 493px;
+}
+
+.new-innovation__title {
+  font-family: var(--font-geely);
+  font-weight: 700;
+  color: var(--c-black);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.new-innovation__description {
+  font-family: var(--font-inter);
+  color: var(--c-urban-graphite);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* =========================
+   TABLET (≤1024px)
+========================= */
+
+@media (max-width: 1024px) {
+  .new-innovation {
+    min-height: 400px;
+    background-position: center;
+  }
+
+  .new-innovation__inner {
+    min-height: 400px;
+  }
+
+  .new-innovation__content {
+    padding: 60px 40px;
+    max-width: 100%;
+  }
+
+  .new-innovation__title {
+    margin-bottom: 20px;
+  }
+}

@@ -185,3 +185,193 @@
   font-style: normal;
   font-display: swap;
 }
+
+/* --------------------------------------------
+    TITLES STYLES
+--------------------------------------------- */
+:root {
+  /* Parrafos */
+  --fs-p-1: 24px;
+  --lh-p-1: 1.25; /*30px*/
+
+  --fs-p-2: 20px;
+  --lh-p-2: 1.2; /*24px*/
+
+  --fs-p-3: 18px;
+  --lh-p-3: 1.2222; /*22px*/
+
+  --fs-p-4: 16px;
+  --lh-p-4: 1.25; /*20px*/
+
+  --fs-p-5: 14px;
+  --lh-p-5: 1.2857; /*18px*/
+
+  --fs-p-6: 12px;
+  --lh-p-6: 1.3333; /*16px*/
+
+  --fs-p-7: 10px;
+  --lh-p-7: 1.4; /*14px*/
+
+  --fs-p-8: 8px;
+  --lh-p-8: 1.5; /*12px*/
+}
+
+/* Desktop */
+.title-1 {
+  font-size: 64px;
+  line-height: 1;
+}
+.title-2 {
+  font-size: 48px;
+  line-height: 0.9167; /* 44/48 */
+}
+.title-3 {
+  font-size: 40px;
+  line-height: 1;
+}
+.title-4 {
+  font-size: 24px;
+  line-height: 1.25; /* 30/24 */
+}
+.title-5 {
+  font-size: 24px;
+  line-height: 1;
+}
+.title-6 {
+  font-size: 20px;
+  line-height: 1.2; /* 24/20 */
+}
+.title-7 {
+  font-size: 16px;
+  line-height: 1.5; /* 24/16 */
+}
+/*  */
+.paragraph-1 {
+  font-size: var(--fs-p-1);
+  line-height: var(--lh-p-1);
+}
+.paragraph-2 {
+  font-size: var(--fs-p-2);
+  line-height: var(--lh-p-2);
+}
+.paragraph-3 {
+  font-size: var(--fs-p-3);
+  line-height: var(--lh-p-3);
+}
+.paragraph-4 {
+  font-size: var(--fs-p-4);
+  line-height: var(--lh-p-4);
+}
+.paragraph-5 {
+  font-size: var(--fs-p-5);
+  line-height: var(--lh-p-5);
+}
+.paragraph-6 {
+  font-size: var(--fs-p-6);
+  line-height: var(--lh-p-6);
+}
+.paragraph-7 {
+  font-size: var(--fs-p-7);
+  line-height: var(--lh-p-7);
+}
+.paragraph-8 {
+  font-size: var(--fs-p-8);
+  line-height: var(--lh-p-8);
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .title-1 {
+    font-size: 40px;
+    line-height: 1;
+  }
+  .title-2 {
+    font-size: 32px;
+    line-height: 1.25; /* 40/32 */
+  }
+  .title-3 {
+    font-size: 18px;
+    line-height: 1.3333; /* 24/18 */
+  }
+  .title-4 {
+    font-size: 18px;
+    line-height: 1.3333; /* 24/18 */
+  }
+  .title-5 {
+    font-size: 16px;
+    line-height: 1.25; /* 20/16 */
+  }
+  .title-6 {
+    font-size: 14px;
+    line-height: 1.4286; /* 20/14 */
+  }
+  .title-7 {
+    font-size: 12px;
+    line-height: 1.6667; /* 20/12 */
+  }
+}
+
+/* colores */
+:root {
+  --c-black: #0b0c0c;
+  --c-greely-blue: #027bff;
+  --c-urban-graphite: #212529;
+  --c-steel-grey: #afb6b9;
+  --c-engine-red: #f6282e;
+  --c-white: #ffffff;
+  --c-snow-white: #f6f3f5;
+  --c-cloud-white: #e7e6e6;
+  --c-midnight-tech: #212529;
+}
+
+/* Color de texto */
+.text-black {
+  color: var(--c-black);
+}
+.text-urban-graphite {
+  color: var(--c-urban-graphite);
+}
+.text-steel-grey {
+  color: var(--c-steel-grey);
+}
+.text-engine-red {
+  color: var(--c-engine-red);
+}
+.text-white {
+  color: var(--c-white);
+}
+.text-snow-white {
+  color: var(--c-snow-white);
+}
+.text-cloud-white {
+  color: var(--c-cloud-white);
+}
+.text-midnight-tech {
+  color: var(--c-midnight-tech);
+}
+
+/* Color de fondo */
+.bg-black {
+  background-color: var(--c-black);
+}
+.bg-urban-graphite {
+  background-color: var(--c-urban-graphite);
+}
+.bg-steel-grey {
+  background-color: var(--c-steel-grey);
+}
+.bg-engine-red {
+  background-color: var(--c-engine-red);
+}
+.bg-white {
+  background-color: var(--c-white);
+}
+.bg-snow-white {
+  background-color: var(--c-snow-white);
+}
+.bg-cloud-white {
+  background-color: var(--c-cloud-white);
+}
+.bg-midnight-tech {
+  background-color: var(--c-midnight-tech);
+}
