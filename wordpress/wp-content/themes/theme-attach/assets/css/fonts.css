@@ -214,6 +214,28 @@
 
   --fs-p-8: 8px;
   --lh-p-8: 1.5; /*12px*/
+
+  /* Títulos */
+  --fs-title-1: 64px;
+  --lh-title-1: 1; /* 64px */
+
+  --fs-title-2: 48px;
+  --lh-title-2: 0.9167; /* 44px */
+
+  --fs-title-3: 40px;
+  --lh-title-3: 1; /* 40px */
+
+  --fs-title-4: 24px;
+  --lh-title-4: 1.25; /* 30px */
+
+  --fs-title-5: 24px;
+  --lh-title-5: 1; /* 24px */
+
+  --fs-title-6: 20px;
+  --lh-title-6: 1.2; /* 24px */
+
+  --fs-title-7: 16px;
+  --lh-title-7: 1.5; /* 24px */
 }
 
 /* Desktop */

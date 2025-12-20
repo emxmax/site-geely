@@ -121,20 +121,21 @@ $uid = 'nf-' . wp_unique_id();
 
       </div>
     </div>
-
-    <div class="new-featured__controls">
-      <!-- Navegación -->
-      <button class="new-featured__nav new-featured__nav--prev" aria-label="Anterior">
-        <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-arrow-right.png'); ?>"
-          alt="Anterior">
-      </button>
-      <!-- Paginación -->
-      <div class="new-featured__pagination"></div>
-      <button class="new-featured__nav new-featured__nav--next" aria-label="Siguiente">
-        <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-arrow-right.png'); ?>"
-          alt="Siguiente">
-      </button>
-    </div>
+    <?php if (count($featured_posts) > 1): ?>
+      <div class="new-featured__controls">
+        <!-- Navegación -->
+        <button class="new-featured__nav new-featured__nav--prev" aria-label="Anterior">
+          <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-arrow-right.png'); ?>"
+            alt="Anterior">
+        </button>
+        <!-- Paginación -->
+        <div class="new-featured__pagination"></div>
+        <button class="new-featured__nav new-featured__nav--next" aria-label="Siguiente">
+          <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-arrow-right.png'); ?>"
+            alt="Siguiente">
+        </button>
+      </div>
+    <?php endif; ?>
 
   </div>
 </section>
