@@ -25,3 +25,6 @@ require_once get_stylesheet_directory() . '/inc/new/assets.php';
 
 // Blog domain
 require_once get_stylesheet_directory() . '/inc/blog/assets.php';
+
+// Utilities
+require_once get_stylesheet_directory() . '/inc/enqueue-utilities.php';

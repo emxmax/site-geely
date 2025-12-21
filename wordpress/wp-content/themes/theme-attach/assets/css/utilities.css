@@ -1,0 +1,257 @@
+/* --------------------------------------------
+    TITLES STYLES
+--------------------------------------------- */
+:root {
+  /* Parrafos */
+  --fs-p-1: 24px;
+  --lh-p-1: 1.25; /*30px*/
+
+  --fs-p-2: 20px;
+  --lh-p-2: 1.2; /*24px*/
+
+  --fs-p-3: 18px;
+  --lh-p-3: 1.2222; /*22px*/
+
+  --fs-p-4: 16px;
+  --lh-p-4: 1.25; /*20px*/
+
+  --fs-p-5: 14px;
+  --lh-p-5: 1.2857; /*18px*/
+
+  --fs-p-6: 12px;
+  --lh-p-6: 1.3333; /*16px*/
+
+  --fs-p-7: 10px;
+  --lh-p-7: 1.4; /*14px*/
+
+  --fs-p-8: 8px;
+  --lh-p-8: 1.5; /*12px*/
+
+  /* Títulos */
+  --fs-title-1: 64px;
+  --lh-title-1: 1; /* 64px */
+
+  --fs-title-sm-1: 40px;
+  --lh-title-sm-1: 1;
+
+  --fs-title-2: 48px;
+  --lh-title-2: 0.9167; /* 44px */
+
+  --fs-title-sm-2: 32px;
+  --lh-title-sm-2: 1.25; /* 40px */
+
+  --fs-title-3: 40px;
+  --lh-title-3: 1; /* 40px */
+
+  --fs-title-sm-3: 18px;
+  --lh-title-sm-3: 1.3333; /* 24px */
+
+  --fs-title-4: 24px;
+  --lh-title-4: 1.25; /* 30px */
+
+  --fs-title-sm-4: 18px;
+  --lh-title-sm-4: 1.3333; /* 24px */
+
+  --fs-title-5: 24px;
+  --lh-title-5: 1; /* 24px */
+
+  --fs-title-sm-5: 16px;
+  --lh-title-sm-5: 1.25; /* 20px */
+
+  --fs-title-6: 20px;
+  --lh-title-6: 1.2; /* 24px */
+
+  --fs-title-sm-6: 14px;
+  --lh-title-sm-6: 1.4286; /* 20px */
+
+  --fs-title-7: 16px;
+  --lh-title-7: 1.5; /* 24px */
+
+  --fs-title-sm-7: 12px;
+  --lh-title-sm-7: 1.6667; /* 20px */
+}
+
+/* Desktop */
+.title-1 {
+  font-size: var(--fs-title-1);
+  line-height: var(--lh-title-1);
+}
+.title-2 {
+  font-size: var(--fs-title-2);
+  line-height: var(--lh-title-2);
+}
+.title-3 {
+  font-size: var(--fs-title-3);
+  line-height: var(--lh-title-3);
+}
+.title-4 {
+  font-size: var(--fs-title-4);
+  line-height: var(--lh-title-4);
+}
+.title-5 {
+  font-size: var(--fs-title-5);
+  line-height: var(--lh-title-5);
+}
+.title-6 {
+  font-size: var(--fs-title-6);
+  line-height: var(--lh-title-6);
+}
+.title-7 {
+  font-size: var(--fs-title-7);
+  line-height: var(--lh-title-7);
+}
+@media (max-width: 767px) {
+  .title-1 {
+    font-size: var(--fs-title-sm-1);
+    line-height: var(--lh-title-sm-1);
+  }
+  .title-2 {
+    font-size: var(--fs-title-sm-2);
+    line-height: var(--lh-title-sm-2);
+  }
+  .title-3 {
+    font-size: var(--fs-title-sm-3);
+    line-height: var(--lh-title-sm-3);
+  }
+  .title-4 {
+    font-size: var(--fs-title-sm-4);
+    line-height: var(--lh-title-sm-4);
+  }
+  .title-5 {
+    font-size: var(--fs-title-sm-5);
+    line-height: var(--lh-title-sm-5);
+  }
+  .title-6 {
+    font-size: var(--fs-title-sm-6);
+    line-height: var(--lh-title-sm-6);
+  }
+  .title-7 {
+    font-size: var(--fs-title-sm-7);
+    line-height: var(--lh-title-sm-7);
+  }
+}
+
+.paragraph-1 {
+  font-size: var(--fs-p-1);
+  line-height: var(--lh-p-1);
+}
+.paragraph-2 {
+  font-size: var(--fs-p-2);
+  line-height: var(--lh-p-2);
+}
+.paragraph-3 {
+  font-size: var(--fs-p-3);
+  line-height: var(--lh-p-3);
+}
+.paragraph-4 {
+  font-size: var(--fs-p-4);
+  line-height: var(--lh-p-4);
+}
+.paragraph-5 {
+  font-size: var(--fs-p-5);
+  line-height: var(--lh-p-5);
+}
+.paragraph-6 {
+  font-size: var(--fs-p-6);
+  line-height: var(--lh-p-6);
+}
+.paragraph-7 {
+  font-size: var(--fs-p-7);
+  line-height: var(--lh-p-7);
+}
+.paragraph-8 {
+  font-size: var(--fs-p-8);
+  line-height: var(--lh-p-8);
+}
+@media (max-width: 767px) {
+  .title-sm-1 {
+    font-size: var(--fs-title-1);
+    line-height: var(--lh-title-1);
+  }
+  .title-sm-2 {
+    font-size: var(--fs-title-2);
+    line-height: var(--lh-title-2);
+  }
+  .title-sm-3 {
+    font-size: var(--fs-title-3);
+    line-height: var(--lh-title-3);
+  }
+  .title-sm-4 {
+    font-size: var(--fs-title-4);
+    line-height: var(--lh-title-4);
+  }
+  .title-sm-5 {
+    font-size: var(--fs-title-5);
+    line-height: var(--lh-title-5);
+  }
+  .title-sm-6 {
+    font-size: var(--fs-title-6);
+    line-height: var(--lh-title-6);
+  }
+  .title-sm-7 {
+    font-size: var(--fs-title-7);
+    line-height: var(--lh-title-7);
+  }
+
+  .title-mobile-sm-1 {
+    font-size: var(--fs-title-sm-1);
+    line-height: var(--lh-title-sm-1);
+  }
+  .title-mobile-sm-2 {
+    font-size: var(--fs-title-sm-2);
+    line-height: var(--lh-title-sm-2);
+  }
+  .title-mobile-sm-3 {
+    font-size: var(--fs-title-sm-3);
+    line-height: var(--lh-title-sm-3);
+  }
+  .title-mobile-sm-4 {
+    font-size: var(--fs-title-sm-4);
+    line-height: var(--lh-title-sm-4);
+  }
+  .title-mobile-sm-5 {
+    font-size: var(--fs-title-sm-5);
+    line-height: var(--lh-title-sm-5);
+  }
+  .title-mobile-sm-6 {
+    font-size: var(--fs-title-sm-6);
+    line-height: var(--lh-title-sm-6);
+  }
+  .title-mobile-sm-7 {
+    font-size: var(--fs-title-sm-7);
+    line-height: var(--lh-title-sm-7);
+  }
+
+  .paragraph-sm-1 {
+    font-size: var(--fs-p-1);
+    line-height: var(--lh-p-1);
+  }
+  .paragraph-sm-2 {
+    font-size: var(--fs-p-2);
+    line-height: var(--lh-p-2);
+  }
+  .paragraph-sm-3 {
+    font-size: var(--fs-p-3);
+    line-height: var(--lh-p-3);
+  }
+  .paragraph-sm-4 {
+    font-size: var(--fs-p-4);
+    line-height: var(--lh-p-4);
+  }
+  .paragraph-sm-5 {
+    font-size: var(--fs-p-5);
+    line-height: var(--lh-p-5);
+  }
+  .paragraph-sm-6 {
+    font-size: var(--fs-p-6);
+    line-height: var(--lh-p-6);
+  }
+  .paragraph-sm-7 {
+    font-size: var(--fs-p-7);
+    line-height: var(--lh-p-7);
+  }
+  .paragraph-sm-8 {
+    font-size: var(--fs-p-8);
+    line-height: var(--lh-p-8);
+  }
+}

@@ -11,6 +11,8 @@
   position: relative;
   overflow: hidden;
 
+  padding-inline: 24px;
+
   /* Background image */
   background-size: cover;
   background-position: top right;
@@ -27,6 +29,7 @@
 
 .new-innovation__inner {
   max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -63,11 +66,11 @@
 /* =========================
    DESKTOP (≤1328px)
 ========================= */
-@media (max-width: 1328px) {
+/* @media (max-width: 1328px) {
   .new-innovation__inner {
     padding-inline: 24px;
   }
-}
+} */
 
 /* =========================
    TABLET (≤1024px)
@@ -75,20 +78,47 @@
 
 @media (max-width: 1024px) {
   .new-innovation {
-    min-height: 400px;
-    background-position: center;
+    min-height: 320px;
+    background-position: center left;
+    background-size: cover;
   }
 
   .new-innovation__inner {
-    min-height: 400px;
+    min-height: 320px;
   }
 
   .new-innovation__content {
-    padding: 60px 40px;
-    max-width: 100%;
+    /* max-width: 100%; */
+    max-width: 400px;
+    padding-block: 60px;
   }
 
   .new-innovation__title {
     margin-bottom: 20px;
   }
+}
+
+@media (max-width: 767px) {
+  .new-innovation {
+    min-height: 480px;
+    padding-inline: 16px;
+    background-position-x: 45%;
+  }
+  .new-innovation__inner {
+    min-height: 480px;
+    padding-block: 40px;
+    align-items: flex-start;
+  }
+  .new-innovation__content {
+    max-width: 303px;
+    padding-block: 0;
+  }
+  .new-innovation__description {
+    max-width: 239px;
+  }
+
+  /*
+  background-position-x: 0%;
+  background-position-y: 50%;
+  */
 }

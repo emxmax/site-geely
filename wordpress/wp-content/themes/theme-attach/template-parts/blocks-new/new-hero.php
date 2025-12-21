@@ -12,7 +12,6 @@ if (!function_exists('get_field'))
 // Campos ACF del bloque
 $title = get_field('news_hero_title');
 $description = get_field('news_hero_description');
-$section_title = get_field('news_hero_section_title');
 
 // Valores por defecto
 if (empty($title)) {
@@ -22,10 +21,6 @@ if (empty($title)) {
 if (empty($description)) {
   $description = 'Conoce las últimas noticias sobre lanzamientos, tecnología, la compañía, etc';
 }
-
-if (empty($section_title)) {
-  $section_title = 'DESTACADOS';
-}
 ?>
 
 <section class="new-hero">
@@ -34,7 +29,9 @@ if (empty($section_title)) {
       <h1 class="new-hero__title title-1"><?php echo esc_html($title); ?></h1>
 
       <?php if ($description): ?>
-        <p class="new-hero__description paragraph-2"><?php echo esc_html($description); ?></p>
+        <div class="new-hero__description paragraph-2 paragraph-sm-4">
+          <?php echo wp_kses_post($description); ?>
+        </div>
       <?php endif; ?>
     </div>
   </div>

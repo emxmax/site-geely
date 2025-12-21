@@ -3,11 +3,16 @@
 ===================================================== */
 
 .new-featured {
-  padding-block: 34px 16px;
+  /* padding-block: 34px 16px; */
+  padding-block: 34px 0;
   margin-block-start: 0 !important;
   width: 100%;
   margin-left: auto;
   margin-right: auto;
+}
+
+.new-featured__header {
+  padding-inline: 24px;
 }
 
 .new-featured__inner {
@@ -94,6 +99,14 @@
   color: var(--c-black);
   line-height: 1.6;
 }
+@media (max-width: 1439px) {
+  .new-featured__excerpt {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+}
 
 .new-featured__cta {
   display: inline-block;
@@ -131,7 +144,9 @@
 }
 @media (max-width: 1439px) {
   .new-featured__image {
-    max-height: none;
+    /* max-height: none; */
+    min-height: 363px;
+    max-height: 363px;
   }
 }
 /* =========================
@@ -222,20 +237,12 @@
 }
 
 /* =========================
-   DESKTOP (≤1328px)
-========================= */
-@media (max-width: 1328px) {
-  .new-featured__inner {
-    padding-inline: 24px;
-  }
-}
-/* =========================
    TABLET (≤1024px)
 ========================= */
 
 @media (max-width: 1024px) {
   .new-featured {
-    padding: 0 24px 64px;
+    padding: 0 0 64px;
   }
 
   .new-featured__title {
@@ -261,7 +268,7 @@
   }
 
   .new-featured__image {
-    min-height: 320px;
+    /* min-height: 320px; */
   }
 
   .new-featured__nav--prev {
@@ -274,5 +281,42 @@
 
   .new-featured__pagination {
     bottom: 40px;
+  }
+}
+
+/*  */
+@media (max-width: 767px) {
+  .new-featured {
+    padding: 0 0 16px;
+  }
+  .new-featured__header {
+    padding-inline: 16px;
+  }
+  .new-featured__title {
+    margin-bottom: 0;
+  }
+  .new-featured__slider-wrapper {
+    margin-top: 24px;
+  }
+
+  .new-featured__content {
+    padding: 24px 16px;
+    gap: 16px;
+  }
+  .new-featured__excerpt {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+  }
+  .new-featured__media {
+    min-height: auto;
+  }
+  .new-featured__image {
+    height: 213px;
+    min-height: auto;
+  }
+  .new-featured__nav {
+    display: none;
   }
 }

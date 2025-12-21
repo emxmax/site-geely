@@ -16,9 +16,9 @@ $title = get_the_title();
 
     <div class="blog-content__header">
       <p class="blog-content__date paragraph-4">
-        <?= esc_html(get_the_date(format: 'F j, Y')); ?>
+        <?= esc_html(get_the_date('j F Y')); ?>
       </p>
-      <h1 class="blog-content__title title-3"><?= esc_html($title); ?></h1>
+      <h1 class="blog-content__title title-3 title-mobile-sm-2"><?= esc_html($title); ?></h1>
     </div>
 
     <?php if (has_post_thumbnail()): ?>

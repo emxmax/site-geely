@@ -31,8 +31,8 @@ $total_pages = (int) $q->max_num_pages;
 
     <div class="new-about__header">
       <div class="new-about__header-content">
-        <h2 class="new-about__title title-3"><?php echo esc_html($block_title); ?></h2>
-        <p class="new-about__description paragraph-2"><?php echo esc_html($block_description); ?></p>
+        <h2 class="new-about__title title-3 title-sm-5"><?php echo esc_html($block_title); ?></h2>
+        <p class="new-about__description paragraph-2 paragraph-sm-4"><?php echo esc_html($block_description); ?></p>
       </div>
     </div>
 

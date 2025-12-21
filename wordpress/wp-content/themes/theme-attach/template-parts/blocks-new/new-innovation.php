@@ -42,10 +42,10 @@ if ($image) {
 <section class="new-innovation" style="background-image: url('<?php echo esc_url($image_url); ?>');">
   <div class="new-innovation__inner">
     <div class="new-innovation__content">
-      <h2 class="new-innovation__title title-3"><?php echo esc_html($title); ?></h2>
+      <h2 class="new-innovation__title title-3 title-mobile-sm-2"><?php echo esc_html($title); ?></h2>
       <?php if ($description): ?>
-        <div class="new-innovation__description paragraph-2">
-          <?php echo esc_html($description); ?>
+        <div class="new-innovation__description paragraph-2 paragraph-sm-4">
+          <?php echo wp_kses_post($description); ?>
         </div>
       <?php endif; ?>
     </div>

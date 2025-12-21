@@ -56,8 +56,10 @@ $uid = 'nf-' . wp_unique_id();
 ?>
 
 <section class="new-featured">
-  <div class="new-featured__inner">
-    <h2 class="new-featured__title title-3"><?php echo esc_html($section_title); ?></h2>
+  <div class="new-featured__header">
+    <div class="new-featured__inner">
+      <h2 class="new-featured__title title-3 title-sm-5"><?php echo esc_html($section_title); ?></h2>
+    </div>
   </div>
   <div class="new-featured__slider-wrapper">
     <div class="new-featured__swiper swiper" id="<?php echo esc_attr($uid); ?>">
@@ -97,8 +99,8 @@ $uid = 'nf-' . wp_unique_id();
           <div class="new-featured__slide swiper-slide">
             <div class="new-featured__content">
               <div class="new-featured__text-content">
-                <p class="new-featured__date paragraph-4"><?php echo esc_html($post_date); ?></p>
-                <h3 class="new-featured__post-title paragraph-1">
+                <p class="new-featured__date paragraph-4 paragraph-sm-5"><?php echo esc_html($post_date); ?></p>
+                <h3 class="new-featured__post-title paragraph-1 paragraph-sm-2">
                   <?php echo esc_html($post_title); ?>
                 </h3>
                 <?php if ($post_excerpt): ?>
