@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Bloque: Emgrand Hero con carrusel + navegación
  */
@@ -46,120 +47,122 @@ if (!$slides) {
 ?>
 
 <?php if ($slides) : ?>
-<section class="emg-hero">
-    <!-- SOLO FONDO / SLIDES -->
-    <div class="swiper emg-hero__swiper">
-        <div class="swiper-wrapper">
-            <?php foreach ($slides as $slide) : ?>
-                <?php
-                $type = $slide['slide_type'] ?? 'image';
+    <section class="emg-hero">
+        <!-- SOLO FONDO / SLIDES -->
+        <div class="swiper emg-hero__swiper">
+            <div class="swiper-wrapper">
+                <?php foreach ($slides as $slide) : ?>
+                    <?php
+                    $type = $slide['slide_type'] ?? 'image';
 
-                $media     = $slide['slide_image'] ?? null;
-                $media_url = '';
-                $alt_text  = '';
+                    $media     = $slide['slide_image'] ?? null;
+                    $media_url = '';
+                    $alt_text  = '';
 
-                if (is_array($media)) {
-                    $media_url = $media['url'] ?? '';
-                    $alt_text  = $slide['slide_alt'] ?? ($media['alt'] ?? '');
-                } else {
-                    $media_url = $media ?: '';
-                    $alt_text  = $slide['slide_alt'] ?? '';
-                }
-
-                $bg_style  = '';
-                $video_url = '';
-
-                if ($type === 'video') {
-                    $video_url = $media_url;
-                } else {
-                    if ($media_url) {
-                        $bg_style = "background-image:url('" . esc_url($media_url) . "');";
+                    if (is_array($media)) {
+                        $media_url = $media['url'] ?? '';
+                        $alt_text  = $slide['slide_alt'] ?? ($media['alt'] ?? '');
+                    } else {
+                        $media_url = $media ?: '';
+                        $alt_text  = $slide['slide_alt'] ?? '';
                     }
-                }
 
-                $slide_class = $type === 'video'
-                    ? 'emg-hero__slide emg-hero__slide--video'
-                    : 'emg-hero__slide emg-hero__slide--image';
-                ?>
-                <div class="swiper-slide <?php echo esc_attr($slide_class); ?>"
-                     style="<?php echo esc_attr($bg_style); ?>">
-                    <?php if ($type === 'video' && $video_url) : ?>
-                        <video class="emg-hero__bg-video"
-                               src="<?php echo esc_url($video_url); ?>"
-                               autoplay
-                               muted
-                               loop
-                               playsinline>
-                        </video>
+                    $bg_style  = '';
+                    $video_url = '';
+
+                    if ($type === 'video') {
+                        $video_url = $media_url;
+                    } else {
+                        if ($media_url) {
+                            $bg_style = "background-image:url('" . esc_url($media_url) . "');";
+                        }
+                    }
+
+                    $slide_class = $type === 'video'
+                        ? 'emg-hero__slide emg-hero__slide--video'
+                        : 'emg-hero__slide emg-hero__slide--image';
+                    ?>
+                    <div class="swiper-slide <?php echo esc_attr($slide_class); ?>"
+                        style="<?php echo esc_attr($bg_style); ?>">
+                        <?php if ($type === 'video' && $video_url) : ?>
+                            <video class="emg-hero__bg-video"
+                                src="<?php echo esc_url($video_url); ?>"
+                                autoplay
+                                muted
+                                loop
+                                playsinline>
+                            </video>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div><!-- /.emg-hero__swiper -->
+
+        <!-- OVERLAY ÚNICO (fuera del swiper) -->
+        <div class="emg-hero__overlay">
+            <!-- ZONA SUPERIOR -->
+            <div class="emg-hero__top">
+                <div class="emg-hero__top-inner">
+                    <?php if ($title) : ?>
+                        <h1 class="emg-hero__title">
+                            <?php echo esc_html($title); ?>
+                        </h1>
+                    <?php endif; ?>
+
+                    <?php if ($subtitle) : ?>
+                        <p class="emg-hero__subtitle">
+                            <?php echo esc_html($subtitle); ?>
+                        </p>
                     <?php endif; ?>
                 </div>
-            <?php endforeach; ?>
-        </div>
-    </div><!-- /.emg-hero__swiper -->
 
-    <!-- OVERLAY ÚNICO (fuera del swiper) -->
-    <div class="emg-hero__overlay">
-        <!-- ZONA SUPERIOR -->
-        <div class="emg-hero__top">
-            <div class="emg-hero__top-inner">
-                <?php if ($title) : ?>
-                    <h1 class="emg-hero__title">
-                        <?php echo esc_html($title); ?>
-                    </h1>
+                <?php if ($cta_quote_text && $cta_quote_url) : ?>
+                    <a href="<?php echo esc_url($cta_quote_url); ?>"
+                        class="emg-hero__btn emg-hero__btn--light">
+                        <?php echo esc_html($cta_quote_text); ?>
+                    </a>
                 <?php endif; ?>
+            </div><!-- /.emg-hero__top -->
 
-                <?php if ($subtitle) : ?>
-                    <p class="emg-hero__subtitle">
-                        <?php echo esc_html($subtitle); ?>
-                    </p>
-                <?php endif; ?>
-            </div>
+            <!-- BARRA NEGRA INFERIOR + MENÚ -->
+            <div class="emg-hero__bottom-contain">
+                <div class="emg-hero__bottom">
+                    <!-- Marca + flecha (toggle mobile) -->
+                    <button class="emg-hero__nav-toggle"
+                        type="button"
+                        aria-expanded="false">
+                        <span class="emg-hero__brand">
+                            <?php echo esc_html($title); ?>
+                        </span>
+                        <span class="emg-hero__nav-icon" aria-hidden="true"></span>
+                    </button>
 
-            <?php if ($cta_quote_text && $cta_quote_url) : ?>
-                <a href="<?php echo esc_url($cta_quote_url); ?>"
-                   class="emg-hero__btn emg-hero__btn--light">
-                    <?php echo esc_html($cta_quote_text); ?>
-                </a>
-            <?php endif; ?>
-        </div><!-- /.emg-hero__top -->
+                    <?php if ($nav_items) : ?>
+                        <nav class="emg-hero__nav">
+                            <?php foreach ($nav_items as $item) :
+                                $label = $item['item_title'] ?? '';
+                                $url   = $item['item_url'] ?? '#';
+                                if (!$label) {
+                                    continue;
+                                }
+                            ?>
+                                <a href="<?php echo esc_url($url); ?>"
+                                    class="emg-hero__nav-link">
+                                    <?php echo esc_html($label); ?>
+                                </a>
+                            <?php endforeach; ?>
+                        </nav>
+                    <?php endif; ?>
 
-        <!-- BARRA NEGRA INFERIOR + MENÚ -->
-        <div class="emg-hero__bottom">
-            <!-- Marca + flecha (toggle mobile) -->
-            <button class="emg-hero__nav-toggle"
-                    type="button"
-                    aria-expanded="false">
-                <span class="emg-hero__brand">
-                    <?php echo esc_html($title); ?>
-                </span>
-                <span class="emg-hero__nav-icon" aria-hidden="true"></span>
-            </button>
-
-            <?php if ($nav_items) : ?>
-                <nav class="emg-hero__nav">
-                    <?php foreach ($nav_items as $item) :
-                        $label = $item['item_title'] ?? '';
-                        $url   = $item['item_url'] ?? '#';
-                        if (!$label) {
-                            continue;
-                        }
-                        ?>
-                        <a href="<?php echo esc_url($url); ?>"
-                           class="emg-hero__nav-link">
-                            <?php echo esc_html($label); ?>
+                    <?php if ($cta_datasheet_text && $cta_datasheet_url) : ?>
+                        <a target="_blank"
+                            href="<?php echo esc_url($cta_datasheet_url); ?>"
+                            class="emg-hero__btn emg-hero__btn--header emg-hero__btn--outline">
+                            <?php echo esc_html($cta_datasheet_text); ?>
                         </a>
-                    <?php endforeach; ?>
-                </nav>
-            <?php endif; ?>
-
-            <?php if ($cta_datasheet_text && $cta_datasheet_url) : ?>
-                <a target="_blank"
-                   href="<?php echo esc_url($cta_datasheet_url); ?>"
-                   class="emg-hero__btn emg-hero__btn--header emg-hero__btn--outline">
-                    <?php echo esc_html($cta_datasheet_text); ?>
-                </a>
-            <?php endif; ?>
-        </div><!-- /.emg-hero__bottom -->
-    </div><!-- /.emg-hero__overlay -->
-</section>
+                    <?php endif; ?>
+                </div>
+            </div><!-- /.emg-hero__bottom -->
+        </div><!-- /.emg-hero__overlay -->
+    </section>
 <?php endif; ?>

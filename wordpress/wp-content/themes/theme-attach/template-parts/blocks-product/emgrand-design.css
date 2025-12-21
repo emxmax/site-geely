@@ -29,8 +29,8 @@
   margin: 0 0 24px;
   text-transform: uppercase;
   font-weight: 700;
-  font-size: 64px;
-  line-height: 40px;
+  font-size: 48px;
+  line-height: 44px;
   letter-spacing: 0.06em;
   color: #212529;
 }
@@ -38,7 +38,7 @@
 .emg-design__description {
   margin: 0;
   font-size: 20px;
-  line-height: 32px;
+  line-height: 30px;
   font-family: var(--font-inter);
   color: #212529;
 }
@@ -47,7 +47,6 @@
 
 .emg-design__tabs {
   display: inline-flex;
-  margin-top: 24px;
 }
 
 .emg-design__tab {
@@ -72,14 +71,14 @@
   left: 0;
   bottom: -1px;
   width: 100%;
-  height: 2px;
+  height: 4px;
   background: #0b0c0c;
 }
 
 /* Paneles */
 
 .emg-design__panels {
-  margin-top: 32px;
+  margin-top: 40px;
 }
 
 .emg-design__tab-panel {
@@ -167,9 +166,9 @@
 .emg-design__overlay-title {
   font-family: var(--font-inter);
   margin: 0 0 16px;
-  font-size: 32px;
+  font-size: 24px;
   font-weight: 600;
-  line-height: 40px;
+  line-height: 30px;
 }
 
 .emg-design__overlay-text {
@@ -222,7 +221,7 @@
 
 @media (max-width: 1024px) {
   .emg-design {
-    padding: 56px 16px 50px;
+    padding:40px 16px 50px;
   }
 
   .emg-design__title {
@@ -243,17 +242,22 @@
 @media (max-width: 768px) {
   .emg-design__title {
     font-size: 32px;
-    line-height: 48px;
+    line-height: 40px;
     letter-spacing: 0.04em;
+    margin-bottom: 16px;
   }
 
   .emg-design__description {
     font-size: 16px;
-    line-height: 24px;
+    line-height: 22px;
+  }
+
+  .emg-design__header {
+    margin-bottom: 16px;
   }
 
   .emg-design__tabs {
-    gap: 24px;
+    gap: 0px;
     margin-top: 0px;
   }
 
@@ -278,7 +282,8 @@
 
   .emg-design__overlay-title {
     font-size: 16px;
-    line-height: 24px;
+    line-height: 20px;
+    margin-bottom: 8px;
   }
 
   .emg-design__overlay-text {
@@ -295,5 +300,9 @@
   .emg-design__nav-btn {
     width: 44px;
     height: 44px;
+  }
+
+  .emg-design__overlay {
+    bottom: 48px;
   }
 }
