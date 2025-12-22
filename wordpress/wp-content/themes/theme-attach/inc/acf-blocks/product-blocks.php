@@ -127,9 +127,25 @@ function theme_attach_register_product_blocks()
         'title'           => __('Producto Bloque - Modelos', 'theme-attach'),
         'description'     => __('Bloque Modelos por Categorías', 'theme-attach'),
         'render_template' => 'template-parts/blocks-product/models-geely.php',
-        'category'        => 'layout', 
+        'category'        => 'layout',
         'icon'            => 'megaphone',
         'keywords'        => ['producto', 'modelos', 'categorias'],
+        'supports'        => [
+            'align'  => false,
+            'anchor' => true,
+            'jsx'    => true,
+        ],
+    ]);
+
+    // Bloque MODELS FINDER (ENCUENTRA TU GEELY IDEAL)
+    acf_register_block_type([
+        'name'            => 'models-finder',
+        'title'           => __('Producto Bloque - Modelos Finder', 'theme-attach'),
+        'description'     => __('Bloque de modelos con tabs por categorías, cards y modal de versiones', 'theme-attach'),
+        'render_template' => 'template-parts/blocks-product/models-finder.php',
+        'category'        => 'layout',
+        'icon'            => 'search',
+        'keywords'        => ['modelos', 'finder', 'geely', 'categorias', 'cards', 'modal'],
         'supports'        => [
             'align'  => false,
             'anchor' => true,

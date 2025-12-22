@@ -78,4 +78,16 @@ function theme_attach_register_page_blocks()
       'align' => false,
     ],
   ]);
+
+  acf_register_block_type([
+    'name'            => 'future-hero',
+    'title'           => 'Pagina - Banner Simple Hero',
+    'description'     => 'Hero con fondo desktop/mobile, título y descripción.',
+    'category'        => 'formatting',
+    'icon'            => 'cover-image',
+    'keywords'        => ['geely', 'hero', 'banner'],
+    'mode'            => 'preview',
+    'supports'        => ['anchor' => true],
+    'render_template' => 'template-parts/blocks-page/geely-future.php',
+  ]);
 }

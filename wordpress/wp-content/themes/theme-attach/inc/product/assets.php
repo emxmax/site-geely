@@ -17,6 +17,7 @@ function product_blocks_assets() {
         'emgrand-safety',
         'emgrand-cta',
         'models-geely',
+        'models-finder',
     ];
 
     foreach ($css_blocks as $handle) {
@@ -110,6 +111,18 @@ function product_blocks_assets() {
         get_stylesheet_directory_uri() . $models_geely_js_rel,
         ['swiper'],
         file_exists($models_geely_js_abs) ? filemtime($models_geely_js_abs) : null,
+        true
+    );
+
+    // MODELS GEELY
+    $models_finder_js_rel = '/assets/js/models-finder.js';
+    $models_finder_js_abs = get_stylesheet_directory() . $models_finder_js_rel;
+
+    wp_enqueue_script(
+        'models-finder',
+        get_stylesheet_directory_uri() . $models_finder_js_rel,
+        ['swiper'],
+        file_exists($models_finder_js_abs) ? filemtime($models_finder_js_abs) : null,
         true
     );
 }

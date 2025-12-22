@@ -19,6 +19,7 @@ function page_blocks_assets() {
         'find-geely',
         'faq',
         'hero-carousel',
+        'geely-future',
     ];
 
     foreach ($css_blocks as $handle) {
