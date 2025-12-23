@@ -36,14 +36,30 @@ $payload = [
     </header>
 
     <div class="mf-card__meta">
-        <?php if (!empty($c['type'])) : ?>
-            <span class="mf-card__type"><?php echo esc_html($c['type']); ?></span>
-        <?php endif; ?>
+        <div class="mf-card__type">
+            <?php if (!empty($c['type'])) : ?>
+                <?php if ($c['type'] === 'gasolina') : ?>
+                    <img
+                        src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-gasolina.png'); ?>"
+                        alt="icon-search"
+                        class="">
+                <?php endif; ?>
+                <span class="mf-card__type"><?php echo esc_html($c['type']); ?></span>
+            <?php endif; ?>
+        </div>
 
         <button
             type="button"
             class="mf-card__versions js-mf-open-versions"
-            data-mf='<?php echo esc_attr(wp_json_encode($payload)); ?>'>
+            data-product-id="<?php echo esc_attr($c['id']); ?>"
+            data-title="<?php echo esc_attr($c['title']); ?>"
+            data-img="<?php echo esc_url($c['img']); ?>"
+            data-usd="<?php echo esc_attr($c['usd']); ?>"
+            data-local="<?php echo esc_attr($c['local']); ?>">
+            <img
+                src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-search.svg'); ?>"
+                alt="icon-search"
+                class="">
             Ver versiones
         </button>
 

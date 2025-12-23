@@ -1,10 +1,11 @@
 <?php
-if ( ! defined('ABSPATH') ) exit;
+if (! defined('ABSPATH')) exit;
 
 /**
  * Assets específicos de bloques Product
  */
-function product_blocks_assets() {
+function product_blocks_assets()
+{
 
     // --- CSS de bloques (asumiendo nombres product-*.css) ---
     $css_blocks = [
@@ -121,9 +122,14 @@ function product_blocks_assets() {
     wp_enqueue_script(
         'models-finder',
         get_stylesheet_directory_uri() . $models_finder_js_rel,
-        ['swiper'],
+        [],
         file_exists($models_finder_js_abs) ? filemtime($models_finder_js_abs) : null,
         true
     );
+
+    wp_localize_script('models-finder', 'mfFinder', [
+        'ajaxUrl' => admin_url('admin-ajax.php'),
+        'nonce'   => wp_create_nonce('mf_finder_nonce'),
+    ]);
 }
 add_action('wp_enqueue_scripts', 'product_blocks_assets');

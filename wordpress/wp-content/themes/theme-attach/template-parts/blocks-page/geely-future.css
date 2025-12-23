@@ -86,7 +86,7 @@
 ========================== */
 @media (max-width: 768px) {
   .gf-future-hero {
-    min-height: 520px; /* para que se vea “alto” como tu captura mobile */
+    min-height: 400px; /* para que se vea “alto” como tu captura mobile */
   }
 
   .gf-future-hero__bg {
