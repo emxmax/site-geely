@@ -21,7 +21,6 @@
 }
 @media (max-width: 1439px) {
   .new-innovation {
-    /* background-size: contain; */
     background-size: 120%;
     background-position-x: 20%;
   }
@@ -43,8 +42,6 @@
 ========================= */
 
 .new-innovation__content {
-  /* padding: 80px 120px 80px 160px; */
-  /* max-width: 720px; */
   max-width: 493px;
 }
 
@@ -64,15 +61,6 @@
 }
 
 /* =========================
-   DESKTOP (≤1328px)
-========================= */
-/* @media (max-width: 1328px) {
-  .new-innovation__inner {
-    padding-inline: 24px;
-  }
-} */
-
-/* =========================
    TABLET (≤1024px)
 ========================= */
 
@@ -88,7 +76,6 @@
   }
 
   .new-innovation__content {
-    /* max-width: 100%; */
     max-width: 400px;
     padding-block: 60px;
   }
@@ -116,9 +103,4 @@
   .new-innovation__description {
     max-width: 239px;
   }
-
-  /*
-  background-position-x: 0%;
-  background-position-y: 50%;
-  */
 }

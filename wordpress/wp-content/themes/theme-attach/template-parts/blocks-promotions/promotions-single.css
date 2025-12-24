@@ -1,0 +1,79 @@
+/* === Bloque: Contenido Single Promoción === */
+.promotions-single {
+  padding: 60px 20px;
+  background: #fff;
+}
+
+.promotions-single__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.promotions-single__image {
+  margin-bottom: 40px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,.08);
+}
+
+.promotions-single__image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.promotions-single__content {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #333;
+}
+
+.promotions-single__content p {
+  margin: 0 0 20px;
+}
+
+.promotions-single__content h2,
+.promotions-single__content h3 {
+  margin: 30px 0 15px;
+  color: #1a1a1a;
+}
+
+.promotions-single__content ul,
+.promotions-single__content ol {
+  margin: 0 0 20px;
+  padding-left: 30px;
+}
+
+.promotions-single__content li {
+  margin-bottom: 8px;
+}
+
+.promotions-single__content a {
+  color: #1a66ff;
+  text-decoration: none;
+}
+
+.promotions-single__content a:hover {
+  text-decoration: underline;
+}
+
+.promotions-single__content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+@media (max-width: 768px) {
+  .promotions-single {
+    padding: 40px 20px;
+  }
+
+  .promotions-single__image {
+    margin-bottom: 30px;
+  }
+
+  .promotions-single__content {
+    font-size: 15px;
+  }
+}

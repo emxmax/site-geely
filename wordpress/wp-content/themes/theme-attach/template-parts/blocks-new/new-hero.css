@@ -68,11 +68,9 @@ p {
   }
 
   .new-hero__inner {
-    /* padding: 0 40px; */
   }
 
   .new-hero__title {
-    /* font-size: 72px; */
   }
 
   .new-hero__description {
@@ -93,17 +91,13 @@ p {
   }
 
   .new-hero__inner {
-    /* padding: 0 20px; */
   }
 
   .new-hero__title {
-    /* font-size: 48px; */
     margin-bottom: 20px;
   }
 
   .new-hero__description {
-    /* font-size: 16px;
-    line-height: 1.5; */
     margin-bottom: 48px;
   }
 
@@ -132,7 +126,5 @@ p {
 
   .new-hero__description {
     margin-bottom: 0;
-    /* font-size: 15px;
-    margin-bottom: 40px; */
   }
 }

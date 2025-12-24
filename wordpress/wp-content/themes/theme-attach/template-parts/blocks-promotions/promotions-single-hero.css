@@ -1,0 +1,60 @@
+/* === Bloque: Hero Single Promoción === */
+.promotions-single-hero {
+  position: relative;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.promotions-single-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,.4), rgba(0,0,0,.6));
+  z-index: 1;
+}
+
+.promotions-single-hero__inner {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  margin: 0 auto;
+  color: #fff;
+}
+
+.promotions-single-hero__title {
+  margin: 0 0 20px;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,.3);
+}
+
+.promotions-single-hero__subtitle {
+  color: rgba(255,255,255,.95);
+  text-shadow: 0 1px 4px rgba(0,0,0,.3);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.promotions-single-hero__subtitle p {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .promotions-single-hero {
+    min-height: 300px;
+    padding: 60px 20px;
+  }
+
+  .promotions-single-hero__title {
+    font-size: 28px;
+  }
+
+  .promotions-single-hero__subtitle {
+    font-size: 14px;
+  }
+}

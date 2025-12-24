@@ -25,7 +25,6 @@
 }
 
 .new-about__header-content {
-  /* max-width: 600px; */
 }
 
 .new-about__title {
@@ -51,7 +50,6 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 40px 24px;
-  /* margin-bottom: 120px; */
   margin-bottom: 80px;
 }
 
@@ -62,17 +60,9 @@
 }
 
 .new-about__grid .blog-news__media {
-  /* border-radius: 16px;
-  overflow: hidden;
-  display: block;
-  margin-bottom: 24px; */
 }
 
 .new-about__grid .blog-news__media img {
-  /* width: 100%;
-  height: 220px;
-  object-fit: cover;
-  display: block; */
   height: 238px;
 }
 
@@ -84,9 +74,6 @@
 }
 
 .new-about__grid .blog-news__date {
-  /* font-size: 16px;
-  opacity: 0.65;
-  font-family: var(--font-inter); */
   font-weight: 400;
   font-size: var(--fs-p-4);
   line-height: var(--lh-p-4);
@@ -95,18 +82,6 @@
 }
 
 .new-about__grid .blog-news__cat {
-  /* display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: #fff;
-  color: var(--c-black);
-  border: 1px solid rgba(3, 5, 15, 0.25);
-  font-size: 16px;
-  font-family: var(--font-inter);
-  font-weight: 500;
-  text-decoration: none; */
   display: none !important;
 }
 
@@ -128,39 +103,21 @@
 }
 
 .new-about__grid .blog-news__card-title a:hover {
-  /* opacity: 0.7; */
 }
 
 .new-about__grid .blog-news__excerpt {
-  /* font-family: var(--font-inter);
-  font-size: 16px;
-  color: var(--c-urban-graphite);
-  line-height: 1.5;
-  margin: 0 0 20px; */
   font-weight: 500;
 }
 
 .new-about__grid .blog-news__link {
-  /* display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-inter);
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--c-black);  
-  text-underline-offset: 4px;
-  margin-top: auto; */
   text-decoration: underline;
   font-weight: 700;
 }
 
 .new-about__grid .blog-news__link:hover {
-  /* opacity: 0.7; */
 }
 
 .new-about__grid .blog-news__link img {
-  /* width: 16px;
-  height: 16px; */
   display: none !important;
 }
 
@@ -201,12 +158,9 @@
 }
 
 .new-about__nav:hover:not(:disabled) {
-  /* opacity: 0.6; */
 }
 
 .new-about__nav:disabled {
-  /* opacity: 0.3;
-  cursor: auto; */
   cursor: auto;
 }
 
@@ -220,8 +174,6 @@
 .new-about__page {
   font-size: 20px;
   line-height: 1.2;
-  /* width: 32px;  
-  height: 32px; */
   border: 0;
   background: transparent;
   color: var(--c-black);
@@ -236,7 +188,6 @@
 }
 
 .new-about__page:hover {
-  /* background: rgba(0, 0, 0, 0.05); */
 }
 
 .new-about__page.is-active {
