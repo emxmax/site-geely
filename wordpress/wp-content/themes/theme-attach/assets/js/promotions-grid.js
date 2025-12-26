@@ -16,27 +16,29 @@
     const nextBtn = document.querySelector(".js-promo-next");
     let pageButtons = document.querySelectorAll(".js-promo-page");
     const gridWrapper = document.querySelector(".js-promotions-grid");
-    const paginationContainer = document.querySelector(".promotions-grid__pagination");
-
-    if (!items.length || totalPages === 1) return;
+    const paginationContainer = document.querySelector(
+      ".promotions-grid__pagination"
+    );
 
     /**
      * Mostrar items de una página específica
      */
     function showPage(pageNumber) {
+      // Solo funciona si hay items y más de una página
+      if (!items.length || totalPages === 1) return;
       // Ocultar todos los items
       items.forEach((item) => {
         item.style.display = "none";
       });
 
-      // Mostrar items de la página actual
+      // Mostrar items de la pÃ¡gina actual
       items.forEach((item) => {
         if (parseInt(item.dataset.page) === pageNumber) {
           item.style.display = "block";
         }
       });
 
-      // Actualizar botones de página
+      // Actualizar botones de pÃ¡gina
       pageButtons.forEach((btn) => {
         const btnPage = parseInt(btn.dataset.page);
         if (btnPage === pageNumber) {
@@ -46,7 +48,7 @@
         }
       });
 
-      // Actualizar estado de botones de navegación
+      // Actualizar estado de botones de navegaciÃ³n
       if (prevBtn) {
         prevBtn.dataset.page = pageNumber;
         prevBtn.disabled = pageNumber === 1;
@@ -66,39 +68,41 @@
     /**
      * Event listeners para botones de paginación
      */
-    pageButtons.forEach((btn) => {
-      btn.addEventListener("click", function () {
-        const page = parseInt(this.dataset.page);
-        if (page !== currentPage) {
-          showPage(page);
-        }
+    if (items.length && totalPages > 1) {
+      pageButtons.forEach((btn) => {
+        btn.addEventListener("click", function () {
+          const page = parseInt(this.dataset.page);
+          if (page !== currentPage) {
+            showPage(page);
+          }
+        });
       });
-    });
 
-    /**
-     * Event listener para botón anterior
-     */
-    if (prevBtn) {
-      prevBtn.addEventListener("click", function () {
-        if (currentPage > 1) {
-          showPage(currentPage - 1);
-        }
-      });
+      /**
+       * Event listener para botón anterior
+       */
+      if (prevBtn) {
+        prevBtn.addEventListener("click", function () {
+          if (currentPage > 1) {
+            showPage(currentPage - 1);
+          }
+        });
+      }
+
+      /**
+       * Event listener para botón siguiente
+       */
+      if (nextBtn) {
+        nextBtn.addEventListener("click", function () {
+          if (currentPage < totalPages) {
+            showPage(currentPage + 1);
+          }
+        });
+      }
     }
 
     /**
-     * Event listener para botón siguiente
-     */
-    if (nextBtn) {
-      nextBtn.addEventListener("click", function () {
-        if (currentPage < totalPages) {
-          showPage(currentPage + 1);
-        }
-      });
-    }
-
-    /**
-     * Filtrar promociones por categoría via AJAX
+     * Filtrar promociones por categorÃ­a via AJAX
      */
     function filterPromotions(categorySlug) {
       if (isLoading) return;
@@ -133,10 +137,10 @@
             // Actualizar referencias a items
             items = document.querySelectorAll(".js-promo-item");
 
-            // Regenerar paginación
+            // Regenerar paginaciÃ³n
             regeneratePagination();
 
-            // Resetear a página 1
+            // Resetear a pÃ¡gina 1
             currentPage = 1;
             currentCategory = categorySlug;
 
@@ -160,7 +164,7 @@
     }
 
     /**
-     * Regenerar botones de paginación
+     * Regenerar botones de paginaciÃ³n
      */
     function regeneratePagination() {
       if (!paginationContainer) return;
@@ -168,18 +172,18 @@
       const pagesContainer = document.querySelector(".js-promo-pages");
       if (!pagesContainer) return;
 
-      // Limpiar páginas actuales
+      // Limpiar pÃ¡ginas actuales
       pagesContainer.innerHTML = "";
 
       if (totalPages <= 1) {
-        // Ocultar paginación si solo hay una página
+        // Ocultar paginaciÃ³n si solo hay una pÃ¡gina
         paginationContainer.style.display = "none";
         return;
       }
 
       paginationContainer.style.display = "flex";
 
-      // Generar primeras 3 páginas
+      // Generar primeras 3 pÃ¡ginas
       for (let i = 1; i <= Math.min(3, totalPages); i++) {
         const btn = document.createElement("button");
         btn.type = "button";
@@ -196,7 +200,7 @@
         pagesContainer.appendChild(btn);
       }
 
-      // Puntos suspensivos si hay muchas páginas
+      // Puntos suspensivos si hay muchas pÃ¡ginas
       if (totalPages > 5) {
         const dots = document.createElement("span");
         dots.className = "promotions-grid__dots";
@@ -204,7 +208,7 @@
         pagesContainer.appendChild(dots);
       }
 
-      // Últimas páginas
+      // Ãšltimas pÃ¡ginas
       if (totalPages > 3) {
         for (let i = Math.max(4, totalPages - 1); i <= totalPages; i++) {
           const btn = document.createElement("button");
@@ -225,7 +229,7 @@
       // Actualizar referencias
       pageButtons = document.querySelectorAll(".js-promo-page");
 
-      // Actualizar estado de botones de navegación
+      // Actualizar estado de botones de navegaciÃ³n
       if (prevBtn) {
         prevBtn.disabled = true;
       }
@@ -243,10 +247,11 @@
         // Remover clase activa de todos los tabs
         tabs.forEach((t) => t.classList.remove("promotions-hero__tab--active"));
 
+        console.log("Tab clickeado:", tab);
         // Agregar clase activa al tab clickeado
         this.classList.add("promotions-hero__tab--active");
 
-        // Obtener categoría del tab
+        // Obtener categorÃ­a del tab
         const tabCategory = this.dataset.tab; // 'ventas' o 'postventa'
 
         // Filtrar promociones por AJAX
@@ -256,4 +261,5 @@
       });
     });
   });
+
 })();

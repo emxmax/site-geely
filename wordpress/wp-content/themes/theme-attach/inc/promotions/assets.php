@@ -3,6 +3,13 @@ if (!defined('ABSPATH'))
   exit;
 
 /**
+ * Constante: Cantidad de promociones por página
+ */
+if (!defined('PROMOTIONS_PER_PAGE')) {
+  define('PROMOTIONS_PER_PAGE', 4);
+}
+
+/**
  * Assets específicos de bloques Promociones
  */
 function promotions_blocks_assets()
@@ -45,6 +52,7 @@ function promotions_blocks_assets()
   $js_blocks = [
     'promotions-grid',
     'promotions-single',
+    'promotions-form',
   ];
 
   foreach ($js_blocks as $handle) {
@@ -60,13 +68,86 @@ function promotions_blocks_assets()
     );
   }
 
-  // Localizar script para AJAX
-  wp_localize_script('promotions-grid-js', 'PROMOTIONS_GRID', [
-    'ajax_url' => admin_url('admin-ajax.php'),
-    'nonce' => wp_create_nonce('promotions_grid_nonce'),
-  ]);
+  // Localizar script para AJAX de grid
+  wp_localize_script(
+    'promotions-grid-js',
+    'PROMOTIONS_GRID',
+    [
+      'ajax_url' => admin_url('admin-ajax.php'),
+      'nonce' => wp_create_nonce('promotions_grid_nonce'),
+    ]
+  );
+
+  // Localizar script para datos de departamentos y tiendas
+  wp_localize_script(
+    'promotions-single-js',
+    'GEELY_STORES_DATA',
+    [
+      'departments' => promotions_get_departments_stores_data(),
+    ]
+  );
 }
 add_action('wp_enqueue_scripts', 'promotions_blocks_assets');
+
+/**
+ * Obtener datos de departamentos y tiendas para el formulario
+ * 
+ * @return array Estructura: ['Departamento' => [['id' => 1, 'title' => 'Tienda']]]
+ */
+function promotions_get_departments_stores_data(): array
+{
+  $departments_data = [];
+
+  // Obtener todos los departamentos con tiendas
+  $departments = get_terms([
+    'taxonomy' => 'departamento',
+    'hide_empty' => true,
+    'orderby' => 'name',
+    'order' => 'ASC',
+  ]);
+
+  if (is_wp_error($departments) || empty($departments)) {
+    return [];
+  }
+
+  foreach ($departments as $department) {
+    // Obtener tiendas de este departamento
+    $stores_query = new WP_Query([
+      'post_type' => 'tienda',
+      'post_status' => 'publish',
+      'posts_per_page' => -1,
+      'orderby' => 'title',
+      'order' => 'ASC',
+      'tax_query' => [
+        [
+          'taxonomy' => 'departamento',
+          'field' => 'term_id',
+          'terms' => $department->term_id,
+        ]
+      ],
+    ]);
+
+    if ($stores_query->have_posts()) {
+      $stores = [];
+      while ($stores_query->have_posts()) {
+        $stores_query->the_post();
+        $stores[] = [
+          'id' => get_the_ID(),
+          'title' => html_entity_decode(
+            get_the_title(),
+            ENT_QUOTES | ENT_HTML5,
+            'UTF-8'
+          ),
+        ];
+      }
+      wp_reset_postdata();
+
+      $departments_data[$department->name] = $stores;
+    }
+  }
+
+  return $departments_data;
+}
 
 /**
  * Handler AJAX para filtrar promociones por categoría
@@ -81,7 +162,7 @@ function promotions_filter_by_category()
   }
 
   $category_slug = isset($_POST['category']) ? sanitize_text_field($_POST['category']) : '';
-  $posts_per_page = 2;
+  $posts_per_page = PROMOTIONS_PER_PAGE;
 
   // Configurar query args
   $args = [
@@ -122,7 +203,7 @@ function promotions_filter_by_category()
   $index = 0;
   while ($q->have_posts()):
     $q->the_post();
-    
+
     $page_number = floor($index / $posts_per_page) + 1;
     $post_id = get_the_ID();
     $title = get_the_title();
@@ -134,7 +215,7 @@ function promotions_filter_by_category()
     if (empty($description)) {
       $description = get_the_excerpt();
     }
-    
+
     $link_url = function_exists('get_field') ? get_field('promocion_link_url', $post_id) : '';
     $link_text = function_exists('get_field') ? get_field('promocion_link_text', $post_id) : '';
     $link_text = !empty($link_text) ? $link_text : 'Ver condiciones';
@@ -149,9 +230,7 @@ function promotions_filter_by_category()
 
         <?php if ($image_url): ?>
           <div class="promotions-grid__image">
-            <img src="<?php echo esc_url($image_url); ?>" 
-                 alt="<?php echo esc_attr($image_alt ?: $title); ?>"
-                 loading="lazy">
+            <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt ?: $title); ?>" loading="lazy">
           </div>
         <?php endif; ?>
 
@@ -167,7 +246,7 @@ function promotions_filter_by_category()
           <?php endif; ?>
 
           <?php if ($link_url): ?>
-            <a href="<?php echo esc_url($link_url); ?>" class="promotions-grid__link" target="_blank" rel="noopener">
+            <a href="<?php echo esc_url($link_url); ?>" class="promotions-grid__link" rel="noopener">
               <?php echo esc_html($link_text); ?>
             </a>
           <?php endif; ?>
@@ -186,3 +265,78 @@ function promotions_filter_by_category()
     'total_items' => $total_items,
   ]);
 }
+
+
+
+add_action('init', function () {
+
+  // Si CF7 no está activo, no hacemos nada
+  if (!function_exists('wpcf7')) {
+    return;
+  }
+
+  add_filter('wpcf7_form_tag', function ($tag) {
+
+    // Obtener nombre del tag para array u objeto
+    $tag_name = is_object($tag)
+      ? (property_exists($tag, 'name') ? (string) $tag->name : '')
+      : (isset($tag['name']) ? (string) $tag['name'] : '');
+
+    if ($tag_name !== 'department' && $tag_name !== 'store') {
+      return $tag;
+    }
+
+    // Data: ['Departamento' => [['id'=>..,'title'=>..], ...]]
+    $data = promotions_get_departments_stores_data();
+
+    // =====================
+    // department
+    // =====================
+    if ($tag_name === 'department') {
+      $departments = array_keys($data);
+      sort($departments, SORT_NATURAL | SORT_FLAG_CASE);
+
+      if (is_object($tag)) {
+        $tag->values = $departments;
+        $tag->labels = $departments;
+      } else {
+        $tag['values'] = $departments;
+        $tag['labels'] = $departments;
+      }
+
+      return $tag;
+    }
+
+    // =====================
+    // store (value = ID, label = Title)
+    // =====================
+    if ($tag_name === 'store') {
+      $values = [];
+      $labels = [];
+
+      foreach ($data as $stores) {
+        foreach ($stores as $store) {
+          if (empty($store['id']) || empty($store['title']))
+            continue;
+
+          $values[] = (string) $store['id'];
+          $labels[] = (string) $store['title'];
+        }
+      }
+
+      if (is_object($tag)) {
+        $tag->values = $values;
+        $tag->labels = $labels;
+      } else {
+        $tag['values'] = $values;
+        $tag['labels'] = $labels;
+      }
+
+      return $tag;
+    }
+
+    return $tag;
+  }, 10, 1);
+});
+
+

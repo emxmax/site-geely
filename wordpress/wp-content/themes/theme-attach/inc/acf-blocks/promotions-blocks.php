@@ -70,7 +70,7 @@ function theme_attach_register_promotions_blocks()
   // Bloque: Formulario Promoción
   acf_register_block_type([
     'name' => 'promotions-form',
-    'title' => __('Promoción - Formulario', 'theme-attach'),
+    'title' => __('Promoción Single - Formulario', 'theme-attach'),
     'description' => __('Formulario de Contact Form 7 para promociones', 'theme-attach'),
     'render_template' => 'template-parts/blocks-promotions/promotions-form.php',
     'category' => 'layout',

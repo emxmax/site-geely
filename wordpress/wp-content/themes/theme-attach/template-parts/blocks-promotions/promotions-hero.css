@@ -1,6 +1,6 @@
 .promotions-hero {
-  background-color: #fff;
-  padding: 60px 20px 40px;
+  padding-top: 40px;
+  padding-inline: 20px;
 }
 
 .promotions-hero__inner {
@@ -9,30 +9,27 @@
 }
 
 .promotions-hero__content {
-  text-align: center;
-  margin-bottom: 48px;
 }
 
 .promotions-hero__title {
-  font-family: "Geely Sans Bold", sans-serif;
+  font-family: var(--font-geely);
   font-weight: 700;
-  color: #000;
-  margin: 0 0 16px 0;
-  text-transform: uppercase;
+  color: var(--c-black);
 }
 
 .promotions-hero__description {
-  font-family: "Geely Sans Regular", sans-serif;
-  color: #666;
-  margin: 0 auto;
-  max-width: 800px;
+  color: var(--c-black);
+  font-family: var(--font-inter);
+  margin-top: 24px;
+  font-weight: 500;
 }
 
-/* Tabs */
+/* ---------------------------------------------------------------------- */
+/* TABS */
+/* ---------------------------------------------------------------------- */
 .promotions-hero__tabs {
   display: flex;
   gap: 0;
-  border-bottom: 2px solid #e5e5e5;
   justify-content: flex-start;
   max-width: 1280px;
   margin: 0 auto;
@@ -45,9 +42,12 @@
   cursor: pointer;
   position: relative;
   transition: all 0.3s ease;
-  font-family: "Geely Sans Regular", sans-serif;
-  font-size: 16px;
-  color: #666;
+
+  font-family: var(--font-inter);
+  font-size: var(--fs-p-2);
+  line-height: var(--lh-p-2);
+  font-weight: 500;
+  color: var(--c-black);
 }
 
 .promotions-hero__tab span {
@@ -61,15 +61,14 @@
   bottom: -2px;
   left: 0;
   width: 100%;
-  height: 2px;
+  height: 4px;
   background-color: #000;
   transform: scaleX(0);
   transition: transform 0.3s ease;
 }
 
 .promotions-hero__tab--active {
-  color: #000;
-  font-family: "Geely Sans Bold", sans-serif;
+  font-weight: 700;
 }
 
 .promotions-hero__tab--active::after {
@@ -80,22 +79,35 @@
   color: #000;
 }
 
-/* Tablet */
-@media (max-width: 1024px) {
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1279px) {
   .promotions-hero {
-    padding: 40px 20px 32px;
+    padding-inline: 32px;
   }
 
-  .promotions-hero__content {
-    margin-bottom: 32px;
+  .promotions-hero__inner {
+    max-width: 100%;
   }
 
-  .promotions-hero__description {
-    max-width: 600px;
+  .promotions-hero__tabs {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 1023px) {
+  .promotions-hero {
+    padding-top: 32px;
+    padding-inline: 24px;
   }
 
   .promotions-hero__tab {
     padding: 10px 24px;
-    font-size: 14px;
   }
+}
+
+@media (max-width: 767px) {
+  /* Móvil: Usuario lo creará */
 }

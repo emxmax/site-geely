@@ -1,45 +1,54 @@
 /* === Bloque: Formulario Promoción === */
 .promotions-form {
-  padding: 60px 20px;
-  background: #f5f5f5;
+  width: 100%;
+  max-width: 100%;
+}
+.promotions-form * {
+  font-family: var(--font-inter);
 }
 
 .promotions-form__inner {
-  max-width: 600px;
-  margin: 0 auto;
 }
 
 /* === Geely CF7 Form === */
-.geely-form {
-  max-width: 520px;
-  background: #fff;
-  border-radius: 18px;
-  padding: 26px 26px 18px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.06);
+.geely-form-main {
+  border-radius: 40px;
   margin: 0 auto;
+  padding: 40px 32px;
+  box-shadow: 0px 4px 4px 0px #bdbdbd80;
+  background-color: #ffffff;
 }
 
 .geely-form__title {
-  margin: 0 0 18px;
   text-align: center;
-  font-size: 18px;
-  letter-spacing: .04em;
   font-weight: 700;
+  color: var(--c-black);
+  font-family: var(--font-geely);
 }
 
 .geely-row {
   display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: 18px;
+  grid-template-columns: 170px 1fr;
+  gap: 16px;
   align-items: center;
-  padding: 14px 0;
-  border-bottom: 1px solid #d9d9d9;
+  padding: 12px 0;
+  border-bottom: 1px solid #212529;
+  padding-inline: 16px;
+  margin-bottom: 16px;
+}
+
+.geely-form-main > .geely-row:nth-of-type(1) {
+  margin-top: 32px;
 }
 
 .geely-row__label {
-  font-size: 13px;
-  font-weight: 600;
-  color: #1a1a1a;
+  font-weight: 500;
+  font-size: var(--fs-p-2);
+  line-height: var(--lh-p-2);
+  color: var(--c-black);
+}
+
+p:has(> .geely-row__label) {
 }
 
 .geely-row__control {
@@ -54,33 +63,53 @@
   border: 0;
   outline: none;
   background: transparent;
-  font-size: 13px;
-  color: #1a1a1a;
+  font-size: 16px;
+  color: var(--c-black);
   padding: 6px 0;
 }
 
 .geely-input::placeholder {
-  color: #b9b9b9;
+  color: var(--c-steel-grey);
 }
 
 .geely-row__control--doc {
   gap: 12px;
+}
+.geely-row__control--doc br {
+  display: none !important;
+}
+.geely-row__control--doc > p {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+p:has(> [data-name*="department"]),
+p:has(> [data-name*="store"]) {
+  width: 100%;
 }
 
 .geely-select {
   appearance: none;
   padding-right: 20px;
   background-image: linear-gradient(45deg, transparent 50%, #2a2a2a 50%),
-                    linear-gradient(135deg, #2a2a2a 50%, transparent 50%);
+    linear-gradient(135deg, #2a2a2a 50%, transparent 50%);
   background-position: calc(100% - 10px) calc(50% - 2px),
-                       calc(100% - 5px) calc(50% - 2px);
+    calc(100% - 5px) calc(50% - 2px);
   background-size: 5px 5px, 5px 5px;
   background-repeat: no-repeat;
 }
 
 .geely-row--document .geely-select {
-  width: 90px;
-  flex: 0 0 90px;
+  width: 73px;
+  flex: 0 0 73px;
+}
+
+.geely-select.first option {
+  color: var(--c-black);
+}
+.geely-select.first {
+  color: var(--c-steel-grey);
 }
 
 .geely-input--doc {
@@ -136,18 +165,18 @@
 }
 
 .geely-submit {
-  background: #bfbfbf;
   border: 0;
-  color: #fff;
-  padding: 10px 22px;
-  border-radius: 2px;
-  font-size: 12px;
   cursor: pointer;
-  transition: filter .2s ease;
+  transition: filter 0.2s ease;
+}
+p:has(> .geely-submit) {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .geely-submit:hover {
-  filter: brightness(.95);
+  filter: brightness(0.95);
 }
 
 /* CF7 messages */
@@ -182,35 +211,73 @@
   color: #721c24;
 }
 
-/* Responsive */
-@media (max-width: 520px) {
-  .promotions-form {
-    padding: 40px 15px;
+.geely-form__footer .geely-consent {
+  margin-top: 0;
+}
+.geely-form__footer {
+  margin-top: 40px;
+}
+.geely-form__footer .wpcf7-list-item {
+  margin-left: 0;
+  font-size: var(--fs-p-4);
+  line-height: var(--lh-p-4);
+  font-family: var(--font-inter);
+  font-weight: 500;
+  color: var(--c-black);
+}
+.geely-form__footer .wpcf7-list-item a {
+  color: var(--c-greely-blue);
+  text-decoration: underline;
+}
+
+label:has(> [name*="marketing_consent"]) {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.geely-actions .geely-submit {
+  padding: 12px 32px;
+  font-size: var(--fs-title-7);
+  line-height: var(--lh-title-7);
+  font-weight: 700;
+  color: var(--c-white);
+  background-color: var(--c-steel-grey);
+  font-family: var(--font-geely);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1279px) {
+  .geely-promotions-form {
+    padding: 32px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .geely-promotions-form {
+    padding: 24px;
+    max-width: 100%;
   }
 
-  .geely-form {
-    padding: 20px 16px;
-    border-radius: 12px;
-  }
-
-  .geely-row {
+  .geely-promotions-form__row {
     grid-template-columns: 1fr;
-    gap: 8px;
+    gap: 12px;
   }
 
-  .geely-row__label {
-    margin-top: 2px;
+  .geely-promotions-form__label {
+    width: auto;
   }
 
-  .geely-actions {
-    justify-content: stretch;
+  .geely-promotions-form__footer-note {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
   }
+}
 
-  .geely-submit {
-    width: 100%;
-  }
-
-  .geely-row--document .geely-select {
-    width: 80px;
-  }
+@media (max-width: 767px) {
+  /* Móvil: Usuario lo creará */
 }

@@ -7,6 +7,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Global
+require_once get_stylesheet_directory() . '/inc/helpers.php';
 require_once get_stylesheet_directory() . '/inc/enqueue-assets.php';
 require_once get_stylesheet_directory() . '/inc/enqueue-fonts.php';
 
@@ -28,6 +29,7 @@ require_once get_stylesheet_directory() . '/inc/blog/assets.php';
 
 // Promotions domain
 require_once get_stylesheet_directory() . '/inc/promotions/assets.php';
+require_once get_stylesheet_directory() . '/inc/promotions/helpers.php';
 
 // Utilities
 require_once get_stylesheet_directory() . '/inc/enqueue-utilities.php';

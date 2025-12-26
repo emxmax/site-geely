@@ -8,9 +8,29 @@
 if (!defined('ABSPATH'))
   exit;
 
-// Campos ACF del bloque (opcionales para filtrar)
-// $categoria_filter = get_field('promotions_category'); // Campo ACF tipo Taxonomy
-$posts_per_page = 2; // 4 promociones por página (2x2 grid)
+if (!function_exists('get_field'))
+  return;
+
+// Usar constante global de promociones por página
+$posts_per_page = defined('PROMOTIONS_PER_PAGE') ? PROMOTIONS_PER_PAGE : 4;
+
+// 
+$categories = get_terms_for_post_type_ordered(
+  'categoria_promocion',
+  'promocion',
+  'order'
+);
+
+$first_category = array_slice(
+  $categories,
+  0,
+  1
+);
+
+$initial_category_slug = '';
+if (!is_wp_error($first_category) && !empty($first_category)) {
+  $initial_category_slug = $first_category[0]->slug;
+}
 
 // Configurar query args
 $args = [
@@ -19,14 +39,18 @@ $args = [
   'posts_per_page' => -1, // Obtener todas para paginar en cliente
   'orderby' => 'date',
   'order' => 'DESC',
-  'tax_query' => [
+];
+
+// Filtrar por primera categoría si existe
+if (!empty($initial_category_slug)) {
+  $args['tax_query'] = [
     [
       'taxonomy' => 'categoria_promocion',
       'field' => 'slug',
-      'terms' => 'ventas',
+      'terms' => $initial_category_slug,
     ]
-  ]
-];
+  ];
+}
 
 $q = new WP_Query($args);
 if (!$q->have_posts()) {
@@ -36,16 +60,29 @@ if (!$q->have_posts()) {
 
 $total_items = $q->post_count;
 $total_pages = ceil($total_items / $posts_per_page);
+
+$has_categories = !empty($categories);
 ?>
 
-<section class="promotions-grid" data-total-pages="<?php echo esc_attr($total_pages); ?>">
+<section class="promotions-grid" data-total-pages="<?= esc_attr($total_pages); ?>">
   <div class="promotions-grid__inner">
 
+    <?php if ($has_categories): ?>
+      <div class="promotions-hero__tabs">
+        <?php foreach ($categories as $index => $category): ?>
+          <button type="button"
+            class="promotions-hero__tab <?= $index === 0 ? 'promotions-hero__tab--active' : ''; ?> js-promo-tab"
+            data-tab="<?= esc_attr($category->slug); ?>">
+            <span><?= esc_html($category->name); ?></span>
+          </button>
+        <?php endforeach; ?>
+      </div>
+    <?php endif; ?>
+
     <div class="promotions-grid__wrapper js-promotions-grid">
-      <?php
-      $index = 0;
-      while ($q->have_posts()):
-        $q->the_post();
+      <?php $index = 0; ?>
+      <?php while ($q->have_posts()): ?>
+        <?php $q->the_post();
 
         // Calcular número de página para este item
         $page_number = floor($index / $posts_per_page) + 1;
@@ -58,46 +95,41 @@ $total_pages = ceil($total_items / $posts_per_page);
         $image_alt = $image_id ? get_post_meta($image_id, '_wp_attachment_image_alt', true) : '';
 
         // Campos ACF del post promocion (si existen)
-        $description = function_exists('get_field') ? get_field('promocion_card_text', $post_id) : '';
-        // Fallback al excerpt si no hay texto personalizado
+        $description = get_field('promocion_card_text', $post_id) ?: '';
         if (empty($description)) {
-          $description = get_the_excerpt();
+          $description = get_field(
+            'promocion_content_text',
+            $post_id
+          ) ?: '';
         }
 
-        $link_url = function_exists('get_field') ? get_field('promocion_link_url', $post_id) : '';
-        $link_text = function_exists('get_field') ? get_field('promocion_link_text', $post_id) : '';
+        $link_url = get_permalink($post_id);
+        $link_text = get_field('promocion_link_text', $post_id) ?: '';
         $link_text = !empty($link_text) ? $link_text : 'Ver condiciones';
-
-        // Si no hay link personalizado, usar el permalink del post
-        if (empty($link_url)) {
-          $link_url = get_permalink($post_id);
-        }
         ?>
-        <div class="promotions-grid__item js-promo-item" data-page="<?php echo esc_attr($page_number); ?>"
-          style="<?php echo $page_number > 1 ? 'display: none;' : ''; ?>">
+        <div class="promotions-grid__item js-promo-item" data-page="<?= esc_attr($page_number); ?>"
+          style="<?= $page_number > 1 ? 'display: none;' : ''; ?>">
           <div class="promotions-grid__card">
-
             <?php if ($image_url): ?>
               <div class="promotions-grid__image">
-                <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt ?: $title); ?>"
-                  loading="lazy">
+                <img src="<?= esc_url($image_url); ?>" alt="<?= esc_attr($image_alt ?: $title); ?>" loading="lazy">
               </div>
             <?php endif; ?>
 
             <div class="promotions-grid__content">
               <?php if ($title): ?>
-                <h3 class="promotions-grid__title title-5"><?php echo esc_html($title); ?></h3>
+                <h3 class="promotions-grid__title paragraph-2"><?= esc_html($title); ?></h3>
               <?php endif; ?>
 
               <?php if ($description): ?>
                 <div class="promotions-grid__description paragraph-4">
-                  <?php echo wp_kses_post(wpautop($description)); ?>
+                  <?= wp_kses_post(wpautop($description)); ?>
                 </div>
               <?php endif; ?>
 
               <?php if ($link_url): ?>
-                <a href="<?php echo esc_url($link_url); ?>" class="promotions-grid__link" target="_blank" rel="noopener">
-                  <?php echo esc_html($link_text); ?>
+                <a href="<?= esc_url($link_url); ?>" class="promotions-grid__link paragraph-4" rel="noopener">
+                  <?= esc_html($link_text); ?>
                 </a>
               <?php endif; ?>
             </div>
@@ -105,10 +137,9 @@ $total_pages = ceil($total_items / $posts_per_page);
           </div>
         </div>
         <?php
-        $index++;
-      endwhile;
-      wp_reset_postdata();
-      ?>
+        $index++; ?>
+      <?php endwhile; ?>
+      <?php wp_reset_postdata(); ?>
     </div>
 
     <?php if ($total_pages > 1): ?>
@@ -116,8 +147,7 @@ $total_pages = ceil($total_items / $posts_per_page);
         <!-- Flecha izquierda -->
         <button type="button" class="promotions-grid__nav promotions-grid__nav--prev js-promo-prev" data-page="1"
           disabled>
-          <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-arrow-right.png'); ?>"
-            alt="Anterior">
+          <img decoding="async" src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-arrow-right.png'); ?>" alt="Anterior">
         </button>
 
         <!-- Números de página -->
@@ -143,9 +173,9 @@ $total_pages = ceil($total_items / $posts_per_page);
         </div>
 
         <!-- Flecha derecha -->
-        <button type="button" class="promotions-grid__nav promotions-grid__nav--next js-promo-next" data-page="1" <?php echo $total_pages <= 1 ? 'disabled' : ''; ?>>
-          <img src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-arrow-right.png'); ?>"
-            alt="Siguiente">
+        <button type="button" class="promotions-grid__nav promotions-grid__nav--next js-promo-next" data-page="1"
+          <?php echo $total_pages <= 1 ? 'disabled' : ''; ?>>
+          <img decoding="async" src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-arrow-right.png'); ?>" alt="Siguiente">
         </button>
       </div>
     <?php endif; ?>

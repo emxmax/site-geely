@@ -20,30 +20,19 @@ if (empty($title)) {
 
 if (empty($description)) {
   $description = 'Disfruta de nuestras Promociones de Autos Nuevos en Geely. Encuentra el carro de tus sueños hoy.';
-}
-?>
-
+} ?>
 <section class="promotions-hero">
   <div class="promotions-hero__inner">
     <div class="promotions-hero__content">
-      <h1 class="promotions-hero__title title-1"><?php echo esc_html($title); ?></h1>
+      <?php if (!empty($title)): ?>
+        <h1 class="promotions-hero__title title-1"><?= esc_html($title); ?></h1>
+      <?php endif; ?>
 
       <?php if ($description): ?>
         <div class="promotions-hero__description paragraph-2 paragraph-sm-4">
-          <?php echo esc_html($description); ?>
+          <?= wp_kses_post($description); ?>
         </div>
       <?php endif; ?>
     </div>
-
-    <!-- Tabs -->
-    <div class="promotions-hero__tabs">
-      <button type="button" class="promotions-hero__tab promotions-hero__tab--active js-promo-tab"
-        data-tab="ventas">
-        <span>Ventas</span>
-      </button>
-      <button type="button" class="promotions-hero__tab js-promo-tab" data-tab="postventa">
-        <span>Postventa</span>
-      </button>
-    </div>    
   </div>
 </section>

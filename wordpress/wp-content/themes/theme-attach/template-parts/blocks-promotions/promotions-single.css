@@ -1,19 +1,35 @@
+.promotions-single-section {
+  width: 100%;
+  max-width: 100%;
+  padding-block: 40px 80px;
+  padding-inline: 20px;
+  background-color: #f6f3f5;
+  margin-top: 0;
+}
+.promotions-single-section__inner {
+  max-width: 1283px;
+  width: 100%;
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  justify-content: center;
+  margin-inline: auto;
+}
+
 /* === Bloque: Contenido Single Promoción === */
 .promotions-single {
-  padding: 60px 20px;
-  background: #fff;
+  width: 100%;
+  max-width: 539px;
 }
 
 .promotions-single__inner {
-  max-width: 1100px;
-  margin: 0 auto;
 }
 
 .promotions-single__image {
-  margin-bottom: 40px;
+  margin-bottom: 24px;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0,0,0,.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 .promotions-single__image img {
@@ -23,9 +39,9 @@
 }
 
 .promotions-single__content {
-  font-size: 16px;
-  line-height: 1.7;
-  color: #333;
+  font-family: var(--font-inter);
+  color: var(--c-black);
+  font-weight: 500;
 }
 
 .promotions-single__content p {
@@ -35,7 +51,7 @@
 .promotions-single__content h2,
 .promotions-single__content h3 {
   margin: 30px 0 15px;
-  color: #1a1a1a;
+  color: var(--c-black);
 }
 
 .promotions-single__content ul,
@@ -49,10 +65,9 @@
 }
 
 .promotions-single__content a {
-  color: #1a66ff;
-  text-decoration: none;
+  font-family: var(--font-inter);
+  color: var(--c-black);
 }
-
 .promotions-single__content a:hover {
   text-decoration: underline;
 }
@@ -64,16 +79,183 @@
   margin: 20px 0;
 }
 
-@media (max-width: 768px) {
-  .promotions-single {
-    padding: 40px 20px;
-  }
+/* =========================
+   MODAL TÉRMINOS Y CONDICIONES
+========================= */
 
-  .promotions-single__image {
-    margin-bottom: 30px;
-  }
+.geely-modal {
+  max-width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
 
-  .promotions-single__content {
-    font-size: 15px;
+.geely-modal[aria-hidden="false"] {
+  opacity: 1;
+  visibility: visible;
+}
+
+.geely-modal__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+}
+
+.geely-modal__container {
+  position: relative;
+  width: 90%;
+  max-width: 808px;
+  max-height: 596px;
+  background: #ffffff;
+  border-radius: 40px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
 }
+
+.geely-modal__header {
+  padding: 40px 40px 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.geely-modal__title {
+  font-family: var(--font-geely);
+  font-weight: 700;
+  color: var(--c-black);
+  text-align: center;
+}
+
+.geely-modal__close {
+  display: none !important;
+}
+
+.geely-modal__close:hover {
+  opacity: 0.7;
+}
+
+.geely-modal__content {
+  padding: 24px 40px;
+  overflow-y: auto;
+  flex: 1;
+  font-family: var(--font-inter);
+  color: var(--c-black);
+  font-weight: 500;
+}
+
+.geely-modal__content p {
+  margin: 0 0 16px;
+}
+
+.geely-modal__content p:last-child {
+  margin-bottom: 0;
+}
+
+.geely-modal__footer {
+  padding: 24px 40px 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.geely-modal__button {
+  min-width: 133px;
+  padding: 12px 32px;
+  background: var(--c-black);
+  color: #ffffff;
+  border: 0;
+  /* border-radius: 8px; */
+  font-family: var(--font-geely);
+  /* font-size: 16px; */
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.geely-modal__button:hover {
+  background: #333333;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1279px) {
+  .promotions-single-section {
+    padding-inline: 32px;
+  }
+
+  .promotions-single-section__inner {
+    max-width: 100%;
+    gap: 32px;
+  }
+
+  .geely-modal__container {
+    max-width: 700px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .promotions-single-section {
+    padding-inline: 24px;
+    padding-block: 32px 60px;
+  }
+
+  .promotions-single-section__inner {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .promotions-single {
+    max-width: 100%;
+  }
+
+  .geely-modal__container {
+    max-width: 90%;
+    max-height: 80vh;
+  }
+
+  .geely-modal__header {
+    padding: 32px 24px 0;
+  }
+
+  .geely-modal__content {
+    padding: 20px 24px;
+  }
+
+  .geely-modal__footer {
+    padding: 20px 24px 32px;
+  }
+}
+
+@media (max-width: 767px) {
+  /* Móvil: Usuario lo creará */
+}
+
