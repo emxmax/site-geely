@@ -5,6 +5,9 @@
   background-color: var(--c-white) !important;
   padding-block: 80px;
 }
+.cpt-single-blog .blog-news__link {
+  text-decoration: underline;
+}
 .cpt-single-blog .blog-news__link img {
   display: none;
 }
@@ -99,6 +102,9 @@
   color: var(--c-black);
 }
 
+.cpt-single-blog .blog-content {
+  margin-top: 0px;
+}
 /* Debe ser blanco */
 /* .blog-news {
   background-color: var(--c-white) !important;
