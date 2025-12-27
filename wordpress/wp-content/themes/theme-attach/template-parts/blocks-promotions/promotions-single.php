@@ -40,9 +40,10 @@ if (empty($image)) {
           </div>
         <?php endif; ?>
         <?php if ($content): ?>
-          <div class="promotions-single__content paragraph-4">
+          <div class="promotions-single__content paragraph-4 paragraph-sm-5">
             <?= wp_kses_post($content); ?>
           </div>
+          <span id="ver-mas" class="promotions-single__ver-mas paragraph-4">Ver más</span>
         <?php endif; ?>
       </div>
     </div>

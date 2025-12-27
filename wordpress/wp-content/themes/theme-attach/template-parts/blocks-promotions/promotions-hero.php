@@ -25,7 +25,7 @@ if (empty($description)) {
   <div class="promotions-hero__inner">
     <div class="promotions-hero__content">
       <?php if (!empty($title)): ?>
-        <h1 class="promotions-hero__title title-1"><?= esc_html($title); ?></h1>
+        <h1 class="promotions-hero__title title-1 title-mobile-sm-2"><?= esc_html($title); ?></h1>
       <?php endif; ?>
 
       <?php if ($description): ?>

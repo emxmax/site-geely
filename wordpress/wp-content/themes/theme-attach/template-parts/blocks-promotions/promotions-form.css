@@ -103,6 +103,8 @@ p:has(> [data-name*="store"]) {
 .geely-row--document .geely-select {
   width: 73px;
   flex: 0 0 73px;
+  background-color: #e7e6e6;
+  padding: 7px;
 }
 
 .geely-select.first option {
@@ -280,4 +282,55 @@ label:has(> [name*="marketing_consent"]) {
 
 @media (max-width: 767px) {
   /* Móvil: Usuario lo creará */
+  .geely-form-main {
+    border-radius: 16px;
+    padding-inline: 16px;
+    padding-block: 32px;
+  }
+
+  .geely-row {
+    padding-inline: 8px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding-bottom: 7px;
+  }
+  .geely-row__label {
+    font-size: var(--fs-p-5);
+    line-height: var(--lh-p-5);
+  }
+
+  .geely-input,
+  .geely-select {
+    font-size: var(--fs-p-5);
+    line-height: var(--lh-p-5);
+  }
+
+  .geely-row__control {
+    width: 100%;
+  }
+  .geely-geo__btn {
+    font-size: var(--fs-p-5) !important;
+    line-height: var(--lh-p-5) !important;
+  }
+  .geely-form__footer {
+    margin-top: 24px;
+  }
+  .geely-form__footer .wpcf7-list-item {
+    font-size: var(--fs-p-5);
+    line-height: var(--lh-p-5);
+  }
+  .geely-form__title {
+    font-size: var(--fs-title-sm-3);
+    line-height: var(--lh-title-sm-3);
+  }
+  .geely-form-main > .geely-row:nth-of-type(1) {
+    margin-top: 4px;
+  }
+  .geely-row--document .geely-select {
+    width: 69px;
+    flex: 0 0 69px;
+  }
 }

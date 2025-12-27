@@ -71,7 +71,7 @@ $has_categories = !empty($categories);
       <div class="promotions-hero__tabs">
         <?php foreach ($categories as $index => $category): ?>
           <button type="button"
-            class="promotions-hero__tab <?= $index === 0 ? 'promotions-hero__tab--active' : ''; ?> js-promo-tab"
+            class="paragraph-sm-4 promotions-hero__tab <?= $index === 0 ? 'promotions-hero__tab--active' : ''; ?> js-promo-tab"
             data-tab="<?= esc_attr($category->slug); ?>">
             <span><?= esc_html($category->name); ?></span>
           </button>
@@ -118,11 +118,11 @@ $has_categories = !empty($categories);
 
             <div class="promotions-grid__content">
               <?php if ($title): ?>
-                <h3 class="promotions-grid__title paragraph-2"><?= esc_html($title); ?></h3>
+                <h3 class="promotions-grid__title paragraph-2 paragraph-sm-3"><?= esc_html($title); ?></h3>
               <?php endif; ?>
 
               <?php if ($description): ?>
-                <div class="promotions-grid__description paragraph-4">
+                <div class="promotions-grid__description paragraph-4 paragraph-sm-5">
                   <?= wp_kses_post(wpautop($description)); ?>
                 </div>
               <?php endif; ?>

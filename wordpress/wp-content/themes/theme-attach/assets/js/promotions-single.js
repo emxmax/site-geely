@@ -75,7 +75,7 @@
   }
   setSpanishPlaceholder(depSelect, "Selecciona una opción");
   setSpanishPlaceholder(storeSelect, "Selecciona una opción");
-  
+
   function changeValueFirstOption(select, value = "first") {
     if (!select) return;
     select.classList.remove("first");
@@ -309,46 +309,54 @@
   // =========================
   // MODAL TÉRMINOS Y CONDICIONES
   // =========================
-  
-  const modal = document.getElementById('geely-terms-modal');
-  
+
+  const modal = document.getElementById("geely-terms-modal");
+
   if (modal) {
     // Función para abrir el modal
     function openModal() {
-      modal.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
     }
-    
+
     // Función para cerrar el modal
     function closeModal() {
-      modal.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
+      modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
     }
-    
+
     // Interceptar clicks en enlaces de "Política de Protección"
-    document.addEventListener('click', (e) => {
+    document.addEventListener("click", (e) => {
       const target = e.target;
-      
+
       // Buscar si el click es en el enlace o en un elemento hijo del enlace
       const link = target.closest('a[href="#0"]');
-      
-      if (link && link.textContent.includes('Política de Protección')) {
+
+      if (link && link.textContent.includes("Política de Protección")) {
         e.preventDefault();
         openModal();
       }
     });
-    
+
     // Cerrar al hacer click en elementos con data-modal-close
-    const closeButtons = modal.querySelectorAll('[data-modal-close]');
-    closeButtons.forEach(btn => {
-      btn.addEventListener('click', closeModal);
+    const closeButtons = modal.querySelectorAll("[data-modal-close]");
+    closeButtons.forEach((btn) => {
+      btn.addEventListener("click", closeModal);
     });
-    
+
     // Cerrar con tecla ESC
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') {
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal.getAttribute("aria-hidden") === "false") {
         closeModal();
       }
     });
   }
+
+  //
+  const verMas = document.querySelector("#ver-mas");
+  const content = document.querySelector(
+    ".promotions-single-section .promotions-single__inner"
+  );
+  verMas.addEventListener("click", () => content.classList.add("all"));
+  //
 })();

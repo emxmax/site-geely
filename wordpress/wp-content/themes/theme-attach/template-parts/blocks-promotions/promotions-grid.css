@@ -213,10 +213,29 @@
   }
 
   .promotions-grid__pagination {
-    justify-content: center;
+    /* justify-content: center; */
   }
 }
 
 @media (max-width: 767px) {
-  /* Móvil: Usuario lo creará */
+  .promotions-grid {
+    padding-top: 24px;
+    padding-inline: 16px;
+  }
+
+  .promotions-grid__image {
+    height: 238px;
+  }
+  .promotions-grid__image img {
+    object-position: left top;
+  }
+  .promotions-grid__wrapper {
+    padding-top: 56px;
+  }
+  .promotions-grid__content {
+    padding-bottom: 0px;
+  }
+  .promotions-grid__pagination {
+    padding-block: 16px;
+  }
 }

@@ -110,4 +110,11 @@
 
 @media (max-width: 767px) {
   /* Móvil: Usuario lo creará */
+  .promotions-hero {
+    padding-top: 40px;
+    padding-inline: 16px;
+  }
+
+
+
 }

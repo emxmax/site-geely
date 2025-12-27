@@ -45,12 +45,12 @@ if (empty($custom_subtitle)) {
   <div class="promotions-single-hero__inner">
     <div class="promotions-single-hero__content">
       <?php if (!empty($custom_title)): ?>
-        <h1 class="promotions-single-hero__title title-1">
+        <h1 class="promotions-single-hero__title title-1 title-mobile-sm-2">
           <?= esc_html($custom_title); ?>
         </h1>
       <?php endif; ?>
       <?php if ($custom_subtitle): ?>
-        <div class="promotions-single-hero__description paragraph-2">
+        <div class="promotions-single-hero__description paragraph-2 paragraph-sm-4">
           <?= esc_html($custom_subtitle); ?>
         </div>
       <?php endif; ?>

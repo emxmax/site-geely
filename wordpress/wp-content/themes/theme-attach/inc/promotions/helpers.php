@@ -83,7 +83,13 @@ function get_terms_for_post_type_ordered(
 
   // Si no está ACF disponible, ordenar por nombre y listo
   if (!function_exists('get_field')) {
-    usort($terms, fn($a, $b) => strcasecmp($a->name, $b->name));
+    usort(
+      $terms,
+      fn($a, $b) => strcasecmp(
+        $a->name,
+        $b->name
+      )
+    );
     return $terms;
   }
 
