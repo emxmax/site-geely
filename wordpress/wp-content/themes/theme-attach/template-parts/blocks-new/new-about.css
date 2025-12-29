@@ -100,6 +100,7 @@
   font-weight: 600;
   font-size: var(--fs-p-3);
   line-height: var(--lh-p-3);
+  font-family: var(--font-inter);
 }
 
 .new-about__grid .blog-news__card-title a:hover {

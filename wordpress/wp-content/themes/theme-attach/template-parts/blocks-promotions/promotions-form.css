@@ -102,9 +102,12 @@ p:has(> [data-name*="store"]) {
 
 .geely-row--document .geely-select {
   width: 73px;
+  height: 36px;
   flex: 0 0 73px;
   background-color: #e7e6e6;
   padding: 7px;
+  font-family: var(--font-geely);
+  font-weight: 700;
 }
 
 .geely-select.first option {

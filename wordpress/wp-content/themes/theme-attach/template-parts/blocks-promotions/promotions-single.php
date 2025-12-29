@@ -125,4 +125,20 @@ if (empty($image)) {
     font-weight: 500;
     padding-left: 28px;
   }
+
+  .geely-row--document .geely-select {
+    background-image: url('<?php echo esc_url(get_template_directory_uri()); ?>/assets/img/arrow-down-black.svg');
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    background-position: calc(100% - 8px) calc(50% + 0.25px);
+    font-size: 14px;
+  }
+
+  select[name*="department"],
+  select[name*="store"] {
+    background-image: url('<?php echo esc_url(get_template_directory_uri()); ?>/assets/img/arrow-down-blue.svg');
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    background-position: calc(100% - 16px) calc(50% + 0.25px);
+  }
 </style>
