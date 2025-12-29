@@ -38,10 +38,15 @@
 
 .new-featured__slider-wrapper {
   position: relative;
+  /* padding-inline: 24px; */
 }
 
 .new-featured__swiper {
   overflow: hidden;
+
+  margin-inline: auto;
+  width: 100%;
+  max-width: 1440px;
 }
 
 /* =========================
@@ -50,7 +55,8 @@
 
 .new-featured__slide {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* grid-template-columns: 1fr 1fr; */
+  grid-template-columns: 770px 670px;
   align-items: center;
   background: #f6f3f5;
   padding: 0;
@@ -68,7 +74,7 @@
 }
 @media (max-width: 1439px) {
   .new-featured__content {
-    padding: 67px 32px;
+    padding: 67px 40px;
   }
 }
 
@@ -137,7 +143,7 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  max-height: 392px;
+  max-height: 422px;
 }
 @media (max-width: 1439px) {
   .new-featured__image {
@@ -156,7 +162,12 @@
   justify-content: center;
   gap: 32px;
   margin-top: 16px;
-  padding-inline: 3.33%;
+  /* padding-inline: 3.33%; */
+  /*  */
+  padding-inline: 48px;
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
 }
 /* =========================
    NAVIGATION
@@ -164,8 +175,8 @@
 
 .new-featured__nav {
   z-index: 10;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border: 0;
   background: transparent;
   color: var(--c-urban-graphite);
@@ -224,6 +235,17 @@
 
 .new-featured__pagination .swiper-pagination-bullet-active {
   background-color: #027bff;
+}
+/* =========================
+   TABLET (≤1439px)
+========================= */
+@media (max-width: 1439px) {
+  .new-featured__slide {
+    grid-template-columns: 1fr 1fr;
+  }
+  .new-featured__controls {
+    padding-inline: 3.33%;
+  }
 }
 
 /* =========================
@@ -286,6 +308,7 @@
   }
   .new-featured__slider-wrapper {
     margin-top: 24px;
+    padding-inline: 0;
   }
 
   .new-featured__content {

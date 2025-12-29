@@ -6,7 +6,10 @@ if (!defined('ABSPATH'))
  * Constante para posts por página en new-about
  */
 if (!defined('NEW_ABOUT_POSTS_PER_PAGE')) {
-  define('NEW_ABOUT_POSTS_PER_PAGE', 3);
+  define(
+    'NEW_ABOUT_POSTS_PER_PAGE',
+    wp_is_mobile() ? 3 : 6
+  );
 }
 
 /**

@@ -23,7 +23,7 @@ $featured_posts = get_field('featured_posts');
 if (empty($featured_posts)) {
   $query = new WP_Query([
     'post_type' => 'post',
-    'posts_per_page' => 3,
+    'posts_per_page' => NEW_ABOUT_POSTS_PER_PAGE,
     'post_status' => 'publish',
     'orderby' => 'date',
     'order' => 'DESC',
@@ -55,7 +55,7 @@ if (empty($featured_posts)) {
 $uid = 'nf-' . wp_unique_id();
 ?>
 
-<section class="new-featured">
+<section class="new-featured" id="new-featured">
   <div class="new-featured__header">
     <div class="new-featured__inner">
       <h2 class="new-featured__title title-3 title-sm-5"><?php echo esc_html($section_title); ?></h2>

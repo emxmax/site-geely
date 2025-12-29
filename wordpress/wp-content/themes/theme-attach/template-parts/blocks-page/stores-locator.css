@@ -1,0 +1,661 @@
+/* ============================================
+   STORES LOCATOR - Red de Atención
+============================================ */
+
+.stores-locator {
+  background: #ffffff;
+  margin-block-start: 0 !important;
+}
+
+/* ============================================
+   HERO SECTION
+============================================ */
+
+.stores-locator__hero {
+  background: linear-gradient(180deg, #f7f9fb 0%, #ffffff 100%);
+  padding: 80px 24px 60px;
+}
+
+.stores-locator__hero-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.stores-locator__hero-title {
+  font-family: var(--font-geely);
+  font-size: var(--fs-title-2);
+  line-height: var(--lh-title-2);
+  font-weight: 700;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #027bff 0%, #444444 124.81%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  margin: 0 0 16px;
+}
+
+.stores-locator__hero-description {
+  font-family: var(--font-inter);
+  font-size: var(--fs-p-3);
+  line-height: var(--lh-p-3);
+  color: #212529;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* ============================================
+   MAIN CONTAINER
+============================================ */
+
+.stores-locator__main {
+  padding: 0 24px 80px;
+}
+
+.stores-locator__container {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+/* ============================================
+   FILTERS
+============================================ */
+
+.stores-locator__filters {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 32px;
+  padding: 24px;
+  background: #f7f9fb;
+  border-radius: 12px;
+}
+
+.stores-locator__filter-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.stores-locator__filter-group--geo {
+  flex: 0 0 auto;
+  min-width: auto;
+}
+
+.stores-locator__select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.stores-locator__select-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.stores-locator__select {
+  width: 100%;
+  height: 48px;
+  padding: 12px 16px 12px 48px;
+  font-family: var(--font-inter);
+  font-size: var(--fs-p-4);
+  color: #212529;
+  background: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.41 0L6 4.58L10.59 0L12 1.41L6 7.41L0 1.41L1.41 0Z' fill='%236C757D'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  transition: border-color 0.3s ease;
+}
+
+.stores-locator__select:hover {
+  border-color: #027bff;
+}
+
+.stores-locator__select:focus {
+  outline: none;
+  border-color: #027bff;
+  box-shadow: 0 0 0 3px rgba(2, 123, 255, 0.1);
+}
+
+/* Geolocation Checkbox */
+.stores-locator__geo-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.stores-locator__geo-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #027bff;
+}
+
+.stores-locator__geo-text {
+  font-family: var(--font-inter);
+  font-size: var(--fs-p-4);
+  color: #212529;
+  white-space: nowrap;
+}
+
+/* ============================================
+   GRID LAYOUT (Stores List + Map)
+============================================ */
+
+.stores-locator__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+/* ============================================
+   STORES LIST (Left Column)
+============================================ */
+
+.stores-locator__list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 800px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.stores-locator__list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.stores-locator__list::-webkit-scrollbar-track {
+  background: #f7f9fb;
+  border-radius: 3px;
+}
+
+.stores-locator__list::-webkit-scrollbar-thumb {
+  background: #dee2e6;
+  border-radius: 3px;
+}
+
+.stores-locator__list::-webkit-scrollbar-thumb:hover {
+  background: #ced4da;
+}
+
+.stores-locator__empty {
+  font-family: var(--font-inter);
+  font-size: var(--fs-p-3);
+  color: #6c757d;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+/* ============================================
+   STORE CARD
+============================================ */
+
+.stores-locator__card {
+  background: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.stores-locator__card:hover {
+  border-color: #027bff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.stores-locator__card.is-active {
+  border-color: #027bff;
+  background: #f0f8ff;
+  box-shadow: 0 4px 16px rgba(2, 123, 255, 0.15);
+}
+
+.stores-locator__card.is-hidden {
+  display: none;
+}
+
+.stores-locator__card-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #027bff;
+  color: #ffffff;
+  font-family: var(--font-inter);
+  font-size: var(--fs-p-6);
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.stores-locator__card-title {
+  font-family: var(--font-geely);
+  font-size: var(--fs-p-1);
+  line-height: var(--lh-p-1);
+  font-weight: 700;
+  color: #212529;
+  margin: 0 0 16px;
+  text-transform: uppercase;
+}
+
+.stores-locator__card-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stores-locator__card-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-family: var(--font-inter);
+  font-size: var(--fs-p-4);
+  line-height: var(--lh-p-4);
+  color: #495057;
+}
+
+.stores-locator__card-item svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.stores-locator__card-item a {
+  color: #027bff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.stores-locator__card-item a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+.stores-locator__card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-inter);
+  font-size: var(--fs-p-5);
+  font-weight: 600;
+  color: #027bff;
+  text-decoration: none;
+  transition: gap 0.3s ease;
+}
+
+.stores-locator__card-link:hover {
+  gap: 12px;
+}
+
+.stores-locator__card-link svg {
+  transition: transform 0.3s ease;
+}
+
+.stores-locator__card-link:hover svg {
+  transform: translateX(4px);
+}
+
+/* ============================================
+   MAP CONTAINER (Right Column)
+============================================ */
+
+.stores-locator__map-container {
+  position: sticky;
+  top: 24px;
+  height: 800px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.stores-locator__map {
+  width: 100%;
+  height: 100%;
+}
+
+/* Google Maps Info Window Custom Styles */
+.gm-style .gm-style-iw-c {
+  border-radius: 8px !important;
+  padding: 12px !important;
+}
+
+.gm-style .gm-style-iw-d {
+  overflow: hidden !important;
+}
+
+.stores-locator__map-info {
+  font-family: var(--font-inter);
+}
+
+.stores-locator__map-info h4 {
+  font-family: var(--font-geely);
+  font-size: var(--fs-p-3);
+  font-weight: 700;
+  color: #212529;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+}
+
+.stores-locator__map-info p {
+  font-size: var(--fs-p-5);
+  color: #495057;
+  margin: 4px 0;
+  line-height: 1.4;
+}
+
+/* ============================================
+   PRODUCTS CAROUSEL SECTION
+============================================ */
+
+.stores-locator__products {
+  background: #f7f9fb;
+  padding: 80px 24px;
+}
+
+.stores-locator__products-container {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.stores-locator__products-title {
+  font-family: var(--font-geely);
+  font-size: var(--fs-title-3);
+  line-height: var(--lh-title-3);
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #027bff 0%, #444444 124.81%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  margin: 0 0 16px;
+}
+
+.stores-locator__products-subtitle {
+  font-family: var(--font-inter);
+  font-size: var(--fs-p-3);
+  line-height: var(--lh-p-3);
+  color: #212529;
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 48px;
+}
+
+.stores-locator__products-carousel {
+  position: relative;
+  padding: 0 60px;
+}
+
+.stores-locator__product-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.stores-locator__product-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+}
+
+.stores-locator__product-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin-bottom: 20px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.stores-locator__product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.stores-locator__product-title {
+  font-family: var(--font-geely);
+  font-size: var(--fs-p-1);
+  line-height: var(--lh-p-1);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #212529;
+  margin: 0 0 12px;
+}
+
+.stores-locator__product-price {
+  font-family: var(--font-inter);
+  font-size: var(--fs-p-5);
+  color: #6c757d;
+  margin: 0 0 24px;
+}
+
+.stores-locator__product-price strong {
+  display: block;
+  font-size: var(--fs-p-2);
+  color: #027bff;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.stores-locator__product-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.stores-locator__product-btn {
+  flex: 1;
+  padding: 12px 20px;
+  font-family: var(--font-inter);
+  font-size: var(--fs-p-5);
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 8px;
+  text-align: center;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.stores-locator__product-btn--outline {
+  background: #ffffff;
+  color: #027bff;
+  border: 2px solid #027bff;
+}
+
+.stores-locator__product-btn--outline:hover {
+  background: #027bff;
+  color: #ffffff;
+}
+
+.stores-locator__product-btn--primary {
+  background: #212529;
+  color: #ffffff;
+  border: 2px solid #212529;
+}
+
+.stores-locator__product-btn--primary:hover {
+  background: #027bff;
+  border-color: #027bff;
+}
+
+/* Carousel Navigation */
+.stores-locator__carousel-nav {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.stores-locator__carousel-prev,
+.stores-locator__carousel-next {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #027bff;
+  color: #027bff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.stores-locator__carousel-prev:hover,
+.stores-locator__carousel-next:hover {
+  background: #027bff;
+  color: #ffffff;
+}
+
+.stores-locator__carousel-prev.swiper-button-disabled,
+.stores-locator__carousel-next.swiper-button-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.stores-locator__carousel-pagination {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.stores-locator__carousel-pagination .swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  background: #dee2e6;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.stores-locator__carousel-pagination .swiper-pagination-bullet-active {
+  background: #027bff;
+  width: 32px;
+  border-radius: 6px;
+}
+
+/* ============================================
+   RESPONSIVE STYLES
+============================================ */
+
+@media (max-width: 1279px) {
+  .stores-locator__grid {
+    gap: 24px;
+  }
+
+  .stores-locator__map-container {
+    height: 600px;
+  }
+
+  .stores-locator__list {
+    max-height: 600px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .stores-locator__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stores-locator__map-container {
+    position: relative;
+    top: 0;
+    height: 500px;
+  }
+
+  .stores-locator__list {
+    max-height: none;
+    order: 2;
+  }
+
+  .stores-locator__map-container {
+    order: 1;
+  }
+
+  .stores-locator__filters {
+    gap: 12px;
+  }
+
+  .stores-locator__filter-group {
+    min-width: 150px;
+  }
+}
+
+@media (max-width: 767px) {
+  .stores-locator__hero {
+    padding: 60px 20px 40px;
+  }
+
+  .stores-locator__main {
+    padding: 0 20px 60px;
+  }
+
+  .stores-locator__filters {
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+  }
+
+  .stores-locator__filter-group,
+  .stores-locator__filter-group--geo {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .stores-locator__geo-text {
+    white-space: normal;
+  }
+
+  .stores-locator__grid {
+    gap: 20px;
+  }
+
+  .stores-locator__map-container {
+    height: 400px;
+  }
+
+  .stores-locator__list {
+    padding-right: 0;
+  }
+
+  .stores-locator__card {
+    padding: 20px;
+  }
+
+  .stores-locator__card-title {
+    font-size: var(--fs-p-2);
+  }
+
+  .stores-locator__products {
+    padding: 60px 20px;
+  }
+
+  .stores-locator__products-carousel {
+    padding: 0 40px;
+  }
+
+  .stores-locator__product-actions {
+    flex-direction: column;
+  }
+
+  .stores-locator__carousel-prev,
+  .stores-locator__carousel-next {
+    width: 40px;
+    height: 40px;
+  }
+}
