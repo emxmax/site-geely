@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    //console.log("[MF] DOMContentLoaded ✅");
+    //console.log("[MF] DOMContentLoaded");
 
     const selectors = window.__MF_BLOCKS__ || [];
     //console.log("[MF] __MF_BLOCKS__ =", selectors);

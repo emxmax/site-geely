@@ -80,9 +80,9 @@
   gap: 32px;
 }
 
-.emg-hero__top-inner {
+/* .emg-hero__top-inner {
   max-width: 420px;
-}
+} */
 
 .emg-hero__title {
   text-transform: uppercase;
@@ -156,7 +156,7 @@
 
   padding: 14px 0;
 
-  background: #000;
+  background: #0b0c0c;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;

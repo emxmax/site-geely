@@ -65,6 +65,7 @@
   position: relative;
   overflow: hidden;
   border-radius: 22px;
+  margin: 0;
 }
 
 .emg-moments__image {
@@ -186,7 +187,7 @@
   .emg-moments__grid {
     display: none;
   }
-  
+
   .emg-moments__mobile .swiper-pagination {
     display: block !important;
   }

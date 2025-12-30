@@ -29,17 +29,17 @@
   text-transform: uppercase;
   font-size: 52px;
   line-height: 64px;
-  color: #212529;
+  color: #0B0C0C;
 }
 
 .mg-models__desc {
   margin: 0 auto;
   max-width: 860px;
   font-family: var(--font-inter);
-  font-weight: 500;
+  font-weight: 400;
   font-size: 16px;
   line-height: 26px;
-  color: #212529;
+  color: #0B0C0C;
 }
 
 /* Tabs full width (desktop) */
@@ -263,8 +263,8 @@
 }
 
 .mg-models__pagination .swiper-pagination-bullet {
-  width: 7px;
-  height: 7px;
+  width: 12px;
+  height: 12px;
   opacity: 0.35;
   background: #7c8693;
   margin: 0 4px !important;
@@ -321,7 +321,7 @@
 
 @media (max-width: 768px) {
   .mg-models {
-    padding: 36px 16px 40px;
+    padding: 36px 16px 16px;
   }
 
   .mg-models__header {
@@ -331,15 +331,16 @@
 
   .mg-models__title {
     font-size: 32px;
-    line-height: 48px;
+    line-height: 40px;
     text-align: center;
+    margin-bottom: 24px;
   }
 
   .mg-models__desc {
-    text-align: left;
-    font-size: 13px;
-    line-height: 20px;
-    margin: 10px 0 6px;
+    text-align: center;
+    font-size: 16px;
+    line-height: 22px;
+    margin: 10px 0 24px;
     max-width: none;
   }
 
@@ -366,8 +367,8 @@
     max-width: 80%;
     padding: 16px 14px 18px;
 
-    font-size: 13px;
-    line-height: 16px;
+    font-size: 16px;
+    line-height: 20px;
     letter-spacing: 0.22em;
     text-align: left;
   }
@@ -385,11 +386,11 @@
     display: block;
   }
 
-  /* ⭐️ 4 cards en columna dentro del slide */
+  /* 4 cards en columna dentro del slide */
   .mg-models__mcol {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 40px;
   }
 
   /* Card compacta en mobile para que entren 4 */
@@ -404,44 +405,44 @@
   }
 
   .mg-card--mobile .mg-card__meta {
-    left: 18px;
-    top: 18px;
+    left: 32px;
+    top: 24px;
   }
 
   .mg-card--mobile .mg-card__year {
-    font-size: 13px;
-    line-height: 18px;
+    font-size: 16px;
+    line-height: 22px;
     margin-bottom: 6px;
   }
 
   .mg-card--mobile .mg-card__name {
-    font-size: 16px;
-    line-height: 20px;
+    font-size: 18px;
+    line-height: 24px;
     letter-spacing: 0.18em;
   }
 
   .mg-card--mobile .mg-card__picture {
-    height: 118px;
-    padding-top: 46px;
+    height: 230px;
+    padding-top: 62px;
   }
 
   .mg-card--mobile .mg-card__img {
-    height: 98px;
+    height: 170px;
     max-width: 280px;
   }
 
   .mg-card--mobile .mg-card__body {
-    padding: 0;
+    padding-left: 29px;
   }
 
   .mg-card--mobile .mg-card__priceLabel {
-    font-size: 12px;
-    line-height: 16px;
+    font-size: 14px;
+    line-height: 18px;
   }
 
   .mg-card--mobile .mg-card__prices {
-    font-size: 14px;
-    line-height: 18px;
+    font-size: 16px;
+    line-height: 20px;
     margin-top: 6px;
     font-family: var(--font-inter);
     font-weight: 700;
@@ -449,13 +450,15 @@
 
   .mg-card--mobile .mg-card__dot {
     margin: 0 6px;
-    font-size: 12px;
+    font-size: 14px;
+    line-height: 18px;
   }
 
   /* Controls en mobile: flechas + bullets */
   .mg-models__controls--mobile {
-    margin-top: 18px;
+    margin-top: 40px;
     gap: 10px;
+    grid-template-columns: 1fr;
   }
 
   .mg-models__nav img {
@@ -468,5 +471,18 @@
   }
   .mg-models__nav--next-m img {
     transform: rotate(0deg);
+  }
+
+  .mg-card__arrow {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    z-index: 2;
+  }
+
+  .mg-card {
+    height: 306px;
   }
 }

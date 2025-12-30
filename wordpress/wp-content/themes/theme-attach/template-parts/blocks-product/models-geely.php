@@ -310,6 +310,10 @@ if (!function_exists('mg_models_geely_get_cards_for_term')) {
                                 <div class="mg-card__name"><?php echo esc_html($c['title']); ?></div>
                               </div>
 
+                              <img class="mg-card__arrow"
+                                src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/arrow-card.png'); ?>"
+                                alt="Arrow">
+
                               <picture class="mg-card__picture">
                                 <source media="(max-width: 767px)" srcset="<?php echo esc_url($c['imgM']); ?>">
                                 <img class="mg-card__img" src="<?php echo esc_url($c['imgD']); ?>" alt="<?php echo esc_attr($c['title']); ?>" loading="lazy">
@@ -333,19 +337,19 @@ if (!function_exists('mg_models_geely_get_cards_for_term')) {
                 </div>
 
                 <div class="mg-models__controls mg-models__controls--mobile">
-                  <button class="mg-models__nav mg-models__nav--prev-m" type="button" aria-label="Anterior">
+                  <!-- <button class="mg-models__nav mg-models__nav--prev-m" type="button" aria-label="Anterior">
                     <img
                       src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-arrow.png'); ?>"
                       alt="Prev">
-                  </button>
+                  </button> -->
 
                   <div class="mg-models__pagination mg-models__pagination--mobile"></div>
 
-                  <button class="mg-models__nav mg-models__nav--next-m" type="button" aria-label="Siguiente">
+                  <!-- <button class="mg-models__nav mg-models__nav--next-m" type="button" aria-label="Siguiente">
                     <img
                       src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-arrow.png'); ?>"
                       alt="Next">
-                  </button>
+                  </button> -->
                 </div>
               </div>
             </div>

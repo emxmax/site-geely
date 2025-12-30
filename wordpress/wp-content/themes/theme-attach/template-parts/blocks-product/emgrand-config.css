@@ -207,6 +207,7 @@
   border-radius: 16px;
   box-shadow: 0px 4px 4px 0px #BDBDBD80;
   max-height: fit-content;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F0F0F0 50%, #D6D6D6 100%);
 }
 
 .emg-config__colors-label {
@@ -284,7 +285,7 @@
 /* Franja inferior: 3 bloques (Precio, Aros, Hasta) */
 
 .emg-config__bottom-grid {
-  color: #212529;
+  color: #0B0C0C;
   margin-top: 56px;
   display: grid;
   grid-template-columns: 1fr 2fr; /* bloque de precio más ancho */
@@ -352,7 +353,7 @@
   line-height: 32px;
   letter-spacing: 0px;
   vertical-align: middle;
-  color: #212529;
+  color: #0B0C0C;
 }
 
 .emg-config__spec-main {
@@ -519,7 +520,6 @@
     top: 0;
     right: 0;
 
-    width: 100%;
     max-width: 100%;
 
     overflow-x: auto;
