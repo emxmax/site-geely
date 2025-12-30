@@ -22,7 +22,7 @@
 }
 
 .mg-models__title {
-  margin: 0 0 14px;
+  margin: 0 0 16px;
   font-family: var(--font-geely);
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -36,9 +36,9 @@
   margin: 0 auto;
   max-width: 860px;
   font-family: var(--font-inter);
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 26px;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
   color: #0B0C0C;
 }
 
@@ -58,7 +58,7 @@
   background: transparent;
   cursor: pointer;
 
-  padding: 8px 16px 24px;
+  padding: 12px 16px 24px;
   text-align: start;
 
   font-family: var(--font-geely);
@@ -66,8 +66,8 @@
   letter-spacing: 0.22em;
   text-transform: uppercase;
 
-  font-size: 22px;
-  line-height: 22px;
+  font-size: 20px;
+  line-height: 24px;
 
   color: #afb6b9;
   position: relative;
@@ -204,7 +204,7 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  height: 210px;
+  height: 246px;
   padding-top: 50px;
 }
 
@@ -233,8 +233,8 @@
   margin-top: 8px;
   font-family: var(--font-geely);
   font-weight: 800;
-  font-size: 30px;
-  line-height: 32px;
+  font-size: 24px;
+  line-height: 24px;
   color: #212529;
 }
 
@@ -412,7 +412,7 @@
   .mg-card--mobile .mg-card__year {
     font-size: 16px;
     line-height: 22px;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
 
   .mg-card--mobile .mg-card__name {
