@@ -166,7 +166,7 @@ p:has(> [data-name*="store"]) {
 .geely-actions {
   display: flex;
   justify-content: flex-end;
-  margin-top: 14px;
+  margin-top: 32px;
 }
 
 .geely-submit {
@@ -242,7 +242,7 @@ label:has(> [name*="marketing_consent"]) {
 }
 
 .geely-actions .geely-submit {
-  padding: 12px 32px;
+  padding: 12px 35.85px;
   font-size: var(--fs-title-7);
   line-height: var(--lh-title-7);
   font-weight: 700;
@@ -335,5 +335,17 @@ label:has(> [name*="marketing_consent"]) {
   .geely-row--document .geely-select {
     width: 69px;
     flex: 0 0 69px;
+  }
+  .geely-actions {
+    margin-top: 24px;
+  }
+
+  p:has(> .geely-submit) {
+    width: 100%;
+  }
+  .geely-actions .geely-submit {
+    padding-inline: 10px;
+    font-size: var(--fs-title-sm-6);
+    line-height: var(--lh-title-sm-6);
   }
 }

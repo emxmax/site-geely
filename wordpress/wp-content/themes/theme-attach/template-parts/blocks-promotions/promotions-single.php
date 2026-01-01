@@ -17,8 +17,10 @@ if (!is_singular('promocion'))
 $post_id = get_the_ID();
 
 // Campos ACF opcionales del bloque
+$card_text = get_field("promocion_card_text", $post_id) ?: null;
 $image = get_field('promocion_content_image', $post_id) ?: null;
-$content = get_field('promocion_content_text', $post_id) ?: null;
+$content = get_field('promocion_content_text', $post_id) ?: $card_text;
+
 $image_url = '';
 $image_alt = '';
 if (empty($image)) {

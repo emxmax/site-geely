@@ -38,7 +38,6 @@ if ($image) {
   }
 } ?>
 
-<!-- style="background-image: url('<?php echo esc_url($image_url); ?>');" -->
 <section class="new-innovation">
   <img class="new-innovation__bg" src="<?= esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt); ?>"
     aria-hidden="true">

@@ -113,6 +113,7 @@
 .new-about__grid .blog-news__link {
   text-decoration: underline;
   font-weight: 700;
+  text-underline-offset: 3px;
 }
 
 .new-about__grid .blog-news__link:hover {

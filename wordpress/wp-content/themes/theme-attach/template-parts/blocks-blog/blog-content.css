@@ -138,4 +138,8 @@
     font-size: var(--fs-p-2);
     line-height: var(--lh-p-2);
   }
+  .blog-content__title {
+    font-size: var(--fs-title-6) !important;
+    line-height: var(--lh-title-6) !important;
+  }
 }
