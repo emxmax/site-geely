@@ -3,6 +3,7 @@
 ===================================================== */
 
 .new-innovation {
+  max-width: 1440px;
   padding: 0;
   margin-block-start: 0 !important;
   width: 100%;
@@ -24,6 +25,24 @@
     background-size: 120%;
     background-position-x: 20%;
   }
+}
+@media (min-width: 1440px) {
+  .new-innovation {
+    background-size: 1440px auto;
+    background-position: center top;
+  }
+}
+
+.new-innovation__bg {
+  position: absolute;
+  inset: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  object-fit: contain;
+  z-index: 0;
+  object-position: right -51px;
+  width: auto;
+  height: 475px;
 }
 
 .new-innovation__inner {
@@ -61,6 +80,23 @@
 }
 
 /* =========================
+    (≤1439px)
+========================= */
+@media (max-width: 1439px) {
+  .new-innovation__bg {
+    object-position: 45px -51px;
+  }
+}
+/* =========================
+    (≤1439px)
+========================= */
+@media (max-width: 1199px) {
+  .new-innovation__bg {
+    object-position: 138px -51px;
+  }
+}
+
+/* =========================
    TABLET (≤1024px)
 ========================= */
 
@@ -90,6 +126,9 @@
     min-height: 480px;
     padding-inline: 16px;
     background-position-x: 45%;
+  }
+  .new-innovation__bg {
+    object-position: 75px 0;
   }
   .new-innovation__inner {
     min-height: 480px;

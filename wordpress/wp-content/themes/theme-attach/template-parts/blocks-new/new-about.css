@@ -235,6 +235,7 @@
 
   .new-about__pagination {
     padding-top: 0;
-    padding-bottom: 12px;
+    /* padding-bottom: 12px; */
+    padding-bottom: 16px;
   }
 }

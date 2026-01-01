@@ -36,10 +36,12 @@ if ($image) {
     $image_url = wp_get_attachment_image_url($image, 'full') ?: $image_url;
     $image_alt = get_post_meta($image, '_wp_attachment_image_alt', true) ?: $title;
   }
-}
-?>
+} ?>
 
-<section class="new-innovation" style="background-image: url('<?php echo esc_url($image_url); ?>');">
+<!-- style="background-image: url('<?php echo esc_url($image_url); ?>');" -->
+<section class="new-innovation">
+  <img class="new-innovation__bg" src="<?= esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt); ?>"
+    aria-hidden="true">
   <div class="new-innovation__inner">
     <div class="new-innovation__content">
       <h2 class="new-innovation__title title-3 title-mobile-sm-2"><?php echo esc_html($title); ?></h2>
