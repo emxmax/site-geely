@@ -93,16 +93,16 @@ function theme_attach_register_page_blocks()
   ]);
 
   // Bloque: Red de Atención (Localizador de Tiendas)
-  acf_register_block_type([
-    'name' => 'page-stores-locator',
-    'title' => __('Pagina - Red de Atención', 'theme-attach'),
-    'description' => __('Localizador de tiendas con mapa interactivo y filtros', 'theme-attach'),
-    'render_template' => 'template-parts/blocks-page/stores-locator.php',
-    'category' => 'layout',
-    'icon' => 'location',
-    'keywords' => ['tienda', 'mapa', 'localizador', 'red', 'atencion'],
-    'supports' => [
-      'align' => false,
-    ],
-  ]);
+  // acf_register_block_type([
+  //   'name' => 'page-stores-locator',
+  //   'title' => __('Pagina - Red de Atención', 'theme-attach'),
+  //   'description' => __('Localizador de tiendas con mapa interactivo y filtros', 'theme-attach'),
+  //   'render_template' => 'template-parts/blocks-page/stores-locator.php',
+  //   'category' => 'layout',
+  //   'icon' => 'location',
+  //   'keywords' => ['tienda', 'mapa', 'localizador', 'red', 'atencion'],
+  //   'supports' => [
+  //     'align' => false,
+  //   ],
+  // ]);
 }

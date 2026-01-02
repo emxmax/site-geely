@@ -6,7 +6,8 @@
  * Para helpers específicos de un dominio, usar inc/{domain}/helpers.php
  */
 
-if (!defined('ABSPATH')) exit;
+if (!defined('ABSPATH'))
+  exit;
 
 /**
  * Obtener términos de una taxonomía que tienen posts publicados
@@ -32,11 +33,19 @@ function theme_attach_get_terms_with_posts(string $taxonomy, array $args = []): 
 /**
  * Sanitizar número de teléfono (solo dígitos y +)
  * 
- * @param string $phone Número de teléfono sin sanitizar
+ * @param string|array $phone Número de teléfono sin sanitizar (string o array)
  * @return string Teléfono sanitizado
  */
-function theme_attach_sanitize_phone(string $phone): string
+function theme_attach_sanitize_phone($phone): string
 {
+  // Manejar arrays (tomar primer elemento)
+  if (is_array($phone)) {
+    $phone = !empty($phone) ? $phone[0] : '';
+  }
+
+  // Convertir a string si no lo es
+  $phone = (string) $phone;
+
   return preg_replace('/[^0-9+]/', '', $phone);
 }
 
@@ -121,4 +130,65 @@ function theme_attach_truncate_words(string $text, int $words = 20, string $more
   }
 
   return implode(' ', array_slice($words_array, 0, $words)) . $more;
+}
+
+/**
+ * Parsear coordenadas desde string
+ * 
+ * Acepta formatos:
+ * - "-9.485725658859815, -77.53700189768016"
+ * - "-9.485725658859815,-77.53700189768016"
+ * - "lat: -9.485725658859815, lng: -77.53700189768016"
+ * 
+ * @param string $coordinates String con coordenadas
+ * @return array|null ['lat' => float, 'lng' => float] o null si inválido
+ */
+function theme_attach_parse_coordinates(
+  string $coordinates
+): ?array {
+  if (empty($coordinates)) {
+    return null;
+  }
+
+  // Limpiar espacios extras y texto descriptivo
+  $coordinates = trim($coordinates);
+  $coordinates = preg_replace(
+    '/\s+/',
+    ' ',
+    $coordinates
+  ); // Normalizar espacios
+  $coordinates = str_replace(
+    ['lat:', 'lng:', 'latitude:', 'longitude:'],
+    '',
+    strtolower($coordinates)
+  );
+  $coordinates = trim($coordinates);
+
+  // Extraer números (incluyendo decimales negativos)
+  preg_match_all('/-?\d+\.?\d*/', $coordinates, $matches);
+
+  if (empty($matches[0]) || count($matches[0]) < 2) {
+    if (WP_DEBUG) {
+      error_log("[Theme Attach] Coordenadas inválidas: {$coordinates}");
+    }
+    return null;
+  }
+
+  $lat = floatval($matches[0][0]);
+  $lng = floatval($matches[0][1]);
+
+  // Validar rangos válidos
+  // Latitud: -90 a 90
+  // Longitud: -180 a 180
+  if ($lat < -90 || $lat > 90 || $lng < -180 || $lng > 180) {
+    if (WP_DEBUG) {
+      error_log("[Theme Attach] Coordenadas fuera de rango: lat={$lat}, lng={$lng}");
+    }
+    return null;
+  }
+
+  return [
+    'lat' => $lat,
+    'lng' => $lng
+  ];
 }

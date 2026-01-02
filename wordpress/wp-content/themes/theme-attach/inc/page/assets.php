@@ -1,10 +1,12 @@
 <?php
-if ( ! defined('ABSPATH') ) exit;
+if (!defined('ABSPATH'))
+    exit;
 
 /**
  * Assets específicos de bloques PAGE
  */
-function page_blocks_assets() {
+function page_blocks_assets()
+{
 
     /**
      * =========================
@@ -20,7 +22,7 @@ function page_blocks_assets() {
         'faq',
         'hero-carousel',
         'geely-future',
-        'stores-locator',
+        // 'stores-locator',
     ];
 
     foreach ($css_blocks as $handle) {
@@ -65,23 +67,23 @@ function page_blocks_assets() {
     /**
      * Stores Locator (Google Maps + Swiper)
      */
-    $stores_locator_js = "/assets/js/stores-locator.js";
-    $stores_locator_js_abs = get_stylesheet_directory() . $stores_locator_js;
-    
-    if (file_exists($stores_locator_js_abs)) {
-        wp_enqueue_script(
-            'page-stores-locator-js',
-            get_stylesheet_directory_uri() . $stores_locator_js,
-            ['swiper'],
-            filemtime($stores_locator_js_abs),
-            true
-        );
+    // $stores_locator_js = "/assets/js/stores-locator.js";
+    // $stores_locator_js_abs = get_stylesheet_directory() . $stores_locator_js;
 
-        // Datos para JavaScript
-        wp_localize_script('page-stores-locator-js', 'STORES_LOCATOR', [
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'google_maps_api_key' => 'TU_API_KEY_AQUI', // CAMBIAR por tu API key real
-        ]);
-    }
+    // if (file_exists($stores_locator_js_abs)) {
+    //     wp_enqueue_script(
+    //         'page-stores-locator-js',
+    //         get_stylesheet_directory_uri() . $stores_locator_js,
+    //         ['swiper'],
+    //         filemtime($stores_locator_js_abs),
+    //         true
+    //     );
+
+    //     // Datos para JavaScript
+    //     wp_localize_script('page-stores-locator-js', 'STORES_LOCATOR', [
+    //         'ajax_url' => admin_url('admin-ajax.php'),
+    //         'google_maps_api_key' => 'TU_API_KEY_AQUI', // CAMBIAR por tu API key real
+    //     ]);
+    // }
 }
 add_action('wp_enqueue_scripts', 'page_blocks_assets');

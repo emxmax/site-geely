@@ -4,7 +4,6 @@ if (!defined('ABSPATH'))
 
 // Verificar que ACF esté activo
 if (!function_exists('get_field')) {
-  echo '<div style="padding: 40px; text-align: center; background: #f8d7da; color: #721c24; border-radius: 8px;">⚠️ ACF Pro no está activo. Este bloque requiere Advanced Custom Fields Pro.</div>';
   return;
 }
 
@@ -114,8 +113,6 @@ if ($show_products_carousel && post_type_exists('producto')) {
     </div>
   </div>
 
-  <?php return; ?>
-
   <!-- Filters and Map Container -->
   <div class="stores-locator__main">
     <div class="stores-locator__container">
@@ -193,27 +190,56 @@ if ($show_products_carousel && post_type_exists('producto')) {
               $store_id = get_the_ID();
               $store_name = get_the_title();
               $store_address = get_field('store_address', $store_id) ?: '';
-              $store_phone = get_field('store_phone', $store_id) ?: '';
-              $store_whatsapp = get_field('store_whatsapp', $store_id) ?: '';
-              $store_lat = get_field('store_latitude', $store_id) ?: '';
-              $store_lng = get_field('store_longitude', $store_id) ?: '';
 
+              // Phone (manejar string o array)
+              $store_phone_raw = get_field('store_phone', $store_id);
+              $store_phone = is_array($store_phone_raw) ? ($store_phone_raw[0] ?? '') : ($store_phone_raw ?: '');
+
+              // WhatsApp
+              $store_whatsapp_group = get_field('store_whatsapp', $store_id);
+              $store_whatsapp_number = is_array($store_whatsapp_group)
+                ? ($store_whatsapp_group['store_whatsapp_number'] ?? '') : '';
+              $store_whatsapp_message = is_array($store_whatsapp_group)
+                ? ($store_whatsapp_group['store_whatsapp_message'] ?? '') : '';
+
+
+              $store_coordinates_raw = get_field(
+                'store_coordinates',
+                $store_id
+              ) ?: '';
+              $coordinates = theme_attach_parse_coordinates($store_coordinates_raw);
+              $store_lat = $coordinates['lat'] ?? '';
+              $store_lng = $coordinates['lng'] ?? '';
+              // $store_lat = get_field('store_latitude', $store_id) ?: '';
+              // $store_lng = get_field('store_longitude', $store_id) ?: '';
+          
               // Obtener términos de la tienda
-              $store_departments = wp_get_post_terms($store_id, 'departamento', ['fields' => 'slugs']);
-              $store_services = wp_get_post_terms($store_id, 'categoria_promocion', ['fields' => 'slugs']);
+              $store_departments = wp_get_post_terms(
+                $store_id,
+                'departamento',
+                ['fields' => 'slugs']
+              );
+              $store_services = wp_get_post_terms(
+                $store_id,
+                'categoria_promocion',
+                ['fields' => 'slugs']
+              );
 
               $dept_slugs = !is_wp_error($store_departments) && is_array($store_departments) ? implode(',', $store_departments) : '';
               $service_slugs = !is_wp_error($store_services) && is_array($store_services) ? implode(',', $store_services) : '';
               ?>
 
-              <div class="stores-locator__card" data-store-id="<?php echo esc_attr($store_id); ?>"
-                data-lat="<?php echo esc_attr($store_lat); ?>" data-lng="<?php echo esc_attr($store_lng); ?>"
-                data-departments="<?php echo esc_attr($dept_slugs); ?>"
-                data-services="<?php echo esc_attr($service_slugs); ?>">
+              <div class="stores-locator__card" data-store-id="<?= esc_attr($store_id); ?>"
+                data-lat="<?= esc_attr($store_lat); ?>" data-lng="<?= esc_attr($store_lng); ?>"
+                data-departments="<?= esc_attr($dept_slugs); ?>" data-services="<?= esc_attr($service_slugs); ?>">
 
                 <!-- Category Badge -->
                 <?php
-                $primary_service = wp_get_post_terms($store_id, 'categoria_promocion', ['number' => 1]);
+                $primary_service = wp_get_post_terms(
+                  $store_id,
+                  'categoria_promocion',
+                  ['number' => 1]
+                );
                 if (!empty($primary_service) && !is_wp_error($primary_service)):
                   ?>
                   <div class="stores-locator__card-badge">
@@ -228,7 +254,6 @@ if ($show_products_carousel && post_type_exists('producto')) {
 
                 <!-- Store Details -->
                 <div class="stores-locator__card-details">
-
                   <?php if ($store_address): ?>
                     <div class="stores-locator__card-item">
                       <svg width="16" height="20" viewBox="0 0 16 20" fill="none">
@@ -239,7 +264,6 @@ if ($show_products_carousel && post_type_exists('producto')) {
                       <span><?php echo esc_html($store_address); ?></span>
                     </div>
                   <?php endif; ?>
-
                   <?php if ($store_phone): ?>
                     <div class="stores-locator__card-item">
                       <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -248,22 +272,32 @@ if ($show_products_carousel && post_type_exists('producto')) {
                           fill="#027BFF" />
                       </svg>
                       <a
-                        href="tel:<?php echo esc_attr(function_exists('theme_attach_sanitize_phone') ? theme_attach_sanitize_phone($store_phone) : preg_replace('/[^0-9+]/', '', $store_phone)); ?>">
-                        <?php echo esc_html($store_phone); ?>
+                        href="tel:+51<?php echo esc_attr(function_exists('theme_attach_sanitize_phone') ? theme_attach_sanitize_phone($store_phone) : preg_replace('/[^0-9+]/', '', $store_phone)); ?>">
+                        <?= esc_html($store_phone); ?>
                       </a>
                     </div>
                   <?php endif; ?>
 
-                  <?php if ($store_whatsapp): ?>
+                  <?php if ($store_whatsapp_number): ?>
+                    <?php
+                    // Construir URL de WhatsApp
+                    // $whatsapp_number_clean = function_exists('theme_attach_sanitize_phone') 
+                    //   ? theme_attach_sanitize_phone($store_whatsapp_number)
+                    //   : preg_replace('/[^0-9+]/', '', $store_whatsapp_number);              
+                    $whatsapp_number_clean = '+51' . trim($store_whatsapp_number);
+                    $whatsapp_url = 'https://wa.me/' . $whatsapp_number_clean;
+                    if (!empty($store_whatsapp_message)) {
+                      $whatsapp_url .= '?text=' . rawurlencode($store_whatsapp_message);
+                    }
+                    ?>
                     <div class="stores-locator__card-item">
                       <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                         <path
                           d="M15.3 2.7C13.62 0.99 11.38 0 9 0C4.05 0 0 4.05 0 9C0 10.62 0.45 12.21 1.26 13.59L0 18L4.5 16.77C5.82 17.5 7.32 17.88 9 17.88C13.95 17.88 18 13.83 18 8.88C18 6.48 17.01 4.23 15.3 2.7ZM9 16.38C7.5 16.38 6.03 15.96 4.77 15.18L4.47 15L1.95 15.66L2.64 13.23L2.43 12.9C1.59 11.61 1.14 10.08 1.14 8.55C1.14 4.68 4.35 1.5 9 1.5C11.19 1.5 13.23 2.34 14.7 3.81C16.17 5.28 17.01 7.32 17.01 9.51C17.01 13.38 13.83 16.38 9 16.38Z"
                           fill="#25D366" />
                       </svg>
-                      <a href="https://wa.me/<?php echo esc_attr(function_exists('theme_attach_sanitize_phone') ? theme_attach_sanitize_phone($store_whatsapp) : preg_replace('/[^0-9+]/', '', $store_whatsapp)); ?>"
-                        target="_blank" rel="noopener noreferrer">
-                        <?php echo esc_html($store_whatsapp); ?>
+                      <a href="<?= esc_url($whatsapp_url); ?>" target="_blank" rel="noopener noreferrer">
+                        <?= esc_html($store_whatsapp_number); ?>
                       </a>
                     </div>
                   <?php endif; ?>
@@ -272,7 +306,10 @@ if ($show_products_carousel && post_type_exists('producto')) {
 
                 <!-- View on Map Link -->
                 <a href="#" class="stores-locator__card-link" data-action="view-on-map">
-                  <?php _e('Ver ubicación en el mapa', 'theme-attach'); ?>
+                  <?php _e(
+                    'Ver ubicación en el mapa',
+                    'theme-attach'
+                  ); ?>
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path d="M8 0L6.59 1.41L12.17 7H0V9H12.17L6.59 14.59L8 16L16 8L8 0Z" fill="#027BFF" />
                   </svg>
@@ -307,80 +344,82 @@ if ($show_products_carousel && post_type_exists('producto')) {
   </div>
 
   <!-- Products Carousel Section -->
-  <?php if ($show_products_carousel && !empty($products_carousel)): ?>
-    <div class="stores-locator__products">
-      <div class="stores-locator__products-container">
+  <div style="display: none !important;">
+    <?php if ($show_products_carousel && !empty($products_carousel)): ?>
+      <div class="stores-locator__products">
+        <div class="stores-locator__products-container">
 
-        <h2 class="stores-locator__products-title">
-          <?php _e('ELIGE TU GEELY', 'theme-attach'); ?>
-        </h2>
+          <h2 class="stores-locator__products-title">
+            <?php _e('ELIGE TU GEELY', 'theme-attach'); ?>
+          </h2>
 
-        <p class="stores-locator__products-subtitle">
-          <?php _e('Obtén los mejores precios en autos nuevos con Geely. Encuentra SUVs y Sedanes de alta calidad y tecnología a un precio accesible.', 'theme-attach'); ?>
-        </p>
+          <p class="stores-locator__products-subtitle">
+            <?php _e('Obtén los mejores precios en autos nuevos con Geely. Encuentra SUVs y Sedanes de alta calidad y tecnología a un precio accesible.', 'theme-attach'); ?>
+          </p>
 
-        <div class="stores-locator__products-carousel swiper">
-          <div class="swiper-wrapper">
-            <?php foreach ($products_carousel as $product): ?>
-              <div class="swiper-slide">
-                <div class="stores-locator__product-card">
+          <div class="stores-locator__products-carousel swiper">
+            <div class="swiper-wrapper">
+              <?php foreach ($products_carousel as $product): ?>
+                <div class="swiper-slide">
+                  <div class="stores-locator__product-card">
 
-                  <div class="stores-locator__product-image">
-                    <img src="<?php echo esc_url($product['image']); ?>" alt="<?php echo esc_attr($product['alt']); ?>">
-                  </div>
-
-                  <h3 class="stores-
-                        echo esc_html(function_exists('theme_attach_format_price') 
-                          ? theme_attach_format_price($product['price_from']) 
-                          : 'S/ ' . number_format($product['price_from'], 2)
-                        ); 
-                     
-                    <?php echo esc_html($product['title']); ?>
-                  </h3>
-                  
-                  <?php if (!empty($product['price_from'])): ?>
-                    <p class=" stores-locator__product-price">
-                      <?php _e('Precio desde', 'theme-attach'); ?><br>
-                      <strong><?php echo esc_html(theme_attach_format_price($product['price_from'])); ?></strong>
-                      </p>
-                    <?php endif; ?>
-
-                    <div class="stores-locator__product-actions">
-                      <a href="<?php echo esc_url($product['permalink']); ?>"
-                        class="stores-locator__product-btn stores-locator__product-btn--outline">
-                        <?php _e('Ver modelo', 'theme-attach'); ?>
-                      </a>
-                      <a href="<?php echo esc_url($product['permalink'] . '#cotizar'); ?>"
-                        class="stores-locator__product-btn stores-locator__product-btn--primary">
-                        <?php _e('Cotizar', 'theme-attach'); ?>
-                      </a>
+                    <div class="stores-locator__product-image">
+                      <img src="<?php echo esc_url($product['image']); ?>" alt="<?php echo esc_attr($product['alt']); ?>">
                     </div>
 
+                    <h3 class="stores-
+                          echo esc_html(function_exists('theme_attach_format_price') 
+                            ? theme_attach_format_price($product['price_from']) 
+                            : 'S/ ' . number_format($product['price_from'], 2)
+                          ); 
+                      
+                      <?php echo esc_html($product['title']); ?>
+                    </h3>
+                    
+                    <?php if (!empty($product['price_from'])): ?>
+                      <p class=" stores-locator__product-price">
+                        <?php _e('Precio desde', 'theme-attach'); ?><br>
+                        <strong><?php echo esc_html(theme_attach_format_price($product['price_from'])); ?></strong>
+                        </p>
+                      <?php endif; ?>
+
+                      <div class="stores-locator__product-actions">
+                        <a href="<?php echo esc_url($product['permalink']); ?>"
+                          class="stores-locator__product-btn stores-locator__product-btn--outline">
+                          <?php _e('Ver modelo', 'theme-attach'); ?>
+                        </a>
+                        <a href="<?php echo esc_url($product['permalink'] . '#cotizar'); ?>"
+                          class="stores-locator__product-btn stores-locator__product-btn--primary">
+                          <?php _e('Cotizar', 'theme-attach'); ?>
+                        </a>
+                      </div>
+
+                  </div>
                 </div>
-              </div>
-            <?php endforeach; ?>
+              <?php endforeach; ?>
+            </div>
+
+            <!-- Navigation -->
+            <div class="stores-locator__carousel-nav">
+              <button class="stores-locator__carousel-prev" aria-label="<?php esc_attr_e('Anterior', 'theme-attach'); ?>">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M15.41 7.41L14 6L8 12L14 18L15.41 16.59L10.83 12L15.41 7.41Z" fill="currentColor" />
+                </svg>
+              </button>
+              <button class="stores-locator__carousel-next"
+                aria-label="<?php esc_attr_e('Siguiente', 'theme-attach'); ?>">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M8.59 16.59L10 18L16 12L10 6L8.59 7.41L13.17 12L8.59 16.59Z" fill="currentColor" />
+                </svg>
+              </button>
+            </div>
+
+            <!-- Pagination -->
+            <div class="stores-locator__carousel-pagination"></div>
           </div>
 
-          <!-- Navigation -->
-          <div class="stores-locator__carousel-nav">
-            <button class="stores-locator__carousel-prev" aria-label="<?php esc_attr_e('Anterior', 'theme-attach'); ?>">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M15.41 7.41L14 6L8 12L14 18L15.41 16.59L10.83 12L15.41 7.41Z" fill="currentColor" />
-              </svg>
-            </button>
-            <button class="stores-locator__carousel-next" aria-label="<?php esc_attr_e('Siguiente', 'theme-attach'); ?>">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M8.59 16.59L10 18L16 12L10 6L8.59 7.41L13.17 12L8.59 16.59Z" fill="currentColor" />
-              </svg>
-            </button>
-          </div>
-
-          <!-- Pagination -->
-          <div class="stores-locator__carousel-pagination"></div>
         </div>
-
       </div>
-    </div>
-  <?php endif; ?>
-
+    <?php endif; ?>
+  </div>
 </section>

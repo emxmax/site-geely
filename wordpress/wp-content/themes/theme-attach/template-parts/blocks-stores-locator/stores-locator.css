@@ -54,7 +54,7 @@
 }
 
 .stores-locator__container {
-  max-width: 1240px;
+  max-width: 1280px;
   margin: 0 auto;
 }
 
@@ -154,8 +154,9 @@
 
 .stores-locator__grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 32px;
+  /* grid-template-columns: 1fr 1fr; */
+  grid-template-columns: 473px 767px;
+  gap: 40px;
 }
 
 /* ============================================
@@ -166,9 +167,9 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  max-height: 800px;
+  max-height: 596px;
   overflow-y: auto;
-  padding-right: 8px;
+  padding-right: 21px;
 }
 
 .stores-locator__list::-webkit-scrollbar {
@@ -317,6 +318,7 @@
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  max-height: 596px;
 }
 
 .stores-locator__map {

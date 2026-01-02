@@ -20,9 +20,10 @@ require_once get_stylesheet_directory() . '/inc/product/zip-360.php';
 
 // Page domain
 require_once get_stylesheet_directory() . '/inc/page/assets.php';
-
 // News Page 
 require_once get_stylesheet_directory() . '/inc/new/assets.php';
+// Stores Locator
+require_once get_stylesheet_directory() . '/inc/stores-locator/assets.php';
 
 // Blog domain
 require_once get_stylesheet_directory() . '/inc/blog/assets.php';

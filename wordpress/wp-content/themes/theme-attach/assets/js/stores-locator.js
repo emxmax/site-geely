@@ -2,17 +2,16 @@
  * Stores Locator - Red de Atención
  * Google Maps + Filters + Geolocation + Products Carousel
  */
-
 (function () {
-  'use strict';
+  "use strict";
 
   // Configuración
   const CONFIG = {
-    mapId: 'stores-map',
+    mapId: "stores-map",
     defaultCenter: { lat: -12.0464, lng: -77.0428 }, // Lima, Perú
     defaultZoom: 12,
     markerIcon: {
-      url: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA0MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cGF0aCBkPSJNMjAgMEMxMC42IDAgMyA3LjYgMyAxN0MzIDI5LjUgMjAgNTAgMjAgNTBDMjAgNTAgMzcgMjkuNSAzNyAxN0MzNyA3LjYgMjkuNCA0IDIwIDBaTTIwIDIzQzE2LjcgMjMgMTQgMjAuMyAxNCAxN0MxNCAxMy43IDE2LjcgMTEgMjAgMTFDMjMuMyAxMSAyNiAxMy43IDI2IDE3QzI2IDIwLjMgMjMuMyAyMyAyMCAyM1oiIGZpbGw9IiMwMjdCRkYiLz4KPC9zdmc+',
+      url: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA0MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cGF0aCBkPSJNMjAgMEMxMC42IDAgMyA3LjYgMyAxN0MzIDI5LjUgMjAgNTAgMjAgNTBDMjAgNTAgMzcgMjkuNSAzNyAxN0MzNyA3LjYgMjkuNCA0IDIwIDBaTTIwIDIzQzE2LjcgMjMgMTQgMjAuMyAxNCAxN0MxNCAxMy43IDE2LjcgMTEgMjAgMTFDMjMuMyAxMSAyNiAxMy43IDI2IDE3QzI2IDIwLjMgMjMuMyAyMyAyMCAyM1oiIGZpbGw9IiMwMjdCRkYiLz4KPC9zdmc+",
       scaledSize: { width: 40, height: 50 },
     },
   };
@@ -30,7 +29,7 @@
     if (!document.getElementById(CONFIG.mapId)) return;
 
     // Esperar a que Google Maps esté cargado
-    if (typeof google === 'undefined' || !google.maps) {
+    if (typeof google === "undefined" || !google.maps) {
       loadGoogleMaps();
       return;
     }
@@ -44,15 +43,19 @@
    * Cargar Google Maps API dinámicamente
    */
   function loadGoogleMaps() {
-    const apiKey = STORES_LOCATOR.google_maps_api_key || '';
-    
-    if (!apiKey || apiKey === 'TU_API_KEY_AQUI') {
-      console.error('⚠️ Google Maps API Key no configurada. Edita inc/page/assets.php');
-      showMapError('Configuración de mapa pendiente. Contacta al administrador.');
+    const apiKey = STORES_LOCATOR.google_maps_api_key || "";
+
+    if (!apiKey || apiKey === "TU_API_KEY_AQUI") {
+      console.error(
+        "⚠️ Google Maps API Key no configurada. Edita inc/page/assets.php"
+      );
+      showMapError(
+        "Configuración de mapa pendiente. Contacta al administrador."
+      );
       return;
     }
 
-    const script = document.createElement('script');
+    const script = document.createElement("script");
     script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initStoresMap`;
     script.async = true;
     script.defer = true;
@@ -102,9 +105,9 @@
       zoomControl: true,
       styles: [
         {
-          featureType: 'poi',
-          elementType: 'labels',
-          stylers: [{ visibility: 'off' }],
+          featureType: "poi",
+          elementType: "labels",
+          stylers: [{ visibility: "off" }],
         },
       ],
     });
@@ -125,7 +128,7 @@
    * Crear markers para todas las tiendas
    */
   function createMarkers() {
-    const storeCards = document.querySelectorAll('.stores-locator__card');
+    const storeCards = document.querySelectorAll(".stores-locator__card");
 
     storeCards.forEach((card) => {
       const lat = parseFloat(card.dataset.lat);
@@ -143,12 +146,13 @@
         position: { lat, lng },
         map: map,
         icon: CONFIG.markerIcon,
-        title: card.querySelector('.stores-locator__card-title')?.textContent || '',
+        title:
+          card.querySelector(".stores-locator__card-title")?.textContent || "",
         storeId: storeId,
       });
 
       // Click en marker: abrir info window
-      marker.addListener('click', () => {
+      marker.addListener("click", () => {
         showInfoWindow(marker, card);
         highlightStoreCard(storeId);
       });
@@ -161,8 +165,10 @@
    * Mostrar info window del marker
    */
   function showInfoWindow(marker, card) {
-    const title = card.querySelector('.stores-locator__card-title')?.textContent || '';
-    const address = card.querySelector('.stores-locator__card-item span')?.textContent || '';
+    const title =
+      card.querySelector(".stores-locator__card-title")?.textContent || "";
+    const address =
+      card.querySelector(".stores-locator__card-item span")?.textContent || "";
 
     const content = `
       <div class="stores-locator__map-info">
@@ -197,7 +203,7 @@
     map.fitBounds(bounds);
 
     // Evitar zoom excesivo si solo hay 1 marker
-    google.maps.event.addListenerOnce(map, 'bounds_changed', () => {
+    google.maps.event.addListenerOnce(map, "bounds_changed", () => {
       if (map.getZoom() > 15) {
         map.setZoom(15);
       }
@@ -209,15 +215,17 @@
    */
   function highlightStoreCard(storeId) {
     // Remover clase activa de todas las cards
-    document.querySelectorAll('.stores-locator__card').forEach((card) => {
-      card.classList.remove('is-active');
+    document.querySelectorAll(".stores-locator__card").forEach((card) => {
+      card.classList.remove("is-active");
     });
 
     // Agregar clase activa a la card seleccionada
-    const activeCard = document.querySelector(`.stores-locator__card[data-store-id="${storeId}"]`);
+    const activeCard = document.querySelector(
+      `.stores-locator__card[data-store-id="${storeId}"]`
+    );
     if (activeCard) {
-      activeCard.classList.add('is-active');
-      activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      activeCard.classList.add("is-active");
+      activeCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
   }
 
@@ -225,61 +233,73 @@
    * Inicializar filtros
    */
   function initFilters() {
-    const serviceFilter = document.getElementById('stores-service-filter');
-    const departmentFilter = document.getElementById('stores-department-filter');
-    const useLocationCheckbox = document.getElementById('stores-use-location');
+    const serviceFilter = document.getElementById("stores-service-filter");
+    const departmentFilter = document.getElementById(
+      "stores-department-filter"
+    );
+    const useLocationCheckbox = document.getElementById("stores-use-location");
 
     // Event listeners
     if (serviceFilter) {
-      serviceFilter.addEventListener('change', applyFilters);
+      serviceFilter.addEventListener("change", applyFilters);
     }
 
     if (departmentFilter) {
-      departmentFilter.addEventListener('change', applyFilters);
+      departmentFilter.addEventListener("change", applyFilters);
     }
 
     if (useLocationCheckbox) {
-      useLocationCheckbox.addEventListener('change', handleGeolocation);
+      useLocationCheckbox.addEventListener("change", handleGeolocation);
     }
 
     // "Ver ubicación en el mapa" en cards
-    document.querySelectorAll('.stores-locator__card-link[data-action="view-on-map"]').forEach((link) => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const card = link.closest('.stores-locator__card');
-        const storeId = card.dataset.storeId;
-        const marker = markers.find((m) => m.storeId === storeId);
+    document
+      .querySelectorAll('.stores-locator__card-link[data-action="view-on-map"]')
+      .forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          const card = link.closest(".stores-locator__card");
+          const storeId = card.dataset.storeId;
+          const marker = markers.find((m) => m.storeId === storeId);
 
-        if (marker) {
-          map.setCenter(marker.getPosition());
-          map.setZoom(16);
-          google.maps.event.trigger(marker, 'click');
-          
-          // Scroll al mapa en mobile
-          if (window.innerWidth <= 1023) {
-            document.querySelector('.stores-locator__map-container')?.scrollIntoView({ 
-              behavior: 'smooth', 
-              block: 'start' 
-            });
+          if (marker) {
+            map.setCenter(marker.getPosition());
+            map.setZoom(16);
+            google.maps.event.trigger(marker, "click");
+
+            // Scroll al mapa en mobile
+            if (window.innerWidth <= 1023) {
+              document
+                .querySelector(".stores-locator__map-container")
+                ?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
+            }
           }
-        }
+        });
       });
-    });
   }
 
   /**
    * Aplicar filtros de servicio y departamento
    */
   function applyFilters() {
-    const serviceValue = document.getElementById('stores-service-filter')?.value || '';
-    const departmentValue = document.getElementById('stores-department-filter')?.value || '';
+    const serviceValue =
+      document.getElementById("stores-service-filter")?.value || "";
+    const departmentValue =
+      document.getElementById("stores-department-filter")?.value || "";
 
-    const storeCards = document.querySelectorAll('.stores-locator__card');
+    const storeCards = document.querySelectorAll(".stores-locator__card");
     const visibleMarkers = [];
 
     storeCards.forEach((card) => {
-      const cardServices = (card.dataset.services || '').split(',').filter(Boolean);
-      const cardDepartments = (card.dataset.departments || '').split(',').filter(Boolean);
+      const cardServices = (card.dataset.services || "")
+        .split(",")
+        .filter(Boolean);
+      const cardDepartments = (card.dataset.departments || "")
+        .split(",")
+        .filter(Boolean);
 
       let showCard = true;
 
@@ -294,7 +314,7 @@
       }
 
       // Mostrar/ocultar card
-      card.classList.toggle('is-hidden', !showCard);
+      card.classList.toggle("is-hidden", !showCard);
 
       // Mostrar/ocultar marker
       const storeId = card.dataset.storeId;
@@ -318,7 +338,9 @@
    */
   function handleGeolocation(e) {
     const isChecked = e.target.checked;
-    const departmentFilter = document.getElementById('stores-department-filter');
+    const departmentFilter = document.getElementById(
+      "stores-department-filter"
+    );
 
     if (!isChecked) {
       return;
@@ -326,7 +348,7 @@
 
     // Verificar si el navegador soporta geolocalización
     if (!navigator.geolocation) {
-      alert('Tu navegador no soporta geolocalización.');
+      alert("Tu navegador no soporta geolocalización.");
       e.target.checked = false;
       return;
     }
@@ -342,7 +364,7 @@
           if (department && departmentFilter) {
             // Buscar opción que coincida
             const options = Array.from(departmentFilter.options);
-            const matchingOption = options.find((opt) => 
+            const matchingOption = options.find((opt) =>
               opt.text.toLowerCase().includes(department.toLowerCase())
             );
 
@@ -350,7 +372,10 @@
               departmentFilter.value = matchingOption.value;
               applyFilters();
             } else {
-              console.warn('No se encontró departamento coincidente:', department);
+              console.warn(
+                "No se encontró departamento coincidente:",
+                department
+              );
             }
           }
         });
@@ -362,8 +387,10 @@
         }
       },
       (error) => {
-        console.error('Error de geolocalización:', error);
-        alert('No se pudo obtener tu ubicación. Verifica los permisos del navegador.');
+        console.error("Error de geolocalización:", error);
+        alert(
+          "No se pudo obtener tu ubicación. Verifica los permisos del navegador."
+        );
         e.target.checked = false;
       }
     );
@@ -382,14 +409,16 @@
     const latlng = { lat, lng };
 
     geocoder.geocode({ location: latlng }, (results, status) => {
-      if (status === 'OK' && results[0]) {
+      if (status === "OK" && results[0]) {
         // Buscar componente de nivel administrativo 1 (departamento)
         const addressComponents = results[0].address_components;
         const adminArea = addressComponents.find((comp) =>
-          comp.types.includes('administrative_area_level_1')
+          comp.types.includes("administrative_area_level_1")
         );
 
-        const department = adminArea ? normalizeDepartment(adminArea.long_name) : null;
+        const department = adminArea
+          ? normalizeDepartment(adminArea.long_name)
+          : null;
         callback(department);
       } else {
         callback(null);
@@ -402,38 +431,38 @@
    */
   function normalizeDepartment(location) {
     const departmentMap = {
-      'amazonas': 'Amazonas',
-      'áncash': 'Áncash',
-      'ancash': 'Áncash',
-      'apurímac': 'Apurímac',
-      'apurimac': 'Apurímac',
-      'arequipa': 'Arequipa',
-      'ayacucho': 'Ayacucho',
-      'cajamarca': 'Cajamarca',
-      'callao': 'Callao',
-      'cusco': 'Cusco',
-      'cuzco': 'Cusco',
-      'huancavelica': 'Huancavelica',
-      'huánuco': 'Huánuco',
-      'huanuco': 'Huánuco',
-      'ica': 'Ica',
-      'junín': 'Junín',
-      'junin': 'Junín',
-      'la libertad': 'La Libertad',
-      'lambayeque': 'Lambayeque',
-      'lima': 'Lima',
-      'lima metropolitana': 'Lima',
-      'loreto': 'Loreto',
-      'madre de dios': 'Madre de Dios',
-      'moquegua': 'Moquegua',
-      'pasco': 'Pasco',
-      'piura': 'Piura',
-      'puno': 'Puno',
-      'san martín': 'San Martín',
-      'san martin': 'San Martín',
-      'tacna': 'Tacna',
-      'tumbes': 'Tumbes',
-      'ucayali': 'Ucayali',
+      amazonas: "Amazonas",
+      áncash: "Áncash",
+      ancash: "Áncash",
+      apurímac: "Apurímac",
+      apurimac: "Apurímac",
+      arequipa: "Arequipa",
+      ayacucho: "Ayacucho",
+      cajamarca: "Cajamarca",
+      callao: "Callao",
+      cusco: "Cusco",
+      cuzco: "Cusco",
+      huancavelica: "Huancavelica",
+      huánuco: "Huánuco",
+      huanuco: "Huánuco",
+      ica: "Ica",
+      junín: "Junín",
+      junin: "Junín",
+      "la libertad": "La Libertad",
+      lambayeque: "Lambayeque",
+      lima: "Lima",
+      "lima metropolitana": "Lima",
+      loreto: "Loreto",
+      "madre de dios": "Madre de Dios",
+      moquegua: "Moquegua",
+      pasco: "Pasco",
+      piura: "Piura",
+      puno: "Puno",
+      "san martín": "San Martín",
+      "san martin": "San Martín",
+      tacna: "Tacna",
+      tumbes: "Tumbes",
+      ucayali: "Ucayali",
     };
 
     const normalized = location.toLowerCase().trim();
@@ -444,19 +473,21 @@
    * Inicializar carrusel de productos (Swiper)
    */
   function initProductsCarousel() {
-    const carouselElement = document.querySelector('.stores-locator__products-carousel');
-    if (!carouselElement || typeof Swiper === 'undefined') return;
+    const carouselElement = document.querySelector(
+      ".stores-locator__products-carousel"
+    );
+    if (!carouselElement || typeof Swiper === "undefined") return;
 
-    productsSwiper = new Swiper('.stores-locator__products-carousel', {
+    productsSwiper = new Swiper(".stores-locator__products-carousel", {
       slidesPerView: 1,
       spaceBetween: 20,
       loop: false,
       navigation: {
-        nextEl: '.stores-locator__carousel-next',
-        prevEl: '.stores-locator__carousel-prev',
+        nextEl: ".stores-locator__carousel-next",
+        prevEl: ".stores-locator__carousel-prev",
       },
       pagination: {
-        el: '.stores-locator__carousel-pagination',
+        el: ".stores-locator__carousel-pagination",
         clickable: true,
       },
       breakpoints: {
@@ -473,8 +504,8 @@
   }
 
   // Auto-inicialización
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
   } else {
     init();
   }
