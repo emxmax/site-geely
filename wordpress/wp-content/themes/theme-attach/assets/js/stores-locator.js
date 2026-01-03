@@ -11,7 +11,11 @@
     defaultCenter: { lat: -12.0464, lng: -77.0428 }, // Lima, Perú
     defaultZoom: 12,
     markerIcon: {
-      url: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA0MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cGF0aCBkPSJNMjAgMEMxMC42IDAgMyA3LjYgMyAxN0MzIDI5LjUgMjAgNTAgMjAgNTBDMjAgNTAgMzcgMjkuNSAzNyAxN0MzNyA3LjYgMjkuNCA0IDIwIDBaTTIwIDIzQzE2LjcgMjMgMTQgMjAuMyAxNCAxN0MxNCAxMy43IDE2LjcgMTEgMjAgMTFDMjMuMyAxMSAyNiAxMy43IDI2IDE3QzI2IDIwLjMgMjMuMyAyMyAyMCAyM1oiIGZpbGw9IiMwMjdCRkYiLz4KPC9zdmc+",
+      // Marcador ROJO - Cambiar el color modificando el fill="#E31E24" en el SVG
+      // Azul actual: PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA0MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cGF0aCBkPSJNMjAgMEMxMC42IDAgMyA3LjYgMyAxN0MzIDI5LjUgMjAgNTAgMjAgNTBDMjAgNTAgMzcgMjkuNSAzNyAxN0MzNyA3LjYgMjkuNCA0IDIwIDBaTTIwIDIzQzE2LjcgMjMgMTQgMjAuMyAxNCAxN0MxNCAxMy43IDE2LjcgMTEgMjAgMTFDMjMuMyAxMSAyNiAxMy43IDI2IDE3QzI2IDIwLjMgMjMuMyAyMyAyMCAyM1oiIGZpbGw9IiMwMjdCRkYiLz4KPC9zdmc+
+      // Rojo Geely: PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA0MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cGF0aCBkPSJNMjAgMEMxMC42IDAgMyA3LjYgMyAxN0MzIDI5LjUgMjAgNTAgMjAgNTBDMjAgNTAgMzcgMjkuNSAzNyAxN0MzNyA3LjYgMjkuNCA0IDIwIDBaTTIwIDIzQzE2LjcgMjMgMTQgMjAuMyAxNCAxN0MxNCAxMy43IDE2LjcgMTEgMjAgMTFDMjMuMyAxMSAyNiAxMy43IDI2IDE3QzI2IDIwLjMgMjMuMyAyMyAyMCAyM1oiIGZpbGw9IiNFMzFFMjQiLz4KPC9zdmc+
+      // Negro:      PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA0MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cGF0aCBkPSJNMjAgMEMxMC42IDAgMyA3LjYgMyAxN0MzIDI5LjUgMjAgNTAgMjAgNTBDMjAgNTAgMzcgMjkuNSAzNyAxN0MzNyA3LjYgMjkuNCA0IDIwIDBaTTIwIDIzQzE2LjcgMjMgMTQgMjAuMyAxNCAxN0MxNCAxMy43IDE2LjcgMTEgMjAgMTFDMjMuMyAxMSAyNiAxMy43IDI2IDE3QzI2IDIwLjMgMjMuMyAyMyAyMCAyM1oiIGZpbGw9IiMwMDAwMDAiLz4KPC9zdmc+
+      url: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA0MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cGF0aCBkPSJNMjAgMEMxMC42IDAgMyA3LjYgMyAxN0MzIDI5LjUgMjAgNTAgMjAgNTBDMjAgNTAgMzcgMjkuNSAzNyAxN0MzNyA3LjYgMjkuNCA0IDIwIDBaTTIwIDIzQzE2LjcgMjMgMTQgMjAuMyAxNCAxN0MxNCAxMy43IDE2LjcgMTEgMjAgMTFDMjMuMyAxMSAyNiAxMy43IDI2IDE3QzI2IDIwLjMgMjMuMyAyMyAyMCAyM1oiIGZpbGw9IiMwMDAwMDAiLz4KPC9zdmc+",
       scaledSize: { width: 40, height: 50 },
     },
   };
@@ -168,12 +172,21 @@
     const title =
       card.querySelector(".stores-locator__card-title")?.textContent || "";
     const address =
-      card.querySelector(".stores-locator__card-item span")?.textContent || "";
-
+      card.querySelector(".stores-locator__card-item--address span")
+        ?.textContent || "";
+    const phone =
+      card.querySelector(".stores-locator__card-item--phone a")?.textContent ||
+      "";
+    const whatsapp =
+      card.querySelector(".stores-locator__card-item--whatsapp a")
+        ?.textContent || "";
+        
     const content = `
       <div class="stores-locator__map-info">
         <h4>${title}</h4>
         <p>${address}</p>
+        <p>${phone}</p>
+        <p>${whatsapp}</p>
       </div>
     `;
 
@@ -503,10 +516,17 @@
     });
   }
 
+  //
+  function initSelects() {}
+
   // Auto-inicialización
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener("DOMContentLoaded", () => {
+      init();
+      initSelects();
+    });
   } else {
     init();
+    initSelects();
   }
 })();

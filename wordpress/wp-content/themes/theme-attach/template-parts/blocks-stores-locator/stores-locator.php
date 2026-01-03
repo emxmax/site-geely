@@ -151,7 +151,8 @@ if ($show_products_carousel && post_type_exists('producto')) {
               <img src="<?= esc_url(IMG . '/icon-tiendas-departamentos.svg') ?>" class="stores-locator__select-icon"
                 alt="Icono de departamento" width="24" height="24" />
               <select id="stores-department-filter" class="stores-locator__select"
-                aria-label="<?php esc_attr_e('Filtrar por departamento', 'theme-attach'); ?>">
+                aria-label="<?php esc_attr_e('Filtrar por departamento', 'theme-attach'); ?>"
+                style="background-image: url(<?= IMG . '/icon-tiendas-arrow-down.svg' ?>)">
                 <option value=""><?php _e('Departamento', 'theme-attach'); ?></option>
                 <?php if (!empty($departments)): ?>
                   <?php foreach ($departments as $dept): ?>
@@ -241,37 +242,32 @@ if ($show_products_carousel && post_type_exists('producto')) {
                   );
                   if (!empty($primary_service) && !is_wp_error($primary_service)):
                     ?>
-                    <div class="stores-locator__card-badge">
-                      <?php echo esc_html($primary_service[0]->name); ?>
+                    <div class="stores-locator__card-badge title-mob"
+                      style="background-image: url(<?= esc_url(IMG . '/bg-red-de-atencion-tags.webp') ?>);">
+                      <?= esc_html($primary_service[0]->name); ?>
                     </div>
                   <?php endif; ?>
 
                   <!-- Store Name -->
-                  <h3 class="stores-locator__card-title">
+                  <h3 class="stores-locator__card-title title-7">
                     <?php echo esc_html($store_name); ?>
                   </h3>
 
                   <!-- Store Details -->
                   <div class="stores-locator__card-details">
                     <?php if ($store_address): ?>
-                      <div class="stores-locator__card-item">
-                        <svg width="16" height="20" viewBox="0 0 16 20" fill="none">
-                          <path
-                            d="M8 0C3.58 0 0 3.58 0 8C0 14 8 20 8 20C8 20 16 14 16 8C16 3.58 12.42 0 8 0ZM8 10.5C6.62 10.5 5.5 9.38 5.5 8C5.5 6.62 6.62 5.5 8 5.5C9.38 5.5 10.5 6.62 10.5 8C10.5 9.38 9.38 10.5 8 10.5Z"
-                            fill="#027BFF" />
-                        </svg>
-                        <span><?php echo esc_html($store_address); ?></span>
+                      <div class="stores-locator__card-item stores-locator__card-item--address">
+                        <img src="<?= esc_url(IMG . '/icon-tiendas-direccion.svg') ?>" alt="Icono Dirección" width="24"
+                          height="24" class="stores-locator__card-icon" />
+                        <span class="paragraph-4"><?php echo esc_html($store_address); ?></span>
                       </div>
                     <?php endif; ?>
                     <?php if ($store_phone): ?>
-                      <div class="stores-locator__card-item">
-                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                          <path
-                            d="M3.62 7.79C5.06 10.62 7.38 12.93 10.21 14.38L12.41 12.18C12.68 11.91 13.08 11.82 13.43 11.94C14.55 12.31 15.76 12.51 17 12.51C17.55 12.51 18 12.96 18 13.51V17C18 17.55 17.55 18 17 18C7.61 18 0 10.39 0 1C0 0.45 0.45 0 1 0H4.5C5.05 0 5.5 0.45 5.5 1C5.5 2.25 5.7 3.45 6.07 4.57C6.18 4.92 6.1 5.31 5.82 5.59L3.62 7.79Z"
-                            fill="#027BFF" />
-                        </svg>
-                        <a
-                          href="tel:+51<?php echo esc_attr(function_exists('theme_attach_sanitize_phone') ? theme_attach_sanitize_phone($store_phone) : preg_replace('/[^0-9+]/', '', $store_phone)); ?>">
+                      <div class="stores-locator__card-item stores-locator__card-item--phone">
+                        <img src="<?= esc_url(IMG . '/icon-tiendas-telefono.svg') ?>" alt="Icono Teléfono" width="24"
+                          height="24" class="stores-locator__card-icon" />
+                        <a href="tel:+51<?php echo esc_attr(function_exists('theme_attach_sanitize_phone') ? theme_attach_sanitize_phone($store_phone) : preg_replace('/[^0-9+]/', '', $store_phone)); ?>"
+                          class="paragraph-4">
                           <?= esc_html($store_phone); ?>
                         </a>
                       </div>
@@ -279,23 +275,17 @@ if ($show_products_carousel && post_type_exists('producto')) {
 
                     <?php if ($store_whatsapp_number): ?>
                       <?php
-                      // Construir URL de WhatsApp
-                      // $whatsapp_number_clean = function_exists('theme_attach_sanitize_phone') 
-                      //   ? theme_attach_sanitize_phone($store_whatsapp_number)
-                      //   : preg_replace('/[^0-9+]/', '', $store_whatsapp_number);              
                       $whatsapp_number_clean = '+51' . trim($store_whatsapp_number);
                       $whatsapp_url = 'https://wa.me/' . $whatsapp_number_clean;
                       if (!empty($store_whatsapp_message)) {
                         $whatsapp_url .= '?text=' . rawurlencode($store_whatsapp_message);
                       }
                       ?>
-                      <div class="stores-locator__card-item">
-                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                          <path
-                            d="M15.3 2.7C13.62 0.99 11.38 0 9 0C4.05 0 0 4.05 0 9C0 10.62 0.45 12.21 1.26 13.59L0 18L4.5 16.77C5.82 17.5 7.32 17.88 9 17.88C13.95 17.88 18 13.83 18 8.88C18 6.48 17.01 4.23 15.3 2.7ZM9 16.38C7.5 16.38 6.03 15.96 4.77 15.18L4.47 15L1.95 15.66L2.64 13.23L2.43 12.9C1.59 11.61 1.14 10.08 1.14 8.55C1.14 4.68 4.35 1.5 9 1.5C11.19 1.5 13.23 2.34 14.7 3.81C16.17 5.28 17.01 7.32 17.01 9.51C17.01 13.38 13.83 16.38 9 16.38Z"
-                            fill="#25D366" />
-                        </svg>
-                        <a href="<?= esc_url($whatsapp_url); ?>" target="_blank" rel="noopener noreferrer">
+                      <div class="stores-locator__card-item stores-locator__card-item--whatsapp">
+                        <img src="<?= esc_url(IMG . '/icon-tiendas-wsp.svg') ?>" alt="Icono WhatsApp" width="24" height="24"
+                          class="stores-locator__card-icon" />
+                        <a href="<?= esc_url($whatsapp_url); ?>" target="_blank" rel="noopener noreferrer"
+                          class="paragraph-4">
                           <?= esc_html($store_whatsapp_number); ?>
                         </a>
                       </div>
@@ -309,9 +299,6 @@ if ($show_products_carousel && post_type_exists('producto')) {
                       'Ver ubicación en el mapa',
                       'theme-attach'
                     ); ?>
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path d="M8 0L6.59 1.41L12.17 7H0V9H12.17L6.59 14.59L8 16L16 8L8 0Z" fill="#027BFF" />
-                    </svg>
                   </a>
 
                 </div>
