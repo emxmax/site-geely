@@ -226,10 +226,13 @@
   }
 
   .promotions-grid__image {
-    height: 238px;
+    /* height: 238px; */
+    height: auto;
+    border-radius: 16px;
   }
   .promotions-grid__image img {
     object-position: left top;
+    object-fit: fill;
   }
   .promotions-grid__wrapper {
     padding-top: 56px;
@@ -239,5 +242,8 @@
   }
   .promotions-grid__pagination {
     padding-block: 16px;
+  }
+  .promotions-grid__card {
+    overflow: visible;
   }
 }

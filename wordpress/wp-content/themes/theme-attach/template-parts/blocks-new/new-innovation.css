@@ -40,9 +40,10 @@
   transform: translateX(-50%);
   object-fit: contain;
   z-index: 0;
-  object-position: right -51px;
+  /* object-position: right -51px; */
   width: auto;
   height: 475px;
+  object-position: right -21px;
 }
 
 .new-innovation__inner {
@@ -51,9 +52,10 @@
   margin: 0 auto;
   display: flex;
   align-items: center;
-  min-height: 424px;
+  /* min-height: 424px; */
   position: relative;
   z-index: 1;
+  min-height: calc(424px + 30px);
 }
 
 /* =========================
@@ -85,6 +87,9 @@
 @media (max-width: 1439px) {
   .new-innovation__bg {
     object-position: 45px -51px;
+  }
+  .new-innovation__inner {
+    min-height: 424px;
   }
 }
 /* =========================

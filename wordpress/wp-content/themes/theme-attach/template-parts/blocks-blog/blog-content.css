@@ -7,6 +7,7 @@
 }
 .cpt-single-blog .blog-news__link {
   text-decoration: underline;
+  text-underline-offset: 3px;
 }
 .cpt-single-blog .blog-news__link img {
   display: none;

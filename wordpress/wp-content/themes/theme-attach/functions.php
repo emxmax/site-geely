@@ -6,6 +6,12 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// === Constants ===
+define('URL', get_stylesheet_directory_uri());
+define('IMG', URL . '/assets/img');
+define('JS', URL . '/assets/js');
+define('CSS', URL . '/assets/css');
+
 // Global
 require_once get_stylesheet_directory() . '/inc/helpers.php';
 require_once get_stylesheet_directory() . '/inc/enqueue-assets.php';
