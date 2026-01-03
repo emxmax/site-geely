@@ -10,6 +10,7 @@ if (!function_exists('get_field')) {
 // Campos ACF del bloque (con fallbacks seguros)
 $main_title = get_field('sl_main_title') ?: 'RED DE ATENCIÓN';
 $main_description = get_field('sl_main_description') ?: 'Encuentra un concesionario Geely cerca de ti para recibir asistencia experta en ventas, servicio y repuestos.';
+// Por si queremos ocultarlo creamos esto en ACF
 $show_products_carousel = get_field('sl_show_products_carousel') ?? true;
 
 // Verificar si el CPT 'tienda' existe
@@ -66,11 +67,72 @@ if ($tienda_exists) {
 }
 
 // Obtener productos para el carrusel (CPT producto)
+function mf_parse_price($v)
+{
+  if ($v === null || $v === '')
+    return null;
+  $s = str_replace([',', ' '], '', (string) $v);
+  $s = preg_replace('/[^0-9.]/', '', $s);
+  return $s === '' ? null : (float) $s;
+}
+function mf_get_image_url($img)
+{
+  if (empty($img))
+    return '';
+  if (is_numeric($img)) {
+    return (string) (wp_get_attachment_image_url((int) $img, 'full') ?: '');
+  }
+  if (is_array($img))
+    return (string) ($img['url'] ?? '');
+  return (string) $img;
+}
+function mf_get_selected_model_image($model)
+{
+  $colors = $model['model_colors'] ?? [];
+  if (!is_array($colors))
+    return '';
+  foreach ($colors as $c) {
+    if (!empty($c['color_image_in_card'])) {
+      // para finder usaremos desktop (se ve bien en cards)
+      return mf_get_image_url($c['color_image_desktop'] ?? null) ?: mf_get_image_url($c['color_image_mobile'] ?? null);
+    }
+  }
+  return '';
+}
+function mf_pick_model_for_card($models)
+{
+  if (empty($models) || !is_array($models))
+    return null;
+
+  $candidates = [];
+  foreach ($models as $m) {
+    $img = mf_get_selected_model_image($m);
+    if ($img)
+      $candidates[] = $m;
+  }
+  if (empty($candidates))
+    return null;
+
+  // menor precio (USD si existe, si no Local)
+  $best = null;
+  $bestPrice = null;
+  foreach ($candidates as $m) {
+    $usd = mf_parse_price($m['model_price_usd'] ?? null);
+    $loc = mf_parse_price($m['model_price_local'] ?? null);
+    $price = $usd !== null ? $usd : ($loc !== null ? $loc : PHP_FLOAT_MAX);
+
+    if ($best === null || $price < $bestPrice) {
+      $best = $m;
+      $bestPrice = $price;
+    }
+  }
+  return $best ?: $candidates[0];
+}
 $products_carousel = [];
 if ($show_products_carousel && post_type_exists('producto')) {
   $products_query = new WP_Query([
     'post_type' => 'producto',
-    'posts_per_page' => 6,
+    'posts_per_page' => -1,
     'post_status' => 'publish',
   ]);
 
@@ -78,30 +140,44 @@ if ($show_products_carousel && post_type_exists('producto')) {
     while ($products_query->have_posts()) {
       $products_query->the_post();
 
-      // Obtener precio de forma segura
-      $price_from = '';
-      $product_models = get_field('product_models');
-      if (is_array($product_models) && !empty($product_models) && isset($product_models[0]['model_price'])) {
-        $price_from = $product_models[0]['model_price'];
-      }
+      $post_id = get_the_ID();
+      $models = get_field('product_models', $post_id);
+      $model = mf_pick_model_for_card($models);
+      if (!$model)
+        continue;
+      $img = mf_get_selected_model_image($model);
+      if (!$img)
+        continue;
+
+      $label = (string) ($model['model_price_label'] ?? 'Precio desde');
+      $usd = (string) ($model['model_price_usd'] ?? '');
+      $local = (string) ($model['model_price_local'] ?? '');
+
+      // Tipo (Gasolina / Híbrido)
+      $type = (string) get_field('spec_type', $post_id);
+
+      $link_model = get_permalink();
 
       $products_carousel[] = [
-        'id' => get_the_ID(),
         'title' => get_the_title(),
-        'image' => function_exists('theme_attach_get_post_image_url')
-          ? theme_attach_get_post_image_url(get_the_ID(), 'large')
-          : get_the_post_thumbnail_url(get_the_ID(), 'large'),
-        'alt' => function_exists('theme_attach_get_post_image_alt')
-          ? theme_attach_get_post_image_alt(get_the_ID())
-          : get_the_title(),
-        'permalink' => get_permalink(),
-        'price_from' => $price_from,
+        'image' => $img,
+        'price_label' => $label,
+        'price_usd' => $usd,
+        'price_pen' => $local,
+        'link_model' => $link_model,
+        'link_quote' => $link_model . '#cotizar',
+        'class' => 'stores-locator',
+        'id' => 'producto-' . $post_id,
       ];
     }
     wp_reset_postdata();
   }
 }
+
+// Generar un UID único para el carrusel 
+$uid = 'nf-producto-' . wp_unique_id();
 ?>
+
 
 <div class="stores-locator" id="stores-locator">
 
@@ -323,90 +399,85 @@ if ($show_products_carousel && post_type_exists('producto')) {
           <div class="stores-locator__map-container">
             <div id="stores-map" class="stores-locator__map"></div>
           </div>
-
         </div>
-
       </div>
     </section>
-
   </div>
+
   <!-- Products Carousel Section -->
-  <div style="display: none !important;">
-    <?php if ($show_products_carousel && !empty($products_carousel)): ?>
-      <section class="stores-locator__products">
-        <div class="stores-locator__products-container">
 
-          <h2 class="stores-locator__products-title">
-            <?php _e('ELIGE TU GEELY', 'theme-attach'); ?>
-          </h2>
+  <?php if ($show_products_carousel && !empty($products_carousel)): ?>
+    <section class="stores-locator__products">
+      <div class="stores-locator__products-container">
+        <h2 class="stores-locator__products-title">
+          <?php _e('ELIGE TU GEELY', 'theme-attach'); ?>
+        </h2>
+        <p class="stores-locator__products-subtitle">
+          <?php _e(
+            'Obtén los mejores precios en autos nuevos con Geely. Encuentra SUVs y Sedanes de alta calidad y tecnología a un precio accesible.',
+            'theme-attach'
+          ); ?>
+        </p>
 
-          <p class="stores-locator__products-subtitle">
-            <?php _e('Obtén los mejores precios en autos nuevos con Geely. Encuentra SUVs y Sedanes de alta calidad y tecnología a un precio accesible.', 'theme-attach'); ?>
-          </p>
-
-          <div class="stores-locator__products-carousel swiper">
-            <div class="swiper-wrapper">
-              <?php foreach ($products_carousel as $product): ?>
-                <div class="swiper-slide">
-                  <div class="stores-locator__product-card">
-
-                    <div class="stores-locator__product-image">
-                      <img src="<?php echo esc_url($product['image']); ?>" alt="<?php echo esc_attr($product['alt']); ?>">
-                    </div>
-
-                    <h3 class="stores-
-                          echo esc_html(function_exists('theme_attach_format_price') 
-                            ? theme_attach_format_price($product['price_from']) 
-                            : 'S/ ' . number_format($product['price_from'], 2)
-                          ); 
-                      
-                      <?php echo esc_html($product['title']); ?>
-                    </h3>
-                    
-                    <?php if (!empty($product['price_from'])): ?>
-                      <p class=" stores-locator__product-price">
-                        <?php _e('Precio desde', 'theme-attach'); ?><br>
-                        <strong><?php echo esc_html(theme_attach_format_price($product['price_from'])); ?></strong>
-                        </p>
-                      <?php endif; ?>
-
-                      <div class="stores-locator__product-actions">
-                        <a href="<?php echo esc_url($product['permalink']); ?>"
-                          class="stores-locator__product-btn stores-locator__product-btn--outline">
-                          <?php _e('Ver modelo', 'theme-attach'); ?>
-                        </a>
-                        <a href="<?php echo esc_url($product['permalink'] . '#cotizar'); ?>"
-                          class="stores-locator__product-btn stores-locator__product-btn--primary">
-                          <?php _e('Cotizar', 'theme-attach'); ?>
-                        </a>
-                      </div>
-
-                  </div>
-                </div>
-              <?php endforeach; ?>
-            </div>
-
-            <!-- Navigation -->
-            <div class="stores-locator__carousel-nav">
-              <button class="stores-locator__carousel-prev" aria-label="<?php esc_attr_e('Anterior', 'theme-attach'); ?>">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M15.41 7.41L14 6L8 12L14 18L15.41 16.59L10.83 12L15.41 7.41Z" fill="currentColor" />
-                </svg>
-              </button>
-              <button class="stores-locator__carousel-next"
-                aria-label="<?php esc_attr_e('Siguiente', 'theme-attach'); ?>">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M8.59 16.59L10 18L16 12L10 6L8.59 7.41L13.17 12L8.59 16.59Z" fill="currentColor" />
-                </svg>
-              </button>
-            </div>
-
-            <!-- Pagination -->
-            <div class="stores-locator__carousel-pagination"></div>
+        <div class="stores-locator__products-carousel swiper" id="<?= esc_attr($uid); ?>">
+          <div class="swiper-wrapper">
+            <?php foreach ($products_carousel as $product): ?>
+              <div class="stores-locator__products-slide swiper-slide">
+                <?php get_template_part(
+                  'template-parts/partials/components/c-card-product',
+                  null,
+                  $product
+                ); ?>
+              </div>
+            <?php endforeach; ?>
           </div>
-
         </div>
-      </section>
-    <?php endif; ?>
-  </div>
+
+        <?php get_template_part(
+          'template-parts/partials/components/c-swiper-controls',
+          null,
+          [
+            'id' => 'controls-stores-locator',
+            'class' => 'controls-stores-locator',
+          ]
+        ) ?>
+      </div>
+    </section>
+  <?php endif; ?>
 </div>
+
+
+
+<script>
+  (function () {
+    document.addEventListener('DOMContentLoaded', function () {
+      const swiperEl = document.querySelector('#<?= esc_js($uid); ?>');
+      if (!swiperEl) return;
+      const swiper = new Swiper(swiperEl, {
+        loop: false,
+        spaceBetween: 0,
+        slidesPerView: 1,
+        slidesPerGroup: 1,
+        navigation: {
+          nextEl: '#controls-stores-locator .c-swiper-controls__nav--next',
+          prevEl: '#controls-stores-locator .c-swiper-controls__nav--prev',
+        },
+        pagination: {
+          el: '#controls-stores-locator .c-swiper-controls__pagination',
+          clickable: true,
+        },
+        breakpoints: {
+          768: {
+            spaceBetween: 32,
+            slidesPerView: 3,
+            slidesPerGroup: 3,
+          },
+        },
+      });
+      console.log(
+        'breakpoint:', swiper.currentBreakpoint,
+        'slidesPerView:', swiper.params.slidesPerView
+      );
+    });
+  })();
+</script>

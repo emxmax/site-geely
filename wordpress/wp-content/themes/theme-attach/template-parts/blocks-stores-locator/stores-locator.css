@@ -397,45 +397,47 @@
 ============================================ */
 
 .stores-locator__products {
-  background: #f7f9fb;
-  padding: 80px 24px;
+  padding-block: 80px;
 }
 
 .stores-locator__products-container {
-  max-width: 1240px;
+  max-width: 1280px;
   margin: 0 auto;
 }
 
 .stores-locator__products-title {
   font-family: var(--font-geely);
-  font-size: var(--fs-title-3);
-  line-height: var(--lh-title-3);
+  font-size: var(--fs-title-2);
+  line-height: var(--lh-title-2);
   font-weight: 700;
+  color: var(--c-black);
   text-align: center;
   text-transform: uppercase;
-  background: linear-gradient(90deg, #027bff 0%, #444444 124.81%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
-  margin: 0 0 16px;
+  min-height: 63px;
 }
 
 .stores-locator__products-subtitle {
   font-family: var(--font-inter);
-  font-size: var(--fs-p-3);
-  line-height: var(--lh-p-3);
-  color: #212529;
+  font-size: var(--fs-p-2);
+  line-height: var(--lh-p-2);
+  color: var(--c-black);
   text-align: center;
-  max-width: 720px;
-  margin: 0 auto 48px;
+  margin-top: 16px;
+  margin-inline: auto;
+  font-weight: 500;
 }
 
 .stores-locator__products-carousel {
   position: relative;
-  padding: 0 60px;
+  padding-block: 40px;
 }
-
+.stores-locator__products-carousel
+  .stores-locator__products-slide:nth-last-of-type(1) {
+  margin-right: 0 !important;
+}
+.stores-locator__products-slide {
+  max-width: 405px;
+}
 .stores-locator__product-card {
   background: #ffffff;
   border-radius: 12px;
@@ -587,6 +589,41 @@
   border-radius: 6px;
 }
 
+.c-swiper-controls.controls-stores-locator {
+  padding-inline: 0px;
+  margin-top: 0;
+}
+
+.mf-card.stores-locator .mf-card__label {
+  font-weight: 500;
+  color: var(--c-black);
+}
+
+.mf-card.stores-locator .mf-card__usd {
+  font-family: var(--font-geely);
+  font-size: var(--fs-title-6);
+  line-height: var(--lh-title-6);
+  font-weight: 700;
+  color: var(--c-black);
+}
+.mf-card.stores-locator .mf-card__dot {
+  font-family: var(--font-inter);
+  font-weight: 500;
+  color: var(--c-black);
+  font-size: var(--fs-p-4);
+  line-height: var(--lh-p-4);
+}
+.mf-card.stores-locator .mf-card__local {
+  font-family: var(--font-geely);
+  font-size: var(--fs-title-6);
+  line-height: var(--lh-title-6);
+  font-weight: 700;
+  color: var(--c-black);
+}
+.mf-card.stores-locator .mf-card__actions .mf-btn {
+  font-family: var(--font-geely);
+  font-weight: 700;
+}
 /* ============================================
    RESPONSIVE STYLES
 ============================================ */

@@ -61,6 +61,7 @@ $uid = 'nf-' . wp_unique_id();
       <h2 class="new-featured__title title-3 title-sm-5"><?php echo esc_html($section_title); ?></h2>
     </div>
   </div>
+
   <div class="new-featured__slider-wrapper">
     <div class="new-featured__swiper swiper" id="<?php echo esc_attr($uid); ?>">
       <div class="swiper-wrapper">
@@ -138,8 +139,8 @@ $uid = 'nf-' . wp_unique_id();
         </button>
       </div>
     <?php endif; ?>
-
   </div>
+
 </section>
 
 <script>
@@ -148,6 +149,10 @@ $uid = 'nf-' . wp_unique_id();
       const swiperEl = document.querySelector('#<?php echo esc_js($uid); ?>');
       if (!swiperEl) return;
       new Swiper(swiperEl, {
+        pagination: {
+          el: '.new-featured__pagination',
+          clickable: true,
+        },
         slidesPerView: 1,
         spaceBetween: 0,
         loop: false,
@@ -155,10 +160,6 @@ $uid = 'nf-' . wp_unique_id();
         navigation: {
           nextEl: '.new-featured__nav--next',
           prevEl: '.new-featured__nav--prev',
-        },
-        pagination: {
-          el: '.new-featured__pagination',
-          clickable: true,
         },
       });
     });
