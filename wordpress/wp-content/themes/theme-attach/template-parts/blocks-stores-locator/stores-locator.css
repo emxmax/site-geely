@@ -644,6 +644,10 @@
   padding-right: 32px;
 }
 
+.stores-locator-main .faq-block__list {
+  border-top: none;
+}
+
 /* ============================================
    RESPONSIVE STYLES
 ============================================ */

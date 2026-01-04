@@ -139,7 +139,6 @@ if (!function_exists('mf_pick_model_for_card')) {
     return $best ?: $candidates[0];
   }
 }
-
 $products_carousel = [];
 if ($show_products_carousel && post_type_exists('producto')) {
   $products_query = new WP_Query([
@@ -190,7 +189,6 @@ if ($show_products_carousel && post_type_exists('producto')) {
 $uid = 'nf-producto-' . wp_unique_id();
 ?>
 <div class="stores-locator" id="stores-locator">
-
   <div class="stores-locator__background">
     <img src="<?= esc_url(IMG . '/bg-red-de-atencion.webp') ?>" alt="Background image of Red de Atención"
       class="stores-locator__img" width="2880" height="2072" />
@@ -200,9 +198,9 @@ $uid = 'nf-producto-' . wp_unique_id();
         <h1 class="stores-locator__hero-title title-1 title-sm-3">
           <?= esc_html($main_title); ?>
         </h1>
-        <p class="stores-locator__hero-description paragraph-2 paragraph-sm-4">
-          <?= esc_html($main_description); ?>
-        </p>
+        <div class="stores-locator__hero-description paragraph-2 paragraph-sm-4">
+          <?= wp_kses_post($main_description); ?>
+        </div>
       </div>
     </section>
 
@@ -413,106 +411,4 @@ $uid = 'nf-producto-' . wp_unique_id();
       </div>
     </section>
   </div>
-
-  <!-- Products Carousel Section -->
-
-  <?php if ($show_products_carousel && !empty($products_carousel)): ?>
-    <section class="stores-locator__products">
-      <div class="stores-locator__products-container">
-        <h2 class="stores-locator__products-title">
-          <?php _e('ELIGE TU GEELY', 'theme-attach'); ?>
-        </h2>
-        <p class="stores-locator__products-subtitle">
-          <?php _e(
-            'Obtén los mejores precios en autos nuevos con Geely. Encuentra SUVs y Sedanes de alta calidad y tecnología a un precio accesible.',
-            'theme-attach'
-          ); ?>
-        </p>
-
-        <div class="stores-locator__products-carousel swiper" id="<?= esc_attr($uid); ?>">
-          <div class="swiper-wrapper">
-            <?php foreach ($products_carousel as $product): ?>
-              <div class="stores-locator__products-slide swiper-slide">
-                <?php get_template_part(
-                  'template-parts/partials/components/c-card-product',
-                  null,
-                  $product
-                ); ?>
-              </div>
-            <?php endforeach; ?>
-          </div>
-        </div>
-
-        <?php get_template_part(
-          'template-parts/partials/components/c-swiper-controls',
-          null,
-          [
-            'id' => 'controls-stores-locator',
-            'class' => 'controls-stores-locator',
-          ]
-        ) ?>
-      </div>
-    </section>
-  <?php endif; ?>
 </div>
-<script>
-  (function () {
-    document.addEventListener('DOMContentLoaded', function () {
-      const swiperEl = document.querySelector('#<?= esc_js($uid); ?>');
-      if (!swiperEl) return;
-      const swiper = new Swiper(swiperEl, {
-        loop: false,
-        spaceBetween: 0,
-        slidesPerView: 1,
-        slidesPerGroup: 1,
-        // slidesPerView: 3,
-        // slidesPerGroup: 3,
-        grid: {
-          rows: 3,
-          fill: 'row',          
-        },
-        navigation: {
-          nextEl: '#controls-stores-locator .c-swiper-controls__nav--next',
-          prevEl: '#controls-stores-locator .c-swiper-controls__nav--prev',
-        },
-        pagination: {
-          el: '#controls-stores-locator .c-swiper-controls__pagination',
-          clickable: true,
-        },
-        breakpoints: {
-          768: {
-            spaceBetween: 32,
-            slidesPerView: 2,
-            slidesPerGroup: 2,
-            grid: {
-              rows: 1,
-            },
-          },
-          1280: {
-            spaceBetween: 32,
-            slidesPerView: 3,
-            slidesPerGroup: 3,
-            grid: {
-              rows: 1,
-            },
-          }
-        },
-      });
-
-      // console.log({
-      //   'breakpoint': swiper.currentBreakpoint,
-      //   'slidesPerView': swiper.params.slidesPerView,
-      //   'asd': swiper.params.grid,
-      // });
-
-      // const bullets = document.querySelectorAll('#controls-stores-locator .swiper-pagination-bullet');
-      // console.log('Dots:', bullets.length);
-
-      // console.log('snapGrid:', swiper.snapGrid.length);
-      // const slides = document.querySelectorAll(`.stores-locator__products-carousel .stores-locator__products-slide`);
-      // slides.forEach((slide, index) => {
-      //   slide.style.setAttribute('style', `width: ${100 / swiper.snapGrid.length}% !important;`);
-      // });
-    });
-  })();
-</script>
