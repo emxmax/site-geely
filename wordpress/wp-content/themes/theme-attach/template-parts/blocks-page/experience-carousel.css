@@ -89,7 +89,7 @@
   background: #0B0C0C;
   color: #fff;
   text-decoration: none;
-  font-family: var(--font-inter);
+  font-family: var(--font-geely);
   font-weight: 600;
   font-size: 16px;
   width: 150px;
@@ -110,8 +110,8 @@
 }
 
 .exp-carousel__pagination .swiper-pagination-bullet {
-  width: 7px;
-  height: 7px;
+  width: 12px;
+  height: 12px;
   margin: 0 3px !important;
   opacity: 0.35;
   background: #7c8693;
@@ -130,20 +130,20 @@
   position: relative;
 }
 
-.exp-carousel__prev::before,
-.exp-carousel__next::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  width: 18px;
-  height: 18px;
-  border-right: 3px solid #000;
-  border-bottom: 3px solid #000;
-  transform: rotate(-45deg);
+.exp-carousel__nav img {
+  width: 35px;
+  height: 40px;
+  display: block;
 }
-.exp-carousel__prev::before {
-  transform: rotate(135deg);
+.exp-carousel__nav--prev img {
+  transform: rotate(180deg);
+}
+.exp-carousel__nav--next img {
+  transform: rotate(0deg);
+}
+.exp-carousel__nav.is-disabled {
+  opacity: 0.35;
+  pointer-events: none;
 }
 
 @media (max-width: 1024px) {

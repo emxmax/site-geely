@@ -36,8 +36,8 @@
 
     <a class="blog-news__link" href="<?php the_permalink(); ?>">
         Ver más
-        <img
+        <!-- <img
             src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-arrow.png'); ?>"
-            alt="Next">
+            alt="Next"> -->
     </a>
 </article>
