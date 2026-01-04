@@ -12,14 +12,30 @@ if (!defined('ABSPATH')) {
 // Título del bloque (opcional desde ACF)
 $title = get_field('faq_block_title') ?: 'PREGUNTAS FRECUENTES';
 
+// ACF de tipo taxonomía
+$selected_category = get_field('faq_items_category');
+
 // Query FAQs
-$q = new WP_Query([
+$query_args = [
     'post_type'      => 'faq',
     'post_status'    => 'publish',
     'posts_per_page' => -1,
     'orderby'        => 'menu_order',
     'order'          => 'ASC',
-]);
+];
+
+// Filtramos por categoria
+if (!empty($selected_category)) {
+    $query_args['tax_query'] = [
+        [
+            'taxonomy' => 'category',
+            'field'    => 'term_id',
+            'terms'    => is_array($selected_category) ? $selected_category : [$selected_category],
+        ],
+    ];
+}
+
+$q = new WP_Query($query_args);
 ?>
 
 <?php if ($q->have_posts()) : ?>

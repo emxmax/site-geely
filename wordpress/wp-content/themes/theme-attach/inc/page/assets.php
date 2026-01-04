@@ -87,3 +87,85 @@ function page_blocks_assets()
     // }
 }
 add_action('wp_enqueue_scripts', 'page_blocks_assets');
+
+/**
+ * =========================
+ * Columnas personalizadas para CPT FAQ
+ * =========================
+ */
+
+/**
+ * Agregar columna de Categoría al admin de FAQ
+ */
+function faq_add_custom_columns($columns)
+{
+    $new_columns = [];
+    
+    foreach ($columns as $key => $value) {
+        $new_columns[$key] = $value;
+        
+        // Insertar columna de categoría después del título
+        if ($key === 'title') {
+            $new_columns['faq_category'] = __('Categoría', 'theme-attach');
+        }
+    }
+    
+    return $new_columns;
+}
+add_filter('manage_faq_posts_columns', 'faq_add_custom_columns');
+
+/**
+ * Llenar contenido de columna de Categoría
+ */
+function faq_fill_custom_columns($column, $post_id)
+{
+    if ($column === 'faq_category') {
+        $terms = get_the_terms($post_id, 'category');
+        
+        if (!empty($terms) && !is_wp_error($terms)) {
+            $term_links = [];
+            foreach ($terms as $term) {
+                $term_links[] = sprintf(
+                    '<a href="%s">%s</a>',
+                    esc_url(add_query_arg([
+                        'post_type' => 'faq',
+                        'category' => $term->slug
+                    ], 'edit.php')),
+                    esc_html($term->name)
+                );
+            }
+            echo implode(', ', $term_links);
+        } else {
+            echo '<span aria-hidden="true">—</span>';
+        }
+    }
+}
+add_action('manage_faq_posts_custom_column', 'faq_fill_custom_columns', 10, 2);
+
+/**
+ * Hacer columna de Categoría ordenable
+ */
+function faq_sortable_columns($columns)
+{
+    $columns['faq_category'] = 'category';
+    return $columns;
+}
+add_filter('manage_edit-faq_sortable_columns', 'faq_sortable_columns');
+
+/**
+ * Ordenamiento por taxonomía de Categoría
+ */
+function faq_columns_orderby($query)
+{
+    if (!is_admin() || !$query->is_main_query()) {
+        return;
+    }
+    
+    $orderby = $query->get('orderby');
+    
+    if ($orderby === 'category') {
+        $query->set('orderby', 'term_order');
+        $query->set('order', $query->get('order') ?: 'ASC');
+    }
+}
+add_action('pre_get_posts', 'faq_columns_orderby');

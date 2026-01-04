@@ -624,6 +624,15 @@
   font-family: var(--font-geely);
   font-weight: 700;
 }
+
+/* FAQS */
+.stores-locator-main .faq-block{
+  margin-top: 0;
+}
+.stores-locator-main .faq-block__inner {
+  max-width: 1280px;
+}
+
 /* ============================================
    RESPONSIVE STYLES
 ============================================ */

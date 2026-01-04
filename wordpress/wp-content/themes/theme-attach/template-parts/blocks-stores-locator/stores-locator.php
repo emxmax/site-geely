@@ -67,67 +67,79 @@ if ($tienda_exists) {
 }
 
 // Obtener productos para el carrusel (CPT producto)
-function mf_parse_price($v)
-{
-  if ($v === null || $v === '')
-    return null;
-  $s = str_replace([',', ' '], '', (string) $v);
-  $s = preg_replace('/[^0-9.]/', '', $s);
-  return $s === '' ? null : (float) $s;
-}
-function mf_get_image_url($img)
-{
-  if (empty($img))
-    return '';
-  if (is_numeric($img)) {
-    return (string) (wp_get_attachment_image_url((int) $img, 'full') ?: '');
+if (!function_exists('mf_parse_price')) {
+  function mf_parse_price($v)
+  {
+    if ($v === null || $v === '')
+      return null;
+    $s = str_replace([',', ' '], '', (string) $v);
+    $s = preg_replace('/[^0-9.]/', '', $s);
+    return $s === '' ? null : (float) $s;
   }
-  if (is_array($img))
-    return (string) ($img['url'] ?? '');
-  return (string) $img;
 }
-function mf_get_selected_model_image($model)
-{
-  $colors = $model['model_colors'] ?? [];
-  if (!is_array($colors))
-    return '';
-  foreach ($colors as $c) {
-    if (!empty($c['color_image_in_card'])) {
-      // para finder usaremos desktop (se ve bien en cards)
-      return mf_get_image_url($c['color_image_desktop'] ?? null) ?: mf_get_image_url($c['color_image_mobile'] ?? null);
+
+if (!function_exists('mf_get_image_url')) {
+  function mf_get_image_url($img)
+  {
+    if (empty($img))
+      return '';
+    if (is_numeric($img)) {
+      return (string) (wp_get_attachment_image_url((int) $img, 'full') ?: '');
     }
+    if (is_array($img))
+      return (string) ($img['url'] ?? '');
+    return (string) $img;
   }
-  return '';
 }
-function mf_pick_model_for_card($models)
-{
-  if (empty($models) || !is_array($models))
-    return null;
 
-  $candidates = [];
-  foreach ($models as $m) {
-    $img = mf_get_selected_model_image($m);
-    if ($img)
-      $candidates[] = $m;
-  }
-  if (empty($candidates))
-    return null;
-
-  // menor precio (USD si existe, si no Local)
-  $best = null;
-  $bestPrice = null;
-  foreach ($candidates as $m) {
-    $usd = mf_parse_price($m['model_price_usd'] ?? null);
-    $loc = mf_parse_price($m['model_price_local'] ?? null);
-    $price = $usd !== null ? $usd : ($loc !== null ? $loc : PHP_FLOAT_MAX);
-
-    if ($best === null || $price < $bestPrice) {
-      $best = $m;
-      $bestPrice = $price;
+if (!function_exists('mf_get_selected_model_image')) {
+  function mf_get_selected_model_image($model)
+  {
+    $colors = $model['model_colors'] ?? [];
+    if (!is_array($colors))
+      return '';
+    foreach ($colors as $c) {
+      if (!empty($c['color_image_in_card'])) {
+        // para finder usaremos desktop (se ve bien en cards)
+        return mf_get_image_url($c['color_image_desktop'] ?? null) ?: mf_get_image_url($c['color_image_mobile'] ?? null);
+      }
     }
+    return '';
   }
-  return $best ?: $candidates[0];
 }
+
+if (!function_exists('mf_pick_model_for_card')) {
+  function mf_pick_model_for_card($models)
+  {
+    if (empty($models) || !is_array($models))
+      return null;
+
+    $candidates = [];
+    foreach ($models as $m) {
+      $img = mf_get_selected_model_image($m);
+      if ($img)
+        $candidates[] = $m;
+    }
+    if (empty($candidates))
+      return null;
+
+    // menor precio (USD si existe, si no Local)
+    $best = null;
+    $bestPrice = null;
+    foreach ($candidates as $m) {
+      $usd = mf_parse_price($m['model_price_usd'] ?? null);
+      $loc = mf_parse_price($m['model_price_local'] ?? null);
+      $price = $usd !== null ? $usd : ($loc !== null ? $loc : PHP_FLOAT_MAX);
+
+      if ($best === null || $price < $bestPrice) {
+        $best = $m;
+        $bestPrice = $price;
+      }
+    }
+    return $best ?: $candidates[0];
+  }
+}
+
 $products_carousel = [];
 if ($show_products_carousel && post_type_exists('producto')) {
   $products_query = new WP_Query([
@@ -177,8 +189,6 @@ if ($show_products_carousel && post_type_exists('producto')) {
 // Generar un UID único para el carrusel 
 $uid = 'nf-producto-' . wp_unique_id();
 ?>
-
-
 <div class="stores-locator" id="stores-locator">
 
   <div class="stores-locator__background">
@@ -445,9 +455,6 @@ $uid = 'nf-producto-' . wp_unique_id();
     </section>
   <?php endif; ?>
 </div>
-
-
-
 <script>
   (function () {
     document.addEventListener('DOMContentLoaded', function () {
