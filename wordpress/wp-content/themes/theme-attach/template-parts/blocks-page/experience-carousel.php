@@ -1,5 +1,5 @@
 <?php
-if ( ! defined('ABSPATH') ) exit;
+if (! defined('ABSPATH')) exit;
 
 $title    = get_field('experience_title') ?: '';
 $subtitle = get_field('experience_subtitle') ?: '';
@@ -69,9 +69,9 @@ $uid = 'exp-' . uniqid();
 
                     <?php if ($burl): ?>
                       <a class="exp-carousel__btn"
-                         href="<?php echo esc_url($burl); ?>"
-                         target="<?php echo esc_attr($target); ?>"
-                         rel="<?php echo esc_attr($rel); ?>">
+                        href="<?php echo esc_url($burl); ?>"
+                        target="<?php echo esc_attr($target); ?>"
+                        rel="<?php echo esc_attr($rel); ?>">
                         <?php echo esc_html($btext ?: 'Ver más'); ?>
                       </a>
                     <?php endif; ?>
@@ -86,9 +86,17 @@ $uid = 'exp-' . uniqid();
       </div>
 
       <div class="exp-carousel__controls">
-        <button class="exp-carousel__nav exp-carousel__prev" type="button" aria-label="Anterior"></button>
+        <button class="exp-carousel__nav exp-carousel__prev" type="button" aria-label="Anterior">
+          <img
+            src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-arrow.png'); ?>"
+            alt="Prev">
+        </button>
         <div class="exp-carousel__pagination"></div>
-        <button class="exp-carousel__nav exp-carousel__next" type="button" aria-label="Siguiente"></button>
+        <button class="exp-carousel__nav exp-carousel__next" type="button" aria-label="Siguiente">
+          <img
+            src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-arrow.png'); ?>"
+            alt="Next">
+        </button>
       </div>
     </div>
 

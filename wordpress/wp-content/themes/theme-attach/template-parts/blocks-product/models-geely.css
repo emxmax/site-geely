@@ -27,14 +27,13 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  font-size: 52px;
-  line-height: 64px;
+  font-size: 48px;
+  line-height: 44px;
   color: #0B0C0C;
 }
 
 .mg-models__desc {
   margin: 0 auto;
-  max-width: 860px;
   font-family: var(--font-inter);
   font-weight: 500;
   font-size: 20px;
@@ -75,6 +74,7 @@
 
 .mg-models__tab.is-active {
   color: #027bff;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
 }
 
 .mg-models__tab.is-active::before {

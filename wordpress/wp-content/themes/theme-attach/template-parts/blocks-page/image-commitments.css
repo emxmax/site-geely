@@ -78,6 +78,7 @@
   color: #fff;
   font-size: 16px;
   font-family: var(--font-geely);
+  letter-spacing: 1px;
   font-weight: 600;
   text-decoration: none;
   margin-bottom: 40px;
@@ -85,7 +86,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 150px;
+  width: 179px;
 }
 
 /* =========================
@@ -147,6 +148,7 @@
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #0b0c0c;
+  line-break: anywhere;
 }
 
 .ic-block__card-desc {

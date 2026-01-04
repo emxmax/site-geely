@@ -164,6 +164,6 @@
   }
 
   .hero-carousel__pagination--v {
-    display: flex;
+    display: none;
   }
 }

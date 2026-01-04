@@ -70,7 +70,7 @@ $rel    = $btn_newtab ? 'noopener noreferrer' : '';
 ?>
 
 <section
-    class="ic-block"
+    class="ic-block block-image-commitments"
     id="<?php echo esc_attr($uid); ?>"
     style="
     <?php if (!empty($bg_desktop_url)): ?>
