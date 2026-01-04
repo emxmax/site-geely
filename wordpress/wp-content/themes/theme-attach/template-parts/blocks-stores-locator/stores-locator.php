@@ -197,10 +197,10 @@ $uid = 'nf-producto-' . wp_unique_id();
     <!-- Hero Section -->
     <section class=" stores-locator__hero">
       <div class="stores-locator__hero-inner">
-        <h1 class="stores-locator__hero-title title-1">
+        <h1 class="stores-locator__hero-title title-1 title-sm-3">
           <?= esc_html($main_title); ?>
         </h1>
-        <p class="stores-locator__hero-description paragraph-2">
+        <p class="stores-locator__hero-description paragraph-2 paragraph-sm-4">
           <?= esc_html($main_description); ?>
         </p>
       </div>
@@ -335,7 +335,7 @@ $uid = 'nf-producto-' . wp_unique_id();
                   <?php endif; ?>
 
                   <!-- Store Name -->
-                  <h3 class="stores-locator__card-title title-7">
+                  <h3 class="stores-locator__card-title title-7 title-mobile-sm-5">
                     <?php echo esc_html($store_name); ?>
                   </h3>
 
@@ -345,7 +345,7 @@ $uid = 'nf-producto-' . wp_unique_id();
                       <div class="stores-locator__card-item stores-locator__card-item--address">
                         <img src="<?= esc_url(IMG . '/icon-tiendas-direccion.svg') ?>" alt="Icono Dirección" width="24"
                           height="24" class="stores-locator__card-icon" />
-                        <span class="paragraph-4"><?php echo esc_html($store_address); ?></span>
+                        <span class="paragraph-4 paragraph-sm-5"><?php echo esc_html($store_address); ?></span>
                       </div>
                     <?php endif; ?>
                     <?php if ($store_phone): ?>
@@ -353,7 +353,7 @@ $uid = 'nf-producto-' . wp_unique_id();
                         <img src="<?= esc_url(IMG . '/icon-tiendas-telefono.svg') ?>" alt="Icono Teléfono" width="24"
                           height="24" class="stores-locator__card-icon" />
                         <a href="tel:+51<?php echo esc_attr(function_exists('theme_attach_sanitize_phone') ? theme_attach_sanitize_phone($store_phone) : preg_replace('/[^0-9+]/', '', $store_phone)); ?>"
-                          class="paragraph-4">
+                          class="paragraph-4 paragraph-sm-5">
                           <?= esc_html($store_phone); ?>
                         </a>
                       </div>
@@ -371,7 +371,7 @@ $uid = 'nf-producto-' . wp_unique_id();
                         <img src="<?= esc_url(IMG . '/icon-tiendas-wsp.svg') ?>" alt="Icono WhatsApp" width="24" height="24"
                           class="stores-locator__card-icon" />
                         <a href="<?= esc_url($whatsapp_url); ?>" target="_blank" rel="noopener noreferrer"
-                          class="paragraph-4">
+                          class="paragraph-4 paragraph-sm-5">
                           <?= esc_html($store_whatsapp_number); ?>
                         </a>
                       </div>
@@ -465,6 +465,12 @@ $uid = 'nf-producto-' . wp_unique_id();
         spaceBetween: 0,
         slidesPerView: 1,
         slidesPerGroup: 1,
+        // slidesPerView: 3,
+        // slidesPerGroup: 3,
+        grid: {
+          rows: 3,
+          fill: 'row',          
+        },
         navigation: {
           nextEl: '#controls-stores-locator .c-swiper-controls__nav--next',
           prevEl: '#controls-stores-locator .c-swiper-controls__nav--prev',
@@ -476,15 +482,37 @@ $uid = 'nf-producto-' . wp_unique_id();
         breakpoints: {
           768: {
             spaceBetween: 32,
+            slidesPerView: 2,
+            slidesPerGroup: 2,
+            grid: {
+              rows: 1,
+            },
+          },
+          1280: {
+            spaceBetween: 32,
             slidesPerView: 3,
             slidesPerGroup: 3,
-          },
+            grid: {
+              rows: 1,
+            },
+          }
         },
       });
-      console.log(
-        'breakpoint:', swiper.currentBreakpoint,
-        'slidesPerView:', swiper.params.slidesPerView
-      );
+
+      // console.log({
+      //   'breakpoint': swiper.currentBreakpoint,
+      //   'slidesPerView': swiper.params.slidesPerView,
+      //   'asd': swiper.params.grid,
+      // });
+
+      // const bullets = document.querySelectorAll('#controls-stores-locator .swiper-pagination-bullet');
+      // console.log('Dots:', bullets.length);
+
+      // console.log('snapGrid:', swiper.snapGrid.length);
+      // const slides = document.querySelectorAll(`.stores-locator__products-carousel .stores-locator__products-slide`);
+      // slides.forEach((slide, index) => {
+      //   slide.style.setAttribute('style', `width: ${100 / swiper.snapGrid.length}% !important;`);
+      // });
     });
   })();
 </script>

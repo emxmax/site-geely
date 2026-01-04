@@ -22,7 +22,7 @@
   left: 0;
   top: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
   z-index: 0;
 }
 
@@ -30,6 +30,7 @@
   padding-top: 80px;
   position: relative;
   z-index: 2;
+  padding-inline: 24px;
 }
 
 .stores-locator__hero-inner {
@@ -111,6 +112,7 @@
   font-weight: 500;
   color: #212529;
   font-size: var(--fs-p-4);
+  line-height: var(--lh-p-4);
   background: var(--c-white);
   border: 1px solid #dee2e6;
   border-radius: 8px;
@@ -172,7 +174,8 @@
 .stores-locator__grid {
   display: grid;
   /* grid-template-columns: 1fr 1fr; */
-  grid-template-columns: 473px 767px;
+  /* grid-template-columns: 473px 767px; */
+  grid-template-columns: 473px minmax(0, 767px);
   gap: 40px;
   margin-top: 40px;
 }
@@ -398,6 +401,7 @@
 
 .stores-locator__products {
   padding-block: 80px;
+  padding-inline: 24px;
 }
 
 .stores-locator__products-container {
@@ -421,7 +425,7 @@
   font-size: var(--fs-p-2);
   line-height: var(--lh-p-2);
   color: var(--c-black);
-  text-align: center;
+  text-align: left;
   margin-top: 16px;
   margin-inline: auto;
   font-weight: 500;
@@ -626,11 +630,18 @@
 }
 
 /* FAQS */
-.stores-locator-main .faq-block{
+.stores-locator-main .faq-block {
   margin-top: 0;
 }
 .stores-locator-main .faq-block__inner {
   max-width: 1280px;
+}
+
+.stores-locator-main .faq-item__answer {
+  max-width: 100%;
+}
+.stores-locator-main .faq-item__answer p {
+  padding-right: 32px;
 }
 
 /* ============================================
@@ -638,10 +649,16 @@
 ============================================ */
 
 @media (max-width: 1279px) {
+  .stores-locator__products-carousel {
+    max-width: 961px;
+  }
+  /* .stores-locator__products-carousel .stores-locator__products-slide {
+    max-width: 100%;
+    width: calc(50% - 16px) !important;
+  } */
   .stores-locator__grid {
     gap: 24px;
   }
-
   .stores-locator__map-container {
     height: 600px;
   }
@@ -663,7 +680,7 @@
   }
 
   .stores-locator__list {
-    max-height: none;
+    /* max-height: none; */
     order: 2;
   }
 
@@ -681,18 +698,38 @@
 }
 
 @media (max-width: 767px) {
+  .stores-locator__img {
+    height: 100%;
+    object-fit: cover;
+  }
   .stores-locator__hero {
-    padding: 60px 20px 40px;
+    padding: 40px 16px 0;
   }
 
   .stores-locator__main {
-    padding: 0 20px 60px;
+    padding: 0 16px 40px;
   }
 
   .stores-locator__filters {
     flex-direction: column;
-    gap: 12px;
-    padding: 20px;
+    gap: 16px;
+    padding: 0;
+    margin-top: 32px;
+  }
+
+  .stores-locator__select {
+    padding-block: 9px;
+    height: 40px;
+    padding-left: 44px;
+  }
+  .stores-locator__select-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .stores-locator__geo-checkbox {
+    width: 16.71px;
+    height: 16.71px;
   }
 
   .stores-locator__filter-group,
@@ -703,34 +740,54 @@
 
   .stores-locator__geo-text {
     white-space: normal;
+    color: var(--c-black);
   }
 
   .stores-locator__grid {
-    gap: 20px;
+    gap: 32px;
+    margin-top: 32px;
   }
 
   .stores-locator__map-container {
-    height: 400px;
+    height: 416px;
+  }
+
+  .stores-locator__card-link {
+    font-size: var(--fs-p-5);
+    line-height: var(--lh-p-5);
   }
 
   .stores-locator__list {
-    padding-right: 0;
+    /* padding-right: 9px; */
+    /* max-height: 378px; */
+    padding-right: 12px;
+    max-height: 365px;
+  }
+  .stores-locator__list::-webkit-scrollbar {
+    width: 6px;
+    height: 80px;
   }
 
   .stores-locator__card {
+    /* padding: 24px; */
     padding: 20px;
   }
 
+  .stores-locator__card-item {
+    align-items: flex-start;
+    font-weight: 400;
+  }
+
   .stores-locator__card-title {
-    font-size: var(--fs-p-2);
+    padding-block: 5.5px;
   }
 
   .stores-locator__products {
-    padding: 60px 20px;
+    padding: 40px 16px;
   }
 
   .stores-locator__products-carousel {
-    padding: 0 40px;
+    padding: 24px 0;
   }
 
   .stores-locator__product-actions {
@@ -742,4 +799,64 @@
     width: 40px;
     height: 40px;
   }
+
+  .stores-locator__products-title {
+    font-size: var(--fs-title-sm-2);
+    line-height: var(--lh-title-sm-2);
+    min-height: auto;
+  }
+  .stores-locator__products-subtitle {
+    font-size: var(--fs-p-4);
+    line-height: var(--lh-p-4);
+    margin-top: 24px;
+    text-align: left;
+  }
+
+  .stores-locator__products-carousel .stores-locator__products-slide {
+    /* width: calc(50% - 0px) !important; */
+    /* width: 100% !important; */
+    margin-right: 0 !important;
+  }
+
+  .stores-locator-main .faq-block {
+    padding: 40px 16px;
+  }
+  .stores-locator-main .faq-item__question {
+    padding-inline: 0;
+  }
+  .stores-locator-main .faq-item__answer {
+    padding-inline: 0;
+  }
+  .stores-locator-main .faq-item__question-text {
+    line-height: var(--lh-title-sm-3);
+    font-weight: 700;
+    color: var(--c-black);
+  }
+  .stores-locator-main .faq-item__answer {
+  }
+  .stores-locator-main .faq-item__answer p {
+    font-size: var(--fs-p-4);
+    line-height: var(--lh-p-4);
+    color: var(--c-black);
+    font-weight: 400;
+  }
+  .stores-locator-main .faq-block__title {
+    font-size: var(--fs-title-sm-2);
+    line-height: var(--lh-title-sm-2);
+    margin-bottom: 24px;
+  }
+  .mf-card.stores-locator {
+    margin-bottom: 16px;
+  }
 }
+/*  */
+@media (min-width: 768px) and (max-width: 1279px) {
+  .stores-locator__products-carousel .stores-locator__products-slide {
+    max-width: 100%;
+    width: calc(50% - 16px) !important;
+  }
+}
+/* @media (min-width: 1280px) {
+  .stores-locator__hero {
+  }
+} */
