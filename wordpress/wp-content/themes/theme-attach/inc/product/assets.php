@@ -19,6 +19,7 @@ function product_blocks_assets()
         'emgrand-cta',
         'models-geely',
         'models-finder',
+        'quote-geely',
     ];
 
     foreach ($css_blocks as $handle) {
@@ -112,6 +113,17 @@ function product_blocks_assets()
         get_stylesheet_directory_uri() . $models_geely_js_rel,
         ['swiper'],
         file_exists($models_geely_js_abs) ? filemtime($models_geely_js_abs) : null,
+        true
+    );
+    // MODELS GEELY
+    $quote_geely_js_rel = '/assets/js/quote-geely.js';
+    $quote_geely_js_abs = get_stylesheet_directory() . $quote_geely_js_rel;
+
+    wp_enqueue_script(
+        'quote-geely-js',
+        get_stylesheet_directory_uri() . $quote_geely_js_rel,
+        [],
+        file_exists($quote_geely_js_abs) ? filemtime($quote_geely_js_abs) : null,
         true
     );
 

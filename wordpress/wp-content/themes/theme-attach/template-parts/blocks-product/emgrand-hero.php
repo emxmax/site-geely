@@ -116,12 +116,12 @@ if (!$slides) {
                     <?php endif; ?>
                 </div>
 
-                <?php if ($cta_quote_text && $cta_quote_url) : ?>
-                    <a href="<?php echo esc_url($cta_quote_url); ?>"
-                        class="emg-hero__btn emg-hero__btn--light">
-                        <?php echo esc_html($cta_quote_text); ?>
-                    </a>
-                <?php endif; ?>
+                <?php $product_id = get_the_ID(); ?>
+                <a href="<?php echo esc_url(home_url('/cotiza/?product_id=' . (int)$product_id)); ?>"
+                    class="emg-hero__btn emg-hero__btn--light">
+                    Cotizar
+                </a>
+
             </div><!-- /.emg-hero__top -->
 
             <!-- BARRA NEGRA INFERIOR + MENÚ -->

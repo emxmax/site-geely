@@ -152,4 +152,20 @@ function theme_attach_register_product_blocks()
             'jsx'    => true,
         ],
     ]);
+
+    // Bloque MODELS FINDER (ENCUENTRA TU GEELY IDEAL)
+    acf_register_block_type([
+        'name'            => 'product-cotiza',
+        'title'           => __('Cotiza - Tienda', 'theme-attach'),
+        'description'     => __('Bloque de cotización para tienda', 'theme-attach'),
+        'render_template' => 'template-parts/blocks-product/quote-geely.php',
+        'category'        => 'layout',
+        'icon'            => 'store',
+        'keywords'        => ['modelos', 'finder', 'geely', 'categorias', 'cards', 'modal'],
+        'supports'        => [
+            'align'  => false,
+            'anchor' => true,
+            'jsx'    => true,
+        ],
+    ]);
 }

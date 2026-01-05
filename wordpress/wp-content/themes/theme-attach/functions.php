@@ -23,6 +23,7 @@ require_once get_stylesheet_directory() . '/inc/acf-blocks/index.php';
 // Product domain
 require_once get_stylesheet_directory() . '/inc/product/assets.php';
 require_once get_stylesheet_directory() . '/inc/product/zip-360.php';
+require_once get_stylesheet_directory() . '/inc/product/quote-api.php';
 
 // Page domain
 require_once get_stylesheet_directory() . '/inc/page/assets.php';
@@ -40,3 +41,6 @@ require_once get_stylesheet_directory() . '/inc/promotions/helpers.php';
 
 // Utilities
 require_once get_stylesheet_directory() . '/inc/enqueue-utilities.php';
+
+//Entity
+require_once get_stylesheet_directory() . '/inc/entity/quote.php';
