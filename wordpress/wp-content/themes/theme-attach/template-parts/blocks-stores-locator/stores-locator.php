@@ -139,7 +139,6 @@ if (!function_exists('mf_pick_model_for_card')) {
     return $best ?: $candidates[0];
   }
 }
-
 $products_carousel = [];
 if ($show_products_carousel && post_type_exists('producto')) {
   $products_query = new WP_Query([
@@ -190,19 +189,18 @@ if ($show_products_carousel && post_type_exists('producto')) {
 $uid = 'nf-producto-' . wp_unique_id();
 ?>
 <div class="stores-locator" id="stores-locator">
-
   <div class="stores-locator__background">
     <img src="<?= esc_url(IMG . '/bg-red-de-atencion.webp') ?>" alt="Background image of Red de Atención"
       class="stores-locator__img" width="2880" height="2072" />
     <!-- Hero Section -->
     <section class=" stores-locator__hero">
       <div class="stores-locator__hero-inner">
-        <h1 class="stores-locator__hero-title title-1">
+        <h1 class="stores-locator__hero-title title-1 title-sm-3">
           <?= esc_html($main_title); ?>
         </h1>
-        <p class="stores-locator__hero-description paragraph-2">
-          <?= esc_html($main_description); ?>
-        </p>
+        <div class="stores-locator__hero-description paragraph-2 paragraph-sm-4">
+          <?= wp_kses_post($main_description); ?>
+        </div>
       </div>
     </section>
 
@@ -335,7 +333,7 @@ $uid = 'nf-producto-' . wp_unique_id();
                   <?php endif; ?>
 
                   <!-- Store Name -->
-                  <h3 class="stores-locator__card-title title-7">
+                  <h3 class="stores-locator__card-title title-7 title-mobile-sm-5">
                     <?php echo esc_html($store_name); ?>
                   </h3>
 
@@ -345,7 +343,7 @@ $uid = 'nf-producto-' . wp_unique_id();
                       <div class="stores-locator__card-item stores-locator__card-item--address">
                         <img src="<?= esc_url(IMG . '/icon-tiendas-direccion.svg') ?>" alt="Icono Dirección" width="24"
                           height="24" class="stores-locator__card-icon" />
-                        <span class="paragraph-4"><?php echo esc_html($store_address); ?></span>
+                        <span class="paragraph-4 paragraph-sm-5"><?php echo esc_html($store_address); ?></span>
                       </div>
                     <?php endif; ?>
                     <?php if ($store_phone): ?>
@@ -353,7 +351,7 @@ $uid = 'nf-producto-' . wp_unique_id();
                         <img src="<?= esc_url(IMG . '/icon-tiendas-telefono.svg') ?>" alt="Icono Teléfono" width="24"
                           height="24" class="stores-locator__card-icon" />
                         <a href="tel:+51<?php echo esc_attr(function_exists('theme_attach_sanitize_phone') ? theme_attach_sanitize_phone($store_phone) : preg_replace('/[^0-9+]/', '', $store_phone)); ?>"
-                          class="paragraph-4">
+                          class="paragraph-4 paragraph-sm-5">
                           <?= esc_html($store_phone); ?>
                         </a>
                       </div>
@@ -371,7 +369,7 @@ $uid = 'nf-producto-' . wp_unique_id();
                         <img src="<?= esc_url(IMG . '/icon-tiendas-wsp.svg') ?>" alt="Icono WhatsApp" width="24" height="24"
                           class="stores-locator__card-icon" />
                         <a href="<?= esc_url($whatsapp_url); ?>" target="_blank" rel="noopener noreferrer"
-                          class="paragraph-4">
+                          class="paragraph-4 paragraph-sm-5">
                           <?= esc_html($store_whatsapp_number); ?>
                         </a>
                       </div>
@@ -413,78 +411,4 @@ $uid = 'nf-producto-' . wp_unique_id();
       </div>
     </section>
   </div>
-
-  <!-- Products Carousel Section -->
-
-  <?php if ($show_products_carousel && !empty($products_carousel)): ?>
-    <section class="stores-locator__products">
-      <div class="stores-locator__products-container">
-        <h2 class="stores-locator__products-title">
-          <?php _e('ELIGE TU GEELY', 'theme-attach'); ?>
-        </h2>
-        <p class="stores-locator__products-subtitle">
-          <?php _e(
-            'Obtén los mejores precios en autos nuevos con Geely. Encuentra SUVs y Sedanes de alta calidad y tecnología a un precio accesible.',
-            'theme-attach'
-          ); ?>
-        </p>
-
-        <div class="stores-locator__products-carousel swiper" id="<?= esc_attr($uid); ?>">
-          <div class="swiper-wrapper">
-            <?php foreach ($products_carousel as $product): ?>
-              <div class="stores-locator__products-slide swiper-slide">
-                <?php get_template_part(
-                  'template-parts/partials/components/c-card-product',
-                  null,
-                  $product
-                ); ?>
-              </div>
-            <?php endforeach; ?>
-          </div>
-        </div>
-
-        <?php get_template_part(
-          'template-parts/partials/components/c-swiper-controls',
-          null,
-          [
-            'id' => 'controls-stores-locator',
-            'class' => 'controls-stores-locator',
-          ]
-        ) ?>
-      </div>
-    </section>
-  <?php endif; ?>
 </div>
-<script>
-  (function () {
-    document.addEventListener('DOMContentLoaded', function () {
-      const swiperEl = document.querySelector('#<?= esc_js($uid); ?>');
-      if (!swiperEl) return;
-      const swiper = new Swiper(swiperEl, {
-        loop: false,
-        spaceBetween: 0,
-        slidesPerView: 1,
-        slidesPerGroup: 1,
-        navigation: {
-          nextEl: '#controls-stores-locator .c-swiper-controls__nav--next',
-          prevEl: '#controls-stores-locator .c-swiper-controls__nav--prev',
-        },
-        pagination: {
-          el: '#controls-stores-locator .c-swiper-controls__pagination',
-          clickable: true,
-        },
-        breakpoints: {
-          768: {
-            spaceBetween: 32,
-            slidesPerView: 3,
-            slidesPerGroup: 3,
-          },
-        },
-      });
-      console.log(
-        'breakpoint:', swiper.currentBreakpoint,
-        'slidesPerView:', swiper.params.slidesPerView
-      );
-    });
-  })();
-</script>

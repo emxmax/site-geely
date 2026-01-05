@@ -16,6 +16,7 @@ function page_stores_locator_assets()
    */
   $css_blocks = [
     'stores-locator',
+    'choose-your-geely'
   ];
 
   foreach ($css_blocks as $handle) {

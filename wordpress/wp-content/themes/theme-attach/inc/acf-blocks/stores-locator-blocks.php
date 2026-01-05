@@ -24,4 +24,18 @@ function theme_attach_register_page_stores_locator_blocks()
       'align' => false,
     ],
   ]);
+
+  // Bloque: Elige tu Geely (Carrusel de Productos)
+  acf_register_block_type([
+    'name' => 'choose-your-geely',
+    'title' => __('Red Atención - Elige tu Geely', 'theme-attach'),
+    'description' => __('Carrusel de productos con precios y enlaces de cotización', 'theme-attach'),
+    'render_template' => 'template-parts/blocks-stores-locator/choose-your-geely.php',
+    'category' => 'layout',
+    'icon' => 'car',
+    'keywords' => ['productos', 'carrusel', 'autos', 'geely', 'elige'],
+    'supports' => [
+      'align' => false,
+    ],
+  ]);
 }

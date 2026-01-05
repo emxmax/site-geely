@@ -1,0 +1,9 @@
+.stores-locator__products {
+  margin-top: 0;
+}
+
+.c-swiper-controls:has(.c-swiper-controls__nav--prev[aria-disabled="true"]):has(
+    .c-swiper-controls__nav--next[aria-disabled="true"]
+  ) {
+  display: none !important;
+}
