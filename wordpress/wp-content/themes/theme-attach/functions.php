@@ -39,6 +39,12 @@ require_once get_stylesheet_directory() . '/inc/blog/assets.php';
 require_once get_stylesheet_directory() . '/inc/promotions/assets.php';
 require_once get_stylesheet_directory() . '/inc/promotions/helpers.php';
 
+// After Sales | Postventa
+require_once get_stylesheet_directory() . '/inc/after-sales/assets.php';
+
+// About Us | Nosotros
+require_once get_stylesheet_directory() . '/inc/about-us/assets.php';
+
 // Utilities
 require_once get_stylesheet_directory() . '/inc/enqueue-utilities.php';
 

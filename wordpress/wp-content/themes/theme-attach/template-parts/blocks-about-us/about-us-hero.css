@@ -1,0 +1,137 @@
+.about-hero {
+    padding: 80px 20px;
+    background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+}
+
+.about-hero__container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.about-hero__header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.about-hero__eyebrow {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #6c757d;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+
+.about-hero__title {
+    font-size: 48px;
+    font-weight: 700;
+    color: #000000;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.about-hero__description {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #495057;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.about-hero__content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+}
+
+.about-hero__image-wrapper {
+    position: relative;
+}
+
+.about-hero__image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+}
+
+.about-hero__ceo {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.75);
+    padding: 16px 24px;
+    border-radius: 4px;
+    backdrop-filter: blur(10px);
+}
+
+.about-hero__ceo-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+
+.about-hero__ceo-title {
+    font-size: 14px;
+    color: #dee2e6;
+    margin: 0;
+}
+
+.about-hero__text-content {
+    padding-top: 20px;
+}
+
+.about-hero__content-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #000000;
+    margin-bottom: 24px;
+    line-height: 1.3;
+}
+
+.about-hero__content-text {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #495057;
+}
+
+.about-hero__content-text p {
+    margin-bottom: 16px;
+}
+
+.about-hero__content-text p:last-child {
+    margin-bottom: 0;
+}
+
+@media (max-width: 1023px) {
+    .about-hero__content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}
+
+@media (max-width: 767px) {
+    .about-hero {
+        padding: 60px 16px;
+    }
+
+    .about-hero__header {
+        margin-bottom: 40px;
+    }
+
+    .about-hero__title {
+        font-size: 32px;
+    }
+
+    .about-hero__content-title {
+        font-size: 24px;
+    }
+
+    .about-hero__ceo {
+        bottom: 12px;
+        left: 12px;
+        padding: 12px 16px;
+    }
+}
