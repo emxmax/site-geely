@@ -3,6 +3,10 @@
   background: #fff;
   color: #0b0c0c;
   overflow: hidden;
+  background-image: var(--quote-bg);
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: cover;
 }
 
 .mg-quote__inner {
@@ -12,78 +16,122 @@
 
 .mg-quote__header {
   text-align: left;
-  margin-bottom: 22px;
+  margin-bottom: 40px;
 }
 
 .mg-quote__title {
-  margin: 0 0 10px;
+  margin: 0 0 16px;
   font-family: var(--font-geely);
-  font-weight: 700;
-  letter-spacing: 0.06em;
   text-transform: uppercase;
-  font-size: 48px;
-  line-height: 44px;
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 64px;
+  letter-spacing: 0px;
 }
 
 .mg-quote__desc {
   margin: 0;
   font-family: var(--font-inter);
   font-weight: 500;
-  font-size: 16px;
-  line-height: 24px;
-  max-width: 860px;
+  font-size: 20px;
+  line-height: 30px;
+  letter-spacing: 0px;
+  vertical-align: middle;
 }
 
-/* Steps */
-.mg-quote__steps {
+/* Tabs (mismo estilo que models-geely) */
+.mg-quote__tabs {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 28px;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  width: 100%;
   margin-top: 18px;
+  margin-bottom: 22px;
   border-top: 1px solid rgba(0, 0, 0, 0.14);
-  padding-top: 14px;
 }
 
-.mg-quote__stepTop {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+.mg-quote__tab {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
 
-.mg-quote__stepLabel {
+  padding: 12px 16px 24px;
+  text-align: start;
+
   font-family: var(--font-geely);
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  font-size: 14px;
+
   color: #afb6b9;
+  position: relative;
+
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: 1px;
+  vertical-align: middle;
 }
 
-.mg-quote__step.is-active .mg-quote__stepLabel {
+.mg-quote__tabLabel {
+  display: block;
+}
+
+.mg-quote__tabText {
+  display: block;
+  margin-top: 11px;
+  font-family: var(--font-inter);
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #0b0c0c;
+  opacity: 0.9;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.mg-quote__tab.is-active {
   color: #027bff;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0) 70%
+  );
 }
 
-.mg-quote__stepLine {
-  flex: 1;
+.mg-quote__tab.is-active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
   height: 2px;
-  background: rgba(0, 0, 0, 0.1);
-}
-.mg-quote__step.is-active .mg-quote__stepLine {
   background: #027bff;
 }
 
-.mg-quote__stepText {
-  margin-top: 6px;
-  font-family: var(--font-inter);
-  font-size: 12px;
-  color: #0b0c0c;
-  opacity: 0.9;
+.mg-quote__tab.is-active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 18px;
+  background: linear-gradient(
+    180deg,
+    rgba(2, 123, 255, 0.14) 0%,
+    rgba(2, 123, 255, 0) 100%
+  );
+  pointer-events: none;
+}
+
+/* Estado bloqueado (cuando aún no puedes ir al paso 2) */
+.mg-quote__tab.is-disabled {
+  opacity: 0.55;
+  pointer-events: none;
 }
 
 /* Layout */
 .mg-quote__content {
   display: grid;
-  grid-template-columns: 420px 1fr;
+  grid-template-columns: 0.7fr 1fr;
   gap: 36px;
   margin-top: 22px;
   align-items: start;
@@ -96,9 +144,11 @@
 .mg-quote__productName {
   font-family: var(--font-geely);
   font-weight: 700;
-  letter-spacing: 0.22em;
   text-transform: uppercase;
-  font-size: 18px;
+  font-size: 24px;
+  line-height: 30px;
+  letter-spacing: 4px;
+  vertical-align: bottom;
 }
 
 .mg-quote__carWrap {
@@ -170,56 +220,65 @@
 .mg-quoteCard {
   width: 100%;
   display: grid;
-  grid-template-columns: 180px 1fr 26px;
+  grid-template-columns: 265px 1fr;
   gap: 14px;
   align-items: center;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
+  border-radius: 16px;
   background: #fff;
   padding: 14px 16px;
   cursor: pointer;
   text-align: left;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0px 4px 4px 0px #bdbdbd80;
 }
 
 .mg-quoteCard.is-selected {
-  border-color: #027bff;
-  box-shadow: 0 10px 28px rgba(2, 123, 255, 0.12);
+  border: 3px solid #027bff;
 }
 
 .mg-quoteCard__media {
   border-radius: 10px;
-  background: #f6f7f8;
+  background: transparent;
   padding: 10px;
 }
 .mg-quoteCard__img {
   width: 100%;
-  height: 90px;
+  height: 136px;
   object-fit: contain;
   display: block;
 }
 
 .mg-quoteCard__title {
   font-family: var(--font-geely);
-  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: 16px;
   color: #0b0c0c;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 24px;
+  letter-spacing: 1px;
+  vertical-align: middle;
 }
 
 .mg-quoteCard__label {
   margin-top: 6px;
   font-family: var(--font-inter);
-  font-size: 12px;
   opacity: 0.8;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0px;
+  vertical-align: middle;
 }
 
 .mg-quoteCard__price {
   margin-top: 6px;
   font-family: var(--font-geely);
-  font-weight: 800;
-  font-size: 16px;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: 1px;
+  vertical-align: middle;
 }
 
 .mg-quoteCard__dot {
@@ -227,6 +286,10 @@
   font-family: var(--font-inter);
   font-weight: 500;
   font-size: 12px;
+  line-height: 20px;
+  letter-spacing: 0px;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .mg-quoteCard__yearRow {
@@ -264,7 +327,7 @@
 
 /* Actions */
 .mg-quote__actions {
-  margin-top: 18px;
+  margin-top: 32px;
   display: flex;
   justify-content: flex-end;
 }
@@ -273,8 +336,7 @@
   border: 0;
   background: #0b0c0c;
   color: #fff;
-  font-family: var(--font-inter);
-  font-weight: 600;
+  font-family: var(--font-geely);
   padding: 10px 18px;
   cursor: pointer;
   border-radius: 0;
@@ -282,12 +344,25 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  text-align: center;
+  vertical-align: middle;
+  width: 150px;
+  height: 48px;
 }
 
 .mg-quote__btn--ghost {
   background: transparent;
   color: #0b0c0c;
   border: 1px solid #0b0c0c;
+  width: 171px;
+}
+
+.mg-quote__btn--tec {
+  width: 177px;
 }
 
 .mg-quote__formCard {
@@ -300,11 +375,14 @@
 
 .mg-quote__formTitle {
   font-family: var(--font-geely);
-  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  text-align: center;
   margin-bottom: 8px;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 24px;
+  letter-spacing: 1px;
+  text-align: center;
+  vertical-align: middle;
 }
 
 /* Errors */
@@ -321,9 +399,12 @@
 }
 .mg-quote__colorsLabel {
   font-family: var(--font-inter);
-  font-weight: 600;
-  font-size: 12px;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  vertical-align: middle;
 }
 .mg-quote__colorsDots {
   display: flex;
@@ -331,22 +412,26 @@
   align-items: center;
 }
 .mg-quote__colorDotBtn {
-  width: 18px;
-  height: 18px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: 2px solid transparent;
   background: var(--dot, #ccc);
   cursor: pointer;
   padding: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  border: 1px solid #e7e6e6;
 }
 .mg-quote__colorDotBtn.is-active {
   border-color: #027bff;
 }
 .mg-quote__colorsName {
-  margin-top: 10px;
+  margin-top: 16px;
   font-family: var(--font-inter);
   font-size: 13px;
+  font-weight: 500;
+  line-height: 22px;
+  letter-spacing: 0px;
+  vertical-align: middle;
 }
 
 /* Control por step */
@@ -370,14 +455,55 @@
 }
 
 /* =========================
+   STEP 2: COLOR ROW (Figma)
+   ========================= */
+
+/* El contenedor (año + color) en una sola línea */
+.mg-quote[data-step="2"] .mg-quote__selectedRow {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Año (2025 -) */
+.mg-quote[data-step="2"] .mg-quote__yearText {
+  font-family: var(--font-inter);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+  color: #0b0c0c;
+}
+
+/* Dot: limpio, sin borde blanco ni sombra fuerte */
+.mg-quote[data-step="2"] .mg-quote__colorDot {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: var(--selected-color, #027bff);
+  border: 1px solid rgba(0, 0, 0, 0.15); /* borde sutil como Figma */
+  box-shadow: none; /* quitamos sombra pesada */
+}
+
+/* Texto del color (Turquesa) */
+.mg-quote[data-step="2"] .mg-quote__colorText {
+  font-family: var(--font-inter);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+  color: #0b0c0c;
+  opacity: 0.9;
+}
+
+/* =========================
    STEP 3: CONFIRM FULL-BLEED
    ========================= */
-.mg-quote[data-step="3"] .mg-quote__steps {
-  display: none; /* opcional (como tu 2da imagen) */
+.mg-quote[data-step="3"] .mg-quote__tabs {
+  display: none; /* como tu 2da imagen */
 }
 
 .mg-quote[data-step="3"] .mg-quote__content {
-  display: block; /* rompe el grid de 2 columnas */
+  display: block;
   margin-top: 22px;
 }
 
@@ -398,18 +524,19 @@
 }
 
 .mg-quoteConfirm__heroImg {
-  width: 100%;
+  width: fit-content;
   height: auto;
   display: block;
   max-height: 520px;
   object-fit: cover;
+  margin: auto;
 }
 
 /* BODY (gris) */
 .mg-quoteConfirm__body {
   width: 100%;
-  background: #e9e9e9;
-  padding: 36px 24px 44px;
+  background: #e7e6e6;
+  padding: 80px;
 }
 
 .mg-quoteConfirm__inner {
@@ -418,31 +545,30 @@
 }
 
 .mg-quoteConfirm__title {
-  margin: 0 0 12px;
+  margin: 0 0 40px;
   font-family: var(--font-geely);
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  font-size: 38px;
-  line-height: 1.1;
+  font-size: 48px;
+  line-height: 44px;
   color: #0b0c0c;
 }
 
 .mg-quoteConfirm__subtitle {
-  margin: 0 0 10px;
+  margin: 0 0 24px;
   font-family: var(--font-inter);
-  font-size: 16px;
-  line-height: 1.4;
+  font-size: 24px;
+  line-height: 24px;
   color: #0b0c0c;
 }
 
 .mg-quoteConfirm__text {
-  margin: 0;
-  max-width: 860px;
+  margin: 0 0 40px;
   font-family: var(--font-inter);
-  font-size: 14px;
-  line-height: 1.7;
-  color: rgba(11, 12, 12, 0.85);
+  font-size: 20px;
+  line-height: 30px;
+  color: #0b0c0c;
 }
 
 .mg-quoteConfirm__btns {
@@ -450,6 +576,62 @@
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+}
+
+.mg-quoteCard__years {
+  margin-top: 10px;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  justify-content: center;
+}
+
+.mg-quoteYear {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-inter);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mg-quoteYear input[type="radio"] {
+  width: 14px;
+  height: 14px;
+  accent-color: #027bff; /* azul como en tu screenshot */
+}
+
+.mg-quoteCard__years {
+  cursor: default;
+}
+.mg-quoteYear {
+  cursor: pointer;
+}
+
+.mg-quote[data-step="1"] [data-selected-model-name],
+.mg-quote[data-step="1"] [data-selected-row] {
+  display: none;
+}
+
+.mg-quote[data-step="2"] [data-colors-all] {
+  display: none;
+}
+.mg-quote[data-step="2"] [data-selected-model-name],
+.mg-quote[data-step="2"] [data-selected-row] {
+  display: flex;
+}
+
+.mg-quote[data-step="3"] .mg-quote__header {
+  display: none !important;
+}
+
+/* opcional: reduce el espacio superior en paso 3 */
+.mg-quote[data-step="3"] {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }
 
 /* Responsive */
@@ -464,23 +646,365 @@
 
 @media (max-width: 768px) {
   .mg-quote {
-    padding: 40px 16px 16px;
+    padding: 40px 16px 25px;
   }
   .mg-quote__title {
     font-size: 32px;
     line-height: 40px;
   }
+  .mg-quote__desc {
+    font-size: 14px;
+    line-height: 24px;
+  }
   .mg-quoteCard {
-    grid-template-columns: 120px 1fr 22px;
+    grid-template-columns: 120px 1fr;
   }
   .mg-quoteCard__img {
     height: 70px;
   }
-
+  .mg-quote__tabText {
+    font-size: 16px;
+    line-height: 20px;
+  }
+  .mg-quote__tabText {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .mg-quote__productName {
+    font-size: 18px;
+    line-height: 24px;
+  }
+  .mg-quote__tab {
+    padding: 8px 12px 20px;
+  }
+  .mg-quote__left {
+    margin: 0 32px;
+  }
   .mg-quoteConfirm__heroImg {
-    max-height: 360px;
+    height: auto;
+    max-height: fit-content;
+    width: 100%;
   }
   .mg-quoteConfirm__title {
     font-size: 28px;
+  }
+  .mg-quote__colorsLabel,
+  .mg-quote__colorsName {
+    font-size: 16px;
+    line-height: 22px;
+  }
+  .mg-quoteCard__title {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .mg-quoteCard__label,
+  .mg-quoteCard__dot,
+  .mg-quoteYear {
+    font-size: 12px;
+    line-height: 16px;
+  }
+  .mg-quoteCard__label {
+    margin-top: 10px;
+  }
+  .mg-quoteCard__title,
+  .mg-quoteCard__price,
+  .mg-quote__btn {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .mg-quote__colorDotBtn {
+    width: 32px;
+    height: 32px;
+  }
+  .mg-quote__btn {
+    width: 100%;
+    height: 44px;
+  }
+  .mg-quoteConfirm__body {
+    padding: 24px 16px;
+  }
+  .mg-quoteConfirm__title {
+    font-size: 32px;
+    line-height: 40px;
+    margin: 0 0 16px;
+  }
+  .mg-quoteConfirm__subtitle {
+    font-size: 16px;
+    line-height: 20px;
+    margin: 0 0 16px;
+  }
+  .mg-quoteConfirm__text {
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0 0 40px;
+  }
+  .mg-quote[data-step="3"] {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+}
+
+/* =========================
+   CF7 - Form estilo Figma
+   ========================= */
+.mg-quote__cf7 .geely-cotiza-form {
+  width: 100%;
+}
+
+.mg-quote__cf7 .geely-cotiza-form-main {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  padding: 26px 28px 18px;
+  margin-bottom: 40px;
+}
+
+.mg-quote__cf7 .geely-cotiza-form__title {
+  margin: 0 0 8px;
+  text-align: center;
+  font-family: var(--font-geely);
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 24px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #0b0c0c;
+}
+
+/* CF7 reseteos */
+.mg-quote__cf7 .wpcf7 form,
+.mg-quote__cf7 .wpcf7-form {
+  margin: 0;
+}
+.mg-quote__cf7 .wpcf7-form p {
+  margin: 0;
+}
+.mg-quote__cf7 .wpcf7-spinner {
+  margin-left: 10px;
+}
+
+/* Filas */
+.mg-quote__cf7 .geely-cotiza-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 18px;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.mg-quote__cf7 .geely-cotiza-row--last {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+/* Label a la izquierda */
+.mg-quote__cf7 .geely-cotiza-row__label {
+  font-family: var(--font-inter);
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 32px;
+  color: #0b0c0c;
+  padding-left: 16px;
+}
+
+/* Control a la derecha */
+.mg-quote__cf7 .geely-cotiza-row__control {
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+}
+
+/* Inputs & Select minimal */
+.mg-quote__cf7 .geely-cotiza-input,
+.mg-quote__cf7 .geely-cotiza-select {
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-inter);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+  color: #0b0c0c;
+  padding: 6px 0;
+}
+
+.mg-quote__cf7 .geely-cotiza-input::placeholder {
+  color: rgba(11, 12, 12, 0.45);
+}
+
+/* Select con flechita tipo Figma */
+.mg-quote__cf7 .geely-cotiza-select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding-right: 28px;
+  background-repeat: no-repeat;
+  background-position: right 2px center;
+  background-size: 18px 18px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M7 10l5 5 5-5' stroke='%23027BFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* Documento (select + input en una fila) */
+.mg-quote__cf7 .geely-cotiza-row__control--doc {
+  gap: 16px;
+}
+.mg-quote__cf7 .geely-cotiza-row__control--doc .geely-cotiza-select {
+  width: 92px;
+  background-color: rgba(0, 0, 0, 0.06);
+  border-radius: 2px;
+  padding: 6px 28px 6px 10px;
+  font-weight: 700;
+  font-size: 12px;
+}
+.mg-quote__cf7 .geely-cotiza-input--doc {
+  width: calc(100% - 108px);
+}
+
+/* Mensajes de error CF7 */
+.mg-quote__cf7 .wpcf7-not-valid-tip {
+  margin-top: 6px;
+  font-family: var(--font-inter);
+  font-size: 12px;
+}
+.mg-quote__cf7 .wpcf7-response-output {
+  margin: 14px 0 0;
+  font-family: var(--font-inter);
+}
+
+/* Geo */
+.mg-quote__cf7 .geely-cotiza-geo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 0 4px;
+}
+
+.mg-quote__cf7 .geely-cotiza-geo__pin {
+  width: 16px;
+  height: 16px;
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 21s7-4.5 7-11a7 7 0 10-14 0c0 6.5 7 11 7 11z' stroke='%23027BFF' stroke-width='2'/%3E%3Ccircle cx='12' cy='10' r='2.5' stroke='%23027BFF' stroke-width='2'/%3E%3C/svg%3E");
+}
+
+.mg-quote__cf7 .geely-cotiza-geo__btn {
+  font-family: var(--font-inter);
+  font-weight: 500;
+  font-size: 13px;
+  color: #027bff;
+  text-decoration: underline;
+}
+
+.mg-quote__cf7 .geely-cotiza-geo__status {
+  font-family: var(--font-inter);
+  font-size: 12px;
+  color: rgba(11, 12, 12, 0.7);
+}
+
+/* Footer (consent + botón a la derecha) */
+.mg-quote__cf7 .geely-cotiza-form__footer {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  align-items: center;
+}
+
+.mg-quote__cf7 .geely-cotiza-consent {
+  font-family: var(--font-inter);
+  font-size: 12px;
+  line-height: 18px;
+  color: #0b0c0c;
+}
+
+.mg-quote__cf7 .geely-cotiza-consent a {
+  color: #027bff;
+  text-decoration: underline;
+}
+
+/* CF7 acceptance wrap */
+.mg-quote__cf7 .wpcf7-form-control-wrap {
+  display: block;
+}
+.mg-quote__cf7 .wpcf7-acceptance .wpcf7-list-item {
+  margin: 0;
+}
+.mg-quote__cf7 .wpcf7-acceptance label {
+  display: inline-flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+/* Submit */
+.mg-quote__cf7 .geely-cotiza-submit,
+.mg-quote__cf7 input[type="submit"].geely-cotiza-submit {
+  border: 0;
+  background: #0b0c0c;
+  color: #fff;
+  font-family: var(--font-geely);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+  width: 126px;
+  height: 48px;
+  cursor: pointer;
+}
+
+.mg-quote__cf7 .geely-cotiza-row__control--doc p {
+  display: grid;
+  grid-template-columns: 100px 10px 1fr;
+}
+
+.mg-quote__cf7 .geely-cotiza-geo p {
+  display: grid;
+  grid-template-columns: 16px 10px 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.mg-quote__cf7 .geely-cotiza-actions {
+  text-align: end;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .mg-quote__cf7 .geely-cotiza-form-main {
+    max-width: 100%;
+    padding: 20px 18px 14px;
+  }
+
+  .mg-quote__cf7 .geely-cotiza-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 12px 0 12px;
+  }
+
+  .mg-quote__cf7 .geely-cotiza-form__footer {
+    grid-template-columns: 1fr;
+  }
+
+  .mg-quote__cf7 .geely-cotiza-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .mg-quote__cf7 .geely-cotiza-row__label {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .mg-quote__cf7 .geely-cotiza-input,
+  .mg-quote__cf7 .geely-cotiza-select {
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  .mg-quote__cf7 .geely-cotiza-actions p,
+  .mg-quote__cf7 .geely-cotiza-submit,
+  .mg-quote__cf7 input[type="submit"].geely-cotiza-submit {
+    width: 100%;
+    height: 44px;
+    font-size: 14px;
+    line-height: 20px;
   }
 }
