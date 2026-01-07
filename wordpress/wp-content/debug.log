@@ -1,249 +1,312 @@
-[02-Jan-2026 07:23:31 UTC] PHP Fatal error:  Uncaught TypeError: theme_attach_sanitize_phone(): Argument #1 ($phone) must be of type string, array given, called in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 261 and defined in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\inc\helpers.php:38
+[07-Jan-2026 03:15:38 UTC] PHP Fatal error:  Uncaught TypeError: theme_attach_get_post_image_url(): Argument #1 ($post_id) must be of type int, null given, called in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-about-us\about-us-hero.php on line 14 and defined in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\inc\helpers.php:73
 Stack trace:
-#0 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php(261): theme_attach_sanitize_phone(Array)
+#0 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-about-us\about-us-hero.php(14): theme_attach_get_post_image_url(NULL, 'full')
 #1 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(831): include('C:\\xampp_8.2.12...')
-#2 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_block_render_template(Array, '', false, 552, Object(WP_Block), Array)
+#2 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_block_render_template(Array, '', true, 693, Object(WP_Block), Array)
 #3 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
 #4 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
-#5 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(794): do_action('acf_block_rende...', Array, '', false, 552, Object(WP_Block), Array)
-#6 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(679): acf_render_block(Array, '', false, 552, Object(WP_Block), Array)
-#7 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(590): acf_rendered_block(Array, '', false, 552, Object(WP_Block))
+#5 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(794): do_action('acf_block_rende...', Array, '', true, 693, Object(WP_Block), Array)
+#6 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(679): acf_render_block(Array, '', true, 693, Object(WP_Block), Array)
+#7 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(590): acf_rendered_block(Array, '', true, 693, Object(WP_Block))
 #8 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-block.php(586): acf_render_block_callback(Array, '', Object(WP_Block))
 #9 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\blocks.php(2359): WP_Block->render()
 #10 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\blocks.php(2431): render_block(Array)
-#11 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): do_blocks('<!-- wp:acf/pag...')
-#12 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(205): WP_Hook->apply_filters('<!-- wp:acf/pag...', Array)
-#13 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\gutenberg\build\scripts\block-library\post-content.php(50): apply_filters('the_content', '<!-- wp:acf/pag...')
-#14 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-block.php(586): gutenberg_render_block_core_post_content(Array, '<!-- wp:acf/pag...', Object(WP_Block))
-#15 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\blocks.php(2359): WP_Block->render()
-#16 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\blocks.php(2431): render_block(Array)
-#17 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\block-template.php(291): do_blocks('<!-- wp:templat...')
-#18 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\template-canvas.php(12): get_the_block_template_html()
-#19 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\template-loader.php(106): include('C:\\xampp_8.2.12...')
-#20 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-blog-header.php(19): require_once('C:\\xampp_8.2.12...')
-#21 C:\xampp_8.2.12\htdocs\site-geely\wordpress\index.php(17): require('C:\\xampp_8.2.12...')
-#22 {main}
-  thrown in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\inc\helpers.php on line 38
-[02-Jan-2026 11:16:30 UTC] PHP Fatal error:  Uncaught TypeError: theme_attach_parse_coordinates(): Argument #1 ($coordinates) must be of type string, array given, called in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 208 and defined in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\inc\helpers.php:146
+#11 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): do_blocks('<!-- wp:acf/abo...')
+#12 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(205): WP_Hook->apply_filters('<!-- wp:acf/abo...', Array)
+#13 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-posts-controller.php(1967): apply_filters('the_content', '<!-- wp:acf/abo...')
+#14 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-posts-controller.php(661): WP_REST_Posts_Controller->prepare_item_for_response(Object(WP_Post), Object(WP_REST_Request))
+#15 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\class-wp-rest-server.php(1292): WP_REST_Posts_Controller->get_item(Object(WP_REST_Request))
+#16 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\class-wp-rest-server.php(1125): WP_REST_Server->respond_to_request(Object(WP_REST_Request), '/wp/v2/pages/(?...', Array, NULL)
+#17 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api.php(586): WP_REST_Server->dispatch(Object(WP_REST_Request))
+#18 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api.php(2973): rest_do_request(Object(WP_REST_Request))
+#19 [internal function]: rest_preload_api_request(Array, '/wp/v2/pages/69...')
+#20 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\block-editor.php(754): array_reduce(Array, 'rest_preload_ap...', Array)
+#21 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-admin\edit-form-blocks.php(114): block_editor_rest_api_preload(Array, Object(WP_Block_Editor_Context))
+#22 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-admin\post.php(187): require('C:\\xampp_8.2.12...')
+#23 {main}
+  thrown in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\inc\helpers.php on line 73
+[07-Jan-2026 03:15:39 UTC] PHP Warning:  Trying to access array offset on value of type bool in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-recovery-mode-email-service.php on line 367
+[07-Jan-2026 03:15:39 UTC] PHP Warning:  Trying to access array offset on value of type bool in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-recovery-mode-email-service.php on line 368
+[07-Jan-2026 03:19:13 UTC] PHP Fatal error:  Uncaught TypeError: theme_attach_get_post_image_url(): Argument #1 ($post_id) must be of type int, null given, called in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-about-us\about-us-evolution.php on line 12 and defined in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\inc\helpers.php:73
 Stack trace:
-#0 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php(208): theme_attach_parse_coordinates(Array)
+#0 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-about-us\about-us-evolution.php(12): theme_attach_get_post_image_url(NULL, 'large')
 #1 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(831): include('C:\\xampp_8.2.12...')
-#2 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_block_render_template(Array, '', false, 552, Object(WP_Block), Array)
+#2 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_block_render_template(Array, '', true, 693, NULL, Array)
 #3 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
 #4 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
-#5 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(794): do_action('acf_block_rende...', Array, '', false, 552, Object(WP_Block), Array)
-#6 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(679): acf_render_block(Array, '', false, 552, Object(WP_Block), Array)
-#7 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(590): acf_rendered_block(Array, '', false, 552, Object(WP_Block))
+#5 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(794): do_action('acf_block_rende...', Array, '', true, 693, NULL, Array)
+#6 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(679): acf_render_block(Array, '', true, 693, NULL, Array)
+#7 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(1138): acf_rendered_block(Array, '', true, 693, NULL, Array, true)
+#8 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_ajax_fetch_block('')
+#9 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#10 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#11 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-admin\admin-ajax.php(192): do_action('wp_ajax_acf/aja...')
+#12 {main}
+  thrown in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\inc\helpers.php on line 73
+[07-Jan-2026 03:19:34 UTC] PHP Fatal error:  Uncaught TypeError: theme_attach_get_post_image_url(): Argument #1 ($post_id) must be of type int, null given, called in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-about-us\about-us-evolution.php on line 12 and defined in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\inc\helpers.php:73
+Stack trace:
+#0 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-about-us\about-us-evolution.php(12): theme_attach_get_post_image_url(NULL, 'large')
+#1 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(831): include('C:\\xampp_8.2.12...')
+#2 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_block_render_template(Array, '', false, 712, Object(WP_Block), Array)
+#3 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#4 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#5 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(794): do_action('acf_block_rende...', Array, '', false, 712, Object(WP_Block), Array)
+#6 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(679): acf_render_block(Array, '', false, 712, Object(WP_Block), Array)
+#7 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(590): acf_rendered_block(Array, '', false, 712, Object(WP_Block))
 #8 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-block.php(586): acf_render_block_callback(Array, '', Object(WP_Block))
 #9 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\blocks.php(2359): WP_Block->render()
 #10 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\blocks.php(2431): render_block(Array)
-#11 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): do_blocks('<!-- wp:acf/pag...')
-#12 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(205): WP_Hook->apply_filters('<!-- wp:acf/pag...', Array)
-#13 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\gutenberg\build\scripts\block-library\post-content.php(50): apply_filters('the_content', '<!-- wp:acf/pag...')
-#14 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-block.php(586): gutenberg_render_block_core_post_content(Array, '<!-- wp:acf/pag...', Object(WP_Block))
-#15 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\blocks.php(2359): WP_Block->render()
-#16 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\blocks.php(2431): render_block(Array)
-#17 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\block-template.php(291): do_blocks('<!-- wp:templat...')
-#18 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\template-canvas.php(12): get_the_block_template_html()
-#19 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\template-loader.php(106): include('C:\\xampp_8.2.12...')
-#20 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-blog-header.php(19): require_once('C:\\xampp_8.2.12...')
-#21 C:\xampp_8.2.12\htdocs\site-geely\wordpress\index.php(17): require('C:\\xampp_8.2.12...')
-#22 {main}
-  thrown in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\inc\helpers.php on line 146
-[02-Jan-2026 11:22:32 UTC] PHP Fatal error:  Uncaught TypeError: theme_attach_parse_coordinates(): Argument #1 ($coordinates) must be of type string, array given, called in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 210 and defined in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\inc\helpers.php:146
+#11 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): do_blocks('<!-- wp:acf/abo...')
+#12 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(205): WP_Hook->apply_filters('<!-- wp:acf/abo...', Array)
+#13 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php(652): apply_filters('the_content', '<!-- wp:acf/abo...')
+#14 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-autosaves-controller.php(460): WP_REST_Revisions_Controller->prepare_item_for_response(Object(WP_Post), Object(WP_REST_Request))
+#15 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-autosaves-controller.php(253): WP_REST_Autosaves_Controller->prepare_item_for_response(Object(WP_Post), Object(WP_REST_Request))
+#16 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\class-wp-rest-server.php(1292): WP_REST_Autosaves_Controller->create_item(Object(WP_REST_Request))
+#17 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\class-wp-rest-server.php(1125): WP_REST_Server->respond_to_request(Object(WP_REST_Request), '/wp/v2/pages/(?...', Array, NULL)
+#18 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\class-wp-rest-server.php(439): WP_REST_Server->dispatch(Object(WP_REST_Request))
+#19 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api.php(459): WP_REST_Server->serve_request('/wp/v2/pages/69...')
+#20 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): rest_api_loaded(Object(WP))
+#21 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#22 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(565): WP_Hook->do_action(Array)
+#23 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp.php(418): do_action_ref_array('parse_request', Array)
+#24 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp.php(818): WP->parse_request('')
+#25 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\functions.php(1342): WP->main('')
+#26 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-blog-header.php(16): wp()
+#27 C:\xampp_8.2.12\htdocs\site-geely\wordpress\index.php(17): require('C:\\xampp_8.2.12...')
+#28 {main}
+  thrown in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\inc\helpers.php on line 73
+[07-Jan-2026 06:32:59 UTC] PHP Warning:  Undefined variable $cta_primary_text in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-hero.php on line 46
+[07-Jan-2026 06:32:59 UTC] PHP Warning:  Undefined variable $cta_secondary_text in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-hero.php on line 46
+[07-Jan-2026 06:34:00 UTC] PHP Warning:  Undefined variable $cta_primary_text in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-hero.php on line 47
+[07-Jan-2026 06:34:00 UTC] PHP Warning:  Undefined variable $cta_secondary_text in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-hero.php on line 47
+[07-Jan-2026 06:38:42 UTC] PHP Warning:  Undefined variable $cta_primary_text in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-hero.php on line 47
+[07-Jan-2026 06:38:42 UTC] PHP Warning:  Undefined variable $cta_secondary_text in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-hero.php on line 47
+[07-Jan-2026 06:41:55 UTC] PHP Warning:  Undefined variable $cta_primary_text in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-hero.php on line 47
+[07-Jan-2026 06:41:55 UTC] PHP Warning:  Undefined variable $cta_secondary_text in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-hero.php on line 47
+[07-Jan-2026 06:44:00 UTC] PHP Warning:  Undefined variable $cta_primary_text in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-hero.php on line 47
+[07-Jan-2026 06:44:00 UTC] PHP Warning:  Undefined variable $cta_secondary_text in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-hero.php on line 47
+[07-Jan-2026 06:48:12 UTC] PHP Warning:  Undefined variable $cta_primary_text in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-hero.php on line 57
+[07-Jan-2026 06:48:12 UTC] PHP Warning:  Undefined variable $cta_secondary_url in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-hero.php on line 62
+[07-Jan-2026 06:48:12 UTC] PHP Deprecated:  ltrim(): Passing null to parameter #1 ($string) of type string is deprecated in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\formatting.php on line 4486
+[07-Jan-2026 06:48:12 UTC] PHP Warning:  Undefined variable $cta_secondary_text in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-hero.php on line 63
+[07-Jan-2026 09:04:53 UTC] PHP Warning:  Undefined variable $service_cta_text in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 111
+[07-Jan-2026 09:05:11 UTC] PHP Warning:  Undefined variable $service_cta_text in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 111
+[07-Jan-2026 09:05:16 UTC] PHP Warning:  Undefined variable $service_cta_text in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 111
+[07-Jan-2026 09:05:20 UTC] PHP Warning:  Undefined variable $service_cta_text in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 111
+[07-Jan-2026 09:05:34 UTC] PHP Fatal error:  Uncaught TypeError: trim(): Argument #1 ($string) must be of type string, array given in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php:100
 Stack trace:
-#0 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php(210): theme_attach_parse_coordinates(Array)
+#0 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php(100): trim(Array)
 #1 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(831): include('C:\\xampp_8.2.12...')
-#2 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_block_render_template(Array, '', false, 552, Object(WP_Block), Array)
+#2 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_block_render_template(Array, '', true, 689, NULL, Array)
 #3 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
 #4 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
-#5 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(794): do_action('acf_block_rende...', Array, '', false, 552, Object(WP_Block), Array)
-#6 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(679): acf_render_block(Array, '', false, 552, Object(WP_Block), Array)
-#7 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(590): acf_rendered_block(Array, '', false, 552, Object(WP_Block))
+#5 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(794): do_action('acf_block_rende...', Array, '', true, 689, NULL, Array)
+#6 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(679): acf_render_block(Array, '', true, 689, NULL, Array)
+#7 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(1138): acf_rendered_block(Array, '', true, 689, NULL, Array, true)
+#8 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_ajax_fetch_block('')
+#9 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#10 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#11 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-admin\admin-ajax.php(192): do_action('wp_ajax_acf/aja...')
+#12 {main}
+  thrown in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 100
+[07-Jan-2026 09:05:35 UTC] PHP Fatal error:  Uncaught TypeError: trim(): Argument #1 ($string) must be of type string, array given in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php:100
+Stack trace:
+#0 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php(100): trim(Array)
+#1 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(831): include('C:\\xampp_8.2.12...')
+#2 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_block_render_template(Array, '', true, 689, NULL, Array)
+#3 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#4 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#5 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(794): do_action('acf_block_rende...', Array, '', true, 689, NULL, Array)
+#6 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(679): acf_render_block(Array, '', true, 689, NULL, Array)
+#7 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(1138): acf_rendered_block(Array, '', true, 689, NULL, Array, true)
+#8 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_ajax_fetch_block('')
+#9 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#10 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#11 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-admin\admin-ajax.php(192): do_action('wp_ajax_acf/aja...')
+#12 {main}
+  thrown in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 100
+[07-Jan-2026 09:05:36 UTC] PHP Fatal error:  Uncaught TypeError: trim(): Argument #1 ($string) must be of type string, array given in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php:100
+Stack trace:
+#0 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php(100): trim(Array)
+#1 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(831): include('C:\\xampp_8.2.12...')
+#2 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_block_render_template(Array, '', true, 689, NULL, Array)
+#3 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#4 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#5 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(794): do_action('acf_block_rende...', Array, '', true, 689, NULL, Array)
+#6 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(679): acf_render_block(Array, '', true, 689, NULL, Array)
+#7 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(1138): acf_rendered_block(Array, '', true, 689, NULL, Array, true)
+#8 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_ajax_fetch_block('')
+#9 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#10 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#11 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-admin\admin-ajax.php(192): do_action('wp_ajax_acf/aja...')
+#12 {main}
+  thrown in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 100
+[07-Jan-2026 09:05:42 UTC] PHP Fatal error:  Uncaught TypeError: trim(): Argument #1 ($string) must be of type string, array given in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php:100
+Stack trace:
+#0 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php(100): trim(Array)
+#1 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(831): include('C:\\xampp_8.2.12...')
+#2 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_block_render_template(Array, '', true, 689, NULL, Array)
+#3 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#4 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#5 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(794): do_action('acf_block_rende...', Array, '', true, 689, NULL, Array)
+#6 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(679): acf_render_block(Array, '', true, 689, NULL, Array)
+#7 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(1138): acf_rendered_block(Array, '', true, 689, NULL, Array, true)
+#8 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_ajax_fetch_block('')
+#9 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#10 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#11 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-admin\admin-ajax.php(192): do_action('wp_ajax_acf/aja...')
+#12 {main}
+  thrown in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 100
+[07-Jan-2026 09:05:48 UTC] PHP Fatal error:  Uncaught TypeError: trim(): Argument #1 ($string) must be of type string, array given in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php:100
+Stack trace:
+#0 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php(100): trim(Array)
+#1 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(831): include('C:\\xampp_8.2.12...')
+#2 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_block_render_template(Array, '', true, 689, NULL, Array)
+#3 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#4 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#5 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(794): do_action('acf_block_rende...', Array, '', true, 689, NULL, Array)
+#6 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(679): acf_render_block(Array, '', true, 689, NULL, Array)
+#7 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(1138): acf_rendered_block(Array, '', true, 689, NULL, Array, true)
+#8 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_ajax_fetch_block('')
+#9 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#10 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#11 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-admin\admin-ajax.php(192): do_action('wp_ajax_acf/aja...')
+#12 {main}
+  thrown in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 100
+[07-Jan-2026 09:05:50 UTC] PHP Fatal error:  Uncaught TypeError: trim(): Argument #1 ($string) must be of type string, array given in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php:100
+Stack trace:
+#0 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php(100): trim(Array)
+#1 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(831): include('C:\\xampp_8.2.12...')
+#2 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_block_render_template(Array, '', true, 689, NULL, Array)
+#3 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#4 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#5 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(794): do_action('acf_block_rende...', Array, '', true, 689, NULL, Array)
+#6 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(679): acf_render_block(Array, '', true, 689, NULL, Array)
+#7 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(1138): acf_rendered_block(Array, '', true, 689, NULL, Array, true)
+#8 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_ajax_fetch_block('')
+#9 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#10 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#11 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-admin\admin-ajax.php(192): do_action('wp_ajax_acf/aja...')
+#12 {main}
+  thrown in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 100
+[07-Jan-2026 09:05:51 UTC] PHP Fatal error:  Uncaught TypeError: trim(): Argument #1 ($string) must be of type string, array given in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php:100
+Stack trace:
+#0 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php(100): trim(Array)
+#1 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(831): include('C:\\xampp_8.2.12...')
+#2 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_block_render_template(Array, '', true, 689, NULL, Array)
+#3 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#4 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#5 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(794): do_action('acf_block_rende...', Array, '', true, 689, NULL, Array)
+#6 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(679): acf_render_block(Array, '', true, 689, NULL, Array)
+#7 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(1138): acf_rendered_block(Array, '', true, 689, NULL, Array, true)
+#8 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_ajax_fetch_block('')
+#9 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#10 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#11 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-admin\admin-ajax.php(192): do_action('wp_ajax_acf/aja...')
+#12 {main}
+  thrown in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 100
+[07-Jan-2026 09:05:54 UTC] PHP Fatal error:  Uncaught TypeError: trim(): Argument #1 ($string) must be of type string, array given in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php:100
+Stack trace:
+#0 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php(100): trim(Array)
+#1 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(831): include('C:\\xampp_8.2.12...')
+#2 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_block_render_template(Array, '', false, 751, Object(WP_Block), Array)
+#3 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#4 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#5 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(794): do_action('acf_block_rende...', Array, '', false, 751, Object(WP_Block), Array)
+#6 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(679): acf_render_block(Array, '', false, 751, Object(WP_Block), Array)
+#7 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(590): acf_rendered_block(Array, '', false, 751, Object(WP_Block))
 #8 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-block.php(586): acf_render_block_callback(Array, '', Object(WP_Block))
 #9 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\blocks.php(2359): WP_Block->render()
 #10 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\blocks.php(2431): render_block(Array)
-#11 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): do_blocks('<!-- wp:acf/pag...')
-#12 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(205): WP_Hook->apply_filters('<!-- wp:acf/pag...', Array)
-#13 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\gutenberg\build\scripts\block-library\post-content.php(50): apply_filters('the_content', '<!-- wp:acf/pag...')
-#14 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-block.php(586): gutenberg_render_block_core_post_content(Array, '<!-- wp:acf/pag...', Object(WP_Block))
-#15 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\blocks.php(2359): WP_Block->render()
-#16 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\blocks.php(2431): render_block(Array)
-#17 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\block-template.php(291): do_blocks('<!-- wp:templat...')
-#18 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\template-canvas.php(12): get_the_block_template_html()
-#19 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\template-loader.php(106): include('C:\\xampp_8.2.12...')
-#20 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-blog-header.php(19): require_once('C:\\xampp_8.2.12...')
-#21 C:\xampp_8.2.12\htdocs\site-geely\wordpress\index.php(17): require('C:\\xampp_8.2.12...')
-#22 {main}
-  thrown in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\inc\helpers.php on line 146
-[02-Jan-2026 23:14:44 UTC] Automatic updates starting...
-[02-Jan-2026 23:14:48 UTC]   Automatic theme updates starting...
-[02-Jan-2026 23:14:50 UTC]   Automatic theme updates complete.
-[02-Jan-2026 23:14:50 UTC] Automatic updates complete.
-[03-Jan-2026 06:42:27 UTC] Automatic updates starting...
-[03-Jan-2026 06:42:32 UTC]   Automatic theme updates starting...
-[03-Jan-2026 06:42:33 UTC]   Automatic theme updates complete.
-[03-Jan-2026 06:42:33 UTC] Automatic updates complete.
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 09:11:15 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 09:12:40 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 10:02:01 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "price_usd" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 364
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "price_pen" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 365
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "link_model" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 366
-[03-Jan-2026 10:02:17 UTC] PHP Warning:  Undefined array key "link_quote" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 367
-[03-Jan-2026 10:39:22 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mf_pick_model_for_card() in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php:108
+#11 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): do_blocks('<!-- wp:acf/aft...')
+#12 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(205): WP_Hook->apply_filters('<!-- wp:acf/aft...', Array)
+#13 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php(652): apply_filters('the_content', '<!-- wp:acf/aft...')
+#14 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-autosaves-controller.php(460): WP_REST_Revisions_Controller->prepare_item_for_response(Object(WP_Post), Object(WP_REST_Request))
+#15 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-autosaves-controller.php(253): WP_REST_Autosaves_Controller->prepare_item_for_response(Object(WP_Post), Object(WP_REST_Request))
+#16 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\class-wp-rest-server.php(1292): WP_REST_Autosaves_Controller->create_item(Object(WP_REST_Request))
+#17 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\class-wp-rest-server.php(1125): WP_REST_Server->respond_to_request(Object(WP_REST_Request), '/wp/v2/pages/(?...', Array, NULL)
+#18 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\class-wp-rest-server.php(439): WP_REST_Server->dispatch(Object(WP_REST_Request))
+#19 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api.php(459): WP_REST_Server->serve_request('/wp/v2/pages/68...')
+#20 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): rest_api_loaded(Object(WP))
+#21 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#22 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(565): WP_Hook->do_action(Array)
+#23 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp.php(418): do_action_ref_array('parse_request', Array)
+#24 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp.php(818): WP->parse_request('')
+#25 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\functions.php(1342): WP->main('')
+#26 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-blog-header.php(16): wp()
+#27 C:\xampp_8.2.12\htdocs\site-geely\wordpress\index.php(17): require('C:\\xampp_8.2.12...')
+#28 {main}
+  thrown in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 100
+[07-Jan-2026 09:05:56 UTC] PHP Fatal error:  Uncaught TypeError: trim(): Argument #1 ($string) must be of type string, array given in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php:100
 Stack trace:
-#0 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(831): include()
-#1 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_block_render_template(Array, '', false, 346, Object(WP_Block), Array)
-#2 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
-#3 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
-#4 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(794): do_action('acf_block_rende...', Array, '', false, 552, Object(WP_Block), Array)
-#5 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(679): acf_render_block(Array, '', false, 552, Object(WP_Block), Array)
-#6 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(590): acf_rendered_block(Array, '', false, 552, Object(WP_Block))
-#7 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-block.php(586): acf_render_block_callback(Array, '', Object(WP_Block))
-#8 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\blocks.php(2359): WP_Block->render()
-#9 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\blocks.php(2431): render_block(Array)
-#10 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): do_blocks('<!-- wp:acf/pag...')
-#11 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(205): WP_Hook->apply_filters('<!-- wp:acf/pag...', Array)
-#12 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\gutenberg\build\scripts\block-library\post-content.php(50): apply_filters('the_content', '<!-- wp:acf/pag...')
-#13 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-block.php(586): gutenberg_render_block_core_post_content(Array, '<!-- wp:acf/pag...', Object(WP_Block))
-#14 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\blocks.php(2359): WP_Block->render()
-#15 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\blocks.php(2431): render_block(Array)
-#16 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\block-template.php(291): do_blocks('<!-- wp:templat...')
-#17 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\template-canvas.php(12): get_the_block_template_html()
-#18 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\template-loader.php(106): include('C:\\xampp_8.2.12...')
-#19 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-blog-header.php(19): require_once('C:\\xampp_8.2.12...')
-#20 C:\xampp_8.2.12\htdocs\site-geely\wordpress\index.php(17): require('C:\\xampp_8.2.12...')
-#21 {main}
-  thrown in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 108
-[03-Jan-2026 10:41:26 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mf_parse_price() in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php:112
-Stack trace:
-#0 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php(137): mf_pick_model_for_card(Array)
+#0 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php(100): trim(Array)
 #1 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(831): include('C:\\xampp_8.2.12...')
-#2 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_block_render_template(Array, '', false, 346, Object(WP_Block), Array)
+#2 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_block_render_template(Array, '', true, 689, NULL, Array)
 #3 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
 #4 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
-#5 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(794): do_action('acf_block_rende...', Array, '', false, 552, Object(WP_Block), Array)
-#6 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(679): acf_render_block(Array, '', false, 552, Object(WP_Block), Array)
-#7 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(590): acf_rendered_block(Array, '', false, 552, Object(WP_Block))
+#5 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(794): do_action('acf_block_rende...', Array, '', true, 689, NULL, Array)
+#6 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(679): acf_render_block(Array, '', true, 689, NULL, Array)
+#7 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(1138): acf_rendered_block(Array, '', true, 689, NULL, Array, true)
+#8 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_ajax_fetch_block('')
+#9 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#10 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#11 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-admin\admin-ajax.php(192): do_action('wp_ajax_acf/aja...')
+#12 {main}
+  thrown in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 100
+[07-Jan-2026 09:06:16 UTC] PHP Fatal error:  Uncaught TypeError: trim(): Argument #1 ($string) must be of type string, array given in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php:100
+Stack trace:
+#0 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php(100): trim(Array)
+#1 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(831): include('C:\\xampp_8.2.12...')
+#2 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_block_render_template(Array, '', true, 689, NULL, Array)
+#3 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#4 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#5 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(794): do_action('acf_block_rende...', Array, '', true, 689, NULL, Array)
+#6 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(679): acf_render_block(Array, '', true, 689, NULL, Array)
+#7 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(1138): acf_rendered_block(Array, '', true, 689, NULL, Array, true)
+#8 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_ajax_fetch_block('')
+#9 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#10 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#11 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-admin\admin-ajax.php(192): do_action('wp_ajax_acf/aja...')
+#12 {main}
+  thrown in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 100
+[07-Jan-2026 09:06:54 UTC] PHP Fatal error:  Uncaught TypeError: trim(): Argument #1 ($string) must be of type string, array given in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php:98
+Stack trace:
+#0 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php(98): trim(Array)
+#1 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(831): include('C:\\xampp_8.2.12...')
+#2 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): acf_block_render_template(Array, '', false, 751, Object(WP_Block), Array)
+#3 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#4 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#5 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(794): do_action('acf_block_rende...', Array, '', false, 751, Object(WP_Block), Array)
+#6 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(679): acf_render_block(Array, '', false, 751, Object(WP_Block), Array)
+#7 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php(590): acf_rendered_block(Array, '', false, 751, Object(WP_Block))
 #8 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-block.php(586): acf_render_block_callback(Array, '', Object(WP_Block))
 #9 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\blocks.php(2359): WP_Block->render()
 #10 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\blocks.php(2431): render_block(Array)
-#11 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): do_blocks('<!-- wp:acf/pag...')
-#12 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(205): WP_Hook->apply_filters('<!-- wp:acf/pag...', Array)
-#13 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\gutenberg\build\scripts\block-library\post-content.php(50): apply_filters('the_content', '<!-- wp:acf/pag...')
-#14 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-block.php(586): gutenberg_render_block_core_post_content(Array, '<!-- wp:acf/pag...', Object(WP_Block))
-#15 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\blocks.php(2359): WP_Block->render()
-#16 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\blocks.php(2431): render_block(Array)
-#17 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\block-template.php(291): do_blocks('<!-- wp:templat...')
-#18 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\template-canvas.php(12): get_the_block_template_html()
-#19 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\template-loader.php(106): include('C:\\xampp_8.2.12...')
-#20 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-blog-header.php(19): require_once('C:\\xampp_8.2.12...')
-#21 C:\xampp_8.2.12\htdocs\site-geely\wordpress\index.php(17): require('C:\\xampp_8.2.12...')
-#22 {main}
-  thrown in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 112
-[03-Jan-2026 11:18:14 UTC] PHP Warning:  Undefined variable $uid in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 423
-[03-Jan-2026 11:18:14 UTC] PHP Warning:  Undefined variable $uid in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 463
-[03-Jan-2026 18:34:00 UTC] Automatic updates starting...
-[03-Jan-2026 18:34:04 UTC]   Automatic theme updates starting...
-[03-Jan-2026 18:34:06 UTC]   Automatic theme updates complete.
-[03-Jan-2026 18:34:06 UTC] Automatic updates complete.
-[03-Jan-2026 19:16:23 UTC] PHP Fatal error:  Cannot redeclare mf_parse_price() (previously declared in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php:70) in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 76
-[03-Jan-2026 19:17:43 UTC] PHP Fatal error:  Cannot redeclare mf_parse_price() (previously declared in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php:70) in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 76
-[04-Jan-2026 00:06:01 UTC] PHP Fatal error:  Cannot redeclare mf_parse_price() (previously declared in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php:70) in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 76
-[04-Jan-2026 00:06:01 UTC] PHP Warning:  Trying to access array offset on value of type bool in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-recovery-mode-email-service.php on line 367
-[04-Jan-2026 00:06:01 UTC] PHP Warning:  Trying to access array offset on value of type bool in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-recovery-mode-email-service.php on line 368
-[04-Jan-2026 00:07:00 UTC] PHP Fatal error:  Cannot redeclare mf_parse_price() (previously declared in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php:70) in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 76
-[04-Jan-2026 09:23:42 UTC] Automatic updates starting...
-[04-Jan-2026 09:23:46 UTC]   Automatic theme updates starting...
-[04-Jan-2026 09:23:47 UTC]   Automatic theme updates complete.
-[04-Jan-2026 09:23:47 UTC] Automatic updates complete.
+#11 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): do_blocks('<!-- wp:acf/aft...')
+#12 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(205): WP_Hook->apply_filters('<!-- wp:acf/aft...', Array)
+#13 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php(652): apply_filters('the_content', '<!-- wp:acf/aft...')
+#14 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-autosaves-controller.php(460): WP_REST_Revisions_Controller->prepare_item_for_response(Object(WP_Post), Object(WP_REST_Request))
+#15 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-autosaves-controller.php(253): WP_REST_Autosaves_Controller->prepare_item_for_response(Object(WP_Post), Object(WP_REST_Request))
+#16 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\class-wp-rest-server.php(1292): WP_REST_Autosaves_Controller->create_item(Object(WP_REST_Request))
+#17 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\class-wp-rest-server.php(1125): WP_REST_Server->respond_to_request(Object(WP_REST_Request), '/wp/v2/pages/(?...', Array, NULL)
+#18 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\class-wp-rest-server.php(439): WP_REST_Server->dispatch(Object(WP_REST_Request))
+#19 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api.php(459): WP_REST_Server->serve_request('/wp/v2/pages/68...')
+#20 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(324): rest_api_loaded(Object(WP))
+#21 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-hook.php(348): WP_Hook->apply_filters('', Array)
+#22 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\plugin.php(565): WP_Hook->do_action(Array)
+#23 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp.php(418): do_action_ref_array('parse_request', Array)
+#24 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp.php(818): WP->parse_request('')
+#25 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\functions.php(1342): WP->main('')
+#26 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-blog-header.php(16): wp()
+#27 C:\xampp_8.2.12\htdocs\site-geely\wordpress\index.php(17): require('C:\\xampp_8.2.12...')
+#28 {main}
+  thrown in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 98
+[07-Jan-2026 09:13:01 UTC] PHP Warning:  Undefined array key "text" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 109
+[07-Jan-2026 09:13:03 UTC] PHP Warning:  Undefined array key "text" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 109
+[07-Jan-2026 09:13:34 UTC] PHP Warning:  Undefined array key "text" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 109
+[07-Jan-2026 09:14:12 UTC] PHP Warning:  Undefined array key "text" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 109
+[07-Jan-2026 09:14:26 UTC] PHP Warning:  Undefined array key "text" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 109
+[07-Jan-2026 09:14:26 UTC] PHP Warning:  Undefined array key "text" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 109
+[07-Jan-2026 09:14:28 UTC] PHP Warning:  Undefined array key "text" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 109
+[07-Jan-2026 09:15:41 UTC] PHP Warning:  Undefined array key "text" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 111
+[07-Jan-2026 09:16:25 UTC] PHP Warning:  Undefined array key "text" in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-services.php on line 113

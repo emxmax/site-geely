@@ -10,11 +10,37 @@ $block_journey_vision_image = get_field('block_journey_vision_image');
 $block_journey_vision_title = get_field('block_journey_vision_title') ?: 'VISIÓN';
 $block_journey_vision_text = get_field('block_journey_vision_text') ?: '';
 
-$mission_image_url = theme_attach_get_post_image_url($block_journey_mission_image, 'large');
-$mission_image_alt = theme_attach_get_post_image_alt($block_journey_mission_image, $block_journey_mission_title);
+// Obtener URL y alt de la imagen mission ACF
+$mission_image_url = '';
+$mission_image_alt = $block_journey_mission_title;
 
-$vision_image_url = theme_attach_get_post_image_url($block_journey_vision_image, 'large');
-$vision_image_alt = theme_attach_get_post_image_alt($block_journey_vision_image, $block_journey_vision_title);
+if ($block_journey_mission_image) {
+    if (is_array($block_journey_mission_image)) {
+        $mission_image_url = $block_journey_mission_image['url'] ?? '';
+        $mission_image_alt = $block_journey_mission_image['alt'] ?? $mission_image_alt;
+    } elseif (is_numeric($block_journey_mission_image)) {
+        $mission_image_url = wp_get_attachment_image_url($block_journey_mission_image, 'large') ?: '';
+        $mission_image_alt = get_post_meta($block_journey_mission_image, '_wp_attachment_image_alt', true) ?: $mission_image_alt;
+    } else {
+        $mission_image_url = $block_journey_mission_image;
+    }
+}
+
+// Obtener URL y alt de la imagen vision ACF
+$vision_image_url = '';
+$vision_image_alt = $block_journey_vision_title;
+
+if ($block_journey_vision_image) {
+    if (is_array($block_journey_vision_image)) {
+        $vision_image_url = $block_journey_vision_image['url'] ?? '';
+        $vision_image_alt = $block_journey_vision_image['alt'] ?? $vision_image_alt;
+    } elseif (is_numeric($block_journey_vision_image)) {
+        $vision_image_url = wp_get_attachment_image_url($block_journey_vision_image, 'large') ?: '';
+        $vision_image_alt = get_post_meta($block_journey_vision_image, '_wp_attachment_image_alt', true) ?: $vision_image_alt;
+    } else {
+        $vision_image_url = $block_journey_vision_image;
+    }
+}
 ?>
 
 <section class="about-journey">

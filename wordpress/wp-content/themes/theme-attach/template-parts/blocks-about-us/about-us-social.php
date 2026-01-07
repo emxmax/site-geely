@@ -9,8 +9,21 @@ $block_social_description = get_field('block_social_description') ?: '';
 $block_social_content = get_field('block_social_content') ?: '';
 $block_social_image = get_field('block_social_image');
 
-$image_url = theme_attach_get_post_image_url($block_social_image, 'large');
-$image_alt = theme_attach_get_post_image_alt($block_social_image, $block_social_subtitle);
+// Obtener URL y alt de la imagen ACF
+$image_url = '';
+$image_alt = $block_social_subtitle ?: 'Geely Hope';
+
+if ($block_social_image) {
+    if (is_array($block_social_image)) {
+        $image_url = $block_social_image['url'] ?? '';
+        $image_alt = $block_social_image['alt'] ?? $image_alt;
+    } elseif (is_numeric($block_social_image)) {
+        $image_url = wp_get_attachment_image_url($block_social_image, 'large') ?: '';
+        $image_alt = get_post_meta($block_social_image, '_wp_attachment_image_alt', true) ?: $image_alt;
+    } else {
+        $image_url = $block_social_image;
+    }
+}
 ?>
 
 <section class="about-social">

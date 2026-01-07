@@ -1,0 +1,108 @@
+.after-sales-services {
+  margin-top: 0;
+  padding: 80px 20px;
+}
+
+.after-sales-services__inner {
+  max-width: 1280px;
+  margin-inline: auto;
+  width: 100%;
+}
+
+.after-sales-services__title {
+  font-family: var(--font-geely);
+  color: var(--c-black);
+  font-weight: 700;
+}
+
+.after-sales-services__description {
+  margin-top: 24px;
+  font-family: var(--font-inter);
+  color: var(--c-black);
+  font-weight: 500;
+}
+.after-sales-services__carousel {
+  margin-top: 40px;
+}
+.after-sales-services__card {
+  display: grid;
+  grid-template-columns: 857px minmax(250px, 1fr);
+  gap: 24px;
+}
+
+.after-sales-services__card-badge {
+  color: var(--c-greely-blue);
+  font-family: var(--font-geely);
+  font-weight: 700;
+  display: block;
+  max-width: 250px;
+}
+.after-sales-services__card-title {
+  margin-top: 16px;
+  font-family: var(--font-geely);
+  color: var(--c-black);
+  font-weight: 700;
+}
+.after-sales-services__card-description {
+  margin-top: 16px;
+  font-family: var(--font-inter);
+  color: var(--c-black);
+  font-weight: 500;
+}
+
+.after-sales-services__card-features {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+  margin-bottom: 0;
+}
+.after-sales-services__card-feature {
+  display: flex;
+  gap: 8px;
+}
+.after-sales-services__card-feature-text {
+  color: var(--c-black);
+  font-family: var(--font-inter);
+  color: var(--c-black);
+  font-weight: 500;
+}
+
+.after-sales-services__card-img {
+  max-width: 100%;
+  width: 100%;
+  max-height: 600px;
+  object-fit: cover;
+  border-radius: 24px;
+}
+
+.after-sales-services__card-content {
+  padding: 59px 24px;
+  display: flex;
+  align-items: center;
+  border-radius: 24px;
+  background-color: var(--c-snow-white);
+}
+.after-sales-services__card-content-inner {
+}
+
+.after-sales-services__card-cta {
+  margin-top: 24px;
+  color: var(--c-black);
+  font-family: var(--font-geely);
+  font-weight: 700;
+  padding: 12px 32px;
+  border: 1px solid var(--c-black);
+  text-decoration: none;
+  display: inline-flex;
+  max-height: 48px;
+  min-width: 139px;
+}
+
+/*  */
+.c-swiper-controls.controls-postventa-services {
+  margin-top: 36px;
+  padding-inline: 0;
+}
