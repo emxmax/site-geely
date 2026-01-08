@@ -19,6 +19,11 @@
   object-fit: cover;
   z-index: -1;
 }
+.after-sales-appointment__bg--desktop {
+}
+.after-sales-appointment__bg--mobile {
+  display: none;
+}
 
 .after-sales-appointment__inner {
   max-width: 1280px;
@@ -31,6 +36,8 @@
   max-width: 616.84px;
   background-color: rgba(255, 255, 255, 0.7);
   padding: 47px 56.92px;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
 }
 .after-sales-appointment__title {
   font-family: var(--font-geely);
@@ -64,4 +71,34 @@
 }
 
 .after-sales-appointment__map-placeholder {
+}
+
+@media (max-width: 767px) {
+  .after-sales-appointment {
+    padding-block: 445px 32px;
+    padding-inline: 24px;
+  }
+
+  .after-sales-appointment__bg--desktop {
+    display: none;
+  }
+  .after-sales-appointment__bg--mobile {
+    display: block;
+  }
+
+  .after-sales-appointment__content {
+    padding: 24px;
+  }
+
+  .after-sales-appointment__title {
+    /* font-size: var(--fs-title-3) !important;
+    line-height: var(--lh-title-3) !important; */
+  }
+
+  .after-sales-appointment__description {
+    margin-top: 16px;
+  }
+  .after-sales-appointment__cta {
+    margin-top: 16px;
+  }
 }

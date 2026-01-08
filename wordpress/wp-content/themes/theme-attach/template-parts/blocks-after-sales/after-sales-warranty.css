@@ -19,6 +19,9 @@
   object-fit: cover;
   z-index: -1;
 }
+.after-sales-warranty__bg--mobile {
+  display: none;
+}
 
 .after-sales-warranty__inner {
   max-width: 1280px;
@@ -77,9 +80,20 @@
 
 @media (max-width: 767px) {
   .after-sales-warranty {
+    padding-inline: 16px;
+    padding-block: 367px 80px;
   }
-
   .after-sales-warranty__inner {
+  }
+  .after-sales-warranty__bg--desktop {
+    display: none;
+  }
+  .after-sales-warranty__bg--mobile {
+    display: block;
+  }
+  .after-sales-warranty__description {
+    margin-top: 16px;
+    padding-block: 0;
   }
 }
 

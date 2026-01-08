@@ -38,16 +38,22 @@ if ($warranty_image_mobile) {
     <img src="<?= esc_url($image_url_desktop); ?>" alt="<?= esc_attr($section_title); ?>"
       class="after-sales-warranty__bg after-sales-warranty__bg--desktop">
   <?php endif; ?>
+
+  <?php if ($image_url_mobile): ?>
+    <img src="<?= esc_url($image_url_mobile); ?>" alt="<?= esc_attr($section_title); ?>"
+      class="after-sales-warranty__bg after-sales-warranty__bg--mobile">
+  <?php endif; ?>
+
   <div class="after-sales-warranty__inner">
     <div class="after-sales-warranty__content">
       <?php if ($section_title): ?>
-        <h2 class="after-sales-warranty__title title-1">
+        <h2 class="after-sales-warranty__title title-1 title-mobile-sm-2">
           <?= esc_html($section_title); ?>
         </h2>
       <?php endif; ?>
 
       <?php if ($section_description): ?>
-        <div class="after-sales-warranty__description paragraph-2">
+        <div class="after-sales-warranty__description paragraph-2 paragraph-sm-5">
           <?= wp_kses_post($section_description); ?>
         </div>
       <?php endif; ?>

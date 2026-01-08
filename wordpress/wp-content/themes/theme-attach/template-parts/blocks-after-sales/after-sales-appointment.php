@@ -30,8 +30,15 @@ $map_mobile_url = $image_map_mobile ? esc_url($image_map_mobile['url']) : '';
 ?>
 
 <section class="after-sales-appointment">
-  <img src="<?= esc_url($map_desktop_url); ?>" alt="Mapa Ubicaciones"
-    class="after-sales-appointment__bg after-sales-appointment__bg--desktop" />
+  <?php if (!empty($map_desktop_url)): ?>
+    <img src="<?= esc_url($map_desktop_url); ?>" alt="Mapa Ubicaciones"
+      class="after-sales-appointment__bg after-sales-appointment__bg--desktop" />
+  <?php endif; ?>
+  <?php if (!empty($map_mobile_url)): ?>
+    <img src="<?= esc_url($map_mobile_url); ?>" alt="Mapa Ubicaciones"
+      class="after-sales-appointment__bg after-sales-appointment__bg--mobile" />
+  <?php endif; ?>
+
   <div class="after-sales-appointment__inner">
     <!-- Contenido lado izquierdo -->
     <div class="after-sales-appointment__content">
@@ -42,13 +49,13 @@ $map_mobile_url = $image_map_mobile ? esc_url($image_map_mobile['url']) : '';
       <?php endif; ?>
 
       <?php if ($section_description): ?>
-        <div class="after-sales-appointment__description paragraph-3">
+        <div class="after-sales-appointment__description paragraph-3 paragraph-sm-5">
           <?= wp_kses_post($section_description); ?>
         </div>
       <?php endif; ?>
 
       <?php if ($cta): ?>
-        <a href="<?= esc_url($cta['url']); ?>" class="after-sales-appointment__cta title-7">
+        <a href="<?= esc_url($cta['url']); ?>" class="after-sales-appointment__cta title-7 title-mobile-sm-6">
           <?= esc_html($cta['title']); ?>
         </a>
       <?php endif; ?>
