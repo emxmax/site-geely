@@ -1,0 +1,20 @@
+[08-Jan-2026 01:27:31 UTC] Automatic updates starting...
+[08-Jan-2026 01:27:35 UTC]   Automatic theme updates starting...
+[08-Jan-2026 01:27:36 UTC]   Automatic theme updates complete.
+[08-Jan-2026 01:27:36 UTC] Automatic updates complete.
+[08-Jan-2026 01:47:33 UTC] PHP Warning:  Undefined variable $cta_url in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-appointment.php on line 48
+[08-Jan-2026 01:49:38 UTC] PHP Warning:  Undefined variable $cta_text in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-appointment.php on line 49
+[08-Jan-2026 03:23:29 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 53
+[08-Jan-2026 03:23:44 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 53
+[08-Jan-2026 03:24:03 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 53
+[08-Jan-2026 03:26:15 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 53
+[08-Jan-2026 03:27:04 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 53
+[08-Jan-2026 03:27:17 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 53
+[08-Jan-2026 03:27:42 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 53
+[08-Jan-2026 03:27:44 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 53
+[08-Jan-2026 03:31:40 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 54
+[08-Jan-2026 03:33:48 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 55
+[08-Jan-2026 07:30:43 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 55
+[08-Jan-2026 07:32:57 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 55
+[08-Jan-2026 07:36:03 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 55
+[08-Jan-2026 08:05:19 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 55

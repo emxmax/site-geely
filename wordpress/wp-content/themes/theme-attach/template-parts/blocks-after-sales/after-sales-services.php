@@ -37,7 +37,7 @@ $carousel_id = 'after-sales-services-' . uniqid();
         <?php endif; ?>
 
         <?php if ($section_description): ?>
-          <p class="after-sales-services__description paragraph-2">
+          <p class="after-sales-services__description paragraph-2 paragraph-sm-4">
             <?= esc_html($section_description); ?>
           </p>
         <?php endif; ?>
@@ -112,9 +112,11 @@ $carousel_id = 'after-sales-services-' . uniqid();
                       <?php endif; ?>
 
                       <?php if (!empty($service_cta)): ?>
-                        <a href="<?= esc_url($service_cta["url"]); ?>" class="after-sales-services__card-cta title-7">
-                          <?= esc_html($service_cta["title"]); ?>
-                        </a>
+                        <div class="after-sales-services__cta-wrapper">
+                          <a href="<?= esc_url($service_cta["url"]); ?>" class="after-sales-services__card-cta title-7">
+                            <?= esc_html($service_cta["title"]); ?>
+                          </a>
+                        </div>
                       <?php endif; ?>
                     </div>
                   </div>

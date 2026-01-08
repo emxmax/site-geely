@@ -14,6 +14,12 @@
   gap: 24px;
 }
 
+.after-sales-benefits__title {
+  font-family: var(--font-geely);
+  font-weight: 700;
+  color: var(--c-black);
+}
+
 .after-sales-benefits__item-img {
   max-width: 100%;
   width: 100%;
@@ -36,4 +42,24 @@
   font-family: var(--font-inter);
   color: var(--c-black);
   font-weight: 400;
+}
+
+@media (max-width: 767px) {
+  .after-sales-benefits {
+    padding-inline: 16px;
+  }
+  .after-sales-benefits {
+    padding-block: 40px;
+  }
+  .after-sales-benefits__grid {
+    margin-top: 24px;
+  }
+  .after-sales-benefits__inner {
+  }
+  .after-sales-benefits__item-img {
+    max-height: none;
+    object-fit: contain;
+    height: auto;
+    border-radius: 16px;
+  }
 }

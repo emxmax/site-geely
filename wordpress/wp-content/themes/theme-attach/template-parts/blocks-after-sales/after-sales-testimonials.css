@@ -70,3 +70,34 @@
 .after-sales-testimonials__card-content-inner {
   max-width: 415px;
 }
+
+@media (max-width: 1199px) {
+  .after-sales-testimonials__card {
+    grid-template-columns: minmax(415px, 1fr) 540px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .after-sales-testimonials__card {
+    grid-template-columns: 1fr;
+  }
+  .after-sales-testimonials__card-content {
+    order: 2;
+  }
+  .after-sales-testimonials__card-photo {
+    order: 1;
+  }
+  .after-sales-testimonials__card-content-inner {
+    max-width: 620px;
+  }
+}
+
+@media (max-width: 767px) {
+  .after-sales-testimonials {
+    padding-block: 40px;
+    padding-inline: 16px;
+  }
+  .after-sales-testimonials__card-content-inner {
+    padding: 24px;
+  }
+}

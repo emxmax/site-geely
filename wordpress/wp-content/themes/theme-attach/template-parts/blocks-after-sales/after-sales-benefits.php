@@ -18,7 +18,7 @@ $benefits = get_field('after_sales_benefits_items'); // Repeater
   <div class="after-sales-benefits__inner">
     <div class="after-sales-benefits__header">
       <?php if ($section_title): ?>
-        <h2 class="after-sales-benefits__title title-2 title-mobile-sm-3">
+        <h2 class="after-sales-benefits__title title-2 title-mobile-sm-2">
           <?= esc_html($section_title); ?>
         </h2>
       <?php endif; ?>

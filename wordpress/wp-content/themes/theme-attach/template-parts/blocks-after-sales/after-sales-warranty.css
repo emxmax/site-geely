@@ -1,0 +1,132 @@
+.after-sales-warranty {
+  max-width: 1440px;
+  width: 100%;
+  margin-inline: auto;
+  position: relative;
+  overflow: hidden;
+  padding-block: 146.5px;
+  margin-top: 0;
+  padding-inline: 20px;
+}
+
+.after-sales-warranty__bg {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.after-sales-warranty__inner {
+  max-width: 1280px;
+  width: 100%;
+  margin-inline: auto;
+  /* padding-inline: 20px; */
+}
+
+.after-sales-warranty__image {
+}
+
+.after-sales-warranty__image img {
+}
+
+.after-sales-warranty__content {
+  max-width: 880px;
+  margin-left: auto;
+  width: 100%;
+}
+
+.after-sales-warranty__title {
+  color: var(--c-white);
+  font-family: var(--font-geely);
+  font-weight: 700;
+  min-height: 136px;
+}
+
+.after-sales-warranty__description {
+  color: var(--c-white);
+  font-family: var(--font-inter);
+  font-weight: 500;
+  margin-top: 24px;
+  padding-block: 19.5px;
+}
+
+.after-sales-warranty__features {
+}
+
+.after-sales-warranty__feature {
+}
+
+.after-sales-warranty__feature-icon {
+}
+
+.after-sales-warranty__feature span {
+}
+
+/* Responsive */
+@media (max-width: 1023px) {
+  .after-sales-warranty {
+  }
+
+  .after-sales-warranty__inner {
+  }
+}
+
+@media (max-width: 767px) {
+  .after-sales-warranty {
+  }
+
+  .after-sales-warranty__inner {
+  }
+}
+
+/* ===================================== */
+/* FAQS */
+.main-postventa .faq-block {
+  margin-top: 0;
+}
+.main-postventa .faq-block__inner {
+  max-width: 1280px;
+}
+
+.main-postventa .faq-item__answer {
+  max-width: 100%;
+}
+.main-postventa .faq-item__answer p {
+  padding-right: 32px;
+}
+
+.main-postventa .faq-block__list {
+  border-top: none;
+}
+
+@media (max-width: 767px) {
+  .main-postventa .faq-block {
+    padding: 40px 16px;
+  }
+  .main-postventa .faq-item__question {
+    padding-inline: 0;
+  }
+  .main-postventa .faq-item__answer {
+    padding-inline: 0;
+  }
+  .main-postventa .faq-item__question-text {
+    line-height: var(--lh-title-sm-3);
+    font-weight: 700;
+    color: var(--c-black);
+  }
+  .main-postventa .faq-item__answer p {
+    font-size: var(--fs-p-4);
+    line-height: var(--lh-p-4);
+    color: var(--c-black);
+    font-weight: 400;
+  }
+  .main-postventa .faq-block__title {
+    font-size: var(--fs-title-sm-2);
+    line-height: var(--lh-title-sm-2);
+    margin-bottom: 24px;
+  }
+}
