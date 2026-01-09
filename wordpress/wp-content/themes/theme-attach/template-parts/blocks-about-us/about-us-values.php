@@ -19,8 +19,21 @@ $block_values_items = get_field('block_values_items') ?: [];
                     $title = $item['title'] ?? '';
                     $description = $item['description'] ?? '';
                     
-                    $image_url = theme_attach_get_post_image_url($image, 'medium');
-                    $image_alt = theme_attach_get_post_image_alt($image, $title);
+                    // Obtener URL y alt de la imagen ACF
+                    $image_url = '';
+                    $image_alt = $title ?: 'Valor Geely';
+                    
+                    if ($image) {
+                        if (is_array($image)) {
+                            $image_url = $image['url'] ?? '';
+                            $image_alt = $image['alt'] ?? $image_alt;
+                        } elseif (is_numeric($image)) {
+                            $image_url = wp_get_attachment_image_url($image, 'medium') ?: '';
+                            $image_alt = get_post_meta($image, '_wp_attachment_image_alt', true) ?: $image_alt;
+                        } else {
+                            $image_url = $image;
+                        }
+                    }
                 ?>
                     <div class="about-values__item">
                         <?php if ($image_url): ?>

@@ -1,0 +1,104 @@
+.after-sales-appointment {
+  max-width: 1440px;
+  width: 100%;
+  margin-inline: auto;
+  position: relative;
+  overflow: hidden;
+  padding-block: 334px 80px;
+  margin-top: 0;
+  padding-inline: 20px;
+}
+
+.after-sales-appointment__bg {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+.after-sales-appointment__bg--desktop {
+}
+.after-sales-appointment__bg--mobile {
+  display: none;
+}
+
+.after-sales-appointment__inner {
+  max-width: 1280px;
+  width: 100%;
+  margin-inline: auto;
+}
+
+.after-sales-appointment__content {
+  width: 100%;
+  max-width: 616.84px;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 47px 56.92px;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+.after-sales-appointment__title {
+  font-family: var(--font-geely);
+  font-weight: 700;
+  color: var(--c-black);
+  max-width: 460px;
+}
+.after-sales-appointment__description {
+  color: var(--c-black);
+  font-weight: 500;
+  font-family: var(--font-inter);
+  margin-top: 24px;
+}
+.after-sales-appointment__cta {
+  background-color: var(--c-black);
+  color: var(--c-white);
+  font-family: var(--font-inter);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 32px;
+  text-decoration: none;
+  font-weight: 700;
+  margin-top: 24px;
+}
+
+.after-sales-appointment__map {
+}
+
+.after-sales-appointment__map-container {
+}
+
+.after-sales-appointment__map-placeholder {
+}
+
+@media (max-width: 767px) {
+  .after-sales-appointment {
+    padding-block: 445px 32px;
+    padding-inline: 24px;
+  }
+
+  .after-sales-appointment__bg--desktop {
+    display: none;
+  }
+  .after-sales-appointment__bg--mobile {
+    display: block;
+  }
+
+  .after-sales-appointment__content {
+    padding: 24px;
+  }
+
+  .after-sales-appointment__title {
+    /* font-size: var(--fs-title-3) !important;
+    line-height: var(--lh-title-3) !important; */
+  }
+
+  .after-sales-appointment__description {
+    margin-top: 16px;
+  }
+  .after-sales-appointment__cta {
+    margin-top: 16px;
+  }
+}

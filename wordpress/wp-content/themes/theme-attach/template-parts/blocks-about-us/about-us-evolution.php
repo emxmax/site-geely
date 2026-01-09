@@ -9,8 +9,21 @@ $block_evolution_milestone_title = get_field('block_evolution_milestone_title') 
 $block_evolution_milestone_description = get_field('block_evolution_milestone_description') ?: '';
 $block_evolution_milestone_image = get_field('block_evolution_milestone_image');
 
-$milestone_image_url = theme_attach_get_post_image_url($block_evolution_milestone_image, 'large');
-$milestone_image_alt = theme_attach_get_post_image_alt($block_evolution_milestone_image, $block_evolution_milestone_title);
+// Obtener URL y alt de la imagen ACF
+$milestone_image_url = '';
+$milestone_image_alt = $block_evolution_milestone_title ?: 'Geely';
+
+if ($block_evolution_milestone_image) {
+    if (is_array($block_evolution_milestone_image)) {
+        $milestone_image_url = $block_evolution_milestone_image['url'] ?? '';
+        $milestone_image_alt = $block_evolution_milestone_image['alt'] ?? $milestone_image_alt;
+    } elseif (is_numeric($block_evolution_milestone_image)) {
+        $milestone_image_url = wp_get_attachment_image_url($block_evolution_milestone_image, 'large') ?: '';
+        $milestone_image_alt = get_post_meta($block_evolution_milestone_image, '_wp_attachment_image_alt', true) ?: $milestone_image_alt;
+    } else {
+        $milestone_image_url = $block_evolution_milestone_image;
+    }
+}
 ?>
 
 <section class="about-evolution">
