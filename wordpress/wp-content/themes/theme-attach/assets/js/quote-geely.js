@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const q = (root, sel) => root.querySelector(sel);
   const qa = (root, sel) => Array.from(root.querySelectorAll(sel));
 
-  // CF7 hidden fields (IDs deben coincidir con id:... en el form)
   const fillCf7Hidden = (data) => {
     const setVal = (id, val) => {
       const el = document.getElementById(id);
@@ -24,6 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
     setVal("model_price_local", data.model_price_local);
     setVal("color_name", data.color_name);
     setVal("color_hex", data.color_hex);
+    setVal("nid_marca", data.nid_marca);
+    setVal("nid_modelo", data.nid_modelo);
   };
 
   const applyLeftSummary = (root, data) => {
@@ -35,18 +36,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (modelNameEl) modelNameEl.textContent = data.model_name || "";
     if (modelYearEl) modelYearEl.textContent = data.model_year ? `${data.model_year}` : "";
-
     if (carImgEl && data.model_image) carImgEl.src = data.model_image;
 
     root.style.setProperty("--selected-color", data.color_hex || "#027bff");
 
-    if (colorDotEl) {
-      colorDotEl.style.backgroundColor = data.color_hex || "#027bff";
-    }
-
+    if (colorDotEl) colorDotEl.style.backgroundColor = data.color_hex || "#027bff";
     if (colorNameEl) colorNameEl.textContent = data.color_name || "";
   };
-
 
   const renderColorsStep1 = (root, colors, onPick) => {
     const dotsWrap = q(root, "[data-colors-dots]");
@@ -63,8 +59,8 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.setAttribute("aria-label", c.name || "Color");
 
       btn.addEventListener("click", () => {
-        Array.from(dotsWrap.querySelectorAll(".mg-quote__colorDotBtn")).forEach(
-          (x) => x.classList.remove("is-active")
+        Array.from(dotsWrap.querySelectorAll(".mg-quote__colorDotBtn")).forEach((x) =>
+          x.classList.remove("is-active")
         );
         btn.classList.add("is-active");
         if (nameEl) nameEl.textContent = c.name || "";
@@ -107,22 +103,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
     updateTabsUI(root, step);
 
-    // en Step 2 queremos asegurar que el resumen muestre la selección actual
     if (step === 2 && root.__mgSelected) {
       applyLeftSummary(root, root.__mgSelected);
       fillCf7Hidden(root.__mgSelected);
     }
+  };
 
-    // step 3 ya lo manejas con CF7 (si necesitas otra lógica, se agrega aquí)
+  const makeFirstOptionPlaceholder = (selectEl) => {
+    if (!selectEl) return;
+    const first = selectEl.querySelector("option");
+    if (!first) return;
+
+    const txt = (first.textContent || "").trim().toLowerCase();
+    if (txt.includes("selecciona")) {
+      first.value = "";
+      first.disabled = true;
+      first.hidden = true;
+      first.selected = true;
+    }
   };
 
   roots.forEach((sel) => {
     const root = document.querySelector(sel);
     if (!root) return;
 
+    // Placeholder no seleccionable (solo UI)
+    makeFirstOptionPlaceholder(root.querySelector('select[name="cot_department"]'));
+    makeFirstOptionPlaceholder(root.querySelector('select[name="cot_store"]'));
+
     const productId = root.getAttribute("data-product-id") || "";
-    const productTitle =
-      q(root, ".mg-quote__productName")?.textContent?.trim() || "";
+    const productTitle = q(root, ".mg-quote__productName")?.textContent?.trim() || "";
 
     const cards = qa(root, "[data-model-card]");
     const nextBtn = q(root, "[data-next-step]");
@@ -161,8 +171,6 @@ document.addEventListener("DOMContentLoaded", () => {
       })();
 
       const firstColor = colors[0] || null;
-
-      // ✅ año real = el radio marcado dentro del card (o forzado por opts)
       const cardYear = opts.forceYear || getSelectedYearFromCard(btn);
 
       selected = {
@@ -173,8 +181,9 @@ document.addEventListener("DOMContentLoaded", () => {
         model_year: cardYear || "",
         model_price_usd: btn.getAttribute("data-model-price-usd") || "",
         model_price_local: btn.getAttribute("data-model-price-local") || "",
-        model_image:
-          firstColor?.imgD || btn.getAttribute("data-model-image") || "",
+        nid_marca: root.getAttribute("data-nid-marca") || "",
+        nid_modelo: btn.getAttribute("data-nid-modelo") || "",
+        model_image: firstColor?.imgD || btn.getAttribute("data-model-image") || "",
         color_name: firstColor?.name || "",
         color_hex: firstColor?.hex || "#ccc",
         colors,
@@ -191,19 +200,10 @@ document.addEventListener("DOMContentLoaded", () => {
       updateTabsUI(root, Number(root.getAttribute("data-step") || "1"));
     };
 
-    // Inicial
     if (cards[0]) selectCard(cards[0]);
 
-    // Click card
-    cards.forEach((btn) => {
-      btn.addEventListener("click", (e) => {
-        // si el click viene de un label/radio de año, igual seleccionamos la card,
-        // pero leyendo el año marcado (ya lo hace getSelectedYearFromCard)
-        selectCard(btn);
-      });
-    });
+    cards.forEach((btn) => btn.addEventListener("click", () => selectCard(btn)));
 
-    // Tabs click
     tabs.forEach((btn) => {
       btn.addEventListener("click", () => {
         const tabStep = Number(btn.getAttribute("data-step-tab") || "1");
@@ -212,7 +212,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    // Next => Step 2
     if (nextBtn) {
       nextBtn.addEventListener("click", () => {
         if (root.__mgSelected) fillCf7Hidden(root.__mgSelected);
@@ -222,7 +221,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setStep(root, 1);
 
-    // ✅ Cambiar año (radios) => NO cambia de modelo, solo actualiza año del modelo seleccionado.
     root.addEventListener("change", (e) => {
       const t = e.target;
       if (!(t instanceof HTMLInputElement)) return;
@@ -231,13 +229,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const card = t.closest("[data-model-card]");
       if (!card) return;
 
-      // si cambian el año en una card no seleccionada, seleccionamos esa card con ese año
       if (!card.classList.contains("is-selected")) {
         selectCard(card, { forceYear: t.value });
         return;
       }
 
-      // card seleccionada => actualizar año seleccionado
       if (root.__mgSelected) {
         root.__mgSelected.model_year = t.value || "";
         applyLeftSummary(root, root.__mgSelected);
@@ -245,11 +241,45 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // CF7 success => step 3
     document.addEventListener("wpcf7mailsent", () => {
       const step2 = q(root, '.mg-quote__panel[data-step="2"]');
       if (!step2 || !step2.classList.contains("is-active")) return;
       setStep(root, 3);
     });
   });
+
+
+
+  // 1) Log al hacer click en el botón
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest('input.wpcf7-submit, button.wpcf7-submit, .geely-cotiza-submit');
+    if (!btn) return;
+    console.log("[MG_QUOTE] CLICK Cotizar", btn);
+  });
+
+  // 2) Log cuando CF7 responde (aquí veremos mg_api)
+  document.addEventListener("wpcf7submit", (e) => {
+    // e.detail.apiResponse es el JSON que devuelve CF7
+    const res = e.detail?.apiResponse;
+    console.log("[MG_QUOTE] wpcf7submit apiResponse:", res);
+
+    if (res?.mg_api) {
+      console.log("[MG_QUOTE] API RESULT (backend):", res.mg_api);
+    } else {
+      console.warn("[MG_QUOTE] No llegó mg_api en la respuesta. Revisa el filtro wpcf7_ajax_json_echo.");
+    }
+  });
+
+  document.addEventListener("wpcf7mailsent", (e) => {
+    console.log("[MG_QUOTE] wpcf7mailsent (OK)", e.detail?.apiResponse);
+  });
+
+  document.addEventListener("wpcf7mailfailed", (e) => {
+    console.warn("[MG_QUOTE] wpcf7mailfailed", e.detail?.apiResponse);
+  });
+
+  document.addEventListener("wpcf7invalid", (e) => {
+    console.warn("[MG_QUOTE] wpcf7invalid (validación)", e.detail?.apiResponse);
+  });
+
 });

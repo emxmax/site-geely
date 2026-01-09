@@ -131,7 +131,7 @@
 /* Layout */
 .mg-quote__content {
   display: grid;
-  grid-template-columns: 0.7fr 1fr;
+  grid-template-columns: 0.75fr 1fr;
   gap: 36px;
   margin-top: 22px;
   align-items: start;
@@ -913,8 +913,8 @@
 
 .mg-quote__cf7 .geely-cotiza-consent {
   font-family: var(--font-inter);
-  font-size: 12px;
-  line-height: 18px;
+  font-size: 16px;
+  line-height: 22px;
   color: #0b0c0c;
 }
 
