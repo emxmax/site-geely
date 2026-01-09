@@ -24,6 +24,171 @@ if (empty($models) || !is_array($models)) {
   return;
 }
 
+/* ============================================================
+ *  ✅ CF7: Llenar selects dinámicos (cot_department / cot_store)
+ *  - Departamento: terms de taxonomía 'departamento' ligados a tiendas
+ *  - Tienda: WP_Query post_type 'tienda'
+ * ============================================================ */
+$mg_quote_dynamic_departments = [];
+$mg_quote_dynamic_stores = [];
+
+$tienda_exists = post_type_exists('tienda');
+$taxonomy_departamento_exists = taxonomy_exists('departamento');
+
+$tienda_ids = [];
+if ($tienda_exists) {
+  $tienda_ids = get_posts([
+    'post_type'   => 'tienda',
+    'numberposts' => -1,
+    'fields'      => 'ids',
+    'post_status' => 'publish',
+  ]);
+
+  // Departments (como en stores-locator)
+  if ($taxonomy_departamento_exists && !empty($tienda_ids)) {
+    if (function_exists('theme_attach_get_terms_with_posts')) {
+      $departments = theme_attach_get_terms_with_posts('departamento', [
+        'object_ids' => $tienda_ids,
+        'orderby'    => 'name',
+      ]);
+    } else {
+      // Fallback si no existe helper
+      $departments = get_terms([
+        'taxonomy'   => 'departamento',
+        'hide_empty' => false,
+        'orderby'    => 'name',
+        'order'      => 'ASC',
+      ]);
+    }
+
+    if (!is_wp_error($departments) && !empty($departments)) {
+      foreach ($departments as $term) {
+        if (!is_object($term)) continue;
+        $name = (string) ($term->name ?? '');
+        $slug = (string) ($term->slug ?? '');
+        if ($name === '') continue;
+
+        // value: usamos el slug para que sea estable
+        $mg_quote_dynamic_departments[] = [
+          'value' => $slug ?: sanitize_title($name),
+          'label' => $name,
+        ];
+      }
+    }
+  }
+
+  // Stores query (como en tu snippet)
+  $stores_query = new WP_Query([
+    'post_type'      => 'tienda',
+    'posts_per_page' => -1,
+    'post_status'    => 'publish',
+    'orderby'        => 'title',
+    'order'          => 'ASC',
+  ]);
+
+  if ($stores_query->have_posts()) {
+    while ($stores_query->have_posts()) {
+      $stores_query->the_post();
+      $store_id = get_the_ID();
+      $store_title = get_the_title($store_id);
+
+      if (!$store_id || $store_title === '') continue;
+
+      // value: ID|Título (útil para auditoría / API después)
+      $mg_quote_dynamic_stores[] = [
+        'value' => $store_id . '|' . $store_title,
+        'label' => $store_title,
+      ];
+    }
+    wp_reset_postdata();
+  }
+}
+
+/**
+ * Registrar filtro CF7 solo 1 vez por request
+ * y alimentar selects por nombre de campo.
+ */
+if (!function_exists('mg_quote_cf7_dynamic_selects')) {
+  function mg_quote_cf7_dynamic_selects($tag)
+  {
+    // CF7 usa WPCF7_FormTag; pero por seguridad cubrimos array también
+    $tag_name = '';
+    $tag_type = '';
+    $tag_basetype = '';
+
+    if (is_object($tag)) {
+      $tag_name = (string) ($tag->name ?? '');
+      $tag_type = (string) ($tag->type ?? '');
+      $tag_basetype = (string) ($tag->basetype ?? '');
+    } elseif (is_array($tag)) {
+      $tag_name = (string) ($tag['name'] ?? '');
+      $tag_type = (string) ($tag['type'] ?? '');
+      $tag_basetype = (string) ($tag['basetype'] ?? '');
+    }
+
+    // Solo select
+    $is_select = ($tag_basetype === 'select') || (strpos($tag_type, 'select') === 0);
+    if (!$is_select) return $tag;
+
+    // Tomar opciones globales preparadas en este template
+    $deps = $GLOBALS['MG_QUOTE_DYNAMIC_DEPARTMENTS'] ?? [];
+    $stores = $GLOBALS['MG_QUOTE_DYNAMIC_STORES'] ?? [];
+
+    // Helper para setear values/labels en objeto o array
+    $apply = function ($tag, array $items, string $placeholderLabel) {
+      // 1) Placeholder primero: value vacío => required no lo acepta,
+      // y disabled evita que lo elijan “de verdad”.
+      $values = [''];
+      $labels = [$placeholderLabel];
+
+      foreach ($items as $it) {
+        $values[] = (string) ($it['value'] ?? '');
+        $labels[] = (string) ($it['label'] ?? '');
+      }
+
+      if (is_object($tag)) {
+        $tag->values = $values;
+        $tag->raw_values = $values;
+        $tag->labels = $labels;
+
+        // "selected" para CF7: dejamos el placeholder como seleccionado
+        $tag->options = array_unique(array_merge((array) ($tag->options ?? []), ['first_as_label']));
+        $tag->pipes = new WPCF7_Pipes($tag->raw_values);
+
+        return $tag;
+      }
+
+      if (is_array($tag)) {
+        $tag['values'] = $values;
+        $tag['raw_values'] = $values;
+        $tag['labels'] = $labels;
+        return $tag;
+      }
+
+      return $tag;
+    };
+
+    if ($tag_name === 'cot_department' && !empty($deps)) {
+      return $apply($tag, $deps, 'Selecciona una opción');
+    }
+
+    if ($tag_name === 'cot_store' && !empty($stores)) {
+      return $apply($tag, $stores, 'Selecciona una opción');
+    }
+
+    return $tag;
+  }
+}
+
+// Setear globals para que el filtro las lea
+$GLOBALS['MG_QUOTE_DYNAMIC_DEPARTMENTS'] = $mg_quote_dynamic_departments;
+$GLOBALS['MG_QUOTE_DYNAMIC_STORES'] = $mg_quote_dynamic_stores;
+
+// Agregar filtro (solo una vez)
+if (!has_filter('wpcf7_form_tag', 'mg_quote_cf7_dynamic_selects')) {
+  add_filter('wpcf7_form_tag', 'mg_quote_cf7_dynamic_selects', 10, 1);
+}
+
 /** Helpers: ACF image -> URL */
 if (!function_exists('mg_quote_get_image')) {
   function mg_quote_get_image($img)
@@ -195,7 +360,7 @@ $default_hero_img = (string)(
               $usd   = (string)($m['model_price_usd'] ?? '');
               $loc   = (string)($m['model_price_local'] ?? '');
 
-              $nid_modelo = (int)($m['api_nid_modelo'] ?? ($m['nid_modelo'] ?? 0)); // ACF opcional por modelo: api_nid_modelo
+              $nid_modelo = (int)($m['api_nid_modelo'] ?? ($m['nid_modelo'] ?? 0));
 
               $years_list   = mg_quote_get_years_list($m);
               $default_year = $years_list[0] ?? (string)($m['model_year'] ?? '');
@@ -345,19 +510,21 @@ $default_hero_img = (string)(
 
   <style>
     /* Background del bloque */
-    <?php echo esc_html($root_selector); ?>{
+    <?php echo esc_html($root_selector); ?> {
       background-image: var(--quote-bg);
       background-size: cover;
       background-position: center top;
       background-repeat: no-repeat;
     }
+
     /* En Step 3 ocultamos cabecera y tabs (y el resumen izquierdo) */
     <?php echo esc_html($root_selector); ?>[data-step="3"] .mg-quote__header,
     <?php echo esc_html($root_selector); ?>[data-step="3"] .mg-quote__tabs,
-    <?php echo esc_html($root_selector); ?>[data-step="3"] .mg-quote__left{
-      display:none !important;
+    <?php echo esc_html($root_selector); ?>[data-step="3"] .mg-quote__left {
+      display: none !important;
     }
-    <?php echo esc_html($root_selector); ?>[data-step="3"] .mg-quote__content{
+
+    <?php echo esc_html($root_selector); ?>[data-step="3"] .mg-quote__content {
       grid-template-columns: 1fr !important;
     }
   </style>
