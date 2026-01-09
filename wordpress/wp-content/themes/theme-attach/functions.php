@@ -45,6 +45,9 @@ require_once get_stylesheet_directory() . '/inc/after-sales/assets.php';
 // About Us | Nosotros
 require_once get_stylesheet_directory() . '/inc/about-us/assets.php';
 
+// Pasaporte de servicios
+require_once get_stylesheet_directory() . '/inc/passport/assets.php';
+
 // Utilities
 require_once get_stylesheet_directory() . '/inc/enqueue-utilities.php';
 

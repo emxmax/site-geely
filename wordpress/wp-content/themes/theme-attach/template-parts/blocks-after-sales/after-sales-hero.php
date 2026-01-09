@@ -33,23 +33,13 @@ if ($background_image_mob) {
 <section class="after-sales-hero">
 
   <?php if (!empty($bg_url)): ?>
-    <img 
-      src="<?= esc_url($bg_url) ?>" 
-      alt="Banner Hero" 
-      width="1440" 
-      height="600" 
-      class="after-sales-hero__bg after-sales-hero__bg--desktop" 
-    />
+    <img src="<?= esc_url($bg_url) ?>" alt="Banner Hero" width="1440" height="600"
+      class="after-sales-hero__bg after-sales-hero__bg--desktop" />
   <?php endif; ?>
 
   <?php if (!empty($bg_url_mobile)): ?>
-    <img 
-      src="<?= esc_url($bg_url_mobile) ?>" 
-      alt="Banner Hero" 
-      width="768" 
-      height="600" 
-      class="after-sales-hero__bg after-sales-hero__bg--mobile" 
-    />
+    <img src="<?= esc_url($bg_url_mobile) ?>" alt="Banner Hero" width="768" height="600"
+      class="after-sales-hero__bg after-sales-hero__bg--mobile" />
   <?php endif; ?>
 
   <div class="after-sales-hero__inner">

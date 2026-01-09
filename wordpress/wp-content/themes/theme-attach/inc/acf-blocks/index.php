@@ -11,6 +11,7 @@ require_once __DIR__ . '/promotions-blocks.php';
 require_once __DIR__ . '/stores-locator-blocks.php';
 require_once __DIR__ . '/after-sales-blocks.php';
 require_once __DIR__ . '/about-us-blocks.php';
+require_once __DIR__ . '/passport-blocks.php';
 
 // Hooks de ACF
 add_action('acf/init', 'theme_attach_register_blog_blocks');

@@ -338,5 +338,3 @@ add_action('init', function () {
     return $tag;
   }, 10, 1);
 });
-
-

@@ -1,0 +1,135 @@
+/* ========================================
+   Passport Hero
+   ======================================== */
+.pasaportes-main {
+  background-color: var(--c-snow-white);
+}
+.passport-hero {
+  max-width: 1440px;
+  width: 100%;
+  margin-inline: auto;
+  position: relative;
+  overflow: hidden;
+  margin-top: 0;
+  padding-block: 140px 142px;
+  padding-inline: 20px;
+  z-index: 1;
+}
+.passport-hero__bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top right;
+  z-index: -1;
+}
+/* Desktop: mostrar solo en >= 768px */
+.passport-hero__bg--desktop {
+  display: block;
+}
+/* Mobile: ocultar por defecto */
+.passport-hero__bg--mobile {
+  display: none;
+}
+
+.passport-hero__inner {
+  max-width: 1280px;
+  width: 100%;
+  margin-inline: auto;
+}
+
+.passport-hero__content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: 1122px;
+}
+
+.passport-hero__title {
+  color: var(--c-white);
+  font-family: var(--font-geely);
+  font-weight: 700;
+}
+
+.passport-hero__description {
+  color: var(--c-white);
+  font-family: var(--font-inter);
+  font-weight: 500;
+}
+
+.passport-hero__image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.passport-hero__image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.passport-hero__image--desktop {
+  display: block;
+}
+
+.passport-hero__image--mobile {
+  display: none;
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+
+@media (max-width: 1279px) {
+  .passport-hero__container {
+    padding: 60px 80px;
+    gap: 60px;
+  }
+}
+
+@media (max-width: 1199px) {
+  .passport-hero__container {
+    padding: 60px 60px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .passport-hero__container {
+    grid-template-columns: 1fr;
+    padding: 40px 40px;
+    gap: 40px;
+  }
+
+  .passport-hero__image--desktop {
+    display: none;
+  }
+
+  .passport-hero__image--mobile {
+    display: block;
+  }
+}
+
+@media (max-width: 767px) {
+  .passport-hero {
+    padding-block: 40px 189px;
+    min-height: 400px;
+  }
+  .passport-hero__bg--desktop {
+    display: none !important;
+  }
+  .passport-hero__bg--mobile {
+    display: block;
+  }
+  .passport-hero__title {
+    font-size: var(--fs-title-3);
+    line-height: var(--lh-title-3);
+  }
+}
