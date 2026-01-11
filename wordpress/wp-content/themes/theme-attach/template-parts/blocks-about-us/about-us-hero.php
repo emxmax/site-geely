@@ -33,20 +33,20 @@ if ($block_hero_image) {
 }
 ?>
 
-<section class="about-hero">
+<section class="about-hero" style="background-image: url('<?= IMG . "/nosotros-hero-bg.webp" ?>')">
   <div class="about-hero__container">
     <div class="about-hero__header">
       <?php if ($block_hero_eyebrow): ?>
-        <p class="about-hero__eyebrow"><?php echo esc_html($block_hero_eyebrow); ?></p>
+        <p class="about-hero__eyebrow title-4"><?= esc_html($block_hero_eyebrow); ?></p>
       <?php endif; ?>
 
       <?php if ($block_hero_title): ?>
-        <h1 class="about-hero__title"><?php echo esc_html($block_hero_title); ?></h1>
+        <h1 class="about-hero__title title-1"><?= esc_html($block_hero_title); ?></h1>
       <?php endif; ?>
 
       <?php if ($block_hero_description): ?>
-        <div class="about-hero__description">
-          <?php echo wp_kses_post($block_hero_description); ?>
+        <div class="about-hero__description paragraph-3">
+          <?= wp_kses_post($block_hero_description); ?>
         </div>
       <?php endif; ?>
     </div>
@@ -54,14 +54,13 @@ if ($block_hero_image) {
     <div class="about-hero__content">
       <div class="about-hero__image-wrapper">
         <?php if ($image_url): ?>
-          <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt); ?>"
-            class="about-hero__image">
+          <img src="<?= esc_url($image_url); ?>" alt="<?= esc_attr($image_alt); ?>" class="about-hero__image">
         <?php endif; ?>
 
         <?php if ($block_hero_ceo_name): ?>
           <div class="about-hero__ceo">
             <?php if ($block_hero_ceo_name): ?>
-              <p class="about-hero__ceo-name"><?php echo esc_html($block_hero_ceo_name); ?></p>
+              <p class="about-hero__ceo-name paragraph-3"><?= esc_html($block_hero_ceo_name); ?></p>
             <?php endif; ?>
           </div>
         <?php endif; ?>
@@ -69,12 +68,12 @@ if ($block_hero_image) {
 
       <div class="about-hero__text-content">
         <?php if ($block_hero_content_title): ?>
-          <h2 class="about-hero__content-title"><?php echo esc_html($block_hero_content_title); ?></h2>
+          <h2 class="about-hero__content-title title-5"><?= esc_html($block_hero_content_title); ?></h2>
         <?php endif; ?>
 
         <?php if ($block_hero_content_text): ?>
-          <div class="about-hero__content-text">
-            <?php echo wp_kses_post($block_hero_content_text); ?>
+          <div class="about-hero__content-text paragraph-3">
+            <?= wp_kses_post($block_hero_content_text); ?>
           </div>
         <?php endif; ?>
       </div>
