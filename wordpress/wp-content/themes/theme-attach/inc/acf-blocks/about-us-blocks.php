@@ -98,6 +98,30 @@ function theme_attach_register_about_us_blocks()
     ],
   ]);
 
+  
+  // 
+  acf_register_block_type([
+    'name' => 'about-us-social-impact',
+    'title' => __('Nosotros - Bienestar Social', 'theme-attach'),
+    'description' => __('Sección de bienestar social', 'theme-attach'),
+    'render_template' => 'template-parts/blocks-about-us/about-us-social-impact.php',
+    'category' => 'layout',
+    'icon' => 'heart',
+    'keywords' => [
+      'about',
+      'social',
+      'responsibility',
+      'hope'
+    ],
+    'mode' => 'preview',
+    'supports' => [
+      'align' => false,
+      'mode' => false,
+      'jsx' => true,
+    ],
+  ]);
+
+
   // About Us Tech
   acf_register_block_type([
     'name' => 'about-us-tech',

@@ -6,9 +6,10 @@ if (!defined('ABSPATH'))
 $block_hero_eyebrow = get_field('block_hero_eyebrow') ?: 'INNOVACION Y TECNOLOGIA';
 $block_hero_title = get_field('block_hero_title') ?: 'GRUPO GEELY';
 $block_hero_description = get_field('block_hero_description') ?: '';
+
 $block_hero_image = get_field('block_hero_image');
 $block_hero_ceo_name = get_field('block_hero_ceo_name') ?: '';
-$block_hero_ceo_title = get_field('block_hero_ceo_title') ?: '';
+
 $block_hero_content_title = get_field('block_hero_content_title') ?: '';
 $block_hero_content_text = get_field('block_hero_content_text') ?: '';
 
@@ -57,14 +58,10 @@ if ($block_hero_image) {
             class="about-hero__image">
         <?php endif; ?>
 
-        <?php if ($block_hero_ceo_name || $block_hero_ceo_title): ?>
+        <?php if ($block_hero_ceo_name): ?>
           <div class="about-hero__ceo">
             <?php if ($block_hero_ceo_name): ?>
               <p class="about-hero__ceo-name"><?php echo esc_html($block_hero_ceo_name); ?></p>
-            <?php endif; ?>
-
-            <?php if ($block_hero_ceo_title): ?>
-              <p class="about-hero__ceo-title"><?php echo esc_html($block_hero_ceo_title); ?></p>
             <?php endif; ?>
           </div>
         <?php endif; ?>
