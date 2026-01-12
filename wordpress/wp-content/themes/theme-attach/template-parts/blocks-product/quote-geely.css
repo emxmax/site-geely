@@ -1007,4 +1007,13 @@
     font-size: 14px;
     line-height: 20px;
   }
+
+  .mg-quote__cf7 .geely-cotiza-consent {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .mg-quote__cf7 .geely-cotiza-input--doc {
+    width: 100%;
+  }
 }

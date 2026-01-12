@@ -1,34 +1,3 @@
-<<<<<<< HEAD
-[08-Jan-2026 01:27:31 UTC] Automatic updates starting...
-[08-Jan-2026 01:27:35 UTC]   Automatic theme updates starting...
-[08-Jan-2026 01:27:36 UTC]   Automatic theme updates complete.
-[08-Jan-2026 01:27:36 UTC] Automatic updates complete.
-[08-Jan-2026 01:47:33 UTC] PHP Warning:  Undefined variable $cta_url in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-appointment.php on line 48
-[08-Jan-2026 01:49:38 UTC] PHP Warning:  Undefined variable $cta_text in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-appointment.php on line 49
-[08-Jan-2026 03:23:29 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 53
-[08-Jan-2026 03:23:44 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 53
-[08-Jan-2026 03:24:03 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 53
-[08-Jan-2026 03:26:15 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 53
-[08-Jan-2026 03:27:04 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 53
-[08-Jan-2026 03:27:17 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 53
-[08-Jan-2026 03:27:42 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 53
-[08-Jan-2026 03:27:44 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 53
-[08-Jan-2026 03:31:40 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 54
-[08-Jan-2026 03:33:48 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 55
-[08-Jan-2026 07:30:43 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 55
-[08-Jan-2026 07:32:57 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 55
-[08-Jan-2026 07:36:03 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 55
-[08-Jan-2026 08:05:19 UTC] PHP Warning:  Undefined variable $warranty_features in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-after-sales\after-sales-warranty.php on line 55
-[09-Jan-2026 02:56:11 UTC] PHP Fatal error:  Maximum execution time of 120 seconds exceeded in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wpdb.php on line 2351
-[09-Jan-2026 08:14:13 UTC] PHP Warning:  mysqli_real_connect(): php_network_getaddresses: getaddrinfo for geely-database.cbo8w4ekwbz1.sa-east-1.rds.amazonaws.com failed: Host desconocido.  in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wpdb.php on line 1988
-[09-Jan-2026 08:14:13 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): php_network_getaddresses: getaddrinfo for geely-database.cbo8w4ekwbz1.sa-east-1.rds.amazonaws.com failed: Host desconocido.  in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wpdb.php on line 1988
-[09-Jan-2026 08:14:13 UTC] PHP Warning:  mysqli_real_connect(): php_network_getaddresses: getaddrinfo for geely-database.cbo8w4ekwbz1.sa-east-1.rds.amazonaws.com failed: Host desconocido.  in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wpdb.php on line 1988
-[09-Jan-2026 08:14:13 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): php_network_getaddresses: getaddrinfo for geely-database.cbo8w4ekwbz1.sa-east-1.rds.amazonaws.com failed: Host desconocido.  in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wpdb.php on line 1988
-[09-Jan-2026 08:16:27 UTC] Automatic updates starting...
-[09-Jan-2026 08:16:31 UTC]   Automatic theme updates starting...
-[09-Jan-2026 08:16:33 UTC]   Automatic theme updates complete.
-[09-Jan-2026 08:16:33 UTC] Automatic updates complete.
-=======
 [02-Jan-2026 07:23:31 UTC] PHP Fatal error:  Uncaught TypeError: theme_attach_sanitize_phone(): Argument #1 ($phone) must be of type string, array given, called in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php on line 261 and defined in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\inc\helpers.php:38
 Stack trace:
 #0 C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\themes\theme-attach\template-parts\blocks-stores-locator\stores-locator.php(261): theme_attach_sanitize_phone(Array)
@@ -387,4 +356,3 @@ Stack trace:
 [09-Jan-2026 04:58:19 UTC] [MG_QUOTE] POST -> API {"endpoint":"https:\/\/ag-peru-experience-api-prod.us-e1.cloudhub.io\/peru\/lead","headers":{"Authorization":"Basic ***"},"body":{"data":{"co_tipo_documento":"01","nu_documento":"77777777","no_contacto":"Hillary","no_ape_pat":"Vilchez","no_ape_mat":"","no_correo":"ry@gmail.com","nu_celular":"99999999","nid_marca":"0","nid_modelo":"0","Coddpto":"ancash","co_tienda":"507","nid_punto_venta":"507","GPVersion":"Comfort 1.5 MT","co_ano":"2025","co_familia":"PV","co_canal":"CO","co_origen":"WEB","fl_recibir_info":"S","fl_fecha_consen":"08\/01\/2026 23:58:03","fe_nacimiento":"01\/01\/1900","utm_campaign":"","utm_content":"","utm_medium":"","utm_source":"","utm_term":"","gclid":"","fbclid":"","source":{"site":"http:\/\/localhost\/site-geely\/wordpress\/","submitted_at":"2026-01-08 23:58:19","post_id":800}}}}
 [09-Jan-2026 04:58:39 UTC] [MG_QUOTE] API RESULT {"ok":1,"status":200,"response":"{\n  \"success\": false,\n  \"id\": -1,\n  \"message\": \"Código de State no homologado = ancash | Código de Province__c no homologado = ancash01 | Código de City no homologado = ancash0101 | Código de BusinessUnit__c no homologado = 0|PV|CO\"\n}","error":""}
 [09-Jan-2026 04:58:43 UTC] PHP Deprecated:  Hook wpcf7_ajax_json_echo is <strong>deprecated</strong> since Contact Form 7 version 5.2! Use wpcf7_feedback_response instead. in D:\Programas\Laragon\laragon\www\site-geely\wordpress\wp-includes\functions.php on line 6121
->>>>>>> c0e58a7d91d792dff5e6c060f5ca5f13d62cf87e

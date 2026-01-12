@@ -1,4 +1,126 @@
-<!-- wp:paragraph {"align":"center"} -->
-<p class="has-text-align-center has-primary-color">Proudly powered by
-<a href="https://wordpress.org/">WordPress</a>.</p>
-<!-- /wp:paragraph -->
+<!-- wp:group {"tagName":"footer","className":"mg-footer","layout":{"type":"constrained"}} -->
+<footer class="wp-block-group mg-footer">
+  <!-- wp:group {"align":"wide","className":"mg-footer__inner","layout":{"type":"constrained"}} -->
+  <div class="wp-block-group alignwide mg-footer__inner">
+
+    <!-- wp:columns {"className":"mg-footer__cols"} -->
+    <div class="wp-block-columns mg-footer__cols">
+
+      <!-- COLUMNA 1: Logo + texto -->
+      <!-- wp:column {"className":"mg-footer__col mg-footer__col--brand"} -->
+      <div class="wp-block-column mg-footer__col mg-footer__col--brand">
+        <!-- wp:site-logo {"width":92,"shouldSyncIcon":true,"className":"mg-footer__logo"} /-->
+
+        <!-- wp:paragraph {"className":"mg-footer__text"} -->
+        <p class="mg-footer__text">
+          Geely Perú es el importador y distribuidor oficial de la marca en el país, ofreciendo
+          una línea de vehículos modernos y seguros, desde sedanes hasta SUVs y modelos electrificados,
+          diseñados para una movilidad inteligente y eficiente.
+        </p>
+        <!-- /wp:paragraph -->
+      </div>
+      <!-- /wp:column -->
+
+      <!-- COLUMNA 2: Modelos -->
+      <!-- wp:column {"className":"mg-footer__col"} -->
+      <div class="wp-block-column mg-footer__col">
+        <!-- wp:heading {"level":4,"className":"mg-footer__title"} -->
+        <h4 class="mg-footer__title">Sedanes</h4>
+        <!-- /wp:heading -->
+
+        <!-- wp:list {"className":"mg-footer__list"} -->
+        <ul class="mg-footer__list">
+          <li><a href="/emgrand">Emgrand</a></li>
+        </ul>
+        <!-- /wp:list -->
+
+        <!-- wp:heading {"level":4,"className":"mg-footer__title"} -->
+        <h4 class="mg-footer__title">SUV / Crossover</h4>
+        <!-- /wp:heading -->
+
+        <!-- wp:list {"className":"mg-footer__list"} -->
+        <ul class="mg-footer__list">
+          <li><a href="/cityray">Cityray</a></li>
+          <li><a href="/gx3-pro">GX3 Pro</a></li>
+          <li><a href="/coolray-lite">Coolray Lite</a></li>
+          <li><a href="/new-coolray">New Coolray</a></li>
+          <li><a href="/new-starray">New Starray</a></li>
+          <li><a href="/okavango-mild-hybrid">Okavango Mild Hybrid</a></li>
+          <li><a href="/new-okavango">New Okavango</a></li>
+        </ul>
+        <!-- /wp:list -->
+      </div>
+      <!-- /wp:column -->
+
+      <!-- COLUMNA 3: Links principales -->
+      <!-- wp:column {"className":"mg-footer__col"} -->
+      <div class="wp-block-column mg-footer__col">
+        <h4 class="mg-footer__title">Promociones</h4>
+        <ul class="mg-footer__list">
+          <li><a href="/promociones-venta">Promociones Venta</a></li>
+          <li><a href="/promociones-postventa">Promociones Postventa</a></li>
+        </ul>
+
+        <h4 class="mg-footer__title">Postventa</h4>
+        <ul class="mg-footer__list">
+          <li><a href="/pasaportes-de-servicio-geely">Pasaporte de servicios</a></li>
+        </ul>
+
+        <h4 class="mg-footer__title"><a class="mg-footer__titleLink" href="/nosotros">Nosotros</a></h4>
+        <h4 class="mg-footer__title"><a class="mg-footer__titleLink" href="/noticias">Noticias</a></h4>
+        <h4 class="mg-footer__title"><a class="mg-footer__titleLink" href="/concesionarios">Encuentra tu concesionario</a></h4>
+        <h4 class="mg-footer__title"><a class="mg-footer__titleLink" href="/politicas-de-privacidad">Políticas de privacidad</a></h4>
+      </div>
+      <!-- /wp:column -->
+
+      <!-- COLUMNA 4: Libro + redes + copyright -->
+      <!-- wp:column {"className":"mg-footer__col mg-footer__col--side"} -->
+      <div class="wp-block-column mg-footer__col mg-footer__col--side">
+
+        <!-- Libro reclamaciones (imagen desktop + mobile) -->
+        <a class="mg-footer__claims" href="/libro-de-reclamaciones" aria-label="Libro de Reclamaciones">
+          <img
+            class="mg-footer__claimsImg mg-footer__claimsImg--desktop"
+            src="../wp-content/themes/theme-attach/assets/img/footer-libro-reclamaciones-desktop.png"
+            alt="Libro de Reclamaciones"
+            loading="lazy"
+          />
+          <img
+            class="mg-footer__claimsImg mg-footer__claimsImg--mobile"
+            src="../wp-content/themes/theme-attach/assets/img/footer-libro-reclamaciones-mobile.png"
+            alt="Libro de Reclamaciones"
+            loading="lazy"
+          />
+        </a>
+
+        <!-- Redes con imágenes -->
+        <div class="mg-footer__social">
+          <p class="mg-footer__socialLabel">Síguenos</p>
+
+          <div class="mg-footer__socialIcons" aria-label="Redes sociales">
+            <a class="mg-footer__iconLink" href="#" target="_blank" rel="noopener">
+              <img src="../wp-content/themes/theme-attach/assets/img/icon-facebook.png" alt="Facebook" />
+            </a>
+            <a class="mg-footer__iconLink" href="#" target="_blank" rel="noopener">
+              <img src="../wp-content/themes/theme-attach/assets/img/icon-instagram.png" alt="Instagram" />
+            </a>
+            <a class="mg-footer__iconLink" href="#" target="_blank" rel="noopener">
+              <img src="../wp-content/themes/theme-attach/assets/img/icon-linkedin.png" alt="LinkedIn" />
+            </a>
+            <a class="mg-footer__iconLink" href="#" target="_blank" rel="noopener">
+              <img src="../wp-content/themes/theme-attach/assets/img/icon-youtube.png" alt="YouTube" />
+            </a>
+          </div>
+        </div>
+
+        <p class="mg-footer__copy">© Geely Perú 2025. Todos los derechos reservados</p>
+
+      </div>
+      <!-- /wp:column -->
+
+    </div>
+    <!-- /wp:columns -->
+  </div>
+  <!-- /wp:group -->
+</footer>
+<!-- /wp:group -->

@@ -1,0 +1,345 @@
+#wp--skip-link--target {
+  margin-top: 0;
+}
+#mg-mobile-drawer {
+  margin: 0 !important;
+  max-width: 100% !important;
+}
+.mg-no-scroll {
+  overflow: hidden !important;
+}
+
+/* ===== HEADER ===== */
+.mg-header {
+  background: #fff;
+}
+
+.mg-header__bar {
+  min-height: 72px;
+  padding: 12px 16px;
+  gap: 16px;
+  height: 80px;
+}
+
+/* Desktop nav */
+.mg-header__nav .wp-block-navigation__container {
+  gap: 28px;
+}
+
+.mg-header__nav a {
+  text-decoration: none;
+  color: #212529;
+  font-family: var(--font-inter);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+/* Button */
+.mg-btn--primary .wp-block-button__link,
+.mg-btn.mg-btn--full {
+  background: #0b0c0c;
+  color: #fff;
+  border-radius: 0;
+  padding: 10px 18px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  font-family: var(--font-geely);
+  height: 48px;
+}
+.mg-btn--primary .wp-block-button__link {
+  width: 110px;
+}
+.mg-header__cta {
+  margin-left: 8px;
+}
+
+/* ===== BURGER ===== */
+.mg-header__burger {
+  display: none;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  margin-left: auto;
+}
+.mg-burger {
+  display: inline-block;
+  width: 18px;
+  height: 2px;
+  background: #111;
+  position: relative;
+}
+.mg-burger::before,
+.mg-burger::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 18px;
+  height: 2px;
+  background: #111;
+}
+.mg-burger::before {
+  top: -6px;
+}
+.mg-burger::after {
+  top: 6px;
+}
+
+/* ===== DRAWER ===== */
+.mg-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: none;
+}
+.mg-drawer.is-open {
+  display: block;
+}
+
+.mg-drawer__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.mg-drawer__panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: min(420px, 92vw);
+  background: #1f2427;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 18px;
+}
+
+.mg-drawer__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0px;
+}
+
+.mg-drawer__close {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.mg-drawer__nav {
+  flex: 1;
+  overflow: auto;
+  padding-top: 6px;
+}
+
+.mg-drawer__bottom {
+  padding-top: 14px;
+}
+.mg-btn--full {
+  width: 100%;
+}
+
+/* =========================================================
+   NAV EN DRAWER (mobile)
+   - Postventa clickeable (link)
+   - Flecha clickeable aparte (toggle)
+   - Flecha gira según .is-subopen (no dependemos de aria-expanded)
+   - Submenu abajo, no flotante
+   ========================================================= */
+
+.mg-drawer__nav .wp-block-navigation {
+  width: 100%;
+}
+
+/* UL principal vertical */
+.mg-drawer__nav .wp-block-navigation__container,
+.mg-drawer__nav ul.wp-block-navigation__container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+/* LI principal: fila que permite que el submenu baje */
+.mg-drawer__nav .wp-block-navigation-item {
+  width: 100%;
+  display: flex !important;
+  flex-wrap: wrap !important; /* submenu baja */
+  align-items: center !important;
+  padding: 12px 0 !important;
+  margin: 0 !important;
+  position: static !important; /* evita dropdown flotante */
+}
+
+/* Link: clickeable, ocupa todo lo que pueda */
+.mg-drawer__nav .wp-block-navigation-item__content {
+  flex: 0 1 auto !important;
+  min-width: 0;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px;
+  color: #fff !important;
+  text-decoration: none !important;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 22px;
+  padding: 12px 0 !important;
+  cursor: pointer;
+  font-family: var(--font-inter);
+}
+
+/* Botón flecha: SOLO toggle, a la derecha */
+.mg-drawer__nav .wp-block-navigation__submenu-icon,
+.mg-drawer__nav .wp-block-navigation-submenu__toggle {
+  flex: 0 0 auto !important;
+  margin-left: 12px !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: #fff !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 11px;
+  height: 11px;
+  padding: 0 !important;
+
+  cursor: pointer;
+  opacity: 1;
+  transition: transform 0.18s ease;
+}
+
+/* “Área clickeable” clara */
+.mg-drawer__nav .wp-block-navigation__submenu-icon:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.35);
+  outline-offset: 2px;
+}
+
+/* Si WP pinta SVG sin stroke color */
+.mg-drawer__nav .wp-block-navigation__submenu-icon svg path {
+  stroke: #fff !important;
+}
+
+/* 🔥 Rotación por estado REAL (.is-subopen en el LI) */
+.mg-drawer__nav
+  .wp-block-navigation-item.is-subopen
+  > .wp-block-navigation__submenu-icon,
+.mg-drawer__nav
+  .wp-block-navigation-item.is-subopen
+  > .wp-block-navigation-submenu__toggle {
+  transform: rotate(180deg);
+}
+
+/* Submenu siempre abajo */
+.mg-drawer__nav .wp-block-navigation__submenu-container,
+.mg-drawer__nav .wp-block-navigation-submenu__container,
+.mg-drawer__nav ul.sub-menu {
+  position: static !important;
+  inset: auto !important;
+  transform: none !important;
+  float: none !important;
+
+  order: 3 !important;
+  width: 100% !important;
+
+  display: none !important;
+
+  padding: 0px 0px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+
+  list-style: none !important;
+  border: 0 !important;
+}
+
+/* abierto */
+.mg-drawer__nav
+  .wp-block-navigation-item.is-subopen
+  > .wp-block-navigation__submenu-container,
+.mg-drawer__nav
+  .wp-block-navigation-item.is-subopen
+  > .wp-block-navigation-submenu__container,
+.mg-drawer__nav .wp-block-navigation-item.is-subopen > ul.sub-menu {
+  display: block !important;
+}
+
+/* items del submenu */
+.mg-drawer__nav
+  .wp-block-navigation__submenu-container
+  .wp-block-navigation-item,
+.mg-drawer__nav
+  .wp-block-navigation-submenu__container
+  .wp-block-navigation-item,
+.mg-drawer__nav ul.sub-menu li {
+  display: block !important;
+  width: 100% !important;
+  padding: 12px 0 !important;
+  border-bottom: 0 !important;
+}
+
+/* links del submenu */
+.mg-drawer__nav .wp-block-navigation__submenu-container a,
+.mg-drawer__nav .wp-block-navigation-submenu__container a,
+.mg-drawer__nav ul.sub-menu a {
+  color: #fff !important;
+  text-decoration: none !important;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  opacity: 0.95;
+}
+
+/* Hover */
+.mg-drawer__nav a:hover {
+  opacity: 0.85;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .mg-header__bar .mg-header__nav,
+  .mg-header__bar .mg-header__cta {
+    display: none !important;
+  }
+
+  .mg-header__burger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mg-header__bar {
+    height: 56px;
+  }
+  .wp-block-site-logo img {
+    max-width: 100px;
+  }
+
+  .mg-btn--full {
+    background: #ffffff !important;
+    color: #0b0c0c !important;
+  }
+
+  .mg-drawer__nav .wp-block-navigation-item__content {
+    font-size: 16px;
+    line-height: 22px;
+  }
+}
