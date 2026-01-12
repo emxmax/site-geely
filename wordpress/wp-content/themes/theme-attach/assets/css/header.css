@@ -1,3 +1,6 @@
+header.site-header.wp-block-template-part{
+  display: block !important;
+}
 #wp--skip-link--target {
   margin-top: 0;
 }
