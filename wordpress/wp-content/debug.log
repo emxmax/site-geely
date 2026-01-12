@@ -356,3 +356,54 @@ Stack trace:
 [09-Jan-2026 04:58:19 UTC] [MG_QUOTE] POST -> API {"endpoint":"https:\/\/ag-peru-experience-api-prod.us-e1.cloudhub.io\/peru\/lead","headers":{"Authorization":"Basic ***"},"body":{"data":{"co_tipo_documento":"01","nu_documento":"77777777","no_contacto":"Hillary","no_ape_pat":"Vilchez","no_ape_mat":"","no_correo":"ry@gmail.com","nu_celular":"99999999","nid_marca":"0","nid_modelo":"0","Coddpto":"ancash","co_tienda":"507","nid_punto_venta":"507","GPVersion":"Comfort 1.5 MT","co_ano":"2025","co_familia":"PV","co_canal":"CO","co_origen":"WEB","fl_recibir_info":"S","fl_fecha_consen":"08\/01\/2026 23:58:03","fe_nacimiento":"01\/01\/1900","utm_campaign":"","utm_content":"","utm_medium":"","utm_source":"","utm_term":"","gclid":"","fbclid":"","source":{"site":"http:\/\/localhost\/site-geely\/wordpress\/","submitted_at":"2026-01-08 23:58:19","post_id":800}}}}
 [09-Jan-2026 04:58:39 UTC] [MG_QUOTE] API RESULT {"ok":1,"status":200,"response":"{\n  \"success\": false,\n  \"id\": -1,\n  \"message\": \"Código de State no homologado = ancash | Código de Province__c no homologado = ancash01 | Código de City no homologado = ancash0101 | Código de BusinessUnit__c no homologado = 0|PV|CO\"\n}","error":""}
 [09-Jan-2026 04:58:43 UTC] PHP Deprecated:  Hook wpcf7_ajax_json_echo is <strong>deprecated</strong> since Contact Form 7 version 5.2! Use wpcf7_feedback_response instead. in D:\Programas\Laragon\laragon\www\site-geely\wordpress\wp-includes\functions.php on line 6121
+[10-Jan-2026 10:56:39 UTC] Automatic updates starting...
+[10-Jan-2026 10:56:43 UTC]   Automatic theme updates starting...
+[10-Jan-2026 10:56:45 UTC]   Automatic theme updates complete.
+[10-Jan-2026 10:56:45 UTC] Automatic updates complete.
+[11-Jan-2026 18:33:38 UTC] Automatic updates starting...
+[11-Jan-2026 18:33:40 UTC]   Automatic theme updates starting...
+[11-Jan-2026 18:33:42 UTC]   Automatic theme updates complete.
+[11-Jan-2026 18:33:42 UTC] Automatic updates complete.
+[11-Jan-2026 21:58:50 UTC] PHP Warning:  Attempt to read property "ID" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\post.php on line 7879
+[11-Jan-2026 21:58:50 UTC] PHP Warning:  Attempt to read property "post_type" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\post.php on line 8137
+[11-Jan-2026 21:58:50 UTC] PHP Warning:  Attempt to read property "post_type" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\theme.php on line 3644
+[11-Jan-2026 21:58:50 UTC] PHP Warning:  Attempt to read property "post_type" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\theme.php on line 3870
+[11-Jan-2026 21:58:50 UTC] PHP Warning:  Attempt to read property "post_type" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\post.php on line 5798
+[11-Jan-2026 21:58:50 UTC] PHP Warning:  Attempt to read property "ID" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\post.php on line 5798
+[11-Jan-2026 21:58:50 UTC] PHP Warning:  Attempt to read property "post_type" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\post.php on line 5056
+[11-Jan-2026 21:58:51 UTC] PHP Warning:  Attempt to read property "post_name" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\post.php on line 7260
+[11-Jan-2026 21:58:51 UTC] PHP Warning:  Attempt to read property "post_status" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\post.php on line 7265
+[11-Jan-2026 21:58:51 UTC] PHP Warning:  Attempt to read property "post_type" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\post.php on line 7265
+[11-Jan-2026 21:58:51 UTC] PHP Warning:  Attempt to read property "post_date" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\post.php on line 7305
+[11-Jan-2026 21:58:51 UTC] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\post.php on line 7305
+[11-Jan-2026 21:58:51 UTC] PHP Warning:  Attempt to read property "post_status" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\post.php on line 7313
+[11-Jan-2026 21:58:51 UTC] PHP Warning:  Attempt to read property "post_type" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\post.php on line 7313
+[11-Jan-2026 21:58:51 UTC] PHP Warning:  Attempt to read property "post_type" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\post.php on line 5099
+[11-Jan-2026 21:58:51 UTC] PHP Warning:  Attempt to read property "post_type" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\includes\forms\form-post.php on line 281
+[11-Jan-2026 21:58:51 UTC] PHP Warning:  Attempt to read property "post_type" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\includes\forms\form-post.php on line 292
+[11-Jan-2026 21:58:51 UTC] PHP Warning:  Attempt to read property "post_content" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-content\plugins\advanced-custom-fields-pro\pro\blocks.php on line 1575
+[11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "post_author" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php on line 601
+[11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "post_date_gmt" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php on line 605
+[11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "post_date" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php on line 605
+[11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "post_date_gmt" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php on line 609
+[11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "ID" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php on line 613
+[11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "post_modified_gmt" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php on line 617
+[11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "post_modified" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php on line 617
+[11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "post_modified_gmt" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php on line 621
+[11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "post_parent" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php on line 625
+[11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "post_name" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php on line 629
+[11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "guid" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php on line 635
+[11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "ID" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php on line 635
+[11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "guid" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php on line 636
+[11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "post_title" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php on line 642
+[11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "ID" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php on line 643
+[11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "post_content" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php on line 650
+[11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "post_content" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php on line 652
+[11-Jan-2026 21:58:53 UTC] PHP Deprecated:  preg_match(): Passing null to parameter #2 ($subject) of type string is deprecated in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-block-parser.php on line 247
+[11-Jan-2026 21:58:53 UTC] PHP Deprecated:  strlen(): Passing null to parameter #1 ($string) of type string is deprecated in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wp-block-parser.php on line 324
+[11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "post_excerpt" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php on line 658
+[11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "post_excerpt" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php on line 659
+[11-Jan-2026 21:58:53 UTC] PHP Deprecated:  preg_split(): Passing null to parameter #2 ($subject) of type string is deprecated in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\formatting.php on line 3493
+[11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "ID" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php on line 664
+[11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "ID" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-autosaves-controller.php on line 465
+>>>>>>> adaa8ec7322ae7cbc67e8f9b701340a1b14fa901

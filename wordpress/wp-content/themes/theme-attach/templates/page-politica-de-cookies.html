@@ -1,0 +1,111 @@
+<!-- wp:template-part {"slug":"header","tagName":"header","className":"site-header"} /-->
+<main class="page-politica-de-cookies">
+  <div class="page-politica-de-cookies__inner">
+    <!-- wp:post-title /-->
+    <!-- wp:post-content /-->
+  </div>
+</main>
+<!-- wp:template-part {"slug":"footer","tagName":"footer","className":"site-footer"} /-->
+<style>
+  .page-politica-de-cookies {
+    background-color: #f6f3f5;
+    margin-block: 0;
+    padding: 80px 20px;
+  }
+  .page-politica-de-cookies__inner {
+    max-width: 880px;
+    margin-inline: auto;
+  }
+  .page-politica-de-cookies__inner > .entry-content {
+    margin-top: 16px;
+  }
+  .page-politica-de-cookies__inner > .entry-content > p:first-child {
+    color: #212529;
+    margin-top: 16px;
+    font-size: var(--fs-p-4);
+    line-height: var(--lh-p-4);
+    font-weight: 500;
+  }
+
+  .page-politica-de-cookies .wp-block-post-title {
+    font-size: var(--fs-title-3);
+    line-height: var(--lh-title-3);
+    text-transform: uppercase;
+    font-family: var(--font-geely);
+    font-weight: 700;
+    color: var(--c-black);
+  }
+
+  .page-politica-de-cookies__inner > .entry-content p,
+  .page-politica-de-cookies__inner > .entry-content ul,
+  .page-politica-de-cookies__inner > .entry-content ol,
+  .page-politica-de-cookies__inner > .entry-content h3,
+  .page-politica-de-cookies__inner > .entry-content a {
+    font-size: var(--fs-p-3);
+    line-height: var(--lh-p-3);
+    font-weight: 500;
+    color: var(--c-black);
+    margin-top: 24px;
+    font-family: var(--font-inter);
+  }
+  .page-politica-de-cookies__inner > .entry-content h2 {
+    font-size: var(--fs-title-5);
+    line-height: var(--lh-title-5);
+    color: var(--c-black);
+    text-transform: uppercase;
+    margin-top: 24px;
+    font-family: var(--font-geely);
+    font-weight: 700;
+  }
+
+  .page-politica-de-cookies__inner > .entry-content hr {
+    border-color: #d7d6d6;
+    border-width: 1px;
+  }
+
+  .page-politica-de-cookies__inner > .entry-content > p:first-child + * {
+    margin-top: 40px;
+  }
+
+  .page-politica-de-cookies__inner > .entry-content * {
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  @media (max-width: 767px) {
+    .page-politica-de-cookies {
+      padding: 40px 16px;
+    }
+    .page-politica-de-cookies .wp-block-post-title {
+      font-size: var(--fs-title-5);
+      line-height: var(--lh-title-5);
+    }
+    .page-politica-de-cookies__inner > .entry-content {
+      margin-top: 8px;
+    }
+    .page-politica-de-cookies__inner > .entry-content > p:first-child {
+      margin-top: 8px;
+    }
+    .page-politica-de-cookies__inner > .entry-content p,
+    .page-politica-de-cookies__inner > .entry-content ul,
+    .page-politica-de-cookies__inner > .entry-content ol,
+    .page-politica-de-cookies__inner > .entry-content h3,
+    .page-politica-de-cookies__inner > .entry-content a {
+      font-size: var(--fs-p-4);
+      line-height: var(--lh-p-4);
+      margin-top: 16px;
+    }
+    .page-politica-de-cookies__inner > .entry-content hr {
+      margin-block-start: 16px;
+    }
+
+    .page-politica-de-cookies__inner > .entry-content h2 {
+      font-size: var(--fs-title-sm-3);
+      line-height: var(--lh-title-sm-3);
+    }
+    .page-politica-de-cookies__inner > .entry-content ul,
+    .page-politica-de-cookies__inner > .entry-content ol {
+      padding-left: 25px;
+    }
+  }
+</style>

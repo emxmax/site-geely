@@ -1,180 +1,205 @@
 .about-evolution {
-    padding: 80px 20px;
-    background: #ffffff;
+  padding: 0 20px 80px;
+  margin-top: 0;
+  overflow: hidden;
 }
 
 .about-evolution__container {
-    max-width: 1200px;
-    margin: 0 auto;
+  max-width: 1280px;
+  margin: 0 auto;
 }
 
 .about-evolution__title {
-    font-size: 42px;
-    font-weight: 700;
-    color: #000000;
-    text-align: center;
-    margin-bottom: 24px;
-    line-height: 1.2;
+  font-family: var(--font-geely);
+  font-weight: 700;
+  color: var(--c-black);
 }
 
 .about-evolution__description {
-    font-size: 16px;
-    line-height: 1.6;
-    color: #495057;
-    text-align: center;
-    max-width: 900px;
-    margin: 0 auto 60px;
+  margin-top: 16px;
+  font-family: var(--font-inter);
+  font-weight: 500;
+  color: var(--c-black);
 }
 
 .about-evolution__timeline {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    margin-bottom: 80px;
-    padding: 0 20px;
+  margin-top: 28px;
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  width: 100%;
 }
 
 .about-evolution__timeline::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(to right, #dee2e6 0%, #dee2e6 100%);
-    transform: translateY(-50%);
-    z-index: 0;
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #f6f3f5;
+  transform: translateY(-50%);
+  z-index: 0;
 }
 
 .about-evolution__year {
-    position: relative;
-    z-index: 1;
-    text-align: center;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding-inline: 46px;
+  padding-block: 13.5px;
+  flex: 1;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+.about-evolution__year.is-active {
+  border-bottom: 2px solid var(--c-greely-blue);
 }
 
 .about-evolution__year-text {
-    display: block;
-    font-size: 18px;
-    font-weight: 600;
-    color: #6c757d;
-    margin-bottom: 16px;
-    transition: color 0.3s ease;
+  display: block;
+  transition: color 0.3s ease;
+  font-weight: 700;
+  font-family: var(--font-geely);
+  color: var(--c-steel-grey);
 }
 
 .about-evolution__year.is-active .about-evolution__year-text {
-    color: #E31E24;
-    font-weight: 700;
-}
-
-.about-evolution__year-dot {
-    display: block;
-    width: 16px;
-    height: 16px;
-    background: #ffffff;
-    border: 3px solid #dee2e6;
-    border-radius: 50%;
-    margin: 0 auto;
-    transition: all 0.3s ease;
-}
-
-.about-evolution__year.is-active .about-evolution__year-dot {
-    width: 20px;
-    height: 20px;
-    border-color: #E31E24;
-    background: #E31E24;
-    box-shadow: 0 0 0 4px rgba(227, 30, 36, 0.2);
+  color: var(--c-greely-blue);
+  font-weight: 700;
 }
 
 .about-evolution__milestone {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+}
+
+.about-evolution__swiper {
+  margin-top: 28px;
 }
 
 .about-evolution__milestone-content {
-    order: 1;
-}
-
-.about-evolution__milestone-title {
-    font-size: 28px;
-    font-weight: 700;
-    color: #000000;
-    margin-bottom: 20px;
-    line-height: 1.3;
-}
-
-.about-evolution__milestone-description {
-    font-size: 16px;
-    line-height: 1.8;
-    color: #495057;
-}
-
-.about-evolution__milestone-description p {
-    margin-bottom: 16px;
-}
-
-.about-evolution__milestone-description p:last-child {
-    margin-bottom: 0;
+  order: 1;
+  padding-block: 88px;
+  padding-right: 40px;
 }
 
 .about-evolution__milestone-image-wrapper {
-    order: 2;
+  order: 2;
+}
+
+.about-evolution__milestone-year {
+  font-weight: 700;
+  font-family: var(--font-geely);
+  color: var(--c-black);
+}
+
+.about-evolution__milestone-title {
+  /*  */
+  margin-top: 48px;
+  font-family: var(--font-geely);
+  font-weight: 700;
+  color: var(--c-black);
+  text-transform: uppercase;
+}
+
+.about-evolution__milestone-description {
+  /*  */
+
+  margin-top: 24px;
+  font-family: var(--font-inter);
+  font-weight: 500;
+  color: var(--c-black);
+}
+.about-evolution__milestone-description p {
+  margin-bottom: 24px;
+}
+.about-evolution__milestone-description p:last-child {
+  margin-bottom: 0;
 }
 
 .about-evolution__milestone-image {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-    display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 24px;
+  display: block;
 }
 
 @media (max-width: 1023px) {
-    .about-evolution__timeline {
-        overflow-x: auto;
-        justify-content: flex-start;
-        gap: 40px;
-        padding-bottom: 20px;
-    }
+  .about-evolution__timeline {
+    overflow-x: auto;
+    justify-content: flex-start;
+    /* gap: 40px; */
+    padding-bottom: 20px;
+  }
 
-    .about-evolution__milestone {
-        grid-template-columns: 1fr;
-        gap: 40px;
-    }
+  .about-evolution__milestone {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
 
-    .about-evolution__milestone-image-wrapper {
-        order: 1;
-    }
+  .about-evolution__milestone-image-wrapper {
+    order: 1;
+  }
 
-    .about-evolution__milestone-content {
-        order: 2;
-    }
+  .about-evolution__milestone-content {
+    order: 2;
+  }
 }
 
 @media (max-width: 767px) {
-    .about-evolution {
-        padding: 60px 16px;
-    }
+  .about-evolution {
+    padding-inline: 16px;
+    padding-bottom: 40px;
+  }
 
-    .about-evolution__title {
-        font-size: 32px;
-    }
+  .about-evolution__milestone {
+    gap: 24px;
+  }
 
-    .about-evolution__description {
-        margin-bottom: 40px;
-    }
+  .about-evolution__milestone-content {
+    padding: 0;
+  }
+  .about-evolution__swiper {
+    margin-top: 24px;
+  }
 
-    .about-evolution__timeline {
-        gap: 30px;
-        margin-bottom: 60px;
-    }
+  .about-evolution__title {
+  }
 
-    .about-evolution__year-text {
-        font-size: 16px;
-    }
+  .about-evolution__description {
+  }
 
-    .about-evolution__milestone-title {
-        font-size: 24px;
-    }
+  .about-evolution__timeline {
+    gap: 0;
+    padding-bottom: 12px;
+  }
+
+  .about-evolution__year {
+    max-width: 120px;
+  }
+
+  .about-evolution__year-text {
+  }
+
+  .about-evolution__milestone-title {
+    margin-top: 16px;
+  }
+  .about-evolution__milestone-description {
+    margin-top: 16px;
+  }
+  .about-evolution__milestone-image {
+    min-height: 193px;
+    object-fit: cover;
+    border-radius: 16px;
+  }
+  .about-evolution__timeline::before {
+    top: calc(100% - 13px);
+  }
 }
