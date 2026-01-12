@@ -6,17 +6,16 @@ if (!defined('ABSPATH'))
 $block_evolution_title = get_field('block_evolution_title') ?: 'NUESTRA EVOLUCIÓN';
 $block_evolution_description = get_field('block_evolution_description') ?: '';
 
-$block_evolution_timeline = get_field('block_evolution_timeline'); // Repeater
-?>
+$block_evolution_timeline = get_field('block_evolution_timeline'); // Repeater ?>
 
 <section class="about-evolution">
   <div class="about-evolution__container">
     <?php if ($block_evolution_title): ?>
-      <h2 class="about-evolution__title"><?= esc_html($block_evolution_title); ?></h2>
+      <h2 class="about-evolution__title title-2 title-sm-3"><?= esc_html($block_evolution_title); ?></h2>
     <?php endif; ?>
 
     <?php if ($block_evolution_description): ?>
-      <div class="about-evolution__description">
+      <div class="about-evolution__description paragraph-3 paragraph-sm-4">
         <?= wp_kses_post($block_evolution_description); ?>
       </div>
     <?php endif; ?>
@@ -30,8 +29,8 @@ $block_evolution_timeline = get_field('block_evolution_timeline'); // Repeater
           ?>
           <button class="about-evolution__year <?= $is_active ? 'is-active' : ''; ?>" data-index="<?= esc_attr($index); ?>"
             aria-label="<?= esc_attr(sprintf(__('Ver hito del año %s', 'theme-attach'), $year)); ?>">
-            <span class="about-evolution__year-text"><?= esc_html($year); ?></span>
-            <span class="about-evolution__year-dot"></span>
+            <span class="about-evolution__year-text title-4 title-mobile-sm-5"><?= esc_html($year); ?></span>
+            <!-- <span class="about-evolution__year-dot"></span> -->
           </button>
         <?php endforeach; ?>
       </div>
@@ -69,25 +68,26 @@ $block_evolution_timeline = get_field('block_evolution_timeline'); // Repeater
                       class="about-evolution__milestone-image">
                   </div>
                 <?php endif; ?>
+                <div class="about-evolution__milestone-content-wrapper">
+                  <div class="about-evolution__milestone-content">
+                    <?php if ($year): ?>
+                      <span class="about-evolution__milestone-year title-3 title-mobile-sm-2">
+                        <?= esc_html($year); ?>
+                      </span>
+                    <?php endif; ?>
 
-                <div class="about-evolution__milestone-content">
-                  <?php if ($year): ?>
-                    <span class="about-evolution__milestone-year">
-                      <?= esc_html($year); ?>
-                    </span>
-                  <?php endif; ?>
+                    <?php if ($title): ?>
+                      <h3 class="about-evolution__milestone-title title-4 title-mobile-sm-4">
+                        <?= esc_html($title); ?>
+                      </h3>
+                    <?php endif; ?>
 
-                  <?php if ($title): ?>
-                    <h3 class="about-evolution__milestone-title">
-                      <?= esc_html($title); ?>
-                    </h3>
-                  <?php endif; ?>
-
-                  <?php if ($description): ?>
-                    <div class="about-evolution__milestone-description">
-                      <?= wp_kses_post($description); ?>
-                    </div>
-                  <?php endif; ?>
+                    <?php if ($description): ?>
+                      <div class="about-evolution__milestone-description paragraph-3 paragraph-sm-4">
+                        <?= wp_kses_post($description); ?>
+                      </div>
+                    <?php endif; ?>
+                  </div>
                 </div>
               </div>
             </div>

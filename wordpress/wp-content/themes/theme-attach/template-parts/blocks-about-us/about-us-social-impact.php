@@ -25,31 +25,29 @@ if ($block_social_impact_image) {
     // Si ACF retorna URL (return format: URL)
     $image_url = $block_social_impact_image;
   }
-}
-?>
+} ?>
 
-<section class="about-social-impact">
+<section class="about-social-impact" style="background-image: url('<?= IMG . "/nosotros-bienestar-social.png" ?>');">
   <div class="about-social-impact__container">
     <div class="about-social-impact__content">
       <?php if ($block_social_impact_eyebrow): ?>
-        <p class="about-social-impact__eyebrow"><?php echo esc_html($block_social_impact_eyebrow); ?></p>
+        <p class="about-social-impact__eyebrow title-4"><?= esc_html($block_social_impact_eyebrow); ?></p>
       <?php endif; ?>
 
       <?php if ($block_social_impact_title): ?>
-        <h2 class="about-social-impact__title"><?php echo esc_html($block_social_impact_title); ?></h2>
+        <h2 class="about-social-impact__title title-2"><?= esc_html($block_social_impact_title); ?></h2>
       <?php endif; ?>
 
       <?php if ($block_social_impact_description): ?>
-        <div class="about-social-impact__description">
-          <?php echo wp_kses_post($block_social_impact_description); ?>
+        <div class="about-social-impact__description paragraph-3 paragraph-sm-4">
+          <?= wp_kses_post($block_social_impact_description); ?>
         </div>
       <?php endif; ?>
     </div>
 
     <?php if ($image_url): ?>
       <div class="about-social-impact__image-wrapper">
-        <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt); ?>"
-          class="about-social-impact__image">
+        <img src="<?= esc_url($image_url); ?>" alt="<?= esc_attr($image_alt); ?>" class="about-social-impact__image">
       </div>
     <?php endif; ?>
   </div>

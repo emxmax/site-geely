@@ -74,9 +74,6 @@
 }
 
 .about-hero__text-content {
-  /* max-width: 560px;
-  width: 100%; */
-  /* padding: 21px 40px 53px 40px; */
   padding-inline: 40px;
   padding-block: 21px 53px;
 }
@@ -113,17 +110,40 @@
 
 @media (max-width: 767px) {
   .about-hero {
+    padding: 40px 16px;
+  }
+
+  .about-hero__eyebrow {
+    max-width: 270px;
   }
 
   .about-hero__header {
   }
 
   .about-hero__title {
+    margin-top: 16px;
+    margin-bottom: 0;
+  }
+  .about-hero__content {
+    margin-top: 24px;
+    gap: 16px;
   }
 
   .about-hero__content-title {
+    max-width: 320px;
+    width: 100%;
   }
 
   .about-hero__ceo {
+  }
+
+  .about-hero__image {
+    height: 220px;
+    object-fit: cover;
+    border-radius: 16px;
+  }
+  .about-hero__text-content {
+    padding-block: 16px;
+    padding-inline: 0;
   }
 }

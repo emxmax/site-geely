@@ -8,7 +8,7 @@ $block_tech_items = get_field('block_tech_items') ?: [];
 $carousel_id = 'about-tech-' . uniqid();
 ?>
 
-<section class="about-tech" id="<?php echo esc_attr($carousel_id); ?>">
+<section class="about-tech" id="<?= esc_attr($carousel_id); ?>">
   <?php if (!empty($block_tech_items)): ?>
     <div class="about-tech__slider">
       <div class="swiper about-tech__swiper">
@@ -38,19 +38,18 @@ $carousel_id = 'about-tech-' . uniqid();
               <div class="about-tech__slide-container">
                 <?php if ($image_url): ?>
                   <div class="about-tech__slide-image-wrapper">
-                    <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt); ?>"
-                      class="about-tech__slide-image">
+                    <img src="<?= esc_url($image_url); ?>" alt="<?= esc_attr($image_alt); ?>" class="about-tech__slide-image">
                   </div>
                 <?php endif; ?>
 
                 <div class="about-tech__slide-content">
                   <?php if ($title): ?>
-                    <h3 class="about-tech__slide-title"><?php echo esc_html($title); ?></h3>
+                    <h3 class="about-tech__slide-title title-3"><?= esc_html($title); ?></h3>
                   <?php endif; ?>
 
                   <?php if ($description): ?>
-                    <div class="about-tech__slide-description">
-                      <?php echo wp_kses_post($description); ?>
+                    <div class="about-tech__slide-description paragraph-4">
+                      <?= wp_kses_post($description); ?>
                     </div>
                   <?php endif; ?>
                 </div>
@@ -60,7 +59,7 @@ $carousel_id = 'about-tech-' . uniqid();
         </div>
       </div>
 
-      <?php if (count($block_tech_items) > 1): ?>
+      <?php if (count($block_tech_items) > 1000): ?>
         <div class="about-tech__controls">
           <button class="about-tech__nav about-tech__nav--prev" type="button" aria-label="Anterior">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -77,11 +76,20 @@ $carousel_id = 'about-tech-' . uniqid();
           </button>
         </div>
       <?php endif; ?>
+
+      <?php get_template_part(
+        'template-parts/partials/components/c-swiper-controls',
+        null,
+        [
+          'id' => 'controls-about-tech',
+          'class' => 'controls-about-tech',
+        ]
+      ) ?>
     </div>
   <?php endif; ?>
 
   <script>
     window.__ABOUT_TECH_CAROUSELS__ = window.__ABOUT_TECH_CAROUSELS__ || [];
-    window.__ABOUT_TECH_CAROUSELS__.push("#<?php echo esc_js($carousel_id); ?>");
+    window.__ABOUT_TECH_CAROUSELS__.push("#<?= esc_js($carousel_id); ?>");
   </script>
 </section>

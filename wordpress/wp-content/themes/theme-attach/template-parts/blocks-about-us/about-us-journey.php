@@ -46,47 +46,52 @@ if ($block_journey_vision_image) {
 }
 ?>
 
-<section class="about-journey">
+<section class="about-journey" style="background: url(<?= IMG . "/nosotros-mision-vision.png" ?>);">
   <div class="about-journey__container">
     <?php if ($block_journey_title): ?>
-      <h2 class="about-journey__title"><?php echo esc_html($block_journey_title); ?></h2>
+      <h2 class="about-journey__title title-2 title-mobile-sm-2"><?= esc_html($block_journey_title); ?></h2>
     <?php endif; ?>
 
     <div class="about-journey__grid">
       <!-- Mission -->
-      <div class="about-journey__card">
+      <div class="about-journey__card about-journey__card--mision">
         <?php if ($mission_image_url): ?>
           <div class="about-journey__card-image-wrapper">
-            <img src="<?php echo esc_url($mission_image_url); ?>" alt="<?php echo esc_attr($mission_image_alt); ?>"
+            <img src="<?= esc_url($mission_image_url); ?>" alt="<?= esc_attr($mission_image_alt); ?>"
               class="about-journey__card-image">
             <div class="about-journey__card-overlay">
-              <h3 class="about-journey__card-title"><?php echo esc_html($block_journey_mission_title); ?></h3>
+              <h3 class="about-journey__card-title title-1 title-mobile-sm-2">
+                <?= esc_html($block_journey_mission_title); ?>
+              </h3>
             </div>
           </div>
         <?php endif; ?>
 
         <?php if ($block_journey_mission_text): ?>
-          <div class="about-journey__card-content">
-            <?php echo wp_kses_post($block_journey_mission_text); ?>
+          <div class="about-journey__card-content paragraph-3 paragraph-sm-4">
+            <?= wp_kses_post($block_journey_mission_text); ?>
           </div>
         <?php endif; ?>
       </div>
 
       <!-- Vision -->
-      <div class="about-journey__card">
-        <?php if ($vision_image_url): ?>
-          <div class="about-journey__card-image-wrapper">
-            <img src="<?php echo esc_url($vision_image_url); ?>" alt="<?php echo esc_attr($vision_image_alt); ?>"
-              class="about-journey__card-image">
-            <div class="about-journey__card-overlay">
-              <h3 class="about-journey__card-title"><?php echo esc_html($block_journey_vision_title); ?></h3>
-            </div>
+      <div class="about-journey__card about-journey__card--vision">
+
+        <?php if ($block_journey_vision_text): ?>
+          <div class="about-journey__card-content paragraph-3 paragraph-sm-4">
+            <?= wp_kses_post($block_journey_vision_text); ?>
           </div>
         <?php endif; ?>
 
-        <?php if ($block_journey_vision_text): ?>
-          <div class="about-journey__card-content">
-            <?php echo wp_kses_post($block_journey_vision_text); ?>
+        <?php if ($vision_image_url): ?>
+          <div class="about-journey__card-image-wrapper">
+            <img src="<?= esc_url($vision_image_url); ?>" alt="<?= esc_attr($vision_image_alt); ?>"
+              class="about-journey__card-image">
+            <div class="about-journey__card-overlay">
+              <h3 class="about-journey__card-title title-1 title-mobile-sm-2">
+                <?= esc_html($block_journey_vision_title); ?>
+              </h3>
+            </div>
           </div>
         <?php endif; ?>
       </div>

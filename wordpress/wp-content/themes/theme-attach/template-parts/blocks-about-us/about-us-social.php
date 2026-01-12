@@ -49,10 +49,10 @@ if (empty($image_mobile_url) && !empty($image_desktop_url)) {
   <?php if ($image_desktop_url || $image_mobile_url): ?>
     <picture class="about-social__background">
       <?php if ($image_mobile_url): ?>
-        <source media="(max-width: 767px)" srcset="<?php echo esc_url($image_mobile_url); ?>">
+        <source media="(max-width: 767px)" srcset="<?= esc_url($image_mobile_url); ?>">
       <?php endif; ?>
       <?php if ($image_desktop_url): ?>
-        <img src="<?php echo esc_url($image_desktop_url); ?>" alt="<?php echo esc_attr($image_alt); ?>"
+        <img src="<?= esc_url($image_desktop_url); ?>" alt="<?= esc_attr($image_alt); ?>"
           class="about-social__background-image">
       <?php endif; ?>
     </picture>
@@ -61,7 +61,9 @@ if (empty($image_mobile_url) && !empty($image_desktop_url)) {
   <div class="about-social__overlay">
     <div class="about-social__container">
       <?php if ($block_social_title): ?>
-        <h2 class="about-social__title"><?php echo esc_html($block_social_title); ?></h2>
+        <h2 class="about-social__title title-2 title-mobile-sm-3">
+          <?= wp_kses_post($block_social_title) ?>
+        </h2>
       <?php endif; ?>
     </div>
   </div>

@@ -1,115 +1,146 @@
 .about-journey {
-    padding: 80px 20px;
-    background: #f8f9fa;
+  padding: 80px 20px;
+  margin: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .about-journey__container {
-    max-width: 1200px;
-    margin: 0 auto;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .about-journey__title {
-    font-size: 42px;
-    font-weight: 700;
-    color: #000000;
-    text-align: center;
-    margin-bottom: 60px;
-    line-height: 1.2;
+  font-weight: 700;
+  font-family: var(--font-geely);
+  color: var(--c-black);
 }
 
 .about-journey__grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 40px;
 }
 
 .about-journey__card {
-    background: #ffffff;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: grid;
+  grid-template-columns: 628px 1fr;
+  gap: 24px;
+}
+.about-journey__card--vision {
+  grid-template-columns: 1fr 628px;
 }
 
 .about-journey__card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .about-journey__card-image-wrapper {
-    position: relative;
-    height: 280px;
-    overflow: hidden;
+  position: relative;
+  height: 238px;
+  overflow: hidden;
 }
 
 .about-journey__card-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 24px;
+  max-height: 238px;
 }
 
 .about-journey__card-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.2) 100%);
-    display: flex;
-    align-items: flex-end;
-    padding: 32px;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .about-journey__card-title {
-    font-size: 36px;
-    font-weight: 700;
-    color: #ffffff;
-    margin: 0;
-    letter-spacing: 1px;
+  font-weight: 700;
+  font-family: var(--font-geely);
+  color: var(--c-white);
 }
 
 .about-journey__card-content {
-    padding: 32px;
-    font-size: 16px;
-    line-height: 1.8;
-    color: #495057;
+  padding-block: 59px;
+  font-family: var(--font-inter);
+  font-weight: 500;
+  color: var(--c-black);
 }
 
 .about-journey__card-content p {
-    margin-bottom: 16px;
+  margin-bottom: 16px;
 }
 
 .about-journey__card-content p:last-child {
-    margin-bottom: 0;
+  margin-bottom: 0;
+}
+
+@media (max-width: 1199px) {
+  .about-values__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .about-journey__card {
+    grid-template-columns: 528px 1fr;
+  }
+  .about-journey__card--vision {
+    grid-template-columns: 1fr 528px;
+  }
 }
 
 @media (max-width: 1023px) {
-    .about-journey__grid {
-        grid-template-columns: 1fr;
-    }
+  .about-journey__grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 767px) {
-    .about-journey {
-        padding: 60px 16px;
-    }
+  .about-journey {
+    padding-block: 40px;
+    padding-inline: 16px;
+  }
 
-    .about-journey__title {
-        font-size: 32px;
-        margin-bottom: 40px;
-    }
+  .about-journey__title {
+  }
 
-    .about-journey__card-image-wrapper {
-        height: 220px;
-    }
+  .about-journey__grid {
+    margin-top: 24px;
+  }
 
-    .about-journey__card-title {
-        font-size: 28px;
-    }
+  .about-journey__card {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .about-journey__card--vision {
+    grid-template-columns: 1fr;
+  }
+  .about-journey__card--vision .about-journey__card-image-wrapper {
+    order: 1;
+  }
+  .about-journey__card--vision .about-journey__card-content {
+    order: 2;
+  }
 
-    .about-journey__card-overlay {
-        padding: 24px;
-    }
+  .about-journey__card-image-wrapper {
+    height: 140px;
+  }
 
-    .about-journey__card-content {
-        padding: 24px;
-    }
+  .about-journey__card-title {
+  }
+
+  .about-journey__card-overlay {
+  }
+
+  .about-journey__card-content {
+    padding-block: 0px 16px;
+    padding-inline: 0;
+  }
+}
+
+header.site-header.wp-block-template-part {
+  display: none !important;
 }

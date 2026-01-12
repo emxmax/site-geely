@@ -3,19 +3,20 @@
  * Inicializa el carrusel de tecnología con Swiper
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-  if (typeof Swiper === 'undefined') return;
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof Swiper === "undefined") return;
 
   const selectors = window.__ABOUT_TECH_CAROUSELS__ || [];
-  
+
   selectors.forEach((selector) => {
     const root = document.querySelector(selector);
     if (!root) return;
 
-    const swiperEl = root.querySelector('.about-tech__swiper');
-    const prevBtn = root.querySelector('.about-tech__nav--prev');
-    const nextBtn = root.querySelector('.about-tech__nav--next');
-    const paginationEl = root.querySelector('.about-tech__pagination');
+    // #controls-about-tech
+    const swiperEl = root.querySelector(".about-tech__swiper");
+    const prevBtn = root.querySelector("#controls-about-tech .c-swiper-controls__nav--prev"); // #controls-about-tech .c-swiper-controls__nav--prev
+    const nextBtn = root.querySelector("#controls-about-tech .c-swiper-controls__nav--next"); // #controls-about-tech .c-swiper-controls__nav--next
+    const paginationEl = root.querySelector("#controls-about-tech .c-swiper-controls__pagination"); // #controls-about-tech .c-swiper-controls__pagination
 
     if (!swiperEl) return;
 

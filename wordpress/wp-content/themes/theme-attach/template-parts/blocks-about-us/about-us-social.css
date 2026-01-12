@@ -5,6 +5,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  margin: 0;
 }
 
 .about-social__background {
@@ -37,21 +38,19 @@
 }
 
 .about-social__title {
-  font-size: 48px;
+  font-family: var(--font-geely);
   font-weight: 700;
-  color: #ffffff;
+  color: var(--c-white);
   margin: 0;
-  line-height: 1.2;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1199px) {
   .about-social {
     min-height: 350px;
   }
+}
 
+@media (max-width: 1023px) {
   .about-social__overlay {
     padding: 80px 20px;
   }
@@ -63,14 +62,14 @@
 
 @media (max-width: 767px) {
   .about-social {
-    min-height: 300px;
+    min-height: 250px;
   }
 
   .about-social__overlay {
     padding: 60px 16px;
   }
 
-  .about-social__title {
-    font-size: 28px;
+  .about-social__title br {
+    display: none;
   }
 }

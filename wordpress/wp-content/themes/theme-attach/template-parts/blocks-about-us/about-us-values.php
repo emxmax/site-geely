@@ -10,7 +10,7 @@ $block_values_items = get_field('block_values_items') ?: []; // repeater
 <section class="about-values">
   <div class="about-values__container">
     <?php if ($block_values_title): ?>
-      <h2 class="about-values__title">
+      <h2 class="about-values__title title-2">
         <?= esc_html($block_values_title); ?>
       </h2>
     <?php endif; ?>
@@ -46,11 +46,11 @@ $block_values_items = get_field('block_values_items') ?: []; // repeater
             <?php endif; ?>
 
             <?php if ($title): ?>
-              <h3 class="about-values__item-title"><?= esc_html($title); ?></h3>
+              <h3 class="about-values__item-title title-4"><?= esc_html($title); ?></h3>
             <?php endif; ?>
 
             <?php if ($description): ?>
-              <div class="about-values__item-description">
+              <div class="about-values__item-description paragraph-4">
                 <?= wp_kses_post($description); ?>
               </div>
             <?php endif; ?>

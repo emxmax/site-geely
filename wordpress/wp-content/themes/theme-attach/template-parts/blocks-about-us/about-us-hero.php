@@ -41,11 +41,11 @@ if ($block_hero_image) {
       <?php endif; ?>
 
       <?php if ($block_hero_title): ?>
-        <h1 class="about-hero__title title-1"><?= esc_html($block_hero_title); ?></h1>
+        <h1 class="about-hero__title title-1 title-sm-3"><?= esc_html($block_hero_title); ?></h1>
       <?php endif; ?>
 
       <?php if ($block_hero_description): ?>
-        <div class="about-hero__description paragraph-3">
+        <div class="about-hero__description paragraph-3 paragraph-sm-4">
           <?= wp_kses_post($block_hero_description); ?>
         </div>
       <?php endif; ?>
@@ -60,7 +60,7 @@ if ($block_hero_image) {
         <?php if ($block_hero_ceo_name): ?>
           <div class="about-hero__ceo">
             <?php if ($block_hero_ceo_name): ?>
-              <p class="about-hero__ceo-name paragraph-3"><?= esc_html($block_hero_ceo_name); ?></p>
+              <p class="about-hero__ceo-name paragraph-3 paragraph-sm-5"><?= esc_html($block_hero_ceo_name); ?></p>
             <?php endif; ?>
           </div>
         <?php endif; ?>
@@ -68,11 +68,11 @@ if ($block_hero_image) {
 
       <div class="about-hero__text-content">
         <?php if ($block_hero_content_title): ?>
-          <h2 class="about-hero__content-title title-5"><?= esc_html($block_hero_content_title); ?></h2>
+          <h2 class="about-hero__content-title title-5 title-mobile-sm-4"><?= esc_html($block_hero_content_title); ?></h2>
         <?php endif; ?>
 
         <?php if ($block_hero_content_text): ?>
-          <div class="about-hero__content-text paragraph-3">
+          <div class="about-hero__content-text paragraph-3 paragraph-sm-4">
             <?= wp_kses_post($block_hero_content_text); ?>
           </div>
         <?php endif; ?>
