@@ -417,3 +417,93 @@ Stack trace:
 [12-Jan-2026 16:11:53 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): php_network_getaddresses: getaddrinfo failed: Host desconocido.  in D:\Programas\Laragon\laragon\www\site-geely\wordpress\wp-includes\class-wpdb.php on line 1988
 [12-Jan-2026 16:11:58 UTC] PHP Warning:  mysqli_real_connect(): php_network_getaddresses: getaddrinfo failed: Host desconocido.  in D:\Programas\Laragon\laragon\www\site-geely\wordpress\wp-includes\class-wpdb.php on line 1988
 [12-Jan-2026 16:11:58 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): php_network_getaddresses: getaddrinfo failed: Host desconocido.  in D:\Programas\Laragon\laragon\www\site-geely\wordpress\wp-includes\class-wpdb.php on line 1988
+[13-Jan-2026 02:43:26 UTC] Automatic updates starting...
+[13-Jan-2026 02:43:28 UTC] Automatic updates complete.
+[13-Jan-2026 03:08:30 UTC] PHP Warning:  mysqli_real_connect(): php_network_getaddresses: getaddrinfo failed: Host desconocido.  in D:\Programas\Laragon\laragon\www\site-geely\wordpress\wp-includes\class-wpdb.php on line 1988
+[13-Jan-2026 03:08:30 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): php_network_getaddresses: getaddrinfo failed: Host desconocido.  in D:\Programas\Laragon\laragon\www\site-geely\wordpress\wp-includes\class-wpdb.php on line 1988
+[13-Jan-2026 04:37:06 UTC] WordPress database error Unknown column 'RegionIdGildemeister' in 'field list' for query 
+    SELECT 
+      RegionId,
+      Descripcion,
+      RegionIdGildemeister
+    FROM bp_regiones
+    ORDER BY Descripcion ASC
+   made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, gutenberg_render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_blocks, render_block, WP_Block->render, acf_render_block_callback, acf_rendered_block, acf_render_block, do_action('acf_block_render_template'), WP_Hook->do_action, WP_Hook->apply_filters, acf_block_render_template, include('/themes/theme-attach/template-parts/blocks-product/quote-geely.php')
+[13-Jan-2026 04:37:37 UTC] WordPress database error Unknown column 'RegionIdGildemeister' in 'field list' for query 
+    SELECT 
+      RegionId,
+      Descripcion,
+      RegionIdGildemeister
+    FROM bp_regiones
+    ORDER BY Descripcion ASC
+   made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, gutenberg_render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_blocks, render_block, WP_Block->render, acf_render_block_callback, acf_rendered_block, acf_render_block, do_action('acf_block_render_template'), WP_Hook->do_action, WP_Hook->apply_filters, acf_block_render_template, include('/themes/theme-attach/template-parts/blocks-product/quote-geely.php')
+[13-Jan-2026 05:02:27 UTC] WordPress database error Unknown column 'RegionIdGildemeister' in 'field list' for query 
+      SELECT 
+        COALESCE(NULLIF(RegionIdGildemeister, 0), RegionId) AS code,
+        Descripcion AS name
+      FROM bp_regiones
+      ORDER BY name ASC
+     made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, gutenberg_render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_blocks, render_block, WP_Block->render, acf_render_block_callback, acf_rendered_block, acf_render_block, do_action('acf_block_render_template'), WP_Hook->do_action, WP_Hook->apply_filters, acf_block_render_template, include('/themes/theme-attach/template-parts/blocks-product/quote-geely.php'), do_shortcode, preg_replace_callback, do_shortcode_tag, wpcf7_contact_form_tag_func, wpcf7_switch_locale, call_user_func, {closure}, WPCF7_ContactForm->form_html, apply_filters('wpcf7_form_enctype'), WP_Hook->apply_filters, wpcf7_file_form_enctype_filter, wpcf7_scan_form_tags, WPCF7_ContactForm->scan_form_tags, WPCF7_FormTagsManager->scan, preg_replace_callback, WPCF7_FormTagsManager->scan_callback, apply_filters('wpcf7_form_tag'), WP_Hook->apply_filters, {closure}
+[13-Jan-2026 05:02:27 UTC] WordPress database error Unknown column 'Nombre' in 'field list' for query 
+      SELECT TiendaId AS id, Nombre AS name
+      FROM bp_tiendas
+      ORDER BY name ASC
+     made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, gutenberg_render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_blocks, render_block, WP_Block->render, acf_render_block_callback, acf_rendered_block, acf_render_block, do_action('acf_block_render_template'), WP_Hook->do_action, WP_Hook->apply_filters, acf_block_render_template, include('/themes/theme-attach/template-parts/blocks-product/quote-geely.php'), do_shortcode, preg_replace_callback, do_shortcode_tag, wpcf7_contact_form_tag_func, wpcf7_switch_locale, call_user_func, {closure}, WPCF7_ContactForm->form_html, apply_filters('wpcf7_form_enctype'), WP_Hook->apply_filters, wpcf7_file_form_enctype_filter, wpcf7_scan_form_tags, WPCF7_ContactForm->scan_form_tags, WPCF7_FormTagsManager->scan, preg_replace_callback, WPCF7_FormTagsManager->scan_callback, apply_filters('wpcf7_form_tag'), WP_Hook->apply_filters, {closure}
+[13-Jan-2026 05:02:27 UTC] WordPress database error Unknown column 'RegionIdGildemeister' in 'field list' for query 
+      SELECT 
+        COALESCE(NULLIF(RegionIdGildemeister, 0), RegionId) AS code,
+        Descripcion AS name
+      FROM bp_regiones
+      ORDER BY name ASC
+     made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, gutenberg_render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_blocks, render_block, WP_Block->render, acf_render_block_callback, acf_rendered_block, acf_render_block, do_action('acf_block_render_template'), WP_Hook->do_action, WP_Hook->apply_filters, acf_block_render_template, include('/themes/theme-attach/template-parts/blocks-product/quote-geely.php'), do_shortcode, preg_replace_callback, do_shortcode_tag, wpcf7_contact_form_tag_func, wpcf7_switch_locale, call_user_func, {closure}, WPCF7_ContactForm->form_html, WPCF7_ContactForm->form_elements, WPCF7_ContactForm->replace_all_form_tags, WPCF7_FormTagsManager->replace_all, WPCF7_FormTagsManager->scan, preg_replace_callback, WPCF7_FormTagsManager->replace_callback, WPCF7_FormTagsManager->scan_callback, apply_filters('wpcf7_form_tag'), WP_Hook->apply_filters, {closure}
+[13-Jan-2026 05:02:27 UTC] WordPress database error Unknown column 'Nombre' in 'field list' for query 
+      SELECT TiendaId AS id, Nombre AS name
+      FROM bp_tiendas
+      ORDER BY name ASC
+     made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, gutenberg_render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_blocks, render_block, WP_Block->render, acf_render_block_callback, acf_rendered_block, acf_render_block, do_action('acf_block_render_template'), WP_Hook->do_action, WP_Hook->apply_filters, acf_block_render_template, include('/themes/theme-attach/template-parts/blocks-product/quote-geely.php'), do_shortcode, preg_replace_callback, do_shortcode_tag, wpcf7_contact_form_tag_func, wpcf7_switch_locale, call_user_func, {closure}, WPCF7_ContactForm->form_html, WPCF7_ContactForm->form_elements, WPCF7_ContactForm->replace_all_form_tags, WPCF7_FormTagsManager->replace_all, WPCF7_FormTagsManager->scan, preg_replace_callback, WPCF7_FormTagsManager->replace_callback, WPCF7_FormTagsManager->scan_callback, apply_filters('wpcf7_form_tag'), WP_Hook->apply_filters, {closure}
+[13-Jan-2026 05:02:34 UTC] WordPress database error Unknown column 'RegionIdGildemeister' in 'field list' for query 
+      SELECT 
+        COALESCE(NULLIF(RegionIdGildemeister, 0), RegionId) AS code,
+        Descripcion AS name
+      FROM bp_regiones
+      ORDER BY name ASC
+     made by require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, WPCF7_REST_Controller->get_schema, WPCF7_ContactForm->get_schema, do_action('wpcf7_swv_create_schema'), WP_Hook->do_action, WP_Hook->apply_filters, wpcf7_swv_add_checkbox_rules, WPCF7_ContactForm->scan_form_tags, WPCF7_FormTagsManager->scan, preg_replace_callback, WPCF7_FormTagsManager->scan_callback, apply_filters('wpcf7_form_tag'), WP_Hook->apply_filters, {closure}
+[13-Jan-2026 05:02:34 UTC] WordPress database error Unknown column 'Nombre' in 'field list' for query 
+      SELECT TiendaId AS id, Nombre AS name
+      FROM bp_tiendas
+      ORDER BY name ASC
+     made by require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, WPCF7_REST_Controller->get_schema, WPCF7_ContactForm->get_schema, do_action('wpcf7_swv_create_schema'), WP_Hook->do_action, WP_Hook->apply_filters, wpcf7_swv_add_checkbox_rules, WPCF7_ContactForm->scan_form_tags, WPCF7_FormTagsManager->scan, preg_replace_callback, WPCF7_FormTagsManager->scan_callback, apply_filters('wpcf7_form_tag'), WP_Hook->apply_filters, {closure}
+[13-Jan-2026 05:05:06 UTC] WordPress database error Unknown column 'Descripcion' in 'field list' for query 
+      SELECT TiendaId AS id, Descripcion AS name
+      FROM bp_tiendas
+      ORDER BY name ASC
+     made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, gutenberg_render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_blocks, render_block, WP_Block->render, acf_render_block_callback, acf_rendered_block, acf_render_block, do_action('acf_block_render_template'), WP_Hook->do_action, WP_Hook->apply_filters, acf_block_render_template, include('/themes/theme-attach/template-parts/blocks-product/quote-geely.php'), do_shortcode, preg_replace_callback, do_shortcode_tag, wpcf7_contact_form_tag_func, wpcf7_switch_locale, call_user_func, {closure}, WPCF7_ContactForm->form_html, apply_filters('wpcf7_form_enctype'), WP_Hook->apply_filters, wpcf7_file_form_enctype_filter, wpcf7_scan_form_tags, WPCF7_ContactForm->scan_form_tags, WPCF7_FormTagsManager->scan, preg_replace_callback, WPCF7_FormTagsManager->scan_callback, apply_filters('wpcf7_form_tag'), WP_Hook->apply_filters, {closure}
+[13-Jan-2026 05:05:06 UTC] WordPress database error Unknown column 'Descripcion' in 'field list' for query 
+      SELECT TiendaId AS id, Descripcion AS name
+      FROM bp_tiendas
+      ORDER BY name ASC
+     made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, gutenberg_render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_blocks, render_block, WP_Block->render, acf_render_block_callback, acf_rendered_block, acf_render_block, do_action('acf_block_render_template'), WP_Hook->do_action, WP_Hook->apply_filters, acf_block_render_template, include('/themes/theme-attach/template-parts/blocks-product/quote-geely.php'), do_shortcode, preg_replace_callback, do_shortcode_tag, wpcf7_contact_form_tag_func, wpcf7_switch_locale, call_user_func, {closure}, WPCF7_ContactForm->form_html, WPCF7_ContactForm->form_elements, WPCF7_ContactForm->replace_all_form_tags, WPCF7_FormTagsManager->replace_all, WPCF7_FormTagsManager->scan, preg_replace_callback, WPCF7_FormTagsManager->replace_callback, WPCF7_FormTagsManager->scan_callback, apply_filters('wpcf7_form_tag'), WP_Hook->apply_filters, {closure}
+[13-Jan-2026 05:05:13 UTC] WordPress database error Unknown column 'Descripcion' in 'field list' for query 
+      SELECT TiendaId AS id, Descripcion AS name
+      FROM bp_tiendas
+      ORDER BY name ASC
+     made by require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, WPCF7_REST_Controller->get_schema, WPCF7_ContactForm->get_schema, do_action('wpcf7_swv_create_schema'), WP_Hook->do_action, WP_Hook->apply_filters, wpcf7_swv_add_checkbox_rules, WPCF7_ContactForm->scan_form_tags, WPCF7_FormTagsManager->scan, preg_replace_callback, WPCF7_FormTagsManager->scan_callback, apply_filters('wpcf7_form_tag'), WP_Hook->apply_filters, {closure}
+[13-Jan-2026 05:09:00 UTC] WordPress database error Unknown column 'r.RegionIdGildemeister' in 'field list' for query SELECT
+                COALESCE(r.RegionIdGildemeister, r.RegionId) AS coddpto,
+                COALESCE(p.ProvinciaIdGildemeister, p.ProvinciaId) AS codprov,
+                COALESCE(c.ComunaIdGildemeister, c.ComunaId) AS coddist
+             FROM bp_tiendas t
+             INNER JOIN bp_comunas c ON c.ComunaId = t.ComunaId
+             INNER JOIN bp_provincias p ON p.ProvinciaId = c.ProvinciaId
+             INNER JOIN bp_regiones r ON r.RegionId = p.RegionId
+             WHERE t.TiendaId = 15
+             LIMIT 1 made by require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, WPCF7_REST_Controller->create_feedback, WPCF7_ContactForm->submit, WPCF7_Submission::get_instance, WPCF7_Submission->proceed, wpcf7_switch_locale, call_user_func, WPCF7_Submission->{closure}, WPCF7_Submission->before_send_mail, do_action_ref_array('wpcf7_before_send_mail'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, mg_quote_lookup_codes_by_store
+[13-Jan-2026 05:09:16 UTC] [MG_QUOTE] POST -> API {"endpoint":"https:\/\/ag-peru-experience-api-prod.us-e1.cloudhub.io\/peru\/lead","headers":{"Authorization":"Basic ***"},"body":{"data":{"co_tipo_documento":"01","nu_documento":"77777777","no_contacto":"Hillary","no_ape_pat":"Vilchez","no_ape_mat":"","no_correo":"ry@gmail.com","nu_celular":"99999999","nid_marca":"0","nid_modelo":"0","Coddpto":"21","Codprov":"","Coddist":"","co_tienda":"15","nid_punto_venta":"15","GPVersion":"Comfort 1.5 MT","co_ano":"2025","co_familia":"PV","co_canal":"CO","co_origen":"WEB","fl_recibir_info":"S","fl_fecha_consen":"13\/01\/2026 00:09:00","fe_nacimiento":"01\/01\/1900","utm_campaign":"","utm_content":"","utm_medium":"","utm_source":"","utm_term":"","gclid":"","fbclid":"","source":{"site":"http:\/\/localhost\/site-geely\/wordpress\/","submitted_at":"2026-01-13 00:09:16","post_id":897}}}}
+[13-Jan-2026 05:09:20 UTC] [MG_QUOTE] API RESULT {"ok":1,"status":200,"response":"{\n  \"success\": false,\n  \"id\": -1,\n  \"message\": \"Código de BusinessUnit__c no homologado = 0|PV|CO\"\n}","error":""}
+[13-Jan-2026 05:09:24 UTC] PHP Deprecated:  Hook wpcf7_ajax_json_echo is <strong>deprecated</strong> since Contact Form 7 version 5.2! Use wpcf7_feedback_response instead. in D:\Programas\Laragon\laragon\www\site-geely\wordpress\wp-includes\functions.php on line 6121
+[13-Jan-2026 05:14:37 UTC] [MG_QUOTE] POST -> API {"endpoint":"https:\/\/ag-peru-experience-api-prod.us-e1.cloudhub.io\/peru\/lead","headers":{"Authorization":"Basic ***"},"body":{"data":{"co_tipo_documento":"01","nu_documento":"77777777","no_contacto":"Hillary","no_ape_pat":"Vilchez","no_ape_mat":"","no_correo":"ry@gmail.com","nu_celular":"99999999","nid_marca":"0","nid_modelo":"0","Coddpto":"16","Codprov":"129","Coddist":"14","co_tienda":"17","nid_punto_venta":"17","GPVersion":"Comfort 1.5 MT","co_ano":"2025","co_familia":"PV","co_canal":"CO","co_origen":"WEB","fl_recibir_info":"S","fl_fecha_consen":"13\/01\/2026 00:14:20","fe_nacimiento":"01\/01\/1900","utm_campaign":"","utm_content":"","utm_medium":"","utm_source":"","utm_term":"","gclid":"","fbclid":"","source":{"site":"http:\/\/localhost\/site-geely\/wordpress\/","submitted_at":"2026-01-13 00:14:37","post_id":898}}}}
+[13-Jan-2026 05:14:41 UTC] [MG_QUOTE] API RESULT {"ok":1,"status":200,"response":"{\n  \"success\": false,\n  \"id\": -1,\n  \"message\": \"Código de Province__c no homologado = 16129 | Código de City no homologado = 1612914 | Código de BusinessUnit__c no homologado = 0|PV|CO\"\n}","error":""}
+[13-Jan-2026 05:14:44 UTC] PHP Deprecated:  Hook wpcf7_ajax_json_echo is <strong>deprecated</strong> since Contact Form 7 version 5.2! Use wpcf7_feedback_response instead. in D:\Programas\Laragon\laragon\www\site-geely\wordpress\wp-includes\functions.php on line 6121
+[13-Jan-2026 05:23:31 UTC] [MG_QUOTE] REQUEST BODY (to API) {"data":{"co_tipo_documento":"01","nu_documento":"77777777","no_contacto":"Hillary","no_ape_pat":"Vilchez","no_ape_mat":"","no_correo":"ry@gmail.com","nu_celular":"99999999","nid_marca":"0","nid_modelo":"0","Coddpto":"12","Codprov":"100","Coddist":"12","co_tienda":"14","nid_punto_venta":"14","GPVersion":"Comfort 1.5 MT","co_ano":"2025","co_familia":"PV","co_canal":"CO","co_origen":"WEB","fl_recibir_info":"S","fl_fecha_consen":"13\/01\/2026 00:23:14","fe_nacimiento":"01\/01\/1900","utm_campaign":"","utm_content":"","utm_medium":"","utm_source":"","utm_term":"","gclid":"","fbclid":""}}
+[13-Jan-2026 05:23:35 UTC] [MG_QUOTE] API RESPONSE {"status":200,"ok":1,"body":"{\n  \"success\": false,\n  \"id\": -1,\n  \"message\": \"Código de Province__c no homologado = 12100 | Código de City no homologado = 1210012 | Código de BusinessUnit__c no homologado = 0|PV|CO\"\n}","error":""}
+[13-Jan-2026 05:23:38 UTC] PHP Deprecated:  Hook wpcf7_ajax_json_echo is <strong>deprecated</strong> since Contact Form 7 version 5.2! Use wpcf7_feedback_response instead. in D:\Programas\Laragon\laragon\www\site-geely\wordpress\wp-includes\functions.php on line 6121

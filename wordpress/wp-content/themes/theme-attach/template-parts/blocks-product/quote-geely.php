@@ -25,84 +25,193 @@ if (empty($models) || !is_array($models)) {
 }
 
 /* ============================================================
- *  ✅ CF7: Llenar selects dinámicos (cot_department / cot_store)
- *  - Departamento: terms de taxonomía 'departamento' ligados a tiendas
- *  - Tienda: WP_Query post_type 'tienda'
+ *  CF7: Llenar selects dinámicos desde BD (bp_regiones / bp_tiendas)
+ *  - Departamento: bp_regiones (value = RegionIdGildemeister si existe, si no RegionId)
+ *  - Tienda: se cargará por AJAX según Departamento
+ *  - Recomendación por ubicación: AJAX nearest stores
  * ============================================================ */
+global $wpdb;
+
 $mg_quote_dynamic_departments = [];
-$mg_quote_dynamic_stores = [];
+$mg_quote_dynamic_stores = []; // se llena por JS/AJAX (aquí dejamos placeholder)
 
-$tienda_exists = post_type_exists('tienda');
-$taxonomy_departamento_exists = taxonomy_exists('departamento');
-
-$tienda_ids = [];
-if ($tienda_exists) {
-  $tienda_ids = get_posts([
-    'post_type'   => 'tienda',
-    'numberposts' => -1,
-    'fields'      => 'ids',
-    'post_status' => 'publish',
-  ]);
-
-  // Departments (como en stores-locator)
-  if ($taxonomy_departamento_exists && !empty($tienda_ids)) {
-    if (function_exists('theme_attach_get_terms_with_posts')) {
-      $departments = theme_attach_get_terms_with_posts('departamento', [
-        'object_ids' => $tienda_ids,
-        'orderby'    => 'name',
-      ]);
-    } else {
-      // Fallback si no existe helper
-      $departments = get_terms([
-        'taxonomy'   => 'departamento',
-        'hide_empty' => false,
-        'orderby'    => 'name',
-        'order'      => 'ASC',
-      ]);
-    }
-
-    if (!is_wp_error($departments) && !empty($departments)) {
-      foreach ($departments as $term) {
-        if (!is_object($term)) continue;
-        $name = (string) ($term->name ?? '');
-        $slug = (string) ($term->slug ?? '');
-        if ($name === '') continue;
-
-        // value: usamos el slug para que sea estable
-        $mg_quote_dynamic_departments[] = [
-          'value' => $slug ?: sanitize_title($name),
-          'label' => $name,
-        ];
-      }
-    }
-  }
-
-  // Stores query (como en tu snippet)
-  $stores_query = new WP_Query([
-    'post_type'      => 'tienda',
-    'posts_per_page' => -1,
-    'post_status'    => 'publish',
-    'orderby'        => 'title',
-    'order'          => 'ASC',
-  ]);
-
-  if ($stores_query->have_posts()) {
-    while ($stores_query->have_posts()) {
-      $stores_query->the_post();
-      $store_id = get_the_ID();
-      $store_title = get_the_title($store_id);
-
-      if (!$store_id || $store_title === '') continue;
-
-      // value: ID|Título (útil para auditoría / API después)
-      $mg_quote_dynamic_stores[] = [
-        'value' => $store_id . '|' . $store_title,
-        'label' => $store_title,
-      ];
-    }
-    wp_reset_postdata();
+// Helpers tabla existe
+if (!function_exists('mg_quote_table_exists')) {
+  function mg_quote_table_exists($table_name) {
+    global $wpdb;
+    $like = $wpdb->esc_like($table_name);
+    $found = $wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $like));
+    return !empty($found);
   }
 }
+
+// Cargar departamentos (regiones)
+if (mg_quote_table_exists('bp_regiones')) {
+  $cols = $wpdb->get_results("SHOW COLUMNS FROM bp_regiones", ARRAY_A);
+  $has_gid = false;
+  foreach ((array)$cols as $c) {
+    if (!empty($c['Field']) && $c['Field'] === 'RegionIdGildemeister') { $has_gid = true; break; }
+  }
+
+  $sql = $has_gid
+    ? "SELECT RegionIdGildemeister AS value, Descripcion AS label FROM bp_regiones ORDER BY Descripcion ASC"
+    : "SELECT RegionId AS value, Descripcion AS label FROM bp_regiones ORDER BY Descripcion ASC";
+
+  $rows = $wpdb->get_results($sql, ARRAY_A);
+  foreach ((array)$rows as $r) {
+    $v = isset($r['value']) ? (string)$r['value'] : '';
+    $l = isset($r['label']) ? (string)$r['label'] : '';
+    if ($v === '' || $l === '') continue;
+    $mg_quote_dynamic_departments[] = ['value' => $v, 'label' => $l];
+  }
+}
+
+// ==============================
+// AJAX: tiendas por departamento
+// ==============================
+if (!function_exists('mg_quote_ajax_get_stores_by_department')) {
+  function mg_quote_ajax_get_stores_by_department() {
+    if (!check_ajax_referer('mg_quote_ajax', 'nonce', false)) {
+      wp_send_json_error(['message' => 'Nonce inválido'], 403);
+    }
+
+    global $wpdb;
+
+    $dept = isset($_POST['department']) ? sanitize_text_field(wp_unslash($_POST['department'])) : '';
+    $dept = trim($dept);
+
+    if ($dept === '') {
+      wp_send_json_success(['items' => []]);
+    }
+
+    // Detectar si la región se filtra por RegionIdGildemeister o RegionId
+    $has_gid = false;
+    if (mg_quote_table_exists('bp_regiones')) {
+      $cols = $wpdb->get_results("SHOW COLUMNS FROM bp_regiones", ARRAY_A);
+      foreach ((array)$cols as $c) {
+        if (!empty($c['Field']) && $c['Field'] === 'RegionIdGildemeister') { $has_gid = true; break; }
+      }
+    }
+
+    $regionFilter = $has_gid ? "r.RegionIdGildemeister = %s" : "r.RegionId = %s";
+
+    $sql = $wpdb->prepare(
+      "SELECT t.TiendaId AS id, t.Nombre AS name
+       FROM bp_tiendas t
+       INNER JOIN bp_comunas c ON c.ComunaId = t.ComunaId
+       INNER JOIN bp_provincias p ON p.ProvinciaId = c.ProvinciaId
+       INNER JOIN bp_regiones r ON r.RegionId = p.RegionId
+       WHERE {$regionFilter}
+       ORDER BY t.Nombre ASC",
+      $dept
+    );
+
+    $rows = $wpdb->get_results($sql, ARRAY_A);
+    $items = [];
+    foreach ((array)$rows as $r) {
+      $id = (string)($r['id'] ?? '');
+      $name = (string)($r['name'] ?? '');
+      if ($id === '' || $name === '') continue;
+      $items[] = [
+        'value' => $id . '|' . $name,
+        'label' => $name,
+        'id'    => $id,
+        'name'  => $name,
+      ];
+    }
+
+    wp_send_json_success(['items' => $items]);
+  }
+}
+
+if (!has_action('wp_ajax_mg_quote_get_stores')) {
+  add_action('wp_ajax_mg_quote_get_stores', 'mg_quote_ajax_get_stores_by_department');
+  add_action('wp_ajax_nopriv_mg_quote_get_stores', 'mg_quote_ajax_get_stores_by_department');
+}
+
+// ==============================
+// AJAX: tiendas más cercanas
+// ==============================
+if (!function_exists('mg_quote_ajax_nearest_stores')) {
+  function mg_quote_ajax_nearest_stores() {
+    if (!check_ajax_referer('mg_quote_ajax', 'nonce', false)) {
+      wp_send_json_error(['message' => 'Nonce inválido'], 403);
+    }
+
+    global $wpdb;
+
+    $lat = isset($_POST['lat']) ? floatval($_POST['lat']) : 0;
+    $lng = isset($_POST['lng']) ? floatval($_POST['lng']) : 0;
+
+    if (!$lat || !$lng) {
+      wp_send_json_success(['items' => []]);
+    }
+
+    $cols = $wpdb->get_results("SHOW COLUMNS FROM bp_tiendas", ARRAY_A);
+    $latCol = '';
+    $lngCol = '';
+    $latCandidates = ['Latitud','latitud','Latitude','latitude','lat'];
+    $lngCandidates = ['Longitud','longitud','Longitude','longitude','lng','lon'];
+
+    foreach ((array)$cols as $c) {
+      $f = (string)($c['Field'] ?? '');
+      if (!$latCol && in_array($f, $latCandidates, true)) $latCol = $f;
+      if (!$lngCol && in_array($f, $lngCandidates, true)) $lngCol = $f;
+    }
+
+    if ($latCol === '' || $lngCol === '') {
+      wp_send_json_success(['items' => []]);
+    }
+
+    $sql = $wpdb->prepare(
+      "SELECT
+          t.TiendaId AS id,
+          t.Nombre AS name,
+          COALESCE(r.RegionIdGildemeister, r.RegionId) AS region_code,
+          (
+            6371 * 2 * ASIN(
+              SQRT(
+                POWER(SIN((RADIANS(%f) - RADIANS(t.`$latCol`)) / 2), 2) +
+                COS(RADIANS(t.`$latCol`)) * COS(RADIANS(%f)) *
+                POWER(SIN((RADIANS(%f) - RADIANS(t.`$lngCol`)) / 2), 2)
+              )
+            )
+          ) AS distance_km
+       FROM bp_tiendas t
+       INNER JOIN bp_comunas c ON c.ComunaId = t.ComunaId
+       INNER JOIN bp_provincias p ON p.ProvinciaId = c.ProvinciaId
+       INNER JOIN bp_regiones r ON r.RegionId = p.RegionId
+       WHERE t.`$latCol` IS NOT NULL AND t.`$lngCol` IS NOT NULL
+       ORDER BY distance_km ASC
+       LIMIT 5",
+      $lat, $lat, $lng
+    );
+
+    $rows = $wpdb->get_results($sql, ARRAY_A);
+    $items = [];
+    foreach ((array)$rows as $r) {
+      $id = (string)($r['id'] ?? '');
+      $name = (string)($r['name'] ?? '');
+      if ($id === '' || $name === '') continue;
+      $items[] = [
+        'id' => $id,
+        'name' => $name,
+        'department' => (string)($r['region_code'] ?? ''),
+        'distance_km' => isset($r['distance_km']) ? round(floatval($r['distance_km']), 2) : null,
+        'value' => $id . '|' . $name,
+        'label' => $name,
+      ];
+    }
+
+    wp_send_json_success(['items' => $items]);
+  }
+}
+
+if (!has_action('wp_ajax_mg_quote_nearest_stores')) {
+  add_action('wp_ajax_mg_quote_nearest_stores', 'mg_quote_ajax_nearest_stores');
+  add_action('wp_ajax_nopriv_mg_quote_nearest_stores', 'mg_quote_ajax_nearest_stores');
+}
+
 
 /**
  * Registrar filtro CF7 solo 1 vez por request
@@ -168,15 +277,9 @@ if (!function_exists('mg_quote_cf7_dynamic_selects')) {
       return $tag;
     };
 
-    if ($tag_name === 'cot_department' && !empty($deps)) {
-      return $apply($tag, $deps, 'Selecciona una opción');
-    }
-
-    if ($tag_name === 'cot_store' && !empty($stores)) {
-      return $apply($tag, $stores, 'Selecciona una opción');
-    }
-
-    return $tag;
+    if ($tag_name === 'cot_department') { return $apply($tag, is_array($deps)?$deps:[], 'Selecciona una opción'); }
+if ($tag_name === 'cot_store') { return $apply($tag, is_array($stores)?$stores:[], 'Selecciona una opción'); }
+return $tag;
   }
 }
 
@@ -531,6 +634,10 @@ $default_hero_img = (string)(
 
   <script>
     window.__MG_QUOTE_BLOCKS__ = window.__MG_QUOTE_BLOCKS__ || [];
+    window.MG_QUOTE_AJAX = window.MG_QUOTE_AJAX || {
+      url: '<?php echo esc_url(admin_url('admin-ajax.php')); ?>',
+      nonce: '<?php echo esc_js(wp_create_nonce('mg_quote_ajax')); ?>'
+    };
     window.__MG_QUOTE_BLOCKS__.push('<?php echo esc_js($root_selector); ?>');
   </script>
 </section>
