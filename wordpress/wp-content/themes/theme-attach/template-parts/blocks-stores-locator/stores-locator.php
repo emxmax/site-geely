@@ -317,6 +317,8 @@ $uid = 'nf-producto-' . wp_unique_id();
                   data-lat="<?= esc_attr($store_lat); ?>" data-lng="<?= esc_attr($store_lng); ?>"
                   data-departments="<?= esc_attr($dept_slugs); ?>" data-services="<?= esc_attr($service_slugs); ?>">
 
+                  <a href="#" class="stores-locator__card-link stores-locator__card-link--all"
+                    data-action="view-on-map"></a>
                   <!-- Category Badge -->
                   <?php
                   $primary_service = wp_get_post_terms(
@@ -325,9 +327,11 @@ $uid = 'nf-producto-' . wp_unique_id();
                     ['number' => 1]
                   );
                   if (!empty($primary_service) && !is_wp_error($primary_service)):
+                    $service_slug = $primary_service[0]->slug;
+                    $bg_pills = $service_slug === "postventa" ? 'bg-red-de-atencion-tags-postventa.webp' : 'bg-red-de-atencion-tags.webp';
                     ?>
                     <div class="stores-locator__card-badge title-mob"
-                      style="background-image: url(<?= esc_url(IMG . '/bg-red-de-atencion-tags.webp') ?>);">
+                      style="background-image: url(<?= esc_url(IMG . '/' . $bg_pills) ?>);">
                       <?= esc_html($primary_service[0]->name); ?>
                     </div>
                   <?php endif; ?>
