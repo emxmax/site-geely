@@ -114,3 +114,46 @@ function get_terms_for_post_type_ordered(
 
   return $terms;
 }
+
+/**
+ * Validar campo "phone" en Contact Form 7 (servidor)
+ * 
+ * Requisitos:
+ * - Exactamente 9 dígitos
+ * - Debe empezar con 9
+ * - Solo números
+ * 
+ * @param WPCF7_Validation $result Objeto de validación de CF7
+ * @param WPCF7_FormTag $tag Tag del formulario
+ * @return WPCF7_Validation
+ */
+function promotions_validate_phone_field($result, $tag) {
+    $name = $tag->name;
+    
+    // Solo validar el campo "phone"
+    if ($name !== 'phone') {
+        return $result;
+    }
+    
+    $value = isset($_POST[$name]) ? trim($_POST[$name]) : '';
+    
+    // Si está vacío y es requerido, CF7 ya maneja ese error
+    if (empty($value)) {
+        return $result;
+    }
+    
+    // Validar formato: 9 dígitos, empieza con 9, solo números
+    if (!preg_match('/^9\d{8}$/', $value)) {
+        $result->invalidate($tag, 'Ingresa un celular válido (9 dígitos y empieza con 9).');
+    }
+    
+    return $result;
+}
+
+// Registrar validación para campos de tipo "tel*" (teléfono requerido)
+add_filter('wpcf7_validate_tel*', 'promotions_validate_phone_field', 10, 2);
+
+// También para "tel" (teléfono opcional, pero si se llena debe ser válido)
+add_filter('wpcf7_validate_tel', 'promotions_validate_phone_field', 10, 2);
+
+

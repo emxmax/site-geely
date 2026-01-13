@@ -438,3 +438,15 @@ Stack trace:
 [11-Jan-2026 21:58:53 UTC] PHP Deprecated:  preg_split(): Passing null to parameter #2 ($subject) of type string is deprecated in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\formatting.php on line 3493
 [11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "ID" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-revisions-controller.php on line 664
 [11-Jan-2026 21:58:53 UTC] PHP Warning:  Attempt to read property "ID" on null in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\rest-api\endpoints\class-wp-rest-autosaves-controller.php on line 465
+[12-Jan-2026 09:50:34 UTC] PHP Warning:  mysqli_real_connect(): php_network_getaddresses: getaddrinfo for geely-database.cbo8w4ekwbz1.sa-east-1.rds.amazonaws.com failed: Host desconocido.  in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wpdb.php on line 1988
+[12-Jan-2026 09:50:34 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): php_network_getaddresses: getaddrinfo for geely-database.cbo8w4ekwbz1.sa-east-1.rds.amazonaws.com failed: Host desconocido.  in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\class-wpdb.php on line 1988
+[12-Jan-2026 09:53:07 UTC] Automatic updates starting...
+[12-Jan-2026 09:53:11 UTC]   Automatic theme updates starting...
+[12-Jan-2026 09:53:12 UTC]   Automatic theme updates complete.
+[12-Jan-2026 09:53:12 UTC] Automatic updates complete.
+[13-Jan-2026 08:28:32 UTC] Automatic updates starting...
+[13-Jan-2026 08:28:36 UTC]   Automatic theme updates starting...
+[13-Jan-2026 08:28:38 UTC]   Automatic theme updates complete.
+[13-Jan-2026 08:28:38 UTC] Automatic updates complete.
+[13-Jan-2026 09:10:48 UTC] [MG_QUOTE] VALIDATION: missing required fields {"product_id":0,"names":"","lastnames":"","phone":"","email":""}
+[13-Jan-2026 09:10:50 UTC] PHP Deprecated:  Hook wpcf7_ajax_json_echo is <strong>deprecated</strong> since Contact Form 7 version 5.2! Use wpcf7_feedback_response instead. in C:\xampp_8.2.12\htdocs\site-geely\wordpress\wp-includes\functions.php on line 6121

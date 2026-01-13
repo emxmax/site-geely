@@ -247,8 +247,11 @@ label:has(> [name*="marketing_consent"]) {
   line-height: var(--lh-title-7);
   font-weight: 700;
   color: var(--c-white);
-  background-color: var(--c-steel-grey);
   font-family: var(--font-geely);
+  background-color: var(--c-greely-blue);
+}
+.geely-actions .geely-submit:disabled {
+  background-color: var(--c-steel-grey);
 }
 
 /* =========================
