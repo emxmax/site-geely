@@ -1,2 +1,69 @@
-<!-- wp:site-title {"textAlign":"center"} /-->
-<!-- wp:site-tagline {"textAlign":"center"} /-->
+<!-- wp:group {"tagName":"header","className":"mg-header","layout":{"type":"constrained"}} -->
+<header class="wp-block-group mg-header">
+  <!-- wp:group {"align":"wide","className":"mg-header__bar","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between","verticalAlignment":"center"}} -->
+  <div class="wp-block-group alignwide mg-header__bar">
+
+    <!-- LOGO -->
+    <!-- wp:group {"className":"mg-header__brand","layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"center"}} -->
+    <div class="wp-block-group mg-header__brand">
+      <!-- wp:site-logo {"width":120,"shouldSyncIcon":true} /-->
+    </div>
+    <!-- /wp:group -->
+
+    <!-- NAV (ÚNICO - ESTE SE MUEVE AL DRAWER EN MOBILE) -->
+    <!-- wp:navigation {"className":"mg-header__nav","overlayMenu":"never","layout":{"type":"flex","justifyContent":"center","flexWrap":"nowrap"},"showSubmenuIcon":true} /-->
+
+    <!-- CTA DESKTOP -->
+    <!-- wp:buttons {"className":"mg-header__cta"} -->
+    <div class="wp-block-buttons mg-header__cta">
+      <!-- wp:button {"className":"mg-btn mg-btn--primary"} -->
+      <div class="wp-block-button mg-btn mg-btn--primary">
+        <a class="wp-block-button__link wp-element-button" href="/cotizar">Cotizar</a>
+      </div>
+      <!-- /wp:button -->
+    </div>
+    <!-- /wp:buttons -->
+
+    <!-- BURGER MOBILE -->
+    <!-- wp:html -->
+    <button
+      class="mg-header__burger"
+      type="button"
+      aria-label="Abrir menú"
+      aria-controls="mg-mobile-drawer"
+      aria-expanded="false"
+    >
+      <span class="mg-burger" aria-hidden="true"></span>
+    </button>
+    <!-- /wp:html -->
+  </div>
+  <!-- /wp:group -->
+
+  <!-- DRAWER MOBILE -->
+  <!-- wp:html -->
+  <div id="mg-mobile-drawer" class="mg-drawer" aria-hidden="true">
+    <div class="mg-drawer__backdrop" data-mg-drawer-close></div>
+
+    <div class="mg-drawer__panel" role="dialog" aria-modal="true" aria-label="Menú">
+      <div class="mg-drawer__top">
+        <div class="mg-drawer__logo"></div>
+
+        <button
+          class="mg-drawer__close"
+          type="button"
+          aria-label="Cerrar menú"
+          data-mg-drawer-close
+        >✕</button>
+      </div>
+
+      <!-- AQUÍ SE INYECTA EL NAV REAL CON JS -->
+      <nav class="mg-drawer__nav" aria-label="Navegación móvil"></nav>
+
+      <div class="mg-drawer__bottom">
+        <a class="mg-btn mg-btn--full" href="/cotizar">Cotizar</a>
+      </div>
+    </div>
+  </div>
+  <!-- /wp:html -->
+</header>
+<!-- /wp:group -->
