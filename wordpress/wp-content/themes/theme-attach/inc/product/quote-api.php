@@ -1,147 +1,51 @@
 <?php
 if (!defined('ABSPATH')) exit;
 
-/** =========================================
+/** =========================
  *  CONFIG
- *  ========================================= */
+ *  ========================= */
 if (!defined('MG_QUOTE_API_ENDPOINT')) {
   define('MG_QUOTE_API_ENDPOINT', 'https://ag-peru-experience-api-prod.us-e1.cloudhub.io/peru/lead');
 }
 if (!defined('MG_QUOTE_API_DEBUG')) {
-  define('MG_QUOTE_API_DEBUG', true); // true => error_log
+  define('MG_QUOTE_API_DEBUG', true);
 }
 
-/**
- * OJO: si lo pones en true, CF7 devolverá en JSON el body enviado (debug_request).
- * En PROD déjalo en false.
- */
-if (!defined('MG_QUOTE_EXPOSE_DEBUG')) {
-  define('MG_QUOTE_EXPOSE_DEBUG', false);
-}
-
-/** Guardaremos el último resultado del API para devolverlo al front (CF7 ajax JSON) */
+/** Globals para devolver al front */
 $GLOBALS['mg_quote_last_api'] = null;
+$GLOBALS['mg_quote_last_payload'] = null;
 
-/** =========================================
- *  DEBUG LOG
- *  ========================================= */
+/** Helper debug */
 if (!function_exists('mg_quote_log')) {
-  function mg_quote_log($msg, $data = null) {
+  function mg_quote_log($msg, $data = null)
+  {
     if (!MG_QUOTE_API_DEBUG) return;
-    if ($data !== null) {
-      error_log('[MG_QUOTE] ' . $msg . ' ' . wp_json_encode($data, JSON_UNESCAPED_UNICODE));
-    } else {
-      error_log('[MG_QUOTE] ' . $msg);
-    }
+    if ($data !== null) error_log('[MG_QUOTE] ' . $msg . ' ' . wp_json_encode($data, JSON_UNESCAPED_UNICODE));
+    else error_log('[MG_QUOTE] ' . $msg);
   }
 }
 
-/** =========================================
- *  Helpers: Store parsing + DB lookup codes
- *  Tablas: bp_tiendas -> bp_comunas -> bp_provincias -> bp_regiones
- *  ========================================= */
-if (!function_exists('mg_quote_parse_store_id')) {
-  function mg_quote_parse_store_id($raw) {
-    $raw = (string) $raw;
-    if ($raw === '') return 0;
-
-    // si te llega "ID|Nombre"
-    if (strpos($raw, '|') !== false) {
-      $parts = explode('|', $raw);
-      $raw = $parts[0];
-    }
-
-    return (int) preg_replace('/[^0-9]/', '', $raw);
-  }
-}
-
+/** Helper: tabla existe */
 if (!function_exists('mg_quote_table_exists')) {
-  function mg_quote_table_exists($table) {
+  function mg_quote_table_exists($table)
+  {
     global $wpdb;
+    $table = preg_replace('/[^a-zA-Z0-9_]/', '', (string)$table);
+    if ($table === '') return false;
+
     $wpdb->hide_errors();
     $wpdb->suppress_errors(true);
-    $found = $wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table));
+    $exists = $wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table));
     $wpdb->suppress_errors(false);
-    return !empty($found);
+
+    return !empty($exists);
   }
 }
 
-if (!function_exists('mg_quote_has_column')) {
-  function mg_quote_has_column($table, $column) {
-    global $wpdb;
-    $wpdb->hide_errors();
-    $wpdb->suppress_errors(true);
-    $cols = $wpdb->get_results("SHOW COLUMNS FROM `$table`", ARRAY_A);
-    $wpdb->suppress_errors(false);
-
-    foreach ((array)$cols as $c) {
-      if (!empty($c['Field']) && $c['Field'] === $column) return true;
-    }
-    return false;
-  }
-}
-
-if (!function_exists('mg_quote_lookup_codes_by_store')) {
-  function mg_quote_lookup_codes_by_store($store_id) {
-    global $wpdb;
-
-    $store_id = (int)$store_id;
-    if (!$store_id) return [null, null, null];
-
-    // Evitar HTML wpdb error en pantalla (rompe JSON CF7)
-    $wpdb->hide_errors();
-    $wpdb->suppress_errors(true);
-
-    // Validar tablas
-    if (
-      !mg_quote_table_exists('bp_tiendas') ||
-      !mg_quote_table_exists('bp_comunas') ||
-      !mg_quote_table_exists('bp_provincias') ||
-      !mg_quote_table_exists('bp_regiones')
-    ) {
-      $wpdb->suppress_errors(false);
-      return [null, null, null];
-    }
-
-    // Detectar columnas Gildemeister si existen
-    $rCol = mg_quote_has_column('bp_regiones', 'RegionIdGildemeister') ? 'r.RegionIdGildemeister' : 'r.RegionId';
-    $pCol = mg_quote_has_column('bp_provincias', 'ProvinciaIdGildemeister') ? 'p.ProvinciaIdGildemeister' : 'p.ProvinciaId';
-    $cCol = mg_quote_has_column('bp_comunas', 'ComunaIdGildemeister') ? 'c.ComunaIdGildemeister' : 'c.ComunaId';
-
-    // OJO: según tus screenshots, bp_tiendas tiene ComunaId y bp_provincias tiene RegionId
-    $sql = $wpdb->prepare(
-      "SELECT
-          {$rCol} AS coddpto,
-          {$pCol} AS codprov,
-          {$cCol} AS coddist
-       FROM bp_tiendas t
-       INNER JOIN bp_comunas c ON c.ComunaId = t.ComunaId
-       INNER JOIN bp_provincias p ON p.ProvinciaId = c.ProvinciaId
-       INNER JOIN bp_regiones r ON r.RegionId = p.RegionId
-       WHERE t.TiendaId = %d
-       LIMIT 1",
-      $store_id
-    );
-
-    $row = $wpdb->get_row($sql, ARRAY_A);
-
-    $wpdb->suppress_errors(false);
-
-    if (!$row) return [null, null, null];
-
-    return [
-      isset($row['coddpto']) ? (string)$row['coddpto'] : null,
-      isset($row['codprov']) ? (string)$row['codprov'] : null,
-      isset($row['coddist']) ? (string)$row['coddist'] : null,
-    ];
-  }
-}
-
-/** =========================================
- *  Map Tipo Documento requerido por API: 01..06
- *  ========================================= */
+/** Map tipo doc API */
 if (!function_exists('mg_map_doc_type')) {
-  function mg_map_doc_type($v) {
+  function mg_map_doc_type($v)
+  {
     $v = strtoupper(trim((string)$v));
     $map = [
       'DNI' => '01',
@@ -161,18 +65,83 @@ if (!function_exists('mg_map_doc_type')) {
   }
 }
 
-/** =========================================
- *  API call (log request body + response)
- *  ========================================= */
+/** Parse store id (por si viniera "ID|Nombre") */
+if (!function_exists('mg_quote_parse_store_id')) {
+  function mg_quote_parse_store_id($raw)
+  {
+    $raw = (string)$raw;
+    if ($raw === '') return 0;
+
+    if (strpos($raw, '|') !== false) {
+      $parts = explode('|', $raw);
+      $raw = $parts[0];
+    }
+    return (int)preg_replace('/[^0-9]/', '', $raw);
+  }
+}
+
+/** Lookup tienda */
+if (!function_exists('mg_quote_lookup_store_meta')) {
+  function mg_quote_lookup_store_meta($store_id)
+  {
+    global $wpdb;
+
+    $store_id = (int)$store_id;
+    if (!$store_id) return [null, null, null];
+    if (!mg_quote_table_exists('bp_tiendas')) return [null, null, null];
+
+    $wpdb->hide_errors();
+    $wpdb->suppress_errors(true);
+
+    $cols = $wpdb->get_results("SHOW COLUMNS FROM bp_tiendas", ARRAY_A);
+
+    $hasCol = function ($field) use ($cols) {
+      foreach ((array)$cols as $c) {
+        if (!empty($c['Field']) && $c['Field'] === $field) return true;
+      }
+      return false;
+    };
+
+    $colNombre = $hasCol('NombreComercial') ? 'NombreComercial' : ($hasCol('Tienda') ? 'Tienda' : '');
+    $colVenta  = $hasCol('CodigoVenta') ? 'CodigoVenta' : '';
+    $colCanal  = $hasCol('codigoCanal') ? 'codigoCanal' : '';
+
+    $select = [];
+    if ($colNombre) $select[] = "`$colNombre` AS nombre";
+    if ($colVenta)  $select[] = "`$colVenta` AS codigoventa";
+    if ($colCanal)  $select[] = "`$colCanal` AS codigocanal";
+
+    if (empty($select)) {
+      $wpdb->suppress_errors(false);
+      return [null, null, null];
+    }
+
+    $sql = $wpdb->prepare(
+      "SELECT " . implode(', ', $select) . "
+       FROM bp_tiendas
+       WHERE TiendaId = %d
+       LIMIT 1",
+      $store_id
+    );
+
+    $row = $wpdb->get_row($sql, ARRAY_A);
+    $wpdb->suppress_errors(false);
+
+    if (!$row) return [null, null, null];
+
+    $nombre = isset($row['nombre']) ? trim((string)$row['nombre']) : null;
+    $venta  = isset($row['codigoventa']) ? trim((string)$row['codigoventa']) : null;
+    $canal  = isset($row['codigocanal']) ? trim((string)$row['codigocanal']) : null;
+
+    return [$nombre ?: null, $venta ?: null, $canal ?: null];
+  }
+}
+
+/** Enviar a API */
 if (!function_exists('mg_quote_send_api')) {
-  function mg_quote_send_api($payload) {
-    $out = [
-      'ok' => 0,
-      'status' => 0,
-      'response' => '',
-      'error' => '',
-      'debug_request' => null,
-    ];
+  function mg_quote_send_api($payload)
+  {
+    $out = ['ok' => 0, 'status' => 0, 'response' => '', 'error' => ''];
 
     if (empty(MG_QUOTE_API_ENDPOINT) || strpos(MG_QUOTE_API_ENDPOINT, 'http') !== 0) {
       $out['error'] = 'API endpoint no configurado';
@@ -184,13 +153,13 @@ if (!function_exists('mg_quote_send_api')) {
     $pass = '25f688A7F6d249AD93B77EB2822e4356';
     $auth = base64_encode($user . ':' . $pass);
 
-    // APIKIT pide wrapper "data"
+    // APIKIT pide wrapper data
     $body = ['data' => $payload];
 
-    // 👇 ESTE ES EL "BODY ENVIADO" (lo verás en error_log)
-    mg_quote_log('REQUEST BODY (to API)', $body);
+    $GLOBALS['mg_quote_last_payload'] = $body;
 
-    $out['debug_request'] = $body; // opcional para devolverlo en CF7 JSON
+    mg_quote_log('PAYLOAD', $payload);
+    mg_quote_log('BODY', $body);
 
     $res = wp_remote_post(MG_QUOTE_API_ENDPOINT, [
       'timeout' => 60,
@@ -216,20 +185,14 @@ if (!function_exists('mg_quote_send_api')) {
 
     if (!$out['ok']) $out['error'] = 'HTTP ' . $out['status'];
 
-    mg_quote_log('API RESPONSE', [
-      'status' => $out['status'],
-      'ok' => $out['ok'],
-      'body' => $out['response'],
-      'error' => $out['error'],
-    ]);
-
+    mg_quote_log('API RESULT', $out);
     return $out;
   }
 }
 
-/** =========================================
- *  1) Submit CF7: guardar cotización + disparar API
- *  ========================================= */
+/** =========================
+ *  1) CF7 BEFORE SEND MAIL: llama API + prepara globals para AJAX
+ *  ========================= */
 add_action('wpcf7_before_send_mail', function ($contact_form) {
 
   $submission = WPCF7_Submission::get_instance();
@@ -244,41 +207,34 @@ add_action('wpcf7_before_send_mail', function ($contact_form) {
     return is_string($v) ? trim($v) : $v;
   };
 
-  // ===== Contexto (hidden) =====
-  $cot_product_id         = (int) $get('product_id');
-  $cot_product_title      = (string) $get('product_title');
-  $cot_model_slug         = (string) $get('model_slug');
-  $cot_model_name         = (string) $get('model_name');
-  $cot_model_year         = (string) $get('model_year');
-  $cot_model_price_usd    = (string) $get('model_price_usd');
-  $cot_model_price_local  = (string) $get('model_price_local');
-  $cot_color_name         = (string) $get('color_name');
-  $cot_color_hex          = (string) $get('color_hex');
+  // Lead
+  $cot_product_id        = (int) $get('product_id');
+  $cot_product_title     = (string) $get('product_title');
+  $cot_model_slug        = (string) $get('model_slug');
+  $cot_model_name        = (string) $get('model_name');
+  $cot_model_year        = (string) $get('model_year');
+  $cot_model_price_usd   = (string) $get('model_price_usd');
+  $cot_model_price_local = (string) $get('model_price_local');
 
-  // ===== Lead =====
-  $cot_names              = (string) $get('cot_names');
-  $cot_lastnames          = (string) $get('cot_lastnames');
-  $cot_document_type_raw  = (string) $get('cot_document_type');
-  $cot_document_type      = mg_map_doc_type($cot_document_type_raw);
-  $cot_document           = (string) $get('cot_document');
-  $cot_phone              = (string) $get('cot_phone');
-  $cot_email              = (string) $get('cot_email');
-  $cot_department         = (string) $get('cot_department');
-  $cot_store              = (string) $get('cot_store'); // debería ser SOLO ID (por nuestro select)
+  $cot_names             = (string) $get('cot_names');
+  $cot_lastnames         = (string) $get('cot_lastnames');
+  $cot_document_type_raw = (string) $get('cot_document_type');
+  $cot_document_type     = mg_map_doc_type($cot_document_type_raw);
+  $cot_document          = (string) $get('cot_document');
+  $cot_phone             = (string) $get('cot_phone');
+  $cot_email             = (string) $get('cot_email');
 
-  // Derivar códigos por tienda
-  $store_id_int = mg_quote_parse_store_id($cot_store);
-  [$code_dpto, $code_prov, $code_dist] = mg_quote_lookup_codes_by_store($store_id_int);
+  $cot_store_raw         = (string) $get('cot_store');
+  $store_id_int          = mg_quote_parse_store_id($cot_store_raw);
+  $cot_store             = (string)$store_id_int;
 
-  if (empty($code_dpto)) $code_dpto = $cot_department;
+  // Meta tienda
+  [$nombre_comercial_de_la_tienda, $codigo_venta_de_la_tienda, $codigo_canal_db] = mg_quote_lookup_store_meta($store_id_int);
+  $nombre_comercial_de_la_tienda = $nombre_comercial_de_la_tienda ?: '';
+  $codigo_venta_de_la_tienda     = $codigo_venta_de_la_tienda ?: '';
 
-  // IDs API (hidden)
-  $nid_marca   = (string) $get('nid_marca');
-  $nid_modelo  = (string) $get('nid_modelo');
-
-  // Consent
-  $cot_consent_raw = $get('cot_consent');
-  $cot_consent = (!empty($cot_consent_raw) && $cot_consent_raw !== '0') ? 1 : 0;
+  // IDs API (strings)
+  $nid_modelo = (string) $get('nid_modelo');
 
   // Tracking
   $utm_campaign = (string) $get('utm_campaign');
@@ -287,11 +243,30 @@ add_action('wpcf7_before_send_mail', function ($contact_form) {
   $utm_source   = (string) $get('utm_source');
   $utm_term     = (string) $get('utm_term');
   $gclid        = (string) $get('gclid');
-  $fbclid       = (string) $get('fbclid');
+
+  // Consent
+  $cot_consent_raw = $get('cot_consent');
+  $cot_consent = (!empty($cot_consent_raw) && $cot_consent_raw !== '0') ? 1 : 0;
+
+  // Defaults
+  $co_familia      = 'PV';
+  $co_origen       = '91';
+  $co_canal        = $codigo_canal_db ?: 'CO';
+  $fl_recibir_info = $cot_consent ? 'S' : 'N';
+  $fl_fecha_consen = current_time('d/m/Y H:i:s');
+  $fe_nacimiento   = '01/01/1900';
+
+  // Extras (strings, NO int)
+  $co_articulo      = (string) $get('co_articulo');
+  $co_configuracion = (string) $get('co_configuracion');
+  $gp_version       = (string) $get('gp_version');
+
+  if ($co_articulo === '') $co_articulo = $cot_model_slug ?: (string)$cot_product_id;
+  if ($gp_version === '')  $gp_version  = $cot_model_name;
 
   // Validación mínima
   if (!$cot_product_id || !$cot_names || !$cot_lastnames || !$cot_phone || !$cot_email) {
-    mg_quote_log('VALIDATION missing fields', [
+    mg_quote_log('VALIDATION: missing required fields', [
       'product_id' => $cot_product_id,
       'names' => $cot_names,
       'lastnames' => $cot_lastnames,
@@ -306,65 +281,166 @@ add_action('wpcf7_before_send_mail', function ($contact_form) {
   $ape_pat = $parts[0] ?? '';
   $ape_mat = trim(implode(' ', array_slice($parts, 1)));
 
-  // Campos obligatorios API (según tu integración)
-  $co_familia      = 'PV';  // PV/LCV/CV/SN
-  $co_canal        = 'CO';  // SU o CO
-  $co_origen       = 'WEB'; // 3 chars
-  $fl_recibir_info = $cot_consent ? 'S' : 'N';
-  $fl_fecha_consen = current_time('d/m/Y H:i:s');
-  $fe_nacimiento   = '01/01/1900';
-
   // Payload
   $payload = [
     'co_tipo_documento' => $cot_document_type,
     'nu_documento'      => $cot_document,
 
-    'no_contacto' => $cot_names,
-    'no_ape_pat'  => $ape_pat,
-    'no_ape_mat'  => $ape_mat,
+    'no_contacto'   => $cot_names,
+    'no_ape_pat'    => $ape_pat,
+    'no_ape_mat'    => $ape_mat,
+    'fe_nacimiento' => $fe_nacimiento,
 
-    'no_correo'   => $cot_email,
-    'nu_celular'  => $cot_phone,
+    'nu_celular' => $cot_phone,
+    'no_correo'  => $cot_email,
 
-    'nid_marca'   => $nid_marca,
-    'nid_modelo'  => $nid_modelo,
+    // TODO: por ahora fijo mientras corriges geo IDs
+    'Coddpto' => "08",
+    'Codprov' => "01",
+    'Coddist' => "01",
 
-    'Coddpto'     => (string) $code_dpto,
-    'Codprov'     => (string) ($code_prov ?? ''),
-    'Coddist'     => (string) ($code_dist ?? ''),
+    'no_direccion'     => "",
+    'nid_marca'        => "GEE",
+    'no_marca'         => "Geely",
 
-    // tienda: aquí estás mandando ID (ideal)
-    'co_tienda'        => (string) $cot_store,
-    'nid_punto_venta'  => (string) $cot_store,
+    'nid_modelo'       => $nid_modelo,
+    'co_articulo'      => $co_articulo,
+    'co_configuracion' => $co_configuracion,
 
-    'GPVersion' => $cot_model_name,
-    'co_ano'    => $cot_model_year,
+    'no_modelo'        => $cot_model_name,
+    'pr_pub_usd'       => $cot_model_price_usd,
+    'pr_pub_pen'       => $cot_model_price_local,
 
-    'co_familia'      => $co_familia,
-    'co_canal'        => $co_canal,
-    'co_origen'       => $co_origen,
+    'tx_comentario' => "[TIENDA: " . $nombre_comercial_de_la_tienda . "]",
+    'fl_retoma'     => "N",
+    'co_origen'     => $co_origen,
+    'co_tienda'     => (string)$cot_store,
+    'co_canal'      => $co_canal,
+    'co_campaña'    => "",
+    'no_plazo_compra' => "1 mes",
+
     'fl_recibir_info' => $fl_recibir_info,
     'fl_fecha_consen' => $fl_fecha_consen,
-    'fe_nacimiento'   => $fe_nacimiento,
+    'no_valor_adic'   => "NO",
 
+    'nid_punto_venta' => (string)$codigo_venta_de_la_tienda,
+    'co_familia'      => $co_familia,
+
+    'fin_requerido'    => "",
+    'fin_dependiente'  => "NO",
+    'fin_rango'        => "NO",
+    'ClientID'         => "NO",
+    'GPVersion'        => $gp_version,
+    'co_tipo_contacto' => "",
+    'co_km'            => "",
+    'co_placa'         => "",
+    'co_ano'           => $cot_model_year,
+    'co_inversion'     => "0",
+    'co_transmision'   => "",
+    'co_tipo_trabajador' => "",
+
+    // tracking
     'utm_campaign' => $utm_campaign,
     'utm_content'  => $utm_content,
     'utm_medium'   => $utm_medium,
     'utm_source'   => $utm_source,
     'utm_term'     => $utm_term,
     'gclid'        => $gclid,
-    'fbclid'       => $fbclid,
   ];
 
-  // Guardar post local (opcional)
-  $title = sprintf('Cotización - %s %s (%s)', $cot_names, $cot_lastnames, $cot_product_title ?: ('ID ' . $cot_product_id));
+  $api = mg_quote_send_api($payload);
+
+  $GLOBALS['mg_quote_last_api'] = [
+    'ok'       => (int)$api['ok'],
+    'status'   => (int)$api['status'],
+    'error'    => (string)$api['error'],
+    'response' => (string)$api['response'],
+    'debug'    => [
+      'store_id' => $store_id_int,
+      'NombreComercial' => $nombre_comercial_de_la_tienda,
+      'CodigoVenta' => $codigo_venta_de_la_tienda,
+      'co_canal' => $co_canal,
+    ],
+  ];
+
+}, 10, 1);
+
+/** =========================
+ *  2) Meter mg_api + mg_payload en respuesta AJAX CF7
+ *  ========================= */
+add_filter('wpcf7_ajax_json_echo', function ($response, $result) {
+
+  if (!is_array($response)) $response = [];
+
+  $response['mg_api'] = $GLOBALS['mg_quote_last_api'] ?? null;
+  $response['mg_payload'] = !empty($GLOBALS['mg_quote_last_payload']) ? $GLOBALS['mg_quote_last_payload'] : null;
+
+  return $response;
+}, 10, 2);
+
+/** =========================
+ *  3) Cuando el mail YA SE ENVIÓ: guardar CPT + guardar respuesta API en ACF
+ *  ========================= */
+add_action('wpcf7_mail_sent', function ($contact_form) {
+
+  $submission = WPCF7_Submission::get_instance();
+  if (!$submission) return;
+
+  $data = $submission->get_posted_data();
+  if (empty($data) || !is_array($data)) return;
+
+  // helper para obtener string "limpio"
+  $get = function ($key) use ($data) {
+    $v = $data[$key] ?? '';
+    if (is_array($v)) $v = reset($v);
+    return is_string($v) ? trim($v) : $v;
+  };
+
+  // =========================
+  // Datos del form
+  // =========================
+  $cot_product_id        = (int) $get('product_id');
+  $cot_product_title     = (string) $get('product_title');
+  $cot_model_slug        = (string) $get('model_slug');
+  $cot_model_name        = (string) $get('model_name');
+  $cot_model_year        = (string) $get('model_year');
+  $cot_model_price_usd   = (string) $get('model_price_usd');
+  $cot_model_price_local = (string) $get('model_price_local');
+
+  $cot_color_name        = (string) $get('color_name');
+  $cot_color_hex         = (string) $get('color_hex');
+
+  $cot_names             = sanitize_text_field($get('cot_names'));
+  $cot_lastnames         = sanitize_text_field($get('cot_lastnames'));
+  $cot_document_type     = sanitize_text_field($get('cot_document_type'));
+  $cot_document          = sanitize_text_field($get('cot_document'));
+  $cot_phone             = sanitize_text_field($get('cot_phone'));
+  $cot_email             = sanitize_email($get('cot_email'));
+  $cot_department        = sanitize_text_field($get('cot_department'));
+  $cot_store             = sanitize_text_field($get('cot_store'));
+
+  // =========================
+  // 1) Crear CPT
+  // =========================
   $post_id = wp_insert_post([
-    'post_type'   => 'cotizacion',
+    'post_type'   => 'cotizacion',  // ✅ tu slug real
     'post_status' => 'publish',
-    'post_title'  => wp_strip_all_tags($title),
+    'post_title'  => "Cotización - {$cot_names} {$cot_lastnames} ({$cot_product_title})",
   ], true);
 
-  if (!is_wp_error($post_id) && $post_id && function_exists('update_field')) {
+  if (is_wp_error($post_id) || !$post_id) {
+    if (function_exists('mg_quote_log')) {
+      mg_quote_log('CPT ERROR', [
+        'err' => is_wp_error($post_id) ? $post_id->get_error_message() : 'post_id empty'
+      ]);
+    }
+    return;
+  }
+
+  // =========================
+  // 2) Guardar ACF (según tu grupo "Cotizacion - Datos")
+  // =========================
+  if (function_exists('update_field')) {
     update_field('cot_product_id', $cot_product_id, $post_id);
     update_field('cot_product_title', $cot_product_title, $post_id);
     update_field('cot_model_slug', $cot_model_slug, $post_id);
@@ -372,6 +448,7 @@ add_action('wpcf7_before_send_mail', function ($contact_form) {
     update_field('cot_model_year', $cot_model_year, $post_id);
     update_field('cot_model_price_usd', $cot_model_price_usd, $post_id);
     update_field('cot_model_price_local', $cot_model_price_local, $post_id);
+
     update_field('cot_color_name', $cot_color_name, $post_id);
     update_field('cot_color_hex', $cot_color_hex, $post_id);
 
@@ -383,53 +460,35 @@ add_action('wpcf7_before_send_mail', function ($contact_form) {
     update_field('cot_email', $cot_email, $post_id);
     update_field('cot_department', $cot_department, $post_id);
     update_field('cot_store', $cot_store, $post_id);
-    update_field('cot_consent', $cot_consent, $post_id);
-  } else {
-    $post_id = 0; // por si falló
+
+    // Estado/Notas (opcional)
+    // OJO: "cot_status" es un SELECT: el valor debe existir en las opciones del campo.
+    // Si no estás segura del value exacto, déjalo vacío.
+    // update_field('cot_status', 'nuevo', $post_id);
+    update_field('cot_notes', '', $post_id);
   }
 
-  // Disparar API
-  $api = mg_quote_send_api($payload);
+  // =========================
+  // 3) Guardar respuesta del API en ACF
+  // =========================
+  $api_last = $GLOBALS['mg_quote_last_api'] ?? null;
 
-  // Guardar auditoría
-  if ($post_id && function_exists('update_field')) {
-    update_field('cot_api_ok', (int)$api['ok'], $post_id);
-    update_field('cot_api_status', (int)$api['status'], $post_id);
-    update_field('cot_api_response', (string)$api['response'], $post_id);
-    update_field('cot_api_error', (string)$api['error'], $post_id);
+  if (function_exists('update_field')) {
+    update_field('cot_api_ok', (string)($api_last['ok'] ?? ''), $post_id);
+    update_field('cot_api_status', (string)($api_last['status'] ?? ''), $post_id);
+    update_field('cot_api_response', (string)($api_last['response'] ?? ''), $post_id);
+    update_field('cot_api_error', (string)($api_last['error'] ?? ''), $post_id);
   }
 
-  // Respuesta al front (CF7 JSON)
-  $GLOBALS['mg_quote_last_api'] = [
-    'ok'     => (int)$api['ok'],
-    'status' => (int)$api['status'],
-    'error'  => (string)$api['error'],
-    'response' => (string)$api['response'],
-    'post_id' => (int)$post_id,
-  ];
-
-  // Para “consolear el payload body enviado”
-  if (MG_QUOTE_EXPOSE_DEBUG) {
-    $GLOBALS['mg_quote_last_api']['debug_request'] = $api['debug_request'];
+  // (Opcional) también lo guardo como meta crudo por auditoría
+  if ($api_last) {
+    update_post_meta($post_id, '_mg_api_result', wp_json_encode($api_last, JSON_UNESCAPED_UNICODE));
   }
 
 }, 10, 1);
 
 /** =========================================
- *  2) Inyectar mg_api en respuesta AJAX de CF7 (1 SOLA VEZ)
- *  ========================================= */
-add_filter('wpcf7_ajax_json_echo', function ($response, $result) {
-  if (!is_array($response)) $response = [];
-
-  $response['mg_api'] = !empty($GLOBALS['mg_quote_last_api'])
-    ? $GLOBALS['mg_quote_last_api']
-    : ['ok' => 0, 'status' => 0, 'error' => 'mg_quote_last_api vacío'];
-
-  return $response;
-}, 10, 2);
-
-/** =========================================
- *  3) CF7 Dynamic Selects (bp_regiones / bp_tiendas)
+ *  4) CF7 Dynamic Selects (bp_regiones / bp_tiendas)
  *  ========================================= */
 add_filter('wpcf7_form_tag', function ($tag) {
 
@@ -456,7 +515,6 @@ add_filter('wpcf7_form_tag', function ($tag) {
     $labels[0] = 'Selecciona una opción';
   };
 
-  // util: leer columnas de una tabla
   $get_columns = function ($table) use ($wpdb) {
     $wpdb->hide_errors();
     $wpdb->suppress_errors(true);
@@ -477,7 +535,7 @@ add_filter('wpcf7_form_tag', function ($tag) {
     return '';
   };
 
-  /** ========= DEPARTAMENTO: bp_regiones ========= */
+  /** DEPARTAMENTO: bp_regiones */
   if ($name === 'cot_department') {
     $values = [''];
     $labels = ['Selecciona una opción'];
@@ -516,14 +574,12 @@ add_filter('wpcf7_form_tag', function ($tag) {
     $set_prop('values', $values);
     $set_prop('labels', $labels);
 
-    if (class_exists('WPCF7_Pipes')) {
-      $set_prop('pipes', new WPCF7_Pipes($values));
-    }
+    if (class_exists('WPCF7_Pipes')) $set_prop('pipes', new WPCF7_Pipes($values));
 
     return $tag;
   }
 
-  /** ========= TIENDA: bp_tiendas ========= */
+  /** TIENDA: bp_tiendas */
   if ($name === 'cot_store') {
     $values = [''];
     $labels = ['Selecciona una opción'];
@@ -531,7 +587,6 @@ add_filter('wpcf7_form_tag', function ($tag) {
     if (mg_quote_table_exists('bp_tiendas')) {
       $cols = $get_columns('bp_tiendas');
 
-      // según tu screenshot:
       $colId   = $pick_first_existing($cols, ['TiendaId']);
       $colName = $pick_first_existing($cols, ['Tienda', 'NombreComercial']);
 
@@ -562,8 +617,7 @@ add_filter('wpcf7_form_tag', function ($tag) {
           $lab = trim((string)($r['name'] ?? ''));
           if ($id === '' || $lab === '') continue;
 
-          // value SOLO ID (no "ID|Nombre")
-          $values[] = $id;
+          $values[] = $id;   // SOLO ID
           $labels[] = $lab;
         }
       }
@@ -575,9 +629,7 @@ add_filter('wpcf7_form_tag', function ($tag) {
     $set_prop('values', $values);
     $set_prop('labels', $labels);
 
-    if (class_exists('WPCF7_Pipes')) {
-      $set_prop('pipes', new WPCF7_Pipes($values));
-    }
+    if (class_exists('WPCF7_Pipes')) $set_prop('pipes', new WPCF7_Pipes($values));
 
     return $tag;
   }
