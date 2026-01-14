@@ -247,4 +247,7 @@
   .promotions-grid__card {
     overflow: visible;
   }
+  .promotions-grid__card:hover .promotions-grid__image img {
+    transform: none;
+  }
 }

@@ -89,15 +89,25 @@
     display: flex;
     align-items: flex-end;
     padding-bottom: 40px;
+    background-color: #212529;
+  }
+  .after-sales-hero__bg {
+    z-index: 1;
   }
   .after-sales-hero__bg--desktop {
     display: none;
   }
   .after-sales-hero__bg--mobile {
     display: block;
+    transform: translateX(-50%);
+    left: 50%;
+    max-width: 375px;
   }
   .after-sales-hero__inner {
     padding-inline: 10px;
+    max-width: 324px;
+    position: relative;
+    z-index: 2;
   }
   .after-sales-hero__actions {
     margin-top: 16px;

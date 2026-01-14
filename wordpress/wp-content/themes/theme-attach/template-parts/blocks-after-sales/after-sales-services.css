@@ -146,6 +146,7 @@
     line-height: var(--lh-title-7) !important;
     min-width: 147px;
     max-height: 40px;
+    -webkit-font-smoothing: antialiased;
   }
   .after-sales-services__cta-wrapper {
     text-align: center;

@@ -79,6 +79,11 @@
     padding-inline: 24px;
   }
 
+  .after-sales-appointment__inner {
+    max-width: 311px;
+    margin-left: 0;
+  }
+
   .after-sales-appointment__bg--desktop {
     display: none;
   }

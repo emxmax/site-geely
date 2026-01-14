@@ -20,6 +20,7 @@
 }
 
 .about-hero__title {
+  margin-top: 16px;
   margin-bottom: 16px;
 
   font-family: var(--font-geely);

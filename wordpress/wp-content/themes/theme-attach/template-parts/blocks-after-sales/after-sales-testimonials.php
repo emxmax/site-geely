@@ -27,6 +27,10 @@ $carousel_id = 'after-sales-testimonials-' . uniqid();
 ?>
 
 <section class="after-sales-testimonials">
+  <img src="<?= IMG . '/bg-postventa-experiencia-confianza.webp' ?>" alt=""
+    class="after-sales-testimonials__bg after-sales-testimonials__bg--desktop" alt="">
+  <img src="<?= IMG . '/bg-postventa-experiencia-confianza-mobile.webp' ?>" alt=""
+    class="after-sales-testimonials__bg after-sales-testimonials__bg--mobile" alt="">
   <div class="after-sales-testimonials__inner">
     <?php if ($section_title || $section_description): ?>
       <div class="after-sales-testimonials__header">

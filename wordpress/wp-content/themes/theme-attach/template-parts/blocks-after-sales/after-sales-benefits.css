@@ -36,6 +36,7 @@
   font-family: var(--font-geely);
   font-weight: 700;
   color: var(--c-black);
+  letter-spacing: 3px;
 }
 .after-sales-benefits__item-description {
   margin-top: 16px;

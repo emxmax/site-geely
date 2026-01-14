@@ -54,7 +54,8 @@ $has_categories = !empty($categories);
 
     <?php if ($has_categories): ?>
       <div class="passport-catalog__tabs">
-        <button type="button" class="paragraph-2 paragraph-sm-4 passport-catalog__tab passport-catalog__tab--active js-passport-tab"
+        <button type="button"
+          class="paragraph-2 paragraph-sm-4 passport-catalog__tab passport-catalog__tab--active js-passport-tab"
           data-tab="todos">
           <span>Todos</span>
         </button>
@@ -120,12 +121,14 @@ $has_categories = !empty($categories);
               <?php if ($pdf_url): ?>
                 <a href="<?= esc_url($pdf_url); ?>" class="passport-catalog__button title-7 title-mobile-sm-5"
                   target="_blank" rel="noopener">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+
+                  <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                     <polyline points="7 10 12 15 17 10"></polyline>
                     <line x1="12" y1="15" x2="12" y2="3"></line>
-                  </svg>
+                  </svg> -->
+                  <img src="<?= IMG . '/icon-download.svg' ?>" alt="Descargar Pasaporte" class="" width="24" height="24" />
                   Pasaporte de servicios
                 </a>
               <?php endif; ?>
