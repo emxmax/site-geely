@@ -16,7 +16,11 @@ if (!$product_id || get_post_status($product_id) !== 'publish') {
 
 $product_title = get_the_title($product_id);
 $image_url = get_stylesheet_directory_uri() . '/assets/img/fondo-cotiza.png';
-$nid_marca = (int) (get_field('api_nid_marca', $product_id) ?: 0); // ACF opcional: api_nid_marca
+$nid_marca = (string) (get_field('api_nid_marca', $product_id) ?: ''); // ACF opcional: api_nid_marca
+$co_articulo = (string) (get_field('product_code', $product_id) ?: '');
+$co_configuracion = (string) (get_field('product_code_config', $product_id) ?: '');
+$GPVersion = (string) (get_field('product_code_sale', $product_id) ?: '');
+$co_transmision = (string) (get_field('spec_transmission', $product_id) ?: '');
 
 $models = get_field('product_models', $product_id);
 if (empty($models) || !is_array($models)) {
@@ -37,7 +41,8 @@ $mg_quote_dynamic_stores = []; // se llena por JS/AJAX (aquí dejamos placeholde
 
 // Helpers tabla existe
 if (!function_exists('mg_quote_table_exists')) {
-  function mg_quote_table_exists($table_name) {
+  function mg_quote_table_exists($table_name)
+  {
     global $wpdb;
     $like = $wpdb->esc_like($table_name);
     $found = $wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $like));
@@ -50,7 +55,10 @@ if (mg_quote_table_exists('bp_regiones')) {
   $cols = $wpdb->get_results("SHOW COLUMNS FROM bp_regiones", ARRAY_A);
   $has_gid = false;
   foreach ((array)$cols as $c) {
-    if (!empty($c['Field']) && $c['Field'] === 'RegionIdGildemeister') { $has_gid = true; break; }
+    if (!empty($c['Field']) && $c['Field'] === 'RegionIdGildemeister') {
+      $has_gid = true;
+      break;
+    }
   }
 
   $sql = $has_gid
@@ -70,7 +78,8 @@ if (mg_quote_table_exists('bp_regiones')) {
 // AJAX: tiendas por departamento
 // ==============================
 if (!function_exists('mg_quote_ajax_get_stores_by_department')) {
-  function mg_quote_ajax_get_stores_by_department() {
+  function mg_quote_ajax_get_stores_by_department()
+  {
     if (!check_ajax_referer('mg_quote_ajax', 'nonce', false)) {
       wp_send_json_error(['message' => 'Nonce inválido'], 403);
     }
@@ -89,7 +98,10 @@ if (!function_exists('mg_quote_ajax_get_stores_by_department')) {
     if (mg_quote_table_exists('bp_regiones')) {
       $cols = $wpdb->get_results("SHOW COLUMNS FROM bp_regiones", ARRAY_A);
       foreach ((array)$cols as $c) {
-        if (!empty($c['Field']) && $c['Field'] === 'RegionIdGildemeister') { $has_gid = true; break; }
+        if (!empty($c['Field']) && $c['Field'] === 'RegionIdGildemeister') {
+          $has_gid = true;
+          break;
+        }
       }
     }
 
@@ -133,7 +145,8 @@ if (!has_action('wp_ajax_mg_quote_get_stores')) {
 // AJAX: tiendas más cercanas
 // ==============================
 if (!function_exists('mg_quote_ajax_nearest_stores')) {
-  function mg_quote_ajax_nearest_stores() {
+  function mg_quote_ajax_nearest_stores()
+  {
     if (!check_ajax_referer('mg_quote_ajax', 'nonce', false)) {
       wp_send_json_error(['message' => 'Nonce inválido'], 403);
     }
@@ -150,8 +163,8 @@ if (!function_exists('mg_quote_ajax_nearest_stores')) {
     $cols = $wpdb->get_results("SHOW COLUMNS FROM bp_tiendas", ARRAY_A);
     $latCol = '';
     $lngCol = '';
-    $latCandidates = ['Latitud','latitud','Latitude','latitude','lat'];
-    $lngCandidates = ['Longitud','longitud','Longitude','longitude','lng','lon'];
+    $latCandidates = ['Latitud', 'latitud', 'Latitude', 'latitude', 'lat'];
+    $lngCandidates = ['Longitud', 'longitud', 'Longitude', 'longitude', 'lng', 'lon'];
 
     foreach ((array)$cols as $c) {
       $f = (string)($c['Field'] ?? '');
@@ -184,7 +197,9 @@ if (!function_exists('mg_quote_ajax_nearest_stores')) {
        WHERE t.`$latCol` IS NOT NULL AND t.`$lngCol` IS NOT NULL
        ORDER BY distance_km ASC
        LIMIT 5",
-      $lat, $lat, $lng
+      $lat,
+      $lat,
+      $lng
     );
 
     $rows = $wpdb->get_results($sql, ARRAY_A);
@@ -277,9 +292,13 @@ if (!function_exists('mg_quote_cf7_dynamic_selects')) {
       return $tag;
     };
 
-    if ($tag_name === 'cot_department') { return $apply($tag, is_array($deps)?$deps:[], 'Selecciona una opción'); }
-if ($tag_name === 'cot_store') { return $apply($tag, is_array($stores)?$stores:[], 'Selecciona una opción'); }
-return $tag;
+    if ($tag_name === 'cot_department') {
+      return $apply($tag, is_array($deps) ? $deps : [], 'Selecciona una opción');
+    }
+    if ($tag_name === 'cot_store') {
+      return $apply($tag, is_array($stores) ? $stores : [], 'Selecciona una opción');
+    }
+    return $tag;
   }
 }
 
@@ -463,7 +482,7 @@ $default_hero_img = (string)(
               $usd   = (string)($m['model_price_usd'] ?? '');
               $loc   = (string)($m['model_price_local'] ?? '');
 
-              $nid_modelo = (int)($m['api_nid_modelo'] ?? ($m['nid_modelo'] ?? 0));
+              $nid_modelo = (string)($m['model_code'] ?? '');
 
               $years_list   = mg_quote_get_years_list($m);
               $default_year = $years_list[0] ?? (string)($m['model_year'] ?? '');
@@ -519,6 +538,10 @@ $default_hero_img = (string)(
                 data-model-price-usd="<?php echo esc_attr($usd); ?>"
                 data-model-price-local="<?php echo esc_attr($loc); ?>"
                 data-nid-modelo="<?php echo esc_attr($nid_modelo); ?>"
+                data-co-articulo="<?php echo esc_attr($co_articulo); ?>"
+                data-co-configuracion="<?php echo esc_attr($co_configuracion); ?>"
+                data-co-transmision="<?php echo esc_attr($co_transmision); ?>"
+                data-gp-version="<?php echo esc_attr($GPVersion); ?>"
                 data-model-image="<?php echo esc_attr($img); ?>"
                 data-color-name="<?php echo esc_attr($color_name); ?>"
                 data-color-hex="<?php echo esc_attr($color_hex); ?>"
