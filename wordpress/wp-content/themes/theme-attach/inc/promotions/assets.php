@@ -86,6 +86,19 @@ function promotions_blocks_assets()
       'departments' => promotions_get_departments_stores_data(),
     ]
   );
+
+  // Encolar validación de teléfono SOLO en single de promocion
+  if (is_singular('promocion')) {
+    wp_enqueue_script(
+      'promotions-phone-validation-js',
+      get_stylesheet_directory_uri() . '/assets/js/promotions-phone-validation.js',
+      [],
+      file_exists(get_stylesheet_directory() . '/assets/js/promotions-phone-validation.js')
+        ? filemtime(get_stylesheet_directory() . '/assets/js/promotions-phone-validation.js')
+        : null,
+      true
+    );
+  }
 }
 add_action('wp_enqueue_scripts', 'promotions_blocks_assets');
 

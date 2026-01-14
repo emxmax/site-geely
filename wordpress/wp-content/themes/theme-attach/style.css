@@ -18,3 +18,7 @@ Tags:
     --font-inter: 'Inter', sans-serif;
     --font-geely: 'Geely', sans-serif;
 }
+
+/* header.site-header{
+  display: none !important;
+} */

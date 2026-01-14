@@ -140,7 +140,3 @@
     padding-inline: 0;
   }
 }
-
-header.site-header.wp-block-template-part {
-  display: none !important;
-}
