@@ -76,7 +76,7 @@
         (pos) => {
           const { latitude, longitude } = pos.coords;
           setGeo(latitude, longitude);
-          setGeoStatus("Ubicación registrada ✅");
+          setGeoStatus("Ubicación registrada");
         },
         (err) => {
           if (err.code === 1) setGeoStatus("Permiso denegado. Activa la ubicación en tu navegador.");
@@ -94,22 +94,23 @@
    * ========================= */
   const initCf7Logs = () => {
     // Snapshot del FormData ANTES de enviar (frontend)
-    document.addEventListener("wpcf7beforesubmit", () => {
-      const form = $(".wpcf7 form");
-      if (!form) return;
+    document.addEventListener("wpcf7beforesubmit", (e) => {
+      // asegura que sea ESTE form (por si hay más CF7 en la página)
+      if (e.target !== form) return;
 
-      const fd = new FormData(form);
-      const obj = {};
-      fd.forEach((v, k) => {
-        if (obj[k]) {
-          if (!Array.isArray(obj[k])) obj[k] = [obj[k]];
-          obj[k].push(v);
-        } else {
-          obj[k] = v;
+      const ok = validateAll({ showNative: true });
+
+      if (!ok) {
+        // Evita que CF7 continúe el envío AJAX
+        e.preventDefault();
+
+        // Opcional: baja al primer error visible
+        const firstInvalid = form.querySelector(".is-invalid");
+        if (firstInvalid) {
+          firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
+          firstInvalid.focus?.();
         }
-      });
-
-      console.log("[MG_QUOTE] FormData snapshot (frontend):", obj);
+      }
     });
 
     // Resultado de CF7 (aquí llega mg_api)
@@ -117,11 +118,11 @@
       const res = e.detail?.apiResponse;
       console.log("[MG_QUOTE] wpcf7submit apiResponse:", res);
 
-      /* if (res?.mg_payload) {
+      if (res?.mg_payload) {
         console.log("[MG_QUOTE] PAYLOAD SENT TO API (body):", res.mg_payload);
       } else {
         console.warn("[MG_QUOTE] No llegó mg_payload. Revisa el filtro wpcf7_ajax_json_echo.");
-      } */
+      }
 
       if (res?.mg_api) {
         console.log("[MG_QUOTE] API RESULT (backend):", res.mg_api);
@@ -415,6 +416,463 @@
   };
 
   /** =========================
+   *  5) Validaciones en vivo (typing) + click (CF7 async-safe)
+   *
+   *  Objetivos:
+   *  Al PRIMER click en "Cotizar" debe mostrar errores (debajo, con .geely-field-error)
+   *  NO usar tooltips nativos del browser ("Por favor rellene...")
+   *  Luego del 1er intento, valida en vivo mientras escribe/cambia
+   *  Celular: +51 y 9 números => +519XXXXXXXX
+   *  Doc: DNI (8 num), RUC (11 num), otros alfanumérico+&
+   *  NO “matar” el submit: si está enabled => CF7 envía normal.
+   *  si está disabled => click en wrapper muestra errores (sin enviar).
+   * ========================= */
+  const initCotizaValidation = () => {
+    const MAX_TRIES = 60;
+    const TRY_EVERY = 250;
+
+    const findForm = () => document.querySelector(".wpcf7 form");
+    const findActionsWrap = (form) =>
+      form?.querySelector(".geely-cotiza-actions") || null;
+
+    const boot = (form) => {
+      if (form.__mgValidationMounted) return true;
+      form.__mgValidationMounted = true;
+
+      // evita tooltips nativos del browser
+      form.setAttribute("novalidate", "novalidate");
+
+      // solo mostramos errores después del primer intento
+      let showErrors = false;
+
+      // ===== Campos =====
+      const docTypeEl = form.querySelector('select[name="cot_document_type"]');
+      const docEl = form.querySelector('input[name="cot_document"]');
+
+      const namesEl = form.querySelector('input[name="cot_names"]');
+      const lastnamesEl = form.querySelector('input[name="cot_lastnames"]');
+
+      const phoneEl = form.querySelector('input[name="cot_phone"]');
+      const emailEl = form.querySelector('input[name="cot_email"]');
+
+      const deptEl = form.querySelector('select[name="cot_department"]');
+      const storeEl = form.querySelector('select[name="cot_store"]');
+
+      const submitBtn = form.querySelector(".wpcf7-submit");
+
+      if (!docTypeEl || !docEl) {
+        console.warn("[MG_VALIDATE] No encontró docType/doc input aún.");
+        form.__mgValidationMounted = false;
+        return false;
+      }
+
+      // ===== Helpers =====
+      const NAME_ALLOWED = /[^a-zA-Z0-9&ÑñáéíóúÁÉÍÓÚ'\-\s]/g;
+
+      const docType = () => (docTypeEl.value || "").toUpperCase().trim();
+
+      const isNumericDocType = () => {
+        const t = docType();
+        return t === "DNI" || t === "RUC";
+      };
+
+      const getDocMaxLen = () => {
+        const t = docType();
+        if (t === "DNI") return 8;
+        if (t === "RUC") return 11;
+        return 20;
+      };
+
+      const getDocDisallowedRegex = () => {
+        if (isNumericDocType()) return /[^0-9]/g; // DNI/RUC: solo números
+        return /[^a-zA-Z0-9&]/g; // Otros: alfanumérico + &
+      };
+
+      const ensureErrorEl = (fieldEl) => {
+        const wrap =
+          fieldEl?.closest(".geely-cotiza-row__control") ||
+          fieldEl?.parentElement;
+        if (!wrap) return null;
+
+        let err = wrap.querySelector(".geely-field-error");
+        if (!err) {
+          err = document.createElement("span");
+          err.className = "geely-field-error";
+          err.setAttribute("aria-live", "polite");
+          wrap.appendChild(err);
+        }
+        return err;
+      };
+
+      const paintError = (fieldEl, message) => {
+        if (!fieldEl) return;
+        const errEl = ensureErrorEl(fieldEl);
+
+        fieldEl.classList.toggle("is-invalid", !!message);
+        fieldEl.setCustomValidity(message || "");
+        if (errEl) errEl.textContent = message || "";
+      };
+
+      const setFieldError = (fieldEl, message) => {
+        // antes del 1er intento no pintamos nada
+        if (!showErrors) {
+          // pero sí limpiamos estado previo si existía
+          if (!message) {
+            paintError(fieldEl, "");
+          }
+          return;
+        }
+        paintError(fieldEl, message);
+      };
+
+      const clearFieldError = (fieldEl) => paintError(fieldEl, "");
+
+      // ===== Documento =====
+      const sanitizeDoc = () => {
+        const maxLen = getDocMaxLen();
+        docEl.setAttribute("maxlength", String(maxLen));
+
+        const before = docEl.value || "";
+        const disallowed = getDocDisallowedRegex();
+
+        let v = before.replace(disallowed, "");
+        if (v.length > maxLen) v = v.slice(0, maxLen);
+
+        if (v !== before) docEl.value = v;
+      };
+
+      const validateDoc = () => {
+        const t = docType();
+        const v = (docEl.value || "").trim();
+        const maxLen = getDocMaxLen();
+
+        if (!v) {
+          setFieldError(docEl, "Ingresa tu número de documento.");
+          return false;
+        }
+
+        if ((t === "DNI" || t === "RUC") && !/^\d+$/.test(v)) {
+          setFieldError(docEl, "Solo se permiten números.");
+          return false;
+        }
+
+        if (t === "DNI" && v.length !== 8) {
+          setFieldError(docEl, "DNI debe tener 8 dígitos.");
+          return false;
+        }
+
+        if (t === "RUC" && v.length !== 11) {
+          setFieldError(docEl, "RUC debe tener 11 dígitos.");
+          return false;
+        }
+
+        if (v.length > maxLen) {
+          setFieldError(docEl, `Máximo ${maxLen} caracteres.`);
+          return false;
+        }
+
+        setFieldError(docEl, "");
+        return true;
+      };
+
+      // ===== Nombres/Apellidos =====
+      const sanitizeNameField = (el) => {
+        if (!el) return;
+        const before = el.value || "";
+        const v = before.replace(NAME_ALLOWED, "");
+        if (v !== before) el.value = v;
+      };
+
+      const validateNameField = (el, label) => {
+        if (!el) return true;
+        const v = (el.value || "").trim();
+        if (!v) {
+          setFieldError(el, `Ingresa ${label}.`);
+          return false;
+        }
+        setFieldError(el, "");
+        return true;
+      };
+
+      // ===== Celular (+51 y 9 números) =====
+      // Formato requerido: +519XXXXXXXX
+      const sanitizePhone = () => {
+        if (!phoneEl) return;
+        const before = phoneEl.value || "";
+
+        // deja solo + y dígitos
+        let v = before.replace(/[^\d+]/g, "");
+
+        // normaliza + (máximo un + al inicio)
+        if (v.includes("+")) {
+          v = v.replace(/\+/g, "");
+          v = "+" + v;
+        }
+
+        // si escribe 51xxxx sin + -> +51xxxx
+        if (/^51\d/.test(v)) v = "+" + v;
+
+        // limita longitud máxima razonable
+        if (v.length > 13) v = v.slice(0, 13);
+
+        if (v !== before) phoneEl.value = v;
+      };
+
+      const validatePhone = () => {
+        if (!phoneEl) return true;
+        const v = (phoneEl.value || "").trim();
+
+        if (!v) {
+          setFieldError(phoneEl, "Ingresa tu celular.");
+          return false;
+        }
+
+        // exacto +51 y 9 números
+        if (!/^\+51\d{9}$/.test(v)) {
+          setFieldError(phoneEl, "Celular precisa del +51 y 9 numeros.");
+          return false;
+        }
+
+        setFieldError(phoneEl, "");
+        return true;
+      };
+
+      // ===== Email =====
+      const validateEmail = () => {
+        if (!emailEl) return true;
+        const v = (emailEl.value || "").trim();
+        const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+
+        if (!v) {
+          setFieldError(emailEl, "Ingresa tu email.");
+          return false;
+        }
+        if (!emailOk) {
+          setFieldError(emailEl, "Ingresa un email válido.");
+          return false;
+        }
+
+        setFieldError(emailEl, "");
+        return true;
+      };
+
+      // ===== Selects =====
+      const validateDept = () => {
+        if (!deptEl) return true;
+        const v = (deptEl.value || "").trim();
+        if (!v || v.toLowerCase().includes("selecciona")) {
+          setFieldError(deptEl, "Selecciona un departamento.");
+          return false;
+        }
+        setFieldError(deptEl, "");
+        return true;
+      };
+
+      const validateStore = () => {
+        if (!storeEl) return true;
+        const v = (storeEl.value || "").trim();
+        if (!v || v.toLowerCase().includes("selecciona")) {
+          setFieldError(storeEl, "Selecciona una tienda.");
+          return false;
+        }
+        setFieldError(storeEl, "");
+        return true;
+      };
+
+      const validateAllCustom = () => {
+        sanitizeDoc();
+        sanitizePhone();
+        sanitizeNameField(namesEl);
+        sanitizeNameField(lastnamesEl);
+
+        const ok1 = validateNameField(namesEl, "tus nombres");
+        const ok2 = validateNameField(lastnamesEl, "tus apellidos");
+        const ok3 = validateDoc();
+        const ok4 = validatePhone();
+        const ok5 = validateEmail();
+        const ok6 = validateDept();
+        const ok7 = validateStore();
+
+        return ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7;
+      };
+
+      // ===== En vivo (solo después del 1er intento) =====
+      docEl.addEventListener("input", () => {
+        sanitizeDoc();
+        if (showErrors) validateDoc();
+      });
+      docTypeEl.addEventListener("change", () => {
+        sanitizeDoc();
+        if (showErrors) validateDoc();
+      });
+
+      namesEl?.addEventListener("input", () => {
+        sanitizeNameField(namesEl);
+        if (showErrors) validateNameField(namesEl, "tus nombres");
+        else clearFieldError(namesEl);
+      });
+
+      lastnamesEl?.addEventListener("input", () => {
+        sanitizeNameField(lastnamesEl);
+        if (showErrors) validateNameField(lastnamesEl, "tus apellidos");
+        else clearFieldError(lastnamesEl);
+      });
+
+      phoneEl?.addEventListener("input", () => {
+        sanitizePhone();
+        if (showErrors) validatePhone();
+        else clearFieldError(phoneEl);
+      });
+
+      emailEl?.addEventListener("input", () => {
+        if (showErrors) validateEmail();
+        else clearFieldError(emailEl);
+      });
+
+      deptEl?.addEventListener("change", () => {
+        if (showErrors) validateDept();
+        else clearFieldError(deptEl);
+      });
+
+      storeEl?.addEventListener("change", () => {
+        if (showErrors) validateStore();
+        else clearFieldError(storeEl);
+      });
+
+      /** =========================
+       *  Pointer-events sync:
+       *   - submit ENABLED => click normal (CF7 envía)
+       *   - submit DISABLED => click wrapper para mostrar errores
+       * ========================= */
+      const syncPointerEvents = () => {
+        const actionsWrap = findActionsWrap(form);
+        if (!actionsWrap || !submitBtn) return;
+
+        const isDisabled =
+          submitBtn.disabled || submitBtn.getAttribute("disabled") !== null;
+
+        if (isDisabled) {
+          actionsWrap.style.pointerEvents = "auto";
+          submitBtn.style.pointerEvents = "none";
+        } else {
+          actionsWrap.style.pointerEvents = "";
+          submitBtn.style.pointerEvents = "";
+        }
+      };
+
+      /** =========================
+       *  CLICK handler:
+       *   - Siempre enciende showErrors en el primer click
+       *   - Si submit está disabled => valida y muestra errores
+       *   - Si submit está enabled => NO bloquea, CF7 envía.
+       * ========================= */
+      const attachClickHandler = () => {
+        const actionsWrap = findActionsWrap(form);
+        if (!actionsWrap) return false;
+
+        if (actionsWrap.__mgClickMounted) return true;
+        actionsWrap.__mgClickMounted = true;
+
+        syncPointerEvents();
+
+        actionsWrap.addEventListener(
+          "click",
+          (e) => {
+            // primer intento: desde aquí ya se pintan errores
+            showErrors = true;
+
+            // Si submit está enabled, dejamos que CF7 haga submit (no interceptamos)
+            if (submitBtn && !submitBtn.disabled) {
+              // pero aprovechamos para validar y mostrar errores si hubiera (por si CF7 no los muestra como quieres)
+              const ok = validateAllCustom();
+              if (!ok) {
+                // bloquea (porque si no, CF7 intentará enviar y te dará mensaje genérico)
+                e.preventDefault();
+                e.stopPropagation();
+                const first = form.querySelector(".is-invalid");
+                first?.scrollIntoView({ behavior: "smooth", block: "center" });
+                first?.focus?.();
+              }
+              return;
+            }
+
+            // Submit disabled => solo validamos y mostramos errores
+            const okCustom = validateAllCustom();
+
+            if (!okCustom) {
+              e.preventDefault();
+              e.stopPropagation();
+
+              const first = form.querySelector(".is-invalid");
+              if (first) {
+                first.scrollIntoView({ behavior: "smooth", block: "center" });
+                first.focus?.();
+              }
+              return;
+            }
+
+            console.warn(
+              "[MG_VALIDATE] Todo OK, pero CF7 mantiene el botón disabled (acceptance u otra regla)."
+            );
+          },
+          true
+        );
+
+        console.log("[MG_VALIDATE] Click handler montado ✅");
+        return true;
+      };
+
+      attachClickHandler();
+
+      // Observa cambios del botón (disabled/spinner)
+      if (submitBtn && !submitBtn.__mgBtnObserved) {
+        submitBtn.__mgBtnObserved = true;
+
+        const btnObs = new MutationObserver(() => syncPointerEvents());
+        btnObs.observe(submitBtn, {
+          attributes: true,
+          attributeFilter: ["disabled", "class"],
+        });
+      }
+
+      // Si CF7 re-renderiza el form/footer, re-monta handler y re-sync
+      const obs = new MutationObserver(() => {
+        attachClickHandler();
+        syncPointerEvents();
+      });
+      obs.observe(form, { childList: true, subtree: true, attributes: true });
+
+      // Estado inicial (NO pintar errores)
+      sanitizeDoc();
+      sanitizePhone();
+      syncPointerEvents();
+
+      console.log("[MG_VALIDATE] initCotizaValidation montado");
+      return true;
+    };
+
+    // ===== Reintentos =====
+    let tries = 0;
+    const timer = setInterval(() => {
+      tries++;
+
+      const form = findForm();
+      const actions = findActionsWrap(form);
+
+      if (form && actions) {
+        const ok = boot(form);
+        if (ok) clearInterval(timer);
+      }
+
+      if (tries >= MAX_TRIES) {
+        clearInterval(timer);
+        console.warn("[MG_VALIDATE] No se pudo montar en el tiempo esperado.");
+      }
+    }, TRY_EVERY);
+  };
+
+
+  /** =========================
    *  BOOT
    * ========================= */
   document.addEventListener("DOMContentLoaded", () => {
@@ -422,5 +880,6 @@
     initGeo();
     initCf7Logs();
     initQuoteBlocks();
+    initCotizaValidation();
   });
 })();

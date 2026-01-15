@@ -810,7 +810,7 @@
 /* Control a la derecha */
 .mg-quote__cf7 .geely-cotiza-row__control {
   display: flex;
-  align-items: center;
+  align-items: start;
   padding-left: 16px;
 }
 
@@ -964,6 +964,47 @@
 
 .mg-quote__cf7 .geely-cotiza-actions {
   text-align: end;
+}
+
+.geely-field-error {
+  display: block;
+  font-size: 12px;
+  margin-top: 6px;
+  color: #d32f2f;
+}
+
+.geely-cotiza-input.is-invalid,
+.geely-cotiza-select.is-invalid {
+  border-color: #d32f2f !important;
+}
+
+/* ===============================
+   Error debajo SOLO en Documento
+   =============================== */
+/* Fuerza a que todo mensaje custom se apile debajo */
+.geely-cotiza-row__control {
+  display: flex;
+  flex-direction: column;
+}
+
+.geely-cotiza-row__control > p {
+  margin: 0; /* CF7 mete <p> con márgenes */
+  width: 100%;
+}
+
+/* Tu mensaje Geely debajo */
+.geely-field-error {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #d32f2f;
+  line-height: 1.2;
+  font-family: var(--font-inter);
+}
+
+/* (Opcional) ocultar el tip rojo de CF7 si no lo quieres */
+.geely-cotiza-form .wpcf7-not-valid-tip {
+  display: none !important;
 }
 
 /* Responsive */
