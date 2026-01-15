@@ -16,7 +16,7 @@ if (!$product_id || get_post_status($product_id) !== 'publish') {
 
 $product_title = get_the_title($product_id);
 $image_url = get_stylesheet_directory_uri() . '/assets/img/fondo-cotiza.png';
-$nid_marca = (string) (get_field('api_nid_marca', $product_id) ?: ''); // ACF opcional: api_nid_marca
+$nid_marca = (string) (get_field('api_nid_marca', $product_id) ?: '');
 $co_articulo = (string) (get_field('product_code', $product_id) ?: '');
 $co_configuracion = (string) (get_field('product_code_config', $product_id) ?: '');
 $GPVersion = (string) (get_field('product_code_sale', $product_id) ?: '');
@@ -28,16 +28,10 @@ if (empty($models) || !is_array($models)) {
   return;
 }
 
-/* ============================================================
- *  CF7: Llenar selects dinámicos desde BD (bp_regiones / bp_tiendas)
- *  - Departamento: bp_regiones (value = RegionIdGildemeister si existe, si no RegionId)
- *  - Tienda: se cargará por AJAX según Departamento
- *  - Recomendación por ubicación: AJAX nearest stores
- * ============================================================ */
 global $wpdb;
 
 $mg_quote_dynamic_departments = [];
-$mg_quote_dynamic_stores = []; // se llena por JS/AJAX (aquí dejamos placeholder)
+$mg_quote_dynamic_stores = [];
 
 // Helpers tabla existe
 if (!function_exists('mg_quote_table_exists')) {
@@ -93,7 +87,6 @@ if (!function_exists('mg_quote_ajax_get_stores_by_department')) {
       wp_send_json_success(['items' => []]);
     }
 
-    // Detectar si la región se filtra por RegionIdGildemeister o RegionId
     $has_gid = false;
     if (mg_quote_table_exists('bp_regiones')) {
       $cols = $wpdb->get_results("SHOW COLUMNS FROM bp_regiones", ARRAY_A);
@@ -227,15 +220,9 @@ if (!has_action('wp_ajax_mg_quote_nearest_stores')) {
   add_action('wp_ajax_nopriv_mg_quote_nearest_stores', 'mg_quote_ajax_nearest_stores');
 }
 
-
-/**
- * Registrar filtro CF7 solo 1 vez por request
- * y alimentar selects por nombre de campo.
- */
 if (!function_exists('mg_quote_cf7_dynamic_selects')) {
   function mg_quote_cf7_dynamic_selects($tag)
   {
-    // CF7 usa WPCF7_FormTag; pero por seguridad cubrimos array también
     $tag_name = '';
     $tag_type = '';
     $tag_basetype = '';
@@ -250,18 +237,13 @@ if (!function_exists('mg_quote_cf7_dynamic_selects')) {
       $tag_basetype = (string) ($tag['basetype'] ?? '');
     }
 
-    // Solo select
     $is_select = ($tag_basetype === 'select') || (strpos($tag_type, 'select') === 0);
     if (!$is_select) return $tag;
 
-    // Tomar opciones globales preparadas en este template
     $deps = $GLOBALS['MG_QUOTE_DYNAMIC_DEPARTMENTS'] ?? [];
     $stores = $GLOBALS['MG_QUOTE_DYNAMIC_STORES'] ?? [];
 
-    // Helper para setear values/labels en objeto o array
     $apply = function ($tag, array $items, string $placeholderLabel) {
-      // 1) Placeholder primero: value vacío => required no lo acepta,
-      // y disabled evita que lo elijan “de verdad”.
       $values = [''];
       $labels = [$placeholderLabel];
 
@@ -274,11 +256,8 @@ if (!function_exists('mg_quote_cf7_dynamic_selects')) {
         $tag->values = $values;
         $tag->raw_values = $values;
         $tag->labels = $labels;
-
-        // "selected" para CF7: dejamos el placeholder como seleccionado
         $tag->options = array_unique(array_merge((array) ($tag->options ?? []), ['first_as_label']));
         $tag->pipes = new WPCF7_Pipes($tag->raw_values);
-
         return $tag;
       }
 
@@ -302,11 +281,9 @@ if (!function_exists('mg_quote_cf7_dynamic_selects')) {
   }
 }
 
-// Setear globals para que el filtro las lea
 $GLOBALS['MG_QUOTE_DYNAMIC_DEPARTMENTS'] = $mg_quote_dynamic_departments;
 $GLOBALS['MG_QUOTE_DYNAMIC_STORES'] = $mg_quote_dynamic_stores;
 
-// Agregar filtro (solo una vez)
 if (!has_filter('wpcf7_form_tag', 'mg_quote_cf7_dynamic_selects')) {
   add_filter('wpcf7_form_tag', 'mg_quote_cf7_dynamic_selects', 10, 1);
 }
@@ -408,8 +385,7 @@ $first_model_img = mg_quote_get_image($first_model['model_image'] ?? ($first_mod
 $product_thumb   = get_the_post_thumbnail_url($product_id, 'large') ?: '';
 
 $default_hero_img = (string)(
-  ($imgD0['url'] ?? '') ?: ($first_model_img['url'] ?? '') ?:
-  $product_thumb
+  ($imgD0['url'] ?? '') ?: ($first_model_img['url'] ?? '') ?: $product_thumb
 );
 
 ?>
@@ -452,7 +428,6 @@ $default_hero_img = (string)(
         </div>
 
         <div class="mg-quote__leftMeta">
-
           <div class="mg-quote__modelName" data-selected-model-name></div>
 
           <div class="mg-quote__colorsAll" data-colors-all>
@@ -466,7 +441,6 @@ $default_hero_img = (string)(
             <div class="mg-quote__colorDot" data-selected-color-dot></div>
             <span class="mg-quote__colorText" data-selected-color-name></span>
           </div>
-
         </div>
       </aside>
 
@@ -497,10 +471,7 @@ $default_hero_img = (string)(
                 foreach ($colors as $c) {
                   $cname = (string)($c['color_name'] ?? '');
                   $chex  = trim((string)($c['color_hex'] ?? '#cccccc'));
-
-                  if ($chex !== '' && $chex[0] !== '#' && preg_match('/^[0-9a-fA-F]{3,8}$/', $chex)) {
-                    $chex = '#' . $chex;
-                  }
+                  if ($chex !== '' && $chex[0] !== '#' && preg_match('/^[0-9a-fA-F]{3,8}$/', $chex)) $chex = '#' . $chex;
 
                   $imgD  = mg_quote_get_image($c['color_image_desktop'] ?? null);
 
@@ -513,18 +484,11 @@ $default_hero_img = (string)(
               }
 
               [$cc, $imgD] = mg_quote_pick_color($m);
-              $img = (string)(
-                ($imgD['url'] ?? '') ?:
-                $modelImgUrl ?:
-                $product_thumb
-              );
+              $img = (string)(($imgD['url'] ?? '') ?: $modelImgUrl ?: $product_thumb);
 
               $color_name = (string)($cc['color_name'] ?? '');
               $color_hex  = trim((string)($cc['color_hex'] ?? '#cccccc'));
-
-              if ($color_hex !== '' && $color_hex[0] !== '#' && preg_match('/^[0-9a-fA-F]{3,8}$/', $color_hex)) {
-                $color_hex = '#' . $color_hex;
-              }
+              if ($color_hex !== '' && $color_hex[0] !== '#' && preg_match('/^[0-9a-fA-F]{3,8}$/', $color_hex)) $color_hex = '#' . $color_hex;
               ?>
 
               <button
@@ -635,7 +599,6 @@ $default_hero_img = (string)(
   </div><!-- /inner -->
 
   <style>
-    /* Background del bloque */
     <?php echo esc_html($root_selector); ?> {
       background-image: var(--quote-bg);
       background-size: cover;
@@ -643,7 +606,6 @@ $default_hero_img = (string)(
       background-repeat: no-repeat;
     }
 
-    /* En Step 3 ocultamos cabecera y tabs (y el resumen izquierdo) */
     <?php echo esc_html($root_selector); ?>[data-step="3"] .mg-quote__header,
     <?php echo esc_html($root_selector); ?>[data-step="3"] .mg-quote__tabs,
     <?php echo esc_html($root_selector); ?>[data-step="3"] .mg-quote__left {
@@ -652,6 +614,132 @@ $default_hero_img = (string)(
 
     <?php echo esc_html($root_selector); ?>[data-step="3"] .mg-quote__content {
       grid-template-columns: 1fr !important;
+    }
+
+    /* ===== UI modal ubicación (se crea por JS) ===== */
+    .mg-geoModal {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, .45);
+      padding: 16px;
+    }
+
+    .mg-geoModal.is-open {
+      display: flex;
+    }
+
+    .mg-geoModal__card {
+      width: min(560px, 100%);
+      background: #fff;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
+      position: relative;
+    }
+
+    .mg-geoModal__close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      border: 0;
+      background: transparent;
+      font-size: 22px;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+    }
+
+    .mg-geoModal__body {
+      padding: 62px 40px 48px;
+      text-align: center;
+    }
+
+    .mg-geoModal__title {
+      font-size: 40px;
+      font-weight: 700;
+      margin: 12px 0 24px;
+      line-height: 40px;
+      color: #212529;
+      font-family: var(--font-geely);
+    }
+
+    .mg-geoModal__text {
+      font-size: 16px;
+      color: #212529;
+      line-height: 22px;
+      margin: 0 0 24px;
+      font-family: var(--font-inter);
+    }
+
+    .mg-geoModal__btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      background: #111;
+      color: #fff;
+      height: 48px;
+      padding: 0 22px;
+      border-radius: 0px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 16px;
+      line-height: 24px;
+      width: 133px;
+      font-family: var(--font-geely);
+    }
+
+    /* ===== UI recomendación tiendas ===== */
+    .mg-nearStores {
+      margin-top: 24px;
+      background: #F6F3F5;
+      border-radius: 0px;
+      padding: 24px;
+    }
+
+    .mg-nearStores__title {
+      font-weight: 600;
+      font-size: 16px;
+      margin: 0 0 10px;
+      color: #0B0C0C;
+      line-height: 20px;
+      font-family: var(--font-inter);
+    }
+
+    .mg-nearStores__btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      border-radius: 0;
+      padding: 10px 16px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      max-width: 100%;
+      color: #0B0C0C;
+      border: 1px solid #0B0C0C;
+      font-family: var(--font-inter);
+      line-height: 20px;
+    }
+
+    .mg-nearStores__link {
+      display: block;
+      margin-top: 16px;
+      font-size: 16px;
+      color: #027BFF;
+      text-decoration: underline;
+      cursor: pointer;
+      background: transparent;
+      border: 0;
+      padding: 0;
+      line-height: 22px;
+      font-family: var(--font-inter);
     }
   </style>
 

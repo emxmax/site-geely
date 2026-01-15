@@ -362,7 +362,6 @@ add_action('wpcf7_before_send_mail', function ($contact_form) {
       'co_canal' => $co_canal,
     ],
   ];
-
 }, 10, 1);
 
 /** =========================
@@ -484,7 +483,6 @@ add_action('wpcf7_mail_sent', function ($contact_form) {
   if ($api_last) {
     update_post_meta($post_id, '_mg_api_result', wp_json_encode($api_last, JSON_UNESCAPED_UNICODE));
   }
-
 }, 10, 1);
 
 /** =========================================
@@ -636,3 +634,126 @@ add_filter('wpcf7_form_tag', function ($tag) {
 
   return $tag;
 }, 20, 1);
+
+/**
+ * AJAX: tiendas más cercanas (SIN JOINS, solo lat/lng)
+ */
+if (!function_exists('mg_quote_ajax_nearest_stores')) {
+  function mg_quote_ajax_nearest_stores()
+  {
+    if (!check_ajax_referer('mg_quote_ajax', 'nonce', false)) {
+      wp_send_json_error(['message' => 'Nonce inválido'], 403);
+    }
+
+    global $wpdb;
+
+    $lat = isset($_POST['lat']) ? (float) $_POST['lat'] : 0;
+    $lng = isset($_POST['lng']) ? (float) $_POST['lng'] : 0;
+
+    if (!$lat || !$lng) {
+      wp_send_json_success(['items' => [], 'debug' => ['reason' => 'missing lat/lng']]);
+    }
+
+    if (!mg_quote_table_exists('bp_tiendas')) {
+      wp_send_json_success(['items' => [], 'debug' => ['reason' => 'bp_tiendas not found', 'db' => $wpdb->dbname ?? '']]);
+    }
+
+    // Detectar columnas lat/lng reales (case-insensitive)
+    $wpdb->hide_errors();
+    $wpdb->suppress_errors(true);
+    $cols = $wpdb->get_results("SHOW COLUMNS FROM `bp_tiendas`", ARRAY_A);
+    $wpdb->suppress_errors(false);
+
+    $latCol = '';
+    $lngCol = '';
+
+    $latCandidates = ['latitud', 'latitude', 'lat'];
+    $lngCandidates = ['longitud', 'longitude', 'lng', 'lon'];
+
+    foreach ((array)$cols as $c) {
+      $f = (string)($c['Field'] ?? '');
+      $fLower = strtolower($f);
+      if (!$latCol && in_array($fLower, $latCandidates, true)) $latCol = $f;
+      if (!$lngCol && in_array($fLower, $lngCandidates, true)) $lngCol = $f;
+    }
+
+    if ($latCol === '' || $lngCol === '') {
+      wp_send_json_success([
+        'items' => [],
+        'debug' => [
+          'reason' => 'lat/lng columns not detected',
+          'columns' => array_map(fn($x) => $x['Field'] ?? '', (array)$cols)
+        ]
+      ]);
+    }
+
+    /**
+     * Convertir varchar -> número de forma tolerante:
+     * - quita espacios
+     * - cambia coma decimal a punto
+     * - "+ 0" fuerza numérico
+     */
+    $latNum = "(REPLACE(REPLACE(TRIM(t.`$latCol`), ' ', ''), ',', '.') + 0)";
+    $lngNum = "(REPLACE(REPLACE(TRIM(t.`$lngCol`), ' ', ''), ',', '.') + 0)";
+
+    $sql = $wpdb->prepare(
+      "SELECT
+          t.TiendaId AS id,
+          COALESCE(NULLIF(TRIM(t.NombreComercial),''), NULLIF(TRIM(t.Tienda),'')) AS name,
+          (
+            6371 * 2 * ASIN(
+              SQRT(
+                POWER(SIN((RADIANS(%f) - RADIANS($latNum)) / 2), 2) +
+                COS(RADIANS($latNum)) * COS(RADIANS(%f)) *
+                POWER(SIN((RADIANS(%f) - RADIANS($lngNum)) / 2), 2)
+              )
+            )
+          ) AS distance_km
+       FROM bp_tiendas t
+       WHERE TRIM(t.`$latCol`) <> '' AND TRIM(t.`$lngCol`) <> ''
+         AND $latNum BETWEEN -90 AND 90
+         AND $lngNum BETWEEN -180 AND 180
+       ORDER BY distance_km ASC
+       LIMIT 5",
+      $lat,
+      $lat,
+      $lng
+    );
+
+    $wpdb->hide_errors();
+    $wpdb->suppress_errors(true);
+    $rows = $wpdb->get_results($sql, ARRAY_A);
+    $err  = $wpdb->last_error;
+    $wpdb->suppress_errors(false);
+
+    $items = [];
+    foreach ((array)$rows as $r) {
+      $id = (string)($r['id'] ?? '');
+      $name = (string)($r['name'] ?? '');
+      if ($id === '' || $name === '') continue;
+
+      $items[] = [
+        'id' => $id,
+        'name' => $name,
+        'distance_km' => isset($r['distance_km']) ? round((float)$r['distance_km'], 2) : null,
+        'value' => $id . '|' . $name,
+        'label' => $name,
+      ];
+    }
+
+    wp_send_json_success([
+      'items' => $items,
+      'debug' => [
+        'db' => $wpdb->dbname ?? '',
+        'latCol' => $latCol,
+        'lngCol' => $lngCol,
+        'lat' => $lat,
+        'lng' => $lng,
+        'rows' => is_array($rows) ? count($rows) : 0,
+        'sql_error' => $err ?: null,
+      ]
+    ]);
+  }
+}
+add_action('wp_ajax_mg_quote_nearest_stores', 'mg_quote_ajax_nearest_stores');
+add_action('wp_ajax_nopriv_mg_quote_nearest_stores', 'mg_quote_ajax_nearest_stores');

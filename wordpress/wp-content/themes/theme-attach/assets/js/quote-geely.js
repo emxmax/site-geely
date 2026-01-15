@@ -20,9 +20,27 @@
     return true;
   };
 
-  const safeText = (el, text) => {
-    if (!el) return;
-    el.textContent = text;
+  const ajaxPost = async (action, data = {}) => {
+    const cfg = window.MG_QUOTE_AJAX || {};
+    const url = cfg.url;
+    const nonce = cfg.nonce;
+
+    if (!url) throw new Error("MG_QUOTE_AJAX.url no definido");
+
+    const body = new URLSearchParams();
+    body.set("action", action);
+    body.set("nonce", nonce || "");
+    Object.entries(data).forEach(([k, v]) => body.set(k, String(v)));
+
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
+      body: body.toString(),
+      credentials: "same-origin",
+    });
+
+    const json = await resp.json().catch(() => null);
+    return json;
   };
 
   /** =========================
@@ -31,7 +49,6 @@
   const params = getUrlParams();
 
   const fillTrackingHidden = () => {
-    // Hidden tracking
     setFieldById("utm_source", params.utm_source || "", true);
     setFieldById("utm_medium", params.utm_medium || "", true);
     setFieldById("utm_campaign", params.utm_campaign || "", true);
@@ -40,95 +57,37 @@
     setFieldById("gclid", params.gclid || "", true);
     setFieldById("fbclid", params.fbclid || "", true);
 
-    // Si llega por URL:
     if (params.product_id) setFieldById("product_id", params.product_id, true);
   };
 
   /** =========================
-   *  2) GEO (botón "Habilitar ubicación actual")
-   * ========================= */
-  const initGeo = () => {
-    const geoBtn = $("#geely-cotiza-geo-btn");
-    const geoStatus = $("#geely-cotiza-geo-status");
-    const latId = "geely-cotiza-lat";
-    const lngId = "geely-cotiza-lng";
-
-    const setGeo = (lat, lng) => {
-      setFieldById(latId, String(lat), true);
-      setFieldById(lngId, String(lng), true);
-    };
-
-    const setGeoStatus = (msg) => safeText(geoStatus, msg);
-
-    if (!geoBtn) return;
-
-    geoBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-
-      if (!navigator.geolocation) {
-        setGeoStatus("Tu navegador no soporta geolocalización.");
-        return;
-      }
-
-      setGeoStatus("Obteniendo ubicación...");
-
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const { latitude, longitude } = pos.coords;
-          setGeo(latitude, longitude);
-          setGeoStatus("Ubicación registrada");
-        },
-        (err) => {
-          if (err.code === 1) setGeoStatus("Permiso denegado. Activa la ubicación en tu navegador.");
-          else if (err.code === 2) setGeoStatus("No se pudo obtener tu ubicación.");
-          else if (err.code === 3) setGeoStatus("Tiempo de espera agotado. Intenta nuevamente.");
-          else setGeoStatus("Error obteniendo ubicación.");
-        },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-      );
-    });
-  };
-
-  /** =========================
-   *  3) CF7 logs (payload frontend + respuesta backend)
+   *  2) CF7 logs (FIX: no usa "form" undefined)
    * ========================= */
   const initCf7Logs = () => {
-    // Snapshot del FormData ANTES de enviar (frontend)
     document.addEventListener("wpcf7beforesubmit", (e) => {
-      // asegura que sea ESTE form (por si hay más CF7 en la página)
-      if (e.target !== form) return;
+      const form = e.target;
+      if (!(form instanceof HTMLFormElement)) return;
 
-      const ok = validateAll({ showNative: true });
-
-      if (!ok) {
-        // Evita que CF7 continúe el envío AJAX
-        e.preventDefault();
-
-        // Opcional: baja al primer error visible
-        const firstInvalid = form.querySelector(".is-invalid");
-        if (firstInvalid) {
-          firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
-          firstInvalid.focus?.();
+      if (typeof form.__mgValidateAll === "function") {
+        const ok = form.__mgValidateAll();
+        if (!ok) {
+          e.preventDefault();
+          const firstInvalid = form.querySelector(".is-invalid");
+          firstInvalid?.scrollIntoView({ behavior: "smooth", block: "center" });
+          firstInvalid?.focus?.();
         }
       }
     });
 
-    // Resultado de CF7 (aquí llega mg_api)
     document.addEventListener("wpcf7submit", (e) => {
       const res = e.detail?.apiResponse;
       console.log("[MG_QUOTE] wpcf7submit apiResponse:", res);
 
-      if (res?.mg_payload) {
-        console.log("[MG_QUOTE] PAYLOAD SENT TO API (body):", res.mg_payload);
-      } else {
-        console.warn("[MG_QUOTE] No llegó mg_payload. Revisa el filtro wpcf7_ajax_json_echo.");
-      }
+      if (res?.mg_payload) console.log("[MG_QUOTE] PAYLOAD SENT TO API (body):", res.mg_payload);
+      else console.warn("[MG_QUOTE] No llegó mg_payload. Revisa el filtro wpcf7_ajax_json_echo.");
 
-      if (res?.mg_api) {
-        console.log("[MG_QUOTE] API RESULT (backend):", res.mg_api);
-      } else {
-        console.warn("[MG_QUOTE] No llegó mg_api. Revisa el filtro wpcf7_ajax_json_echo.");
-      }
+      if (res?.mg_api) console.log("[MG_QUOTE] API RESULT (backend):", res.mg_api);
+      else console.warn("[MG_QUOTE] No llegó mg_api. Revisa el filtro wpcf7_ajax_json_echo.");
     });
 
     document.addEventListener("wpcf7mailsent", (e) => {
@@ -143,7 +102,6 @@
       console.warn("[MG_QUOTE] wpcf7invalid (validación)", e.detail?.apiResponse);
     });
 
-    // Log al click del botón
     document.addEventListener("click", (e) => {
       const btn = e.target.closest('input.wpcf7-submit, button.wpcf7-submit, .geely-cotiza-submit');
       if (!btn) return;
@@ -152,7 +110,351 @@
   };
 
   /** =========================
-   *  4) Bloque de cotización (tabs/steps/selección modelos/colores)
+   *  3) Carga dinámica: Tiendas por Departamento
+   * ========================= */
+  const initDeptStoreDynamic = () => {
+    const form = document.querySelector(".wpcf7 form");
+    if (!form) return;
+
+    const deptEl = form.querySelector('select[name="cot_department"]');
+    const storeEl = form.querySelector('select[name="cot_store"]');
+    if (!deptEl || !storeEl) return;
+
+    const setLoadingStores = (loading) => {
+      storeEl.disabled = !!loading;
+      storeEl.classList.toggle("is-loading", !!loading);
+    };
+
+    const fillStoreOptions = (items) => {
+      const placeholderText = "Selecciona una opción";
+      storeEl.innerHTML = "";
+      const ph = document.createElement("option");
+      ph.value = "";
+      ph.textContent = placeholderText;
+      ph.disabled = true;
+      ph.hidden = true;
+      ph.selected = true;
+      storeEl.appendChild(ph);
+
+      (items || []).forEach((it) => {
+        const opt = document.createElement("option");
+        // OJO: aquí usas el value que te devuelve el endpoint (id|name)
+        opt.value = it.value || "";
+        opt.textContent = it.label || it.name || "";
+        storeEl.appendChild(opt);
+      });
+    };
+
+    const loadStoresByDept = async (deptValue) => {
+      if (!deptValue) {
+        fillStoreOptions([]);
+        return;
+      }
+
+      setLoadingStores(true);
+      try {
+        const res = await ajaxPost("mg_quote_get_stores", { department: deptValue });
+        const items = res?.success ? (res.data?.items || []) : [];
+        fillStoreOptions(items);
+      } catch (err) {
+        console.warn("[MG_QUOTE] Error loading stores:", err);
+        fillStoreOptions([]);
+      } finally {
+        setLoadingStores(false);
+      }
+    };
+
+    // expone función por si luego quieres usarla
+    form.__mgLoadStoresByDept = loadStoresByDept;
+
+    deptEl.addEventListener("change", () => {
+      loadStoresByDept(deptEl.value || "");
+    });
+  };
+
+  /** =========================
+   *  4) GEO + recomendación tienda cercana
+   * ========================= */
+  const initGeo = () => {
+    const form = document.querySelector(".wpcf7 form");
+    if (!form) return;
+
+    const geoBtn = $("#geely-cotiza-geo-btn");
+    const latId = "geely-cotiza-lat";
+    const lngId = "geely-cotiza-lng";
+
+    const deptEl = form.querySelector('select[name="cot_department"]');
+    const storeEl = form.querySelector('select[name="cot_store"]');
+
+    if (!geoBtn || !deptEl || !storeEl) return;
+
+    const ensureDeniedModal = () => {
+      let modal = document.querySelector(".mg-geoModal");
+      if (modal) return modal;
+
+      modal = document.createElement("div");
+      modal.className = "mg-geoModal";
+      modal.innerHTML = `
+        <div class="mg-geoModal__card" role="dialog" aria-modal="true" aria-label="Permiso de ubicación desactivado">
+          <button class="mg-geoModal__close" type="button" aria-label="Cerrar">×</button>
+          <div class="mg-geoModal__body">
+            <div class="mg-geoModal__title">Permiso de ubicación desactivado</div>
+            <p class="mg-geoModal__text">
+              Has bloqueado previamente el acceso a la ubicación para este sitio.
+              Para continuar, permite el acceso en la configuración de tu navegador,
+              recarga la página y vuelve a intentarlo.
+            </p>
+            <button class="mg-geoModal__btn" type="button">Aceptar</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+
+      const close = () => modal.classList.remove("is-open");
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) close();
+      });
+      modal.querySelector(".mg-geoModal__close")?.addEventListener("click", close);
+      modal.querySelector(".mg-geoModal__btn")?.addEventListener("click", close);
+
+      return modal;
+    };
+
+    const openDeniedModal = () => {
+      const modal = ensureDeniedModal();
+      modal.classList.add("is-open");
+    };
+
+    const ensureNearStoresBox = () => {
+      let box = form.querySelector(".mg-nearStores");
+      if (box) return box;
+
+      const geoWrap = form.querySelector(".geely-cotiza-geo");
+
+      box = document.createElement("div");
+      box.className = "mg-nearStores";
+      box.style.display = "none";
+      box.innerHTML = `
+        <div class="mg-nearStores__title">
+          También contamos con estos concesionarios a tu disposición:
+        </div>
+        <button type="button" class="mg-nearStores__btn"></button>
+        <button type="button" class="mg-nearStores__link">
+          Ver más concesionarios
+        </button>
+      `;
+
+      if (geoWrap && geoWrap.parentNode) {
+        geoWrap.parentNode.insertBefore(box, geoWrap.nextSibling);
+      } else {
+        form.appendChild(box);
+      }
+
+      return box;
+    };
+
+    const setGeoHidden = (lat, lng) => {
+      setFieldById(latId, String(lat), true);
+      setFieldById(lngId, String(lng), true);
+    };
+
+    // helpers para setear tienda en el select sin depender del departamento
+    const ensureOption = (selectEl, value, label) => {
+      if (!selectEl || !value) return false;
+
+      const exists = Array.from(selectEl.options).some((o) => o.value === value);
+      if (!exists) {
+        const opt = document.createElement("option");
+        opt.value = value;
+        opt.textContent = label || value;
+        selectEl.appendChild(opt);
+      }
+      return true;
+    };
+
+    const setSelectValue = (selectEl, value, label) => {
+      if (!selectEl || !value) return false;
+
+      ensureOption(selectEl, value, label);
+
+      selectEl.value = value;
+      selectEl.dispatchEvent(new Event("change", { bubbles: true }));
+      selectEl.dispatchEvent(new Event("input", { bubbles: true }));
+      return true;
+    };
+
+    // IMPORTANTE: aquí solo seteamos la TIENDA
+    // porque el usuario aún no ha elegido dept/tienda
+    const setRecommendedStore = async (storeItem) => {
+      // storeItem viene del backend con:
+      // { id, name, department, distance_km, value: "id|name", label: name }
+      const raw = String(storeItem?.value || "");
+      if (!raw) return;
+
+      const [id, name] = raw.includes("|") ? raw.split("|") : [raw, storeItem?.name || ""];
+      const storeId = (id || "").trim();
+      const storeName = (name || storeItem?.name || storeItem?.label || "").trim();
+
+      if (!storeId) return;
+
+      // como tu select principal maneja value=ID, seteamos ID
+      setSelectValue(storeEl, storeId, storeName);
+
+      // (OPCIONAL) si quieres setear dept SOLO si está vacío:
+      // if (storeItem?.department && !deptEl.value) {
+      //   deptEl.value = String(storeItem.department);
+      //   deptEl.dispatchEvent(new Event("change", { bubbles: true }));
+      // }
+    };
+
+    const showNearestStores = async (lat, lng) => {
+      const box = ensureNearStoresBox();
+      const btn = box.querySelector(".mg-nearStores__btn");
+      const link = box.querySelector(".mg-nearStores__link");
+
+      const geoWrap = form.querySelector(".geely-cotiza-geo");
+      if (geoWrap) geoWrap.style.display = "none";
+
+      box.style.display = "block";
+      btn.textContent = "Buscando concesionario cercano...";
+      btn.disabled = true;
+
+      try {
+        const res = await ajaxPost("mg_quote_nearest_stores", { lat, lng });
+        const items = res?.success ? (res.data?.items || []) : [];
+
+        if (!items.length) {
+          btn.textContent = "No se encontraron concesionarios cercanos.";
+          btn.disabled = true;
+          link.style.display = "none";
+          return;
+        }
+
+        const nearest = items[0];
+        btn.disabled = false;
+        btn.textContent = nearest.name || "Concesionario recomendado";
+        btn.onclick = () => setRecommendedStore(nearest);
+
+        link.style.display = items.length > 1 ? "block" : "none";
+        link.onclick = () => {
+          let list = box.querySelector(".mg-nearStores__list");
+          if (list) {
+            list.remove();
+            return;
+          }
+          list = document.createElement("div");
+          list.className = "mg-nearStores__list";
+          list.style.marginTop = "10px";
+          items.slice(1).forEach((it) => {
+            const b = document.createElement("button");
+            b.type = "button";
+            b.className = "mg-nearStores__btn";
+            b.style.marginRight = "8px";
+            b.style.marginBottom = "8px";
+            b.textContent = it.name || "";
+            b.addEventListener("click", () => setRecommendedStore(it));
+            list.appendChild(b);
+          });
+          box.appendChild(list);
+        };
+      } catch (err) {
+        console.warn("[MG_QUOTE] nearest stores error:", err);
+        btn.textContent = "Ocurrió un error obteniendo concesionarios.";
+        btn.disabled = true;
+        link.style.display = "none";
+      }
+    };
+
+    const openGeoErrorModal = (title, text) => {
+      let modal = document.querySelector(".mg-geoModal");
+      if (!modal) modal = ensureDeniedModal();
+
+      const t = modal.querySelector(".mg-geoModal__title");
+      const p = modal.querySelector(".mg-geoModal__text");
+      if (t) t.textContent = title;
+      if (p) p.textContent = text;
+
+      modal.classList.add("is-open");
+    };
+
+    const requestGeo = async () => {
+      console.clear();
+      console.log("[MG_GEO] location.origin:", location.origin);
+      console.log("[MG_GEO] location.href:", location.href);
+
+      const hasGeo = !!navigator.geolocation;
+      console.log("[MG_GEO] navigator.geolocation exists:", hasGeo);
+
+      let state = "unsupported";
+      try {
+        if (navigator.permissions?.query) {
+          const st = await navigator.permissions.query({ name: "geolocation" });
+          state = st?.state || "unknown";
+          console.log("[MG_GEO] permissions.query state:", state);
+          st.onchange = () => console.log("[MG_GEO] permissions state changed ->", st.state);
+        } else {
+          console.log("[MG_GEO] Permissions API not available");
+        }
+      } catch (e) {
+        console.warn("[MG_GEO] permissions.query error:", e);
+        state = "error";
+      }
+
+      if (state === "denied") {
+        console.warn("[MG_GEO] Blocked by browser -> showing denied modal");
+        openDeniedModal();
+        return;
+      }
+
+      console.log("[MG_GEO] Calling getCurrentPosition...");
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          console.log("[MG_GEO] SUCCESS coords:", pos.coords);
+          const { latitude, longitude } = pos.coords;
+          setGeoHidden(latitude, longitude);
+          await showNearestStores(latitude, longitude);
+        },
+        (err) => {
+          console.warn("[MG_GEO] ERROR:", err, "code:", err?.code, "message:", err?.message);
+
+          if (err?.code === 1) {
+            openDeniedModal();
+            return;
+          }
+
+          if (err?.code === 2) {
+            openGeoErrorModal(
+              "No se pudo obtener tu ubicación",
+              "Tu dispositivo/navegador no pudo determinar la ubicación. Verifica que la ubicación esté activada en tu sistema y vuelve a intentar."
+            );
+            return;
+          }
+
+          if (err?.code === 3) {
+            openGeoErrorModal(
+              "Tiempo de espera agotado",
+              "No se pudo obtener tu ubicación a tiempo. Intenta nuevamente o prueba con otra red."
+            );
+            return;
+          }
+
+          openGeoErrorModal(
+            "No se pudo obtener tu ubicación",
+            "Ocurrió un error inesperado al obtener la ubicación. Intenta nuevamente."
+          );
+        },
+        { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
+      );
+    };
+
+    geoBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      requestGeo();
+    });
+  };
+
+  /** =========================
+   *  5) Bloque de cotización (tabs/steps/selección modelos/colores)
    * ========================= */
   const initQuoteBlocks = () => {
     const roots = window.__MG_QUOTE_BLOCKS__ || [];
@@ -176,7 +478,6 @@
       setVal("nid_marca", data.nid_marca);
       setVal("nid_modelo", data.nid_modelo);
 
-      // extras para tu payload (si los agregas como hidden en CF7)
       setVal("co_articulo", data.co_articulo);
       setVal("co_configuracion", data.co_configuracion);
       setVal("co_transmision", data.co_transmision);
@@ -283,7 +584,6 @@
       const root = document.querySelector(sel);
       if (!root) return;
 
-      // Placeholder no seleccionable (solo UI)
       makeFirstOptionPlaceholder(root.querySelector('select[name="cot_department"]'));
       makeFirstOptionPlaceholder(root.querySelector('select[name="cot_store"]'));
 
@@ -343,7 +643,6 @@
           nid_marca: root.getAttribute("data-nid-marca") || "",
           nid_modelo: btn.getAttribute("data-nid-modelo") || "",
 
-          // extras para tu payload
           co_articulo: btn.getAttribute("data-co-articulo") || "",
           co_configuracion: btn.getAttribute("data-co-configuracion") || "",
           co_transmision: btn.getAttribute("data-co-transmision") || "",
@@ -416,48 +715,31 @@
   };
 
   /** =========================
-   *  5) Validaciones en vivo (typing) + click (CF7 async-safe)
-   *
-   *  Objetivos:
-   *  Al PRIMER click en "Cotizar" debe mostrar errores (debajo, con .geely-field-error)
-   *  NO usar tooltips nativos del browser ("Por favor rellene...")
-   *  Luego del 1er intento, valida en vivo mientras escribe/cambia
-   *  Celular: +51 y 9 números => +519XXXXXXXX
-   *  Doc: DNI (8 num), RUC (11 num), otros alfanumérico+&
-   *  NO “matar” el submit: si está enabled => CF7 envía normal.
-   *  si está disabled => click en wrapper muestra errores (sin enviar).
+   *  6) Validaciones (primer click + en vivo)
    * ========================= */
   const initCotizaValidation = () => {
     const MAX_TRIES = 60;
     const TRY_EVERY = 250;
 
     const findForm = () => document.querySelector(".wpcf7 form");
-    const findActionsWrap = (form) =>
-      form?.querySelector(".geely-cotiza-actions") || null;
+    const findActionsWrap = (form) => form?.querySelector(".geely-cotiza-actions") || null;
 
     const boot = (form) => {
       if (form.__mgValidationMounted) return true;
       form.__mgValidationMounted = true;
 
-      // evita tooltips nativos del browser
       form.setAttribute("novalidate", "novalidate");
 
-      // solo mostramos errores después del primer intento
       let showErrors = false;
 
-      // ===== Campos =====
       const docTypeEl = form.querySelector('select[name="cot_document_type"]');
       const docEl = form.querySelector('input[name="cot_document"]');
-
       const namesEl = form.querySelector('input[name="cot_names"]');
       const lastnamesEl = form.querySelector('input[name="cot_lastnames"]');
-
       const phoneEl = form.querySelector('input[name="cot_phone"]');
       const emailEl = form.querySelector('input[name="cot_email"]');
-
       const deptEl = form.querySelector('select[name="cot_department"]');
       const storeEl = form.querySelector('select[name="cot_store"]');
-
       const submitBtn = form.querySelector(".wpcf7-submit");
 
       if (!docTypeEl || !docEl) {
@@ -466,32 +748,15 @@
         return false;
       }
 
-      // ===== Helpers =====
       const NAME_ALLOWED = /[^a-zA-Z0-9&ÑñáéíóúÁÉÍÓÚ'\-\s]/g;
-
       const docType = () => (docTypeEl.value || "").toUpperCase().trim();
 
-      const isNumericDocType = () => {
-        const t = docType();
-        return t === "DNI" || t === "RUC";
-      };
-
-      const getDocMaxLen = () => {
-        const t = docType();
-        if (t === "DNI") return 8;
-        if (t === "RUC") return 11;
-        return 20;
-      };
-
-      const getDocDisallowedRegex = () => {
-        if (isNumericDocType()) return /[^0-9]/g; // DNI/RUC: solo números
-        return /[^a-zA-Z0-9&]/g; // Otros: alfanumérico + &
-      };
+      const isNumericDocType = () => ["DNI", "RUC"].includes(docType());
+      const getDocMaxLen = () => (docType() === "DNI" ? 8 : docType() === "RUC" ? 11 : 20);
+      const getDocDisallowedRegex = () => (isNumericDocType() ? /[^0-9]/g : /[^a-zA-Z0-9&]/g);
 
       const ensureErrorEl = (fieldEl) => {
-        const wrap =
-          fieldEl?.closest(".geely-cotiza-row__control") ||
-          fieldEl?.parentElement;
+        const wrap = fieldEl?.closest(".geely-cotiza-row__control") || fieldEl?.parentElement;
         if (!wrap) return null;
 
         let err = wrap.querySelector(".geely-field-error");
@@ -507,19 +772,14 @@
       const paintError = (fieldEl, message) => {
         if (!fieldEl) return;
         const errEl = ensureErrorEl(fieldEl);
-
         fieldEl.classList.toggle("is-invalid", !!message);
         fieldEl.setCustomValidity(message || "");
         if (errEl) errEl.textContent = message || "";
       };
 
       const setFieldError = (fieldEl, message) => {
-        // antes del 1er intento no pintamos nada
         if (!showErrors) {
-          // pero sí limpiamos estado previo si existía
-          if (!message) {
-            paintError(fieldEl, "");
-          }
+          if (!message) paintError(fieldEl, "");
           return;
         }
         paintError(fieldEl, message);
@@ -527,17 +787,13 @@
 
       const clearFieldError = (fieldEl) => paintError(fieldEl, "");
 
-      // ===== Documento =====
       const sanitizeDoc = () => {
         const maxLen = getDocMaxLen();
         docEl.setAttribute("maxlength", String(maxLen));
-
         const before = docEl.value || "";
         const disallowed = getDocDisallowedRegex();
-
         let v = before.replace(disallowed, "");
         if (v.length > maxLen) v = v.slice(0, maxLen);
-
         if (v !== before) docEl.value = v;
       };
 
@@ -546,36 +802,16 @@
         const v = (docEl.value || "").trim();
         const maxLen = getDocMaxLen();
 
-        if (!v) {
-          setFieldError(docEl, "Ingresa tu número de documento.");
-          return false;
-        }
-
-        if ((t === "DNI" || t === "RUC") && !/^\d+$/.test(v)) {
-          setFieldError(docEl, "Solo se permiten números.");
-          return false;
-        }
-
-        if (t === "DNI" && v.length !== 8) {
-          setFieldError(docEl, "DNI debe tener 8 dígitos.");
-          return false;
-        }
-
-        if (t === "RUC" && v.length !== 11) {
-          setFieldError(docEl, "RUC debe tener 11 dígitos.");
-          return false;
-        }
-
-        if (v.length > maxLen) {
-          setFieldError(docEl, `Máximo ${maxLen} caracteres.`);
-          return false;
-        }
+        if (!v) return (setFieldError(docEl, "Ingresa tu número de documento."), false);
+        if ((t === "DNI" || t === "RUC") && !/^\d+$/.test(v)) return (setFieldError(docEl, "Solo se permiten números."), false);
+        if (t === "DNI" && v.length !== 8) return (setFieldError(docEl, "DNI debe tener 8 dígitos."), false);
+        if (t === "RUC" && v.length !== 11) return (setFieldError(docEl, "RUC debe tener 11 dígitos."), false);
+        if (v.length > maxLen) return (setFieldError(docEl, `Máximo ${maxLen} caracteres.`), false);
 
         setFieldError(docEl, "");
         return true;
       };
 
-      // ===== Nombres/Apellidos =====
       const sanitizeNameField = (el) => {
         if (!el) return;
         const before = el.value || "";
@@ -586,84 +822,47 @@
       const validateNameField = (el, label) => {
         if (!el) return true;
         const v = (el.value || "").trim();
-        if (!v) {
-          setFieldError(el, `Ingresa ${label}.`);
-          return false;
-        }
+        if (!v) return (setFieldError(el, `Ingresa ${label}.`), false);
         setFieldError(el, "");
         return true;
       };
 
-      // ===== Celular (+51 y 9 números) =====
-      // Formato requerido: +519XXXXXXXX
       const sanitizePhone = () => {
         if (!phoneEl) return;
         const before = phoneEl.value || "";
-
-        // deja solo + y dígitos
         let v = before.replace(/[^\d+]/g, "");
-
-        // normaliza + (máximo un + al inicio)
         if (v.includes("+")) {
           v = v.replace(/\+/g, "");
           v = "+" + v;
         }
-
-        // si escribe 51xxxx sin + -> +51xxxx
         if (/^51\d/.test(v)) v = "+" + v;
-
-        // limita longitud máxima razonable
         if (v.length > 13) v = v.slice(0, 13);
-
         if (v !== before) phoneEl.value = v;
       };
 
       const validatePhone = () => {
         if (!phoneEl) return true;
         const v = (phoneEl.value || "").trim();
-
-        if (!v) {
-          setFieldError(phoneEl, "Ingresa tu celular.");
-          return false;
-        }
-
-        // exacto +51 y 9 números
-        if (!/^\+51\d{9}$/.test(v)) {
-          setFieldError(phoneEl, "Celular precisa del +51 y 9 numeros.");
-          return false;
-        }
-
+        if (!v) return (setFieldError(phoneEl, "Ingresa tu celular."), false);
+        if (!/^\+51\d{9}$/.test(v)) return (setFieldError(phoneEl, "Celular precisa del +51 y 9 numeros."), false);
         setFieldError(phoneEl, "");
         return true;
       };
 
-      // ===== Email =====
       const validateEmail = () => {
         if (!emailEl) return true;
         const v = (emailEl.value || "").trim();
         const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-
-        if (!v) {
-          setFieldError(emailEl, "Ingresa tu email.");
-          return false;
-        }
-        if (!emailOk) {
-          setFieldError(emailEl, "Ingresa un email válido.");
-          return false;
-        }
-
+        if (!v) return (setFieldError(emailEl, "Ingresa tu email."), false);
+        if (!emailOk) return (setFieldError(emailEl, "Ingresa un email válido."), false);
         setFieldError(emailEl, "");
         return true;
       };
 
-      // ===== Selects =====
       const validateDept = () => {
         if (!deptEl) return true;
         const v = (deptEl.value || "").trim();
-        if (!v || v.toLowerCase().includes("selecciona")) {
-          setFieldError(deptEl, "Selecciona un departamento.");
-          return false;
-        }
+        if (!v || v.toLowerCase().includes("selecciona")) return (setFieldError(deptEl, "Selecciona un departamento."), false);
         setFieldError(deptEl, "");
         return true;
       };
@@ -671,10 +870,7 @@
       const validateStore = () => {
         if (!storeEl) return true;
         const v = (storeEl.value || "").trim();
-        if (!v || v.toLowerCase().includes("selecciona")) {
-          setFieldError(storeEl, "Selecciona una tienda.");
-          return false;
-        }
+        if (!v || v.toLowerCase().includes("selecciona")) return (setFieldError(storeEl, "Selecciona una tienda."), false);
         setFieldError(storeEl, "");
         return true;
       };
@@ -696,7 +892,11 @@
         return ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7;
       };
 
-      // ===== En vivo (solo después del 1er intento) =====
+      form.__mgValidateAll = () => {
+        showErrors = true;
+        return validateAllCustom();
+      };
+
       docEl.addEventListener("input", () => {
         sanitizeDoc();
         if (showErrors) validateDoc();
@@ -711,7 +911,6 @@
         if (showErrors) validateNameField(namesEl, "tus nombres");
         else clearFieldError(namesEl);
       });
-
       lastnamesEl?.addEventListener("input", () => {
         sanitizeNameField(lastnamesEl);
         if (showErrors) validateNameField(lastnamesEl, "tus apellidos");
@@ -723,7 +922,6 @@
         if (showErrors) validatePhone();
         else clearFieldError(phoneEl);
       });
-
       emailEl?.addEventListener("input", () => {
         if (showErrors) validateEmail();
         else clearFieldError(emailEl);
@@ -733,23 +931,16 @@
         if (showErrors) validateDept();
         else clearFieldError(deptEl);
       });
-
       storeEl?.addEventListener("change", () => {
         if (showErrors) validateStore();
         else clearFieldError(storeEl);
       });
 
-      /** =========================
-       *  Pointer-events sync:
-       *   - submit ENABLED => click normal (CF7 envía)
-       *   - submit DISABLED => click wrapper para mostrar errores
-       * ========================= */
       const syncPointerEvents = () => {
         const actionsWrap = findActionsWrap(form);
         if (!actionsWrap || !submitBtn) return;
 
-        const isDisabled =
-          submitBtn.disabled || submitBtn.getAttribute("disabled") !== null;
+        const isDisabled = submitBtn.disabled || submitBtn.getAttribute("disabled") !== null;
 
         if (isDisabled) {
           actionsWrap.style.pointerEvents = "auto";
@@ -760,16 +951,9 @@
         }
       };
 
-      /** =========================
-       *  CLICK handler:
-       *   - Siempre enciende showErrors en el primer click
-       *   - Si submit está disabled => valida y muestra errores
-       *   - Si submit está enabled => NO bloquea, CF7 envía.
-       * ========================= */
       const attachClickHandler = () => {
         const actionsWrap = findActionsWrap(form);
         if (!actionsWrap) return false;
-
         if (actionsWrap.__mgClickMounted) return true;
         actionsWrap.__mgClickMounted = true;
 
@@ -778,84 +962,52 @@
         actionsWrap.addEventListener(
           "click",
           (e) => {
-            // primer intento: desde aquí ya se pintan errores
             showErrors = true;
 
-            // Si submit está enabled, dejamos que CF7 haga submit (no interceptamos)
-            if (submitBtn && !submitBtn.disabled) {
-              // pero aprovechamos para validar y mostrar errores si hubiera (por si CF7 no los muestra como quieres)
-              const ok = validateAllCustom();
-              if (!ok) {
-                // bloquea (porque si no, CF7 intentará enviar y te dará mensaje genérico)
-                e.preventDefault();
-                e.stopPropagation();
-                const first = form.querySelector(".is-invalid");
-                first?.scrollIntoView({ behavior: "smooth", block: "center" });
-                first?.focus?.();
-              }
-              return;
-            }
-
-            // Submit disabled => solo validamos y mostramos errores
-            const okCustom = validateAllCustom();
-
-            if (!okCustom) {
+            const ok = validateAllCustom();
+            if (!ok) {
               e.preventDefault();
               e.stopPropagation();
-
               const first = form.querySelector(".is-invalid");
-              if (first) {
-                first.scrollIntoView({ behavior: "smooth", block: "center" });
-                first.focus?.();
-              }
+              first?.scrollIntoView({ behavior: "smooth", block: "center" });
+              first?.focus?.();
               return;
             }
 
-            console.warn(
-              "[MG_VALIDATE] Todo OK, pero CF7 mantiene el botón disabled (acceptance u otra regla)."
-            );
+            if (submitBtn && !submitBtn.disabled) return;
+
+            console.warn("[MG_VALIDATE] Todo OK, pero CF7 mantiene el botón disabled (acceptance u otra regla).");
           },
           true
         );
 
-        console.log("[MG_VALIDATE] Click handler montado ✅");
         return true;
       };
 
       attachClickHandler();
 
-      // Observa cambios del botón (disabled/spinner)
       if (submitBtn && !submitBtn.__mgBtnObserved) {
         submitBtn.__mgBtnObserved = true;
-
         const btnObs = new MutationObserver(() => syncPointerEvents());
-        btnObs.observe(submitBtn, {
-          attributes: true,
-          attributeFilter: ["disabled", "class"],
-        });
+        btnObs.observe(submitBtn, { attributes: true, attributeFilter: ["disabled", "class"] });
       }
 
-      // Si CF7 re-renderiza el form/footer, re-monta handler y re-sync
       const obs = new MutationObserver(() => {
         attachClickHandler();
         syncPointerEvents();
       });
       obs.observe(form, { childList: true, subtree: true, attributes: true });
 
-      // Estado inicial (NO pintar errores)
       sanitizeDoc();
       sanitizePhone();
       syncPointerEvents();
 
-      console.log("[MG_VALIDATE] initCotizaValidation montado");
       return true;
     };
 
-    // ===== Reintentos =====
     let tries = 0;
     const timer = setInterval(() => {
       tries++;
-
       const form = findForm();
       const actions = findActionsWrap(form);
 
@@ -871,15 +1023,15 @@
     }, TRY_EVERY);
   };
 
-
   /** =========================
    *  BOOT
    * ========================= */
   document.addEventListener("DOMContentLoaded", () => {
     fillTrackingHidden();
-    initGeo();
     initCf7Logs();
     initQuoteBlocks();
+    initDeptStoreDynamic();
+    initGeo();
     initCotizaValidation();
   });
 })();
