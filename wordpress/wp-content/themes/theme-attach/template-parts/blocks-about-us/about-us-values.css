@@ -21,7 +21,7 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
-  margin-top: 44px;
+  margin-top: calc(40px + 15px);
 }
 
 .about-values__item {
@@ -49,6 +49,7 @@
   font-weight: 700;
   color: var(--c-black);
   margin-top: 24px;
+  letter-spacing: 3px;
 }
 
 .about-values__item-description {

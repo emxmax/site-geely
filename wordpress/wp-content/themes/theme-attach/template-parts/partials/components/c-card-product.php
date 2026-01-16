@@ -17,7 +17,7 @@
 $defaults = [
   'title' => '',
   'image' => '',
-  'price_label' => '',
+  'price_label' => 'Precio desde',
   'price_usd' => '',
   'price_pen' => '',
   'link_model' => '#',
@@ -37,6 +37,8 @@ $link_model = (string) $args['link_model'];
 $link_quote = (string) $args['link_quote'];
 
 $classes = trim('mf-card ' . (string) $args['class']);
+
+$price_label = !empty($price_label) ? $price_label : 'Precio desde';
 ?>
 
 <article class="<?= esc_attr($classes); ?>" <?php if ($args['id']): ?>id="<?= esc_attr($args['id']); ?>" <?php endif; ?>>

@@ -17,6 +17,7 @@
   font-family: var(--font-geely);
   font-weight: 700;
   color: var(--c-black);
+  letter-spacing: 3px;
 }
 
 .about-hero__title {
