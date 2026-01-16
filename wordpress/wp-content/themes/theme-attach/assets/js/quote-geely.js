@@ -179,6 +179,8 @@
     const form = document.querySelector(".wpcf7 form");
     if (!form) return;
 
+    const root = form.closest(".mg-quote") || document.querySelector(".mg-quote");
+
     const geoBtn = $("#geely-cotiza-geo-btn");
     const latId = "geely-cotiza-lat";
     const lngId = "geely-cotiza-lng";
@@ -192,25 +194,36 @@
       let modal = document.querySelector(".mg-geoModal");
       if (modal) return modal;
 
+      const bgUrl = root?.getAttribute("data-geo-bg") || "";
+
       modal = document.createElement("div");
       modal.className = "mg-geoModal";
       modal.innerHTML = `
-        <div class="mg-geoModal__card" role="dialog" aria-modal="true" aria-label="Permiso de ubicación desactivado">
-          <button class="mg-geoModal__close" type="button" aria-label="Cerrar">×</button>
-          <div class="mg-geoModal__body">
-            <div class="mg-geoModal__title">Permiso de ubicación desactivado</div>
-            <p class="mg-geoModal__text">
-              Has bloqueado previamente el acceso a la ubicación para este sitio.
-              Para continuar, permite el acceso en la configuración de tu navegador,
-              recarga la página y vuelve a intentarlo.
-            </p>
-            <button class="mg-geoModal__btn" type="button">Aceptar</button>
-          </div>
+      <div class="mg-geoModal__card" role="dialog" aria-modal="true" aria-label="Permiso de ubicación desactivado">
+        <button class="mg-geoModal__close" type="button" aria-label="Cerrar">×</button>
+        <div class="mg-geoModal__body">
+          <div class="mg-geoModal__title">Permiso de ubicación desactivado</div>
+          <p class="mg-geoModal__text">
+            Has bloqueado previamente el acceso a la ubicación para este sitio.
+            Para continuar, permite el acceso en la configuración de tu navegador,
+            recarga la página y vuelve a intentarlo.
+          </p>
+          <button class="mg-geoModal__btn" type="button">Aceptar</button>
         </div>
-      `;
+      </div>
+    `;
       document.body.appendChild(modal);
 
+      const card = modal.querySelector(".mg-geoModal__card");
+      if (card && bgUrl) {
+        card.style.backgroundImage = `url("${bgUrl}")`;
+        card.style.backgroundSize = "cover";
+        card.style.backgroundPosition = "center";
+        card.style.backgroundRepeat = "no-repeat";
+      }
+
       const close = () => modal.classList.remove("is-open");
+
       modal.addEventListener("click", (e) => {
         if (e.target === modal) close();
       });
@@ -235,14 +248,14 @@
       box.className = "mg-nearStores";
       box.style.display = "none";
       box.innerHTML = `
-        <div class="mg-nearStores__title">
-          También contamos con estos concesionarios a tu disposición:
-        </div>
-        <button type="button" class="mg-nearStores__btn"></button>
-        <button type="button" class="mg-nearStores__link">
-          Ver más concesionarios
-        </button>
-      `;
+      <div class="mg-nearStores__title">
+        También contamos con estos concesionarios a tu disposición:
+      </div>
+      <button type="button" class="mg-nearStores__btn"></button>
+      <button type="button" class="mg-nearStores__link">
+        Ver más concesionarios
+      </button>
+    `;
 
       if (geoWrap && geoWrap.parentNode) {
         geoWrap.parentNode.insertBefore(box, geoWrap.nextSibling);
@@ -345,6 +358,7 @@
           list = document.createElement("div");
           list.className = "mg-nearStores__list";
           list.style.marginTop = "10px";
+
           items.slice(1).forEach((it) => {
             const b = document.createElement("button");
             b.type = "button";
@@ -355,6 +369,7 @@
             b.addEventListener("click", () => setRecommendedStore(it));
             list.appendChild(b);
           });
+
           box.appendChild(list);
         };
       } catch (err) {
@@ -452,6 +467,7 @@
       requestGeo();
     });
   };
+
 
   /** =========================
    *  5) Bloque de cotización (tabs/steps/selección modelos/colores)
@@ -1024,6 +1040,88 @@
   };
 
   /** =========================
+ *  7) Modal: Política de Datos
+ * ========================= */
+  const initDataPolicyModal = () => {
+    const roots = window.__MG_QUOTE_BLOCKS__ || [];
+    if (!roots.length) return;
+
+    const open = (modal) => {
+      if (!modal) return;
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+      document.documentElement.classList.add("mg-no-scroll");
+    };
+
+    const close = (modal) => {
+      if (!modal) return;
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+      document.documentElement.classList.remove("mg-no-scroll");
+    };
+
+    roots.forEach((sel) => {
+      const root = document.querySelector(sel);
+      if (!root) return;
+
+      // El modal vive en el DOM del bloque (lo pegaste en el PHP)
+      const modal = root.querySelector("[data-data-policy-modal]") || document.querySelector("[data-data-policy-modal]");
+      if (!modal) return;
+
+      // Cierra con botones overlay / X / Cerrar
+      modal.querySelectorAll("[data-policy-close]").forEach((btn) => {
+        btn.addEventListener("click", () => close(modal));
+      });
+
+      // Cierra con ESC
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") close(modal);
+      });
+
+      /**
+       * 1) Caso ideal: tu link tiene clase o data-attr
+       *    Ejemplo: <a href="#" class="mg-open-data-policy">Política...</a>
+       */
+      root.addEventListener("click", (e) => {
+        const a =
+          e.target.closest(".mg-open-data-policy") ||
+          e.target.closest("[data-open-data-policy]");
+
+        if (a) {
+          e.preventDefault();
+          open(modal);
+        }
+      });
+
+      /**
+       * 2) Caso “sin tocar CF7”: buscamos el link por texto (fallback)
+       *    (Por si CF7 te genera el link sin clases)
+       */
+      root.addEventListener("click", (e) => {
+        const link = e.target.closest("a");
+        if (!link) return;
+
+        const txt = (link.textContent || "").toLowerCase();
+        const looksLikePolicy =
+          txt.includes("política") &&
+          (txt.includes("datos") || txt.includes("protección"));
+
+        if (!looksLikePolicy) return;
+
+        // si el link es externo real, NO lo bloquees
+        // aquí solo abrimos modal si es anchor "#" o vacío
+        const href = (link.getAttribute("href") || "").trim();
+        const isFake = href === "" || href === "#" || href.startsWith("javascript:");
+
+        if (isFake) {
+          e.preventDefault();
+          open(modal);
+        }
+      });
+    });
+  };
+
+  /** =========================
    *  BOOT
    * ========================= */
   document.addEventListener("DOMContentLoaded", () => {
@@ -1032,6 +1130,7 @@
     initQuoteBlocks();
     initDeptStoreDynamic();
     initGeo();
+    initDataPolicyModal();
     initCotizaValidation();
   });
 })();

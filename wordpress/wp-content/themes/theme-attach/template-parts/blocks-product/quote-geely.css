@@ -1058,3 +1058,275 @@
     width: 100%;
   }
 }
+
+/* ===== MODAL Política de Datos ===== */
+.mg-dataModal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+.mg-dataModal.is-open {
+  display: flex;
+}
+
+.mg-dataModal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.mg-dataModal__card {
+  position: relative;
+  width: min(860px, 100%);
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+  background-size: cover;
+}
+
+.mg-dataModal__head {
+  position: relative;
+  padding: 14px 18px 0;
+}
+
+.mg-dataModal__kicker {
+  font-size: 12px;
+  color: #6c757d;
+  font-family: var(--font-inter);
+}
+
+.mg-dataModal__x {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: transparent;
+  font-size: 22px;
+  cursor: pointer;
+  border-radius: 999px;
+}
+
+.mg-dataModal__body {
+  padding: 40px;
+}
+
+.mg-dataModal__title {
+  margin: 6px 0 14px;
+  font-size: 40px;
+  line-height: 40px;
+  font-weight: 700;
+  color: #0b0c0c;
+  font-family: var(--font-geely);
+  text-align: center;
+}
+
+.mg-dataModal__content {
+  max-height: 52vh;
+  overflow: auto;
+  padding-right: 10px;
+  font-family: var(--font-inter);
+  color: #0b0c0c;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.mg-dataModal__content a {
+  color: #027bff;
+  text-decoration: underline;
+}
+
+.mg-dataModal__box-info {
+  display: flex;
+  border: 1px solid #f6f3f5;
+  column-gap: 8px;
+  align-items: self-start;
+  padding: 16px;
+  margin-top: 24px;
+  background: #fff;
+}
+
+.mg-dataModal__box-info p {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.mg-dataModal__actions {
+  display: flex;
+  justify-content: center;
+  padding-top: 24px;
+}
+
+.mg-dataModal__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 0 22px;
+  border: 0;
+  background: #0b0c0c;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  width: 119px;
+  border-radius: 0;
+  font-family: var(--font-geely);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+@media (max-width: 768px) {
+  .mg-dataModal__body {
+    padding: 16px;
+  }
+  .mg-dataModal__title {
+    font-size: 28px;
+    line-height: 32px;
+  }
+  .mg-dataModal__content {
+    font-size: 13px;
+    line-height: 20px;
+  }
+  .mg-dataModal__box-info p {
+    max-width: 100%;
+    word-break: break-word;
+    font-size: 13px;
+  }
+  .mg-dataModal__btn {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+}
+
+/* ===== UI modal ubicación (se crea por JS) ===== */
+.mg-geoModal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 16px;
+}
+
+.mg-geoModal.is-open {
+  display: flex;
+}
+
+.mg-geoModal__card {
+  width: min(560px, 100%);
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  position: relative;
+}
+
+.mg-geoModal__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: 0;
+  background: transparent;
+  font-size: 22px;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+}
+
+.mg-geoModal__body {
+  padding: 62px 40px 48px;
+  text-align: center;
+}
+
+.mg-geoModal__title {
+  font-size: 40px;
+  font-weight: 700;
+  margin: 12px 0 24px;
+  line-height: 40px;
+  color: #212529;
+  font-family: var(--font-geely);
+}
+
+.mg-geoModal__text {
+  font-size: 16px;
+  color: #212529;
+  line-height: 22px;
+  margin: 0 0 24px;
+  font-family: var(--font-inter);
+}
+
+.mg-geoModal__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: #111;
+  color: #fff;
+  height: 48px;
+  padding: 0 22px;
+  border-radius: 0px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 24px;
+  width: 133px;
+  font-family: var(--font-geely);
+}
+
+/* ===== UI recomendación tiendas ===== */
+.mg-nearStores {
+  margin-top: 24px;
+  background: #f6f3f5;
+  border-radius: 0px;
+  padding: 24px;
+}
+
+.mg-nearStores__title {
+  font-weight: 600;
+  font-size: 16px;
+  margin: 0 0 10px;
+  color: #0b0c0c;
+  line-height: 20px;
+  font-family: var(--font-inter);
+}
+
+.mg-nearStores__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 0;
+  padding: 10px 16px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  max-width: 100%;
+  color: #0b0c0c;
+  border: 1px solid #0b0c0c;
+  font-family: var(--font-inter);
+  line-height: 20px;
+}
+
+.mg-nearStores__link {
+  display: block;
+  margin-top: 16px;
+  font-size: 16px;
+  color: #027bff;
+  text-decoration: underline;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  line-height: 22px;
+  font-family: var(--font-inter);
+}

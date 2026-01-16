@@ -22,6 +22,8 @@ $co_configuracion = (string) (get_field('product_code_config', $product_id) ?: '
 $GPVersion = (string) (get_field('product_code_sale', $product_id) ?: '');
 $co_transmision = (string) (get_field('spec_transmission', $product_id) ?: '');
 
+$bg_modal_url = get_stylesheet_directory_uri() . '/assets/img/bg-modal.png'; 
+
 $models = get_field('product_models', $product_id);
 if (empty($models) || !is_array($models)) {
   echo '<section id="' . esc_attr($block_id) . '" class="mg-quote"><div class="mg-quote__inner"><p class="mg-quote__error">Este producto no tiene versiones configuradas.</p></div></section>';
@@ -394,6 +396,7 @@ $default_hero_img = (string)(
   style="--quote-bg: url('<?php echo esc_url($image_url); ?>');"
   data-product-id="<?php echo (int)$product_id; ?>"
   data-nid-marca="<?php echo (int)$nid_marca; ?>"
+  data-geo-bg="<?php echo esc_url($bg_modal_url); ?>"
   data-step="1">
   <div class="mg-quote__inner">
 
@@ -598,6 +601,14 @@ $default_hero_img = (string)(
     </div><!-- /content -->
   </div><!-- /inner -->
 
+  <?php
+
+  $policy_id = 'mg-data-policy-modal-' . $block_id;
+  get_template_part('template-parts/blocks-product/partials/data-policy-modal', null, [
+    'policy_id'   => $policy_id,
+  ]);
+  ?>
+
   <style>
     <?php echo esc_html($root_selector); ?> {
       background-image: var(--quote-bg);
@@ -614,132 +625,6 @@ $default_hero_img = (string)(
 
     <?php echo esc_html($root_selector); ?>[data-step="3"] .mg-quote__content {
       grid-template-columns: 1fr !important;
-    }
-
-    /* ===== UI modal ubicación (se crea por JS) ===== */
-    .mg-geoModal {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0, 0, 0, .45);
-      padding: 16px;
-    }
-
-    .mg-geoModal.is-open {
-      display: flex;
-    }
-
-    .mg-geoModal__card {
-      width: min(560px, 100%);
-      background: #fff;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
-      position: relative;
-    }
-
-    .mg-geoModal__close {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      border: 0;
-      background: transparent;
-      font-size: 22px;
-      cursor: pointer;
-      width: 40px;
-      height: 40px;
-      border-radius: 999px;
-    }
-
-    .mg-geoModal__body {
-      padding: 62px 40px 48px;
-      text-align: center;
-    }
-
-    .mg-geoModal__title {
-      font-size: 40px;
-      font-weight: 700;
-      margin: 12px 0 24px;
-      line-height: 40px;
-      color: #212529;
-      font-family: var(--font-geely);
-    }
-
-    .mg-geoModal__text {
-      font-size: 16px;
-      color: #212529;
-      line-height: 22px;
-      margin: 0 0 24px;
-      font-family: var(--font-inter);
-    }
-
-    .mg-geoModal__btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border: 0;
-      background: #111;
-      color: #fff;
-      height: 48px;
-      padding: 0 22px;
-      border-radius: 0px;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 16px;
-      line-height: 24px;
-      width: 133px;
-      font-family: var(--font-geely);
-    }
-
-    /* ===== UI recomendación tiendas ===== */
-    .mg-nearStores {
-      margin-top: 24px;
-      background: #F6F3F5;
-      border-radius: 0px;
-      padding: 24px;
-    }
-
-    .mg-nearStores__title {
-      font-weight: 600;
-      font-size: 16px;
-      margin: 0 0 10px;
-      color: #0B0C0C;
-      line-height: 20px;
-      font-family: var(--font-inter);
-    }
-
-    .mg-nearStores__btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: #fff;
-      border-radius: 0;
-      padding: 10px 16px;
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-      max-width: 100%;
-      color: #0B0C0C;
-      border: 1px solid #0B0C0C;
-      font-family: var(--font-inter);
-      line-height: 20px;
-    }
-
-    .mg-nearStores__link {
-      display: block;
-      margin-top: 16px;
-      font-size: 16px;
-      color: #027BFF;
-      text-decoration: underline;
-      cursor: pointer;
-      background: transparent;
-      border: 0;
-      padding: 0;
-      line-height: 22px;
-      font-family: var(--font-inter);
     }
   </style>
 
