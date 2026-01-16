@@ -317,6 +317,31 @@ header.site-header.wp-block-template-part {
   opacity: 0.85;
 }
 
+.wp-block-navigation .wp-block-navigation-item a:focus-visible {
+  min-height: 36px;
+}
+
+/* .wp-block-navigation__submenu-container.wp-block-navigation-submenu {
+  padding-top: 24px;
+} */
+
+.mg-header--overlay
+  .wp-block-navigation__submenu-container.wp-block-navigation-submenu {
+  background: #100f0b !important;
+}
+
+.wp-block-navigation__submenu-container.wp-block-navigation-submenu
+  .wp-block-navigation-item__content {
+  font-size: 13px;
+  line-height: 22px;
+}
+
+.mg-header--overlay
+  .wp-block-navigation__submenu-container.wp-block-navigation-submenu
+  .wp-block-navigation-item__content:hover {
+  background: #027bff;
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 900px) {
   .mg-header__bar .mg-header__nav,
@@ -346,4 +371,57 @@ header.site-header.wp-block-template-part {
     font-size: 16px;
     line-height: 22px;
   }
+
+  .mg-header--overlay .wp-block-navigation__submenu-container.wp-block-navigation-submenu {
+    background: #1f2427 !important;
+  }
+
+  .wp-block-navigation-submenu .wp-block-navigation__submenu-icon svg {
+    filter: invert(1) brightness(2);
+  }
+}
+
+/* =========================
+   HEADER OVERLAY
+========================= */
+
+.mg-header--overlay {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  z-index: 100000;
+  background: transparent;
+}
+
+.mg-header--overlay .mg-header__bar {
+  background: transparent;
+}
+
+/* Texto del menú */
+.mg-header--overlay .mg-header__nav a {
+  color: #fff !important;
+}
+
+/* Flechas submenu */
+.mg-header--overlay .wp-block-navigation__submenu-icon {
+  filter: invert(1);
+}
+
+/* Logo blanco */
+.mg-header--overlay img,
+.mg-header--overlay .custom-logo {
+  filter: invert(1) brightness(2);
+}
+
+/* Botón cotizar */
+.mg-header--overlay .mg-btn--primary .wp-block-button__link {
+  background: #fff;
+  color: #000;
+}
+
+/* Burger */
+.mg-header--overlay .mg-burger,
+.mg-header--overlay .mg-burger::before,
+.mg-header--overlay .mg-burger::after {
+  background: #fff;
 }

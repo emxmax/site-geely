@@ -107,6 +107,10 @@
   line-height: 22px;
   text-transform: lowercase;
   color: #027bff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: capitalize;
 }
 .mf-card__versions {
   border: 1px solid #0b0c0c;
@@ -119,11 +123,6 @@
   display: flex;
   align-items: center;
   gap: 6px;
-}
-.mf-card__type {
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 .mf-card__media {
   display: flex;
@@ -178,6 +177,7 @@
   border: 1px solid #0b0c0c;
   font-size: 16px;
   line-height: 24px;
+  font-weight: 700;
 }
 .mf-btn--ghost {
   background: #fff;
