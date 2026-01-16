@@ -1,7 +1,9 @@
 /* ================================
    HERO EMGRAND – CARRUSEL
 ================================ */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -244,7 +246,7 @@
 /* ================================
    RESPONSIVE
 ================================ */
-@media (max-width: 1232px) {  
+@media (max-width: 1232px) {
   .emg-hero__bottom {
   }
 }
@@ -271,7 +273,7 @@
 /* Mobile */
 @media (max-width: 768px) {
   .emg-hero__bottom-contain {
-    margin-top: 40px;
+    margin-top: 0px;
   }
 
   .emg-hero__slide {

@@ -1,4 +1,4 @@
-header.site-header.wp-block-template-part{
+header.site-header.wp-block-template-part {
   display: block !important;
 }
 #wp--skip-link--target {
@@ -15,6 +15,7 @@ header.site-header.wp-block-template-part{
 /* ===== HEADER ===== */
 .mg-header {
   background: #fff;
+  z-index: 100000;
 }
 
 .mg-header__bar {

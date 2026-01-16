@@ -285,7 +285,7 @@
 /* Franja inferior: 3 bloques (Precio, Aros, Hasta) */
 
 .emg-config__bottom-grid {
-  color: #0B0C0C;
+  color: #000;
   margin-top: 56px;
   display: grid;
   grid-template-columns: 1fr 2fr; /* bloque de precio más ancho */

@@ -71,6 +71,10 @@
   --lh-title-sm-7: 1.6667; /* 20px */
 }
 
+:where(.wp-site-blocks) > * {
+  margin-block-start: 0px;
+}
+
 /* Desktop */
 .title-1 {
   font-size: var(--fs-title-1);
