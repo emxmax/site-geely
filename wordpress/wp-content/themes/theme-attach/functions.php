@@ -57,3 +57,6 @@ require_once get_stylesheet_directory() . '/inc/entity/quote.php';
 //Parts
 require_once get_stylesheet_directory() . '/inc/parts/header.php';
 require_once get_stylesheet_directory() . '/inc/parts/footer.php';
+
+//Analytics
+require_once get_stylesheet_directory() . '/inc/analytics/gtm.php';
