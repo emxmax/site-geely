@@ -1,4 +1,4 @@
-<!-- wp:group {"tagName":"header-default","className":"mg-header","layout":{"type":"constrained"}} -->
+<!-- wp:group {"tagName":"header","className":"mg-header","layout":{"type":"constrained"}} -->
 <header class="wp-block-group mg-header">
   <!-- wp:group {"align":"wide","className":"mg-header__bar","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between","verticalAlignment":"center"}} -->
   <div class="wp-block-group alignwide mg-header__bar">
@@ -6,12 +6,68 @@
     <!-- LOGO -->
     <!-- wp:group {"className":"mg-header__brand","layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"center"}} -->
     <div class="wp-block-group mg-header__brand">
-      <!-- wp:site-logo {"width":120,"shouldSyncIcon":true} /-->
+      <!-- wp:site-logo {"width":177,"shouldSyncIcon":true} /-->
     </div>
     <!-- /wp:group -->
 
-    <!-- NAV (ÚNICO - ESTE SE MUEVE AL DRAWER EN MOBILE) -->
-    <!-- wp:navigation {"className":"mg-header__nav","overlayMenu":"never","layout":{"type":"flex","justifyContent":"center","flexWrap":"nowrap"},"showSubmenuIcon":true} /-->
+    <!-- NAV DESKTOP (CUSTOM para poder mega-menu Postventa) -->
+    <!-- wp:html -->
+    <nav class="mg-header__nav" aria-label="Navegación principal">
+      <ul class="mg-nav">
+        <li class="mg-nav__item"><a class="mg-nav__link" href="/modelos">Modelos</a></li>
+        <li class="mg-nav__item"><a class="mg-nav__link" href="/red-de-atencion">Red de atención</a></li>
+
+        <!-- POSTVENTA (MEGA MENU) -->
+        <li class="mg-nav__item mg-nav__item--has-mega">
+          <button
+            class="mg-nav__trigger"
+            type="button"
+            aria-haspopup="dialog"
+            aria-expanded="false"
+            data-mg-mega-trigger
+          >
+            Postventa <span class="mg-nav__arrow" aria-hidden="true"></span>
+          </button>
+
+          <div class="mg-mega" role="dialog" aria-label="Menú Postventa" data-mg-mega>
+            <div class="mg-mega__grid">
+
+              <div class="mg-mega__media">
+                <img
+                  class="mg-mega__img"
+                  src="/wp-content/themes/theme-attach/assets/img/postventa.png"
+                  alt="Postventa"
+                  loading="lazy"
+                />
+              </div>
+
+              <div class="mg-mega__content">
+                <a class="mg-mega__title" href="/postventa">Postventa</a>
+                <p class="mg-mega__desc">
+                  El lugar donde tu Geely recibe el respaldo y atención que merece.
+                </p>
+
+                <a class="mg-mega__title" href="/pasaportes-de-servicio">Pasaportes de servicio</a>
+                <p class="mg-mega__desc">
+                  Descarga el manual de mantenimiento de tu modelo.
+                </p>
+
+                <a class="mg-mega__title" href="/pasaportes-de-servicio">Promociones postventa</a>
+                <p class="mg-mega__desc">
+                  Accede a beneficios para el mantenimiento de tu Geely.
+                </p>
+              </div>
+
+            </div>
+          </div>
+        </li>
+
+        <li class="mg-nav__item"><a class="mg-nav__link" href="/nosotros">Nosotros</a></li>
+        <li class="mg-nav__item"><a class="mg-nav__link" href="/noticias">Noticias</a></li>
+        <li class="mg-nav__item"><a class="mg-nav__link" href="/promociones">Promociones</a></li>
+      </ul>
+    </nav>
+    <!-- /wp:html -->
 
     <!-- CTA DESKTOP -->
     <!-- wp:buttons {"className":"mg-header__cta"} -->
@@ -36,6 +92,7 @@
       <span class="mg-burger" aria-hidden="true"></span>
     </button>
     <!-- /wp:html -->
+
   </div>
   <!-- /wp:group -->
 
@@ -56,7 +113,6 @@
         >✕</button>
       </div>
 
-      <!-- AQUÍ SE INYECTA EL NAV REAL CON JS -->
       <nav class="mg-drawer__nav" aria-label="Navegación móvil"></nav>
 
       <div class="mg-drawer__bottom">
@@ -65,5 +121,6 @@
     </div>
   </div>
   <!-- /wp:html -->
+
 </header>
 <!-- /wp:group -->

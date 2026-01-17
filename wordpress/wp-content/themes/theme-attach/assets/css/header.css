@@ -16,6 +16,7 @@ header.site-header.wp-block-template-part {
 .mg-header {
   background: #fff;
   z-index: 100000;
+  position: relative; /* clave para stacking */
 }
 
 .mg-header__bar {
@@ -23,20 +24,8 @@ header.site-header.wp-block-template-part {
   padding: 12px 16px;
   gap: 16px;
   height: 80px;
-}
-
-/* Desktop nav */
-.mg-header__nav .wp-block-navigation__container {
-  gap: 28px;
-}
-
-.mg-header__nav a {
-  text-decoration: none;
-  color: #212529;
-  font-family: var(--font-inter);
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 20px;
+  position: relative; /* clave para que el mega se posicione bien */
+  z-index: 2;
 }
 
 /* Button */
@@ -62,6 +51,148 @@ header.site-header.wp-block-template-part {
 }
 .mg-header__cta {
   margin-left: 8px;
+}
+
+/* ===== NAV DESKTOP CUSTOM (mg-nav) ===== */
+.mg-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mg-nav__item {
+  position: relative;
+}
+
+.mg-nav__link,
+.mg-nav__trigger {
+  text-decoration: none;
+  color: #212529;
+  font-family: var(--font-inter);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+
+  min-height: 60px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Flecha */
+.mg-nav__arrow {
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  margin-top: -2px;
+  transition: transform 0.18s ease;
+}
+
+.mg-nav__item--has-mega.is-open .mg-nav__arrow {
+  transform: rotate(225deg);
+}
+
+/* ===== MEGA MENU (DESKTOP) ===== */
+.mg-mega {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(504px, 90vw);
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.16);
+  padding: 0px;
+  z-index: 999999;
+  display: none; /* CLAVE: oculto por defecto */
+}
+
+.mg-nav__item--has-mega.is-open > .mg-mega {
+  display: block;
+}
+
+.mg-mega__grid {
+  display: grid;
+  grid-template-columns: 244px 1fr;
+  align-items: stretch;
+}
+
+.mg-mega__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+}
+
+.mg-mega__title {
+  display: inline-block;
+  font-family: var(--font-inter);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  color: #212529;
+  text-decoration: none;
+  margin-bottom: 6px;
+}
+
+.mg-mega__title:hover {
+  text-decoration: underline;
+}
+
+.mg-mega__desc {
+  margin: 0 0 14px 0;
+  font-family: var(--font-inter);
+  font-size: 14px;
+  line-height: 18px;
+  color: #2b2b2b;
+  opacity: 0.9;
+}
+
+.mg-mega__content {
+  padding: 33px 16px;
+}
+
+.mg-mega__links {
+  display: grid;
+  gap: 12px;
+}
+
+.mg-mega__link {
+  text-decoration: none;
+  color: #0b0c0c;
+  display: block;
+  padding: 10px 12px;
+  border-radius: 10px;
+  transition: background 0.15s ease;
+}
+.mg-mega__link:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.mg-mega__link strong {
+  display: block;
+  font-family: var(--font-inter);
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 2px;
+}
+.mg-mega__link span {
+  display: block;
+  font-family: var(--font-inter);
+  font-size: 13px;
+  line-height: 18px;
+  opacity: 0.75;
 }
 
 /* ===== BURGER ===== */
@@ -157,189 +288,52 @@ header.site-header.wp-block-template-part {
   width: 100%;
 }
 
-/* =========================================================
-   NAV EN DRAWER (mobile)
-   - Postventa clickeable (link)
-   - Flecha clickeable aparte (toggle)
-   - Flecha gira según .is-subopen (no dependemos de aria-expanded)
-   - Submenu abajo, no flotante
-   ========================================================= */
-
-.mg-drawer__nav .wp-block-navigation {
+/* ===== MOBILE: el mega pasa a acordeón ===== */
+.mg-nav--in-drawer .mg-mega {
+  position: static;
+  transform: none;
+  display: none;
   width: 100%;
-}
-
-/* UL principal vertical */
-.mg-drawer__nav .wp-block-navigation__container,
-.mg-drawer__nav ul.wp-block-navigation__container {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 0 !important;
-  width: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  list-style: none !important;
-}
-
-/* LI principal: fila que permite que el submenu baje */
-.mg-drawer__nav .wp-block-navigation-item {
-  width: 100%;
-  display: flex !important;
-  flex-wrap: wrap !important; /* submenu baja */
-  align-items: center !important;
-  padding: 12px 0 !important;
-  margin: 0 !important;
-  position: static !important; /* evita dropdown flotante */
-}
-
-/* Link: clickeable, ocupa todo lo que pueda */
-.mg-drawer__nav .wp-block-navigation-item__content {
-  flex: 0 1 auto !important;
   min-width: 0;
-  display: flex !important;
-  align-items: center !important;
-  gap: 10px;
-  color: #fff !important;
-  text-decoration: none !important;
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 22px;
-  padding: 12px 0 !important;
-  cursor: pointer;
-  font-family: var(--font-inter);
+  box-shadow: none;
+  padding: 12px 0 0;
+  background: transparent;
 }
 
-/* Botón flecha: SOLO toggle, a la derecha */
-.mg-drawer__nav .wp-block-navigation__submenu-icon,
-.mg-drawer__nav .wp-block-navigation-submenu__toggle {
-  flex: 0 0 auto !important;
-  margin-left: 12px !important;
-  border: 0 !important;
-  background: transparent !important;
-  color: #fff !important;
-
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-
-  width: 11px;
-  height: 11px;
-  padding: 0 !important;
-
-  cursor: pointer;
-  opacity: 1;
-  transition: transform 0.18s ease;
+.mg-nav--in-drawer .mg-mega__grid {
+  grid-template-columns: 1fr;
 }
 
-/* “Área clickeable” clara */
-.mg-drawer__nav .wp-block-navigation__submenu-icon:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.35);
-  outline-offset: 2px;
+.mg-nav--in-drawer .mg-mega__img {
+  max-height: 180px;
 }
 
-/* Si WP pinta SVG sin stroke color */
-.mg-drawer__nav .wp-block-navigation__submenu-icon svg path {
-  stroke: #fff !important;
+.mg-nav--in-drawer .mg-nav__item--has-mega.is-subopen .mg-mega {
+  display: block;
 }
 
-/* 🔥 Rotación por estado REAL (.is-subopen en el LI) */
-.mg-drawer__nav
-  .wp-block-navigation-item.is-subopen
-  > .wp-block-navigation__submenu-icon,
-.mg-drawer__nav
-  .wp-block-navigation-item.is-subopen
-  > .wp-block-navigation-submenu__toggle {
-  transform: rotate(180deg);
+.mg-nav--in-drawer .mg-nav {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
 }
 
-/* Submenu siempre abajo */
-.mg-drawer__nav .wp-block-navigation__submenu-container,
-.mg-drawer__nav .wp-block-navigation-submenu__container,
-.mg-drawer__nav ul.sub-menu {
-  position: static !important;
-  inset: auto !important;
-  transform: none !important;
-  float: none !important;
-
-  order: 3 !important;
-  width: 100% !important;
-
-  display: none !important;
-
-  padding: 0px 0px !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-
-  list-style: none !important;
-  border: 0 !important;
+.mg-nav--in-drawer .mg-nav__item {
+  padding: 12px 0;
+  border-bottom: 0;
 }
 
-/* abierto */
-.mg-drawer__nav
-  .wp-block-navigation-item.is-subopen
-  > .wp-block-navigation__submenu-container,
-.mg-drawer__nav
-  .wp-block-navigation-item.is-subopen
-  > .wp-block-navigation-submenu__container,
-.mg-drawer__nav .wp-block-navigation-item.is-subopen > ul.sub-menu {
-  display: block !important;
+.mg-nav--in-drawer .mg-nav__item.is-subopen .mg-mobile-row .mg-nav__link{
+  text-decoration: underline;
 }
 
-/* items del submenu */
-.mg-drawer__nav
-  .wp-block-navigation__submenu-container
-  .wp-block-navigation-item,
-.mg-drawer__nav
-  .wp-block-navigation-submenu__container
-  .wp-block-navigation-item,
-.mg-drawer__nav ul.sub-menu li {
-  display: block !important;
-  width: 100% !important;
-  padding: 12px 0 !important;
-  border-bottom: 0 !important;
-}
-
-/* links del submenu */
-.mg-drawer__nav .wp-block-navigation__submenu-container a,
-.mg-drawer__nav .wp-block-navigation-submenu__container a,
-.mg-drawer__nav ul.sub-menu a {
-  color: #fff !important;
-  text-decoration: none !important;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 20px;
-  opacity: 0.95;
-}
-
-/* Hover */
-.mg-drawer__nav a:hover {
-  opacity: 0.85;
-}
-
-.wp-block-navigation .wp-block-navigation-item a:focus-visible {
-  min-height: 36px;
-}
-
-/* .wp-block-navigation__submenu-container.wp-block-navigation-submenu {
-  padding-top: 24px;
-} */
-
-.mg-header--overlay
-  .wp-block-navigation__submenu-container.wp-block-navigation-submenu {
-  background: #100f0b !important;
-}
-
-.wp-block-navigation__submenu-container.wp-block-navigation-submenu
-  .wp-block-navigation-item__content {
-  font-size: 13px;
-  line-height: 22px;
-}
-
-.mg-header--overlay
-  .wp-block-navigation__submenu-container.wp-block-navigation-submenu
-  .wp-block-navigation-item__content:hover {
-  background: #027bff;
+.mg-nav--in-drawer .mg-nav__link,
+.mg-nav--in-drawer .mg-nav__trigger {
+  color: #fff;
+  min-height: auto;
+  padding: 10px 0;
+  width: 100%;
+  justify-content: space-between;
 }
 
 /* ===== RESPONSIVE ===== */
@@ -366,18 +360,20 @@ header.site-header.wp-block-template-part {
     background: #ffffff !important;
     color: #0b0c0c !important;
   }
-
-  .mg-drawer__nav .wp-block-navigation-item__content {
-    font-size: 16px;
-    line-height: 22px;
+  .mg-drawer__panel {
+    padding: 40px;
   }
-
-  .mg-header--overlay .wp-block-navigation__submenu-container.wp-block-navigation-submenu {
-    background: #1f2427 !important;
+  .mg-nav {
+    display: flex;
+    align-items: start;
+    gap: 12px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-direction: column;
   }
-
-  .wp-block-navigation-submenu .wp-block-navigation__submenu-icon svg {
-    filter: invert(1) brightness(2);
+  .mg-nav--in-drawer .mg-nav__item {
+    padding: 6px 0;
   }
 }
 
@@ -397,31 +393,82 @@ header.site-header.wp-block-template-part {
   background: transparent;
 }
 
-/* Texto del menú */
-.mg-header--overlay .mg-header__nav a {
-  color: #fff !important;
+.mg-header--overlay .mg-nav__link,
+.mg-header--overlay .mg-nav__trigger {
+  color: #fff;
 }
 
-/* Flechas submenu */
-.mg-header--overlay .wp-block-navigation__submenu-icon {
-  filter: invert(1);
-}
-
-/* Logo blanco */
 .mg-header--overlay img,
 .mg-header--overlay .custom-logo {
   filter: invert(1) brightness(2);
 }
 
-/* Botón cotizar */
 .mg-header--overlay .mg-btn--primary .wp-block-button__link {
   background: #fff;
   color: #000;
 }
 
-/* Burger */
 .mg-header--overlay .mg-burger,
 .mg-header--overlay .mg-burger::before,
 .mg-header--overlay .mg-burger::after {
   background: #fff;
+}
+
+/* mega oscuro en overlay */
+.mg-header--overlay .mg-mega {
+  background: #0b0c0c;
+}
+.mg-header--overlay .mg-mega__title,
+.mg-header--overlay .mg-mega__link,
+.mg-header--overlay .mg-mega__desc,
+.mg-header--overlay .mg-mega__link span,
+.mg-header--overlay .mg-mega__link strong {
+  color: #fff;
+}
+.mg-header--overlay .mg-mega__link:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.mg-nav--in-drawer .mg-mobile-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 0;
+}
+
+.mg-nav--in-drawer .mg-mobile-toggle {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  color: #fff;
+}
+
+.mg-nav--in-drawer .mg-mobile-toggle .mg-nav__arrow {
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  margin-top: -7px; /* quitar el -2px */
+  transition: transform 0.18s ease;
+}
+
+.mg-nav--in-drawer .mg-nav__item.is-subopen .mg-mobile-toggle .mg-nav__arrow {
+  transform: rotate(225deg);
+}
+
+.mg-nav--in-drawer .mg-mobile-submenu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mg-nav--in-drawer .mg-nav__item.is-subopen .mg-nav__arrow {
+  transform: rotate(225deg);
 }
