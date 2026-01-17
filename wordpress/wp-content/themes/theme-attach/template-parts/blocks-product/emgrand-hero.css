@@ -1,6 +1,13 @@
 /* ================================
-   HERO EMGRAND – CARRUSEL
+   HERO EMGRAND – CARRUSEL + STICKY NAV
 ================================ */
+
+/* Si tienes un header fijo, ajusta estas variables */
+:root {
+  --mg-header-h-desktop: 80px;
+  --mg-header-h-mobile: 56px;
+}
+
 *,
 *::before,
 *::after {
@@ -13,8 +20,9 @@
   max-width: 100%;
   color: #fff;
   background: #000;
-  overflow: visible; /* importante para que el dropdown pueda salir del bloque */
-  overflow-x: clip;
+
+  /* IMPORTANTÍSIMO: sticky se rompe con overflow hidden/clip en padres */
+  overflow: visible !important;
 }
 
 /* Swiper sólo como fondo */
@@ -70,7 +78,6 @@
 /* -----------------------------
    ZONA SUPERIOR
 ------------------------------ */
-
 .emg-hero__top {
   position: relative;
   max-width: 1120px;
@@ -80,11 +87,8 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: 32px;
+  padding: 0 24px 78px;
 }
-
-/* .emg-hero__top-inner {
-  max-width: 420px;
-} */
 
 .emg-hero__title {
   text-transform: uppercase;
@@ -109,7 +113,10 @@
   text-decoration: none;
   border: 1px solid transparent;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
   font-family: var(--font-geely);
   font-weight: 700;
   font-size: 16px;
@@ -135,35 +142,37 @@
   color: #000000;
   border-color: #ffffff;
 }
-
 .emg-hero__btn--light:hover {
   background: #f5f5f5;
 }
 
-/* -----------------------------
-   BARRA NEGRA INFERIOR
------------------------------- */
-.emg-hero__bottom-contain {
-  width: 100%;
+/* ================================
+   STICKY NAV (FUERA DEL HERO)
+================================ */
+.emg-sticky-nav {
+  position: sticky;
+  top: 0;
+  z-index: 99999;
   background: #0b0c0c;
-  margin-top: 80px;
-  /* margin-left: -40px;
-  margin-right: -40px; */
+  width: 100%;
+  will-change: transform;
+  max-width: 100%;
+  margin-top: 0;
+}
+
+.emg-sticky-nav__inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0px;
 }
 
 .emg-hero__bottom {
-  max-width: 1120px;
-  width: 100%;
-  margin: 0 auto;
-
   padding: 14px 0;
-
   background: #0b0c0c;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 32px;
-
   position: relative;
 }
 
@@ -180,7 +189,7 @@
   border: 0;
   padding: 0;
   color: #ffffff;
-  cursor: default; /* sólo clickeable en mobile */
+  cursor: default; /* desktop no abre */
 }
 
 .emg-hero__brand {
@@ -199,9 +208,9 @@
   text-overflow: ellipsis;
 }
 
-/* Icono flecha */
+/* Icono flecha (mobile) */
 .emg-hero__nav-icon {
-  display: none; /* sólo mobile */
+  display: none;
 }
 
 /* Navegación desktop */
@@ -212,20 +221,20 @@
   justify-content: center;
   min-width: 0;
   overflow: hidden;
-  justify-content: center;
 }
 
 .emg-hero__nav-link {
   text-decoration: none;
   color: #ffffff;
   opacity: 0.75;
-  transition: opacity 0.2s ease, color 0.2s ease, background 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    color 0.2s ease,
+    background 0.2s ease;
   font-family: var(--font-inter);
   font-weight: 500;
   font-size: 16px;
   line-height: 22px;
-  letter-spacing: 0px;
-  vertical-align: middle;
 }
 
 .emg-hero__nav-link:hover {
@@ -237,7 +246,6 @@
   border-color: #ffffff;
   color: #ffffff;
 }
-
 .emg-hero__btn--outline:hover {
   background: #ffffff;
   color: #000000;
@@ -246,25 +254,12 @@
 /* ================================
    RESPONSIVE
 ================================ */
-@media (max-width: 1232px) {
-  .emg-hero__bottom {
-  }
-}
 
 /* Tablet */
 @media (max-width: 1024px) {
-  .emg-hero__top {
-    padding-inline: 24px;
-  }
-
   .emg-hero__title {
     font-size: 48px;
   }
-
-  .emg-hero__bottom {
-    padding-inline: 24px;
-  }
-
   .emg-hero__brand {
     max-width: 340px;
   }
@@ -272,8 +267,8 @@
 
 /* Mobile */
 @media (max-width: 768px) {
-  .emg-hero__bottom-contain {
-    margin-top: 0px;
+  .emg-sticky-nav {
+    top: 0;
   }
 
   .emg-hero__slide {
@@ -296,15 +291,25 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 20px;
+    padding-bottom: 44px;
   }
 
   .emg-hero__title {
     font-size: 40px;
   }
-
   .emg-hero__subtitle {
     font-size: 16px;
     max-width: 100%;
+  }
+  .emg-hero__btn--light {
+    align-self: flex-start;
+  }
+
+  /* Barra sticky en mobile: layout compacto */
+  .emg-hero__bottom {
+    padding: 16px 24px;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
   }
 
   .emg-hero__brand {
@@ -313,23 +318,7 @@
     letter-spacing: 1px;
   }
 
-  .emg-hero__btn--light {
-    align-self: flex-start;
-  }
-
-  /* Barra negra inferior mobile */
-  .emg-hero__bottom {
-    margin-top: 40px; /* OJO: esto estaba en .emg-hero__bottom, pero tu margin-top real está en __bottom-contain */
-    padding: 14px 20px;
-    grid-template-columns: 1fr auto;
-    gap: 12px;
-  }
-
-  .emg-hero__nav {
-    gap: 0px;
-  }
-
-  /* Botón marca + flecha SÍ es clickeable en mobile */
+  /* Toggle habilitado en mobile */
   .emg-hero__nav-toggle {
     cursor: pointer;
     justify-content: flex-start;
@@ -341,16 +330,16 @@
     height: 10px;
     border-right: 2px solid #ffffff;
     border-bottom: 2px solid #ffffff;
-    transform: rotate(45deg); /* flecha hacia abajo */
+    transform: rotate(45deg); /* abajo */
     transition: transform 0.2s ease;
     margin-top: -2px;
   }
 
   .emg-hero__bottom.is-nav-open .emg-hero__nav-icon {
-    transform: rotate(-135deg); /* flecha hacia arriba */
+    transform: rotate(-135deg); /* arriba */
   }
 
-  /* Menú desplegable flotante */
+  /* Menú desplegable */
   .emg-hero__nav {
     position: absolute;
     left: 0;
@@ -362,8 +351,8 @@
     flex-direction: column;
     padding: 0;
     z-index: 5;
+    gap: 0;
   }
-
   .emg-hero__bottom.is-nav-open .emg-hero__nav {
     display: flex;
   }
@@ -376,7 +365,6 @@
     font-size: 12px;
     line-height: 18px;
   }
-
   .emg-hero__nav-link:hover {
     background: #f5f5f5;
     color: #000000;
@@ -396,9 +384,8 @@
   .emg-hero__title {
     font-size: 40px;
   }
-
-  .emg-hero__bottom {
-    padding-inline: 16px;
+  .emg-sticky-nav__inner {
+    padding: 0px;
   }
 
   .emg-hero__brand {
