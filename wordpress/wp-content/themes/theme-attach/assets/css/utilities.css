@@ -259,3 +259,18 @@
     line-height: var(--lh-p-8);
   }
 }
+
+/*-----------------------------------------------------------------*/
+@media (min-width: 1441px) {
+  .section-xxl-full {
+    max-width: 100%;
+    padding-inline: 0;
+  }
+  .section-xxl-full > img {
+    max-width: 100%;
+    width: 100%;
+    left: 0;
+    transform: none;
+    object-fit: cover;
+  }
+}

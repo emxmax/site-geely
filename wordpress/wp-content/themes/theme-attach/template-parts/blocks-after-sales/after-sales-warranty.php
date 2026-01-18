@@ -33,7 +33,7 @@ if ($warranty_image_mobile) {
   $image_url_mobile = is_array($warranty_image_mobile) ? $warranty_image_mobile['url'] : '';
 } ?>
 
-<section class="after-sales-warranty">
+<section class="after-sales-warranty section-xxl-full">
   <?php if ($image_url_desktop): ?>
     <img src="<?= esc_url($image_url_desktop); ?>" alt="<?= esc_attr($section_title); ?>"
       class="after-sales-warranty__bg after-sales-warranty__bg--desktop">

@@ -48,7 +48,7 @@ if ($block_hero_image_mobile) {
 }
 ?>
 
-<section class="passport-hero">
+<section class="passport-hero section-xxl-full">
   <?php if ($image_desktop_url): ?>
     <img src="<?= esc_url($image_desktop_url); ?>" alt="<?= esc_attr($image_desktop_alt); ?>"
       class="passport-hero__bg passport-hero__bg--desktop">

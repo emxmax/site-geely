@@ -38,7 +38,7 @@ if ($image) {
   }
 } ?>
 
-<section class="new-innovation">
+<section class="new-innovation section-xxl-full">
   <img class="new-innovation__bg" src="<?= esc_url($image_url); ?>" alt="<?php echo esc_attr($image_alt); ?>"
     aria-hidden="true">
   <div class="new-innovation__inner">

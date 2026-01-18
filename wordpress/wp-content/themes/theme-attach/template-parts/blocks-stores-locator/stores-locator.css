@@ -817,6 +817,7 @@
 
   .stores-locator__products-carousel {
     padding: 24px 0;
+    max-width: 405px;
   }
 
   .stores-locator__product-actions {
@@ -876,6 +877,8 @@
   }
   .mf-card.stores-locator {
     margin-bottom: 16px;
+    margin-inline: auto;
+    max-width: 343px;
   }
 
   .stores-locator__products .mf-card__top {

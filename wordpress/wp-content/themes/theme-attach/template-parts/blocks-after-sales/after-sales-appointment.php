@@ -29,7 +29,7 @@ $map_desktop_url = $image_map_desktop ? esc_url($image_map_desktop['url']) : '';
 $map_mobile_url = $image_map_mobile ? esc_url($image_map_mobile['url']) : '';
 ?>
 
-<section class="after-sales-appointment">
+<section class="after-sales-appointment section-xxl-full">
   <?php if (!empty($map_desktop_url)): ?>
     <img src="<?= esc_url($map_desktop_url); ?>" alt="Mapa Ubicaciones"
       class="after-sales-appointment__bg after-sales-appointment__bg--desktop" />
