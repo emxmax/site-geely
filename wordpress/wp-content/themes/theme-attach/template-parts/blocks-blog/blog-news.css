@@ -4,7 +4,7 @@
 
 .blog-news {
   padding: 64px 24px;
-  background: #f7f9fb;
+  /* background: #f7f9fb; */
   margin-block-start: 0px !important;
 }
 
@@ -149,6 +149,7 @@
   display: flex;
   column-gap: 8px;
   align-items: center;
+  text-underline-offset: 3px;
 }
 
 .blog-news__link img {

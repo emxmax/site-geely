@@ -254,7 +254,21 @@
 /* ================================
    RESPONSIVE
 ================================ */
-
+@media (max-width: 1151px) {
+  .emg-sticky-nav__inner {
+    padding: 0px 16px;
+  }
+  .emg-hero__nav {
+    gap: 15px;
+  }
+  .emg-hero__btn--header {
+    font-size: 14px;
+    width: 146px;
+  }
+  .emg-hero__brand  {
+    font-size: 20px;
+  }
+}
 /* Tablet */
 @media (max-width: 1024px) {
   .emg-hero__title {
@@ -266,7 +280,7 @@
 }
 
 /* Mobile */
-@media (max-width: 768px) {
+@media (max-width: 1013px) {
   .emg-sticky-nav {
     top: 0;
   }

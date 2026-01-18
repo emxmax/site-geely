@@ -24,6 +24,7 @@ if (empty($terms)) return;
 
 $block_id = !empty($block['anchor']) ? $block['anchor'] : ('models-geely-' . ($block['id'] ?? uniqid()));
 $root_selector = '#' . $block_id;
+$bg_card_url = get_stylesheet_directory_uri() . '/assets/img/fondo-producto.png';
 
 /** -----------------------------
  * Helpers (nombres ÚNICOS para evitar "Cannot redeclare")
@@ -180,7 +181,8 @@ if (!function_exists('mg_models_geely_get_cards_for_term')) {
 }
 ?>
 
-<section id="<?php echo esc_attr($block_id); ?>" class="mg-models">
+<section id="<?php echo esc_attr($block_id); ?>" class="mg-models"
+style="--bg-card: url('<?php echo esc_url($bg_card_url); ?>');">
   <div class="mg-models__inner">
 
     <header class="mg-models__header">

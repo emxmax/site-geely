@@ -115,10 +115,11 @@ document.addEventListener("DOMContentLoaded", () => {
           <button class="mf-modal__close js-mf-close" type="button" aria-label="Cerrar">×</button>
 
           <h2 class="mf-modal__title">Versiones</h2>
-          <div class="mf-modal__model">${title}</div>
 
           <div class="mf-modal__content">
             <div class="mf-modal__left">
+                <div class="mf-modal__model">${title}</div>
+
               ${img
                 ? `<img class="mf-modal__img" src="${img}" alt="${title}" loading="eager" decoding="async"
                        onerror="this.style.display='none';">`
@@ -128,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="mf-modal__priceLabel">Precio desde</div>
 
               ${usd || local
-                ? `<div class="mf-modal__price" style="margin-top:10px">
+                ? `<div class="mf-modal__price" style="margin-top:24px">
                        <strong>${usd ? `USD ${usd}` : ""}</strong>
                        ${usd && local ? `<span style="margin:0 6px">o</span>` : ""}
                        <strong>${local ? `PEN ${local}` : ""}</strong>

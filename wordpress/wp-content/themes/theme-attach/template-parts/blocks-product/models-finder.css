@@ -1,7 +1,7 @@
 .mf {
   padding: 80px 24px;
   background: #fff;
-  color: #0B0C0C;
+  color: #0b0c0c;
   margin-block-start: 0px;
 }
 .mf__inner {
@@ -50,7 +50,7 @@
   bottom: -1px;
   width: 100%;
   height: 3px;
-  background: #0B0C0C;
+  background: #0b0c0c;
 }
 
 .mf__panel {
@@ -304,11 +304,19 @@ body.mf-modal-open {
 }
 
 .mf-modal__dialog {
-  width: min(1100px, 100%);
-  background: #fff;
-  border-radius: 36px;
+  width: min(900px, 100%);
   padding: 36px;
+
   position: relative;
+  background-color: #ffffff;
+  background-image: url("/wp-content/themes/theme-attach/assets/img/fondo-modal-versiones.png");
+  background-repeat: no-repeat;
+  background-position: right bottom;
+  background-size: 420px auto;
+
+  border-radius: 36px;
+  overflow: hidden;
+
   box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
 }
 
@@ -376,14 +384,14 @@ body.mf-modal-open {
 }
 
 .mf-modal__selectWrap {
-  margin-top: 12px;
+  margin-top: 16px;
 }
 
 .mf-modal__select {
   width: 100%;
   height: 56px;
   border-radius: 14px;
-  border: 1px solid #e5e5e5;
+  border: 0px;
   padding: 0 14px;
   font-family: var(--font-geely);
   font-size: 16px;
@@ -393,6 +401,10 @@ body.mf-modal-open {
   background: #fff;
   box-shadow: 0px 4px 4px 0px #bdbdbd80;
   text-transform: uppercase;
+}
+
+.mf-modal__select:focus {
+  outline: none;
 }
 
 .mf-modal__right {
@@ -428,14 +440,19 @@ body.mf-modal-open {
   font-size: 16px;
   line-height: 20px;
   color: #0b0c0c;
+  min-height: 56px;
+  margin-top: 16px;
+  place-content: center;
 }
 
 .mf-modal__specRow:first-child {
   border-top: none;
+  margin-top: 0;
 }
 
 .mf-modal__specRow strong {
   font-weight: 700;
+  align-self: anchor-center;
 }
 
 .mf-modal__specRow span {
@@ -447,7 +464,19 @@ body.mf-modal-open {
   display: none !important;
 }
 
+@media (min-width: 1024px) {
+  .mf-modal__dialog {
+    background-size: 520px auto;
+    background-position: right -40px bottom -40px;
+  }
+}
+
 @media (max-width: 768px) {
+  .mf-modal__dialog {
+    padding: 24px;
+    background-size: 260px auto;
+    background-position: center bottom;
+  }
   .mf-modal[data-open="1"] {
     padding: 0;
     align-items: flex-start;

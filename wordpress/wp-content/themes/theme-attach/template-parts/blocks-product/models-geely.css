@@ -152,7 +152,7 @@
 
 /* fondo verde sólo en la parte superior */
 .mg-card__media::after {
-  background: #ebfbf4;
+  background: var(--bg-card);
   position: absolute;
   content: "";
   z-index: -1;

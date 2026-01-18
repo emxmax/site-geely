@@ -146,8 +146,6 @@ $rel    = $btn_newtab ? 'noopener noreferrer' : '';
 
                         </div>
                     </div>
-                    
-                    <div class="swiper-pagination ic-block__pagination"></div>
 
 
                     <div class="ic-block__controls">
@@ -163,6 +161,9 @@ $rel    = $btn_newtab ? 'noopener noreferrer' : '';
                                 alt="Next">
                         </button>
                     </div>
+
+                    <!-- Mobile paginations -->
+                    <div class="swiper-pagination ic-block__pagination"></div>
 
                 </div>
             </div>
