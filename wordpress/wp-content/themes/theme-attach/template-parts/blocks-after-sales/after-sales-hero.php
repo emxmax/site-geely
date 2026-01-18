@@ -30,17 +30,19 @@ if ($background_image_mob) {
   $bg_url_mobile = is_array($background_image_mob) ? $background_image_mob['url'] : $background_image_mob;
 } ?>
 
+<!-- section-xxl-full -->
 <section class="after-sales-hero">
+  <div class="after-sales-hero__bg--wrapper">
+    <?php if (!empty($bg_url)): ?>
+      <img src="<?= esc_url($bg_url) ?>" alt="Banner Hero" width="1440" height="600"
+        class="after-sales-hero__bg after-sales-hero__bg--desktop" />
+    <?php endif; ?>
 
-  <?php if (!empty($bg_url)): ?>
-    <img src="<?= esc_url($bg_url) ?>" alt="Banner Hero" width="1440" height="600"
-      class="after-sales-hero__bg after-sales-hero__bg--desktop" />
-  <?php endif; ?>
-
-  <?php if (!empty($bg_url_mobile)): ?>
-    <img src="<?= esc_url($bg_url_mobile) ?>" alt="Banner Hero" width="768" height="600"
-      class="after-sales-hero__bg after-sales-hero__bg--mobile" />
-  <?php endif; ?>
+    <?php if (!empty($bg_url_mobile)): ?>
+      <img src="<?= esc_url($bg_url_mobile) ?>" alt="Banner Hero" width="768" height="600"
+        class="after-sales-hero__bg after-sales-hero__bg--mobile" />
+    <?php endif; ?>
+  </div>
 
   <div class="after-sales-hero__inner">
     <div class="after-sales-hero__content">

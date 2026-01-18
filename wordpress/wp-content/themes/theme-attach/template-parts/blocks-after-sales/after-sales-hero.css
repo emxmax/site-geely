@@ -7,6 +7,23 @@
   margin-top: 0;
   padding-block: 149px;
   padding-inline: 20px;
+  /*  */
+  background-color: #212529;
+}
+@media (min-width: 1441px) {
+  .after-sales-hero {
+    max-width: 100%;
+    padding-inline: 0;
+  }
+}
+.after-sales-hero__bg--wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  max-width: 704px;
+  z-index: 1;
 }
 .after-sales-hero__bg {
   position: absolute;
@@ -22,6 +39,8 @@
 /* Desktop: mostrar solo en >= 768px */
 .after-sales-hero__bg--desktop {
   display: block;
+  border-top-left-radius: 1000px;
+  border-bottom-left-radius: 1000px;
 }
 
 /* Mobile: ocultar por defecto */
@@ -42,6 +61,7 @@
 .after-sales-hero__title {
   color: var(--c-white);
   font-family: var(--font-geely);
+  padding-block: 15px;
 }
 
 .after-sales-hero__actions {
@@ -76,8 +96,29 @@
 
 /*  */
 @media (max-width: 1279px) {
+  .after-sales-hero__bg--wrapper {
+    max-width: 624px;
+  }
+  .after-sales-hero__bg--desktop {
+    object-position: center;
+  }
+
   .after-sales-hero__content {
     /* margin-left: 20px; */
+  }
+}
+@media (max-width: 1199px) {
+  .after-sales-hero__bg--wrapper {
+    max-width: 470px;
+  }
+}
+/*  */
+@media (max-width: 1023px) {
+  .after-sales-hero__bg--wrapper {
+    max-width: 395px;
+  }
+  .after-sales-hero__content {
+    max-width: 500px;
   }
 }
 
@@ -123,5 +164,36 @@
   .after-sales-hero__cta--primary {
   }
   .after-sales-hero__cta--secondary {
+  }
+  /*  */
+
+  .after-sales-hero {
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    padding-inline: 0;
+  }
+  .after-sales-hero__inner {
+    padding-inline: 30px;
+    margin-top: 40px;
+    max-width: 420px;
+    margin-inline: auto;
+  }
+  .after-sales-hero__bg--wrapper {
+    position: static;
+    max-width: 100%;
+    width: 100%;
+  }
+  .after-sales-hero__bg--mobile {
+    position: static;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+
+    border-bottom-right-radius: 500px;
+    border-bottom-left-radius: 500px;
+  }
+  .after-sales-hero__title {
+    padding-block: 0;
   }
 }
