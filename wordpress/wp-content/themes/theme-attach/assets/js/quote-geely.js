@@ -105,7 +105,7 @@
     document.addEventListener("click", (e) => {
       const btn = e.target.closest('input.wpcf7-submit, button.wpcf7-submit, .geely-cotiza-submit');
       if (!btn) return;
-      console.log("[MG_QUOTE] CLICK Cotizar", btn);
+      console.log("[MG_QUOTE] CLICK Cotizar", btn, { disabled: btn.disabled, aria: btn.getAttribute("aria-disabled") });
     });
   };
 
@@ -259,7 +259,7 @@
 
       try {
         const res = await ajaxPost("mg_quote_nearest_stores", { lat, lng });
-        const items = res?.success ? (res.data?.items || []) : [];
+        const items = res?.success ? res.data?.items || [] : [];
 
         if (!items.length) {
           btn.textContent = "No se encontraron concesionarios cercanos.";
@@ -349,10 +349,7 @@
             );
 
           if (err?.code === 3)
-            return openGeoErrorModal(
-              "Tiempo de espera agotado",
-              "No se pudo obtener tu ubicación a tiempo. Intenta nuevamente."
-            );
+            return openGeoErrorModal("Tiempo de espera agotado", "No se pudo obtener tu ubicación a tiempo. Intenta nuevamente.");
 
           openGeoErrorModal("No se pudo obtener tu ubicación", "Ocurrió un error inesperado. Intenta nuevamente.");
         },
@@ -367,7 +364,7 @@
   };
 
   /** =========================
-   *  5) Bloque de cotización (tabs/steps/selección modelos/colores)
+   *  5) Bloque de cotización
    * ========================= */
   const initQuoteBlocks = () => {
     const roots = window.__MG_QUOTE_BLOCKS__ || [];
@@ -429,9 +426,7 @@
         btn.setAttribute("aria-label", c.name || "Color");
 
         btn.addEventListener("click", () => {
-          Array.from(dotsWrap.querySelectorAll(".mg-quote__colorDotBtn")).forEach((x) =>
-            x.classList.remove("is-active")
-          );
+          Array.from(dotsWrap.querySelectorAll(".mg-quote__colorDotBtn")).forEach((x) => x.classList.remove("is-active"));
           btn.classList.add("is-active");
           if (nameEl) nameEl.textContent = c.name || "";
           onPick(c);
@@ -497,7 +492,6 @@
       const root = document.querySelector(sel);
       if (!root) return;
 
-      // Mantiene placeholder como "no seleccionable"
       makeFirstOptionPlaceholder(root.querySelector('select[name="cot_department"]'));
       makeFirstOptionPlaceholder(root.querySelector('select[name="cot_store"]'));
 
@@ -626,11 +620,18 @@
   };
 
   /** =========================
-   *  6) Validaciones + Botón disabled mientras falte algo
+   *  6) Validaciones + Botón disabled
+   *
+   *  FIX (tu caso):
+   *   - El error del celular NO salía porque en modo "silent" estabas limpiando el error
+   *     con clearFieldError() cuando showErrors=false.
+   *   - Ahora: aunque showErrors=false, si el campo tiene valor inválido mostramos error
+   *     (y si está vacío, no mostramos hasta intentar enviar).
+   *   - Regla celular: EXACTO 9 dígitos y debe empezar con 9.
    * ========================= */
   const initCotizaValidation = () => {
-    const MAX_TRIES = 60;
-    const TRY_EVERY = 250;
+    const MAX_TRIES = 80;
+    const TRY_EVERY = 200;
 
     const findForm = () => document.querySelector(".wpcf7 form");
 
@@ -650,15 +651,10 @@
       const emailEl = form.querySelector('input[name="cot_email"]');
       const deptEl = form.querySelector('select[name="cot_department"]');
       const storeEl = form.querySelector('select[name="cot_store"]');
-      const submitBtn = form.querySelector(".wpcf7-submit");
 
-      // Acceptance (si existe) -> para bloquear Cotizar hasta que acepte.
-      // CHANGE: lo incluimos en el "disabled" general.
-      const acceptanceChk =
-        form.querySelector('.wpcf7-acceptance input[type="checkbox"]') ||
-        form.querySelector('input[type="checkbox"][name*="accept"]');
+      const submitBtns = $$(".wpcf7-submit", form);
 
-      if (!docTypeEl || !docEl || !submitBtn) {
+      if (!docTypeEl || !docEl || !submitBtns.length) {
         form.__mgValidationMounted = false;
         return false;
       }
@@ -669,6 +665,23 @@
       const isNumericDocType = () => ["DNI", "RUC"].includes(docType());
       const getDocMaxLen = () => (docType() === "DNI" ? 8 : docType() === "RUC" ? 11 : 20);
       const getDocDisallowedRegex = () => (isNumericDocType() ? /[^0-9]/g : /[^a-zA-Z0-9&]/g);
+
+      // ---- scheduler para correr DESPUÉS de CF7
+      let _syncQueued = false;
+      const scheduleSync = () => {
+        if (_syncQueued) return;
+        _syncQueued = true;
+
+        Promise.resolve().then(() => {
+          requestAnimationFrame(() => {
+            _syncQueued = false;
+            syncSubmitDisabled();
+          });
+        });
+
+        setTimeout(() => syncSubmitDisabled(), 0);
+        setTimeout(() => syncSubmitDisabled(), 50);
+      };
 
       const ensureErrorEl = (fieldEl) => {
         const wrap = fieldEl?.closest(".geely-cotiza-row__control") || fieldEl?.parentElement;
@@ -692,16 +705,37 @@
         if (errEl) errEl.textContent = message || "";
       };
 
-      // CHANGE: ahora setFieldError soporta modo silencioso (no pinta),
-      // para poder deshabilitar el botón sin ensuciar la UI mientras escribe.
+      /**
+       * ✅ Cambio clave:
+       * - Antes: si silent==false pero showErrors==false => limpiabas el error.
+       * - Ahora:
+       *    - Si showErrors==true: siempre muestra.
+       *    - Si showErrors==false:
+       *        - NO muestra error si el campo está vacío.
+       *        - SÍ muestra error si el usuario ya escribió algo y está inválido.
+       */
       const setFieldError = (fieldEl, message, silent = false) => {
-        if (silent) return !!message ? false : true;
+        if (silent) return !message;
+
+        const hasValue = !!String(fieldEl?.value || "").trim();
+
         if (!showErrors) {
-          if (!message) paintError(fieldEl, "");
-          return !!message ? false : true;
+          // si está vacío, no molestamos aún
+          if (!hasValue) {
+            paintError(fieldEl, "");
+            return !message;
+          }
+          // si tiene valor y está inválido, sí mostramos (tu caso celular)
+          if (message) {
+            paintError(fieldEl, message);
+            return false;
+          }
+          paintError(fieldEl, "");
+          return true;
         }
+
         paintError(fieldEl, message);
-        return !!message ? false : true;
+        return !message;
       };
 
       const clearFieldError = (fieldEl) => paintError(fieldEl, "");
@@ -746,24 +780,30 @@
         return true;
       };
 
-      // CHANGE: Celular SOLO 9 dígitos y debe empezar con 9 (sin +51)
       const sanitizePhone = () => {
         if (!phoneEl) return;
         const before = phoneEl.value || "";
-        let v = before.replace(/\D/g, ""); // solo dígitos
+        let v = before.replace(/\D/g, "");
         if (v.length > 9) v = v.slice(0, 9);
         if (v !== before) phoneEl.value = v;
         phoneEl.setAttribute("maxlength", "9");
         phoneEl.setAttribute("inputmode", "numeric");
+        phoneEl.setAttribute("pattern", "^9\\d{8}$");
       };
 
-      // CHANGE: regla nueva del celular
       const validatePhone = (silent = false) => {
         if (!phoneEl) return true;
         const v = (phoneEl.value || "").trim();
+
+        // regla exacta: si está vacío
         if (!v) return setFieldError(phoneEl, "Ingresa tu celular.", silent);
+
+        // exacto 9
         if (!/^\d{9}$/.test(v)) return setFieldError(phoneEl, "Celular debe tener 9 dígitos.", silent);
-        if (!v.startsWith("9")) return setFieldError(phoneEl, "Celular debe iniciar con 9.", silent);
+
+        // empieza con 9
+        if (!/^9\d{8}$/.test(v)) return setFieldError(phoneEl, "Celular debe iniciar con 9.", silent);
+
         setFieldError(phoneEl, "", silent);
         return true;
       };
@@ -796,14 +836,9 @@
         return true;
       };
 
-      const validateAcceptance = (silent = false) => {
-        if (!acceptanceChk) return true;
-        const ok = !!acceptanceChk.checked;
-        if (!ok) return silent ? false : false; // no pintamos error, CF7 ya lo hace
-        return true;
-      };
+      // checkbox no bloquea
+      const validateAcceptance = () => true;
 
-      // CHANGE: valida en modo silencioso para controlar el disabled del botón
       const isAllValidSilent = () => {
         sanitizeDoc();
         sanitizePhone();
@@ -817,29 +852,36 @@
         const ok5 = validateEmail(true);
         const ok6 = validateDept(true);
         const ok7 = validateStore(true);
-        const ok8 = validateAcceptance(true);
+        const ok8 = validateAcceptance();
 
         return ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8;
       };
 
-      // CHANGE: deshabilita/ habilita visualmente el botón
+      const forceEnableBtn = (btn) => {
+        btn.disabled = false;
+        btn.removeAttribute("disabled");
+        btn.removeAttribute("aria-disabled");
+        btn.classList.remove("is-disabled-by-mg");
+        btn.classList.remove("disabled");
+        btn.classList.remove("wpcf7-disabled");
+        btn.style.pointerEvents = "";
+        btn.style.opacity = "";
+        btn.style.filter = "";
+      };
+
+      const forceDisableBtn = (btn) => {
+        btn.disabled = true;
+        btn.setAttribute("disabled", "disabled");
+        btn.setAttribute("aria-disabled", "true");
+        btn.classList.add("is-disabled-by-mg");
+      };
+
       const syncSubmitDisabled = () => {
-        if (!submitBtn) return;
-
         const allOk = isAllValidSilent();
-
-        // Solo forzamos "disabled=true" cuando NO está ok.
-        // Cuando está ok, NO forzamos enabled, porque CF7 podría tenerlo disabled (acceptance u otra regla).
-        if (!allOk) {
-          submitBtn.disabled = true;
-          submitBtn.setAttribute("aria-disabled", "true");
-          submitBtn.classList.add("is-disabled-by-mg");
-        } else {
-          // Si CF7 lo tiene disabled por aceptación u otra cosa, lo respetamos.
-          // Solo quitamos nuestras marcas visuales.
-          submitBtn.classList.remove("is-disabled-by-mg");
-          submitBtn.removeAttribute("aria-disabled");
-        }
+        submitBtns.forEach((btn) => {
+          if (allOk) forceEnableBtn(btn);
+          else forceDisableBtn(btn);
+        });
       };
 
       const validateAllCustom = () => {
@@ -855,7 +897,7 @@
         const ok5 = validateEmail(false);
         const ok6 = validateDept(false);
         const ok7 = validateStore(false);
-        const ok8 = validateAcceptance(false);
+        const ok8 = validateAcceptance();
 
         return ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8;
       };
@@ -863,90 +905,116 @@
       form.__mgValidateAll = () => {
         showErrors = true;
         const ok = validateAllCustom();
-        syncSubmitDisabled(); // CHANGE: refresca disabled luego de mostrar errores
+        scheduleSync();
         return ok;
       };
 
-      // Eventos (input/change) + refresco del disabled
-      docEl.addEventListener("input", () => {
-        sanitizeDoc();
-        if (showErrors) validateDoc(false);
-        else clearFieldError(docEl);
-        syncSubmitDisabled(); // CHANGE
+      // MutationObserver en CADA submit (CF7/tema lo pisan)
+      submitBtns.forEach((btn) => {
+        const moBtn = new MutationObserver(() => scheduleSync());
+        moBtn.observe(btn, { attributes: true, attributeFilter: ["disabled", "class", "aria-disabled", "style"] });
       });
 
-      docTypeEl.addEventListener("change", () => {
-        sanitizeDoc();
-        if (showErrors) validateDoc(false);
-        syncSubmitDisabled(); // CHANGE
+      // MutationObserver en el FORM (por si reemplazan el submit o re-render)
+      const moForm = new MutationObserver(() => scheduleSync());
+      moForm.observe(form, { childList: true, subtree: true });
+
+      // Eventos CF7 que pueden tocar el botón
+      ["wpcf7invalid", "wpcf7submit", "wpcf7reset", "wpcf7init"].forEach((evt) => {
+        document.addEventListener(evt, () => scheduleSync(), true);
       });
 
-      namesEl?.addEventListener("input", () => {
-        sanitizeNameField(namesEl);
-        if (showErrors) validateNameField(namesEl, "tus nombres", false);
-        else clearFieldError(namesEl);
-        syncSubmitDisabled(); // CHANGE
-      });
-
-      lastnamesEl?.addEventListener("input", () => {
-        sanitizeNameField(lastnamesEl);
-        if (showErrors) validateNameField(lastnamesEl, "tus apellidos", false);
-        else clearFieldError(lastnamesEl);
-        syncSubmitDisabled(); // CHANGE
-      });
-
-      phoneEl?.addEventListener("input", () => {
-        sanitizePhone();
-        if (showErrors) validatePhone(false);
-        else clearFieldError(phoneEl);
-        syncSubmitDisabled(); // CHANGE
-      });
-
-      emailEl?.addEventListener("input", () => {
-        if (showErrors) validateEmail(false);
-        else clearFieldError(emailEl);
-        syncSubmitDisabled(); // CHANGE
-      });
-
-      deptEl?.addEventListener("change", () => {
-        if (showErrors) validateDept(false);
-        else clearFieldError(deptEl);
-        syncSubmitDisabled(); // CHANGE
-      });
-
-      storeEl?.addEventListener("change", () => {
-        if (showErrors) validateStore(false);
-        else clearFieldError(storeEl);
-        syncSubmitDisabled(); // CHANGE
-      });
-
-      acceptanceChk?.addEventListener("change", () => {
-        syncSubmitDisabled(); // CHANGE
-      });
-
-      // Click en submit: si algo falla, bloquea y muestra el primer error
-      submitBtn.addEventListener(
-        "click",
+      // Delegación: cualquier cambio dentro del form => sync
+      form.addEventListener(
+        "input",
         (e) => {
-          showErrors = true;
-          const ok = validateAllCustom();
-          syncSubmitDisabled(); // CHANGE
+          const t = e.target;
 
-          if (!ok) {
-            e.preventDefault();
-            e.stopPropagation();
-            const first = form.querySelector(".is-invalid");
-            first?.scrollIntoView({ behavior: "smooth", block: "center" });
-            first?.focus?.();
+          if (t === docEl) {
+            sanitizeDoc();
+            if (showErrors) validateDoc(false);
+            else validateDoc(false); // ✅ si ya escribió algo inválido, que se vea
           }
+          if (t === namesEl) {
+            sanitizeNameField(namesEl);
+            if (showErrors) validateNameField(namesEl, "tus nombres", false);
+            else validateNameField(namesEl, "tus nombres", false);
+          }
+          if (t === lastnamesEl) {
+            sanitizeNameField(lastnamesEl);
+            if (showErrors) validateNameField(lastnamesEl, "tus apellidos", false);
+            else validateNameField(lastnamesEl, "tus apellidos", false);
+          }
+          if (t === phoneEl) {
+            sanitizePhone();
+            // ✅ aquí está tu fix: aunque showErrors=false, si el número es inválido se muestra
+            validatePhone(false);
+          }
+          if (t === emailEl) {
+            if (showErrors) validateEmail(false);
+            else validateEmail(false);
+          }
+
+          scheduleSync();
         },
         true
       );
 
+      form.addEventListener(
+        "change",
+        (e) => {
+          const t = e.target;
+
+          if (t === docTypeEl) {
+            sanitizeDoc();
+            if (showErrors) validateDoc(false);
+            else validateDoc(false);
+          }
+          if (t === deptEl) {
+            if (showErrors) validateDept(false);
+            else validateDept(false);
+          }
+          if (t === storeEl) {
+            if (showErrors) validateStore(false);
+            else validateStore(false);
+          }
+
+          scheduleSync();
+        },
+        true
+      );
+
+      // Click: bloquea submit si algo inválido
+      submitBtns.forEach((btn) => {
+        btn.addEventListener(
+          "click",
+          (e) => {
+            showErrors = true;
+            const ok = validateAllCustom();
+            scheduleSync();
+
+            if (!ok) {
+              e.preventDefault();
+              e.stopPropagation();
+              const first = form.querySelector(".is-invalid");
+              first?.scrollIntoView({ behavior: "smooth", block: "center" });
+              first?.focus?.();
+            }
+          },
+          true
+        );
+      });
+
       // Inicial
       sanitizeDoc();
       sanitizePhone();
-      syncSubmitDisabled(); // CHANGE
+
+      // ✅ importante: si llega prellenado (autofill), valida
+      validatePhone(false);
+
+      scheduleSync();
+      setTimeout(scheduleSync, 200);
+      setTimeout(scheduleSync, 800);
 
       return true;
     };
