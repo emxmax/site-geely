@@ -80,15 +80,29 @@ if (!function_exists('mg_quote_parse_store_id')) {
   }
 }
 
-/** Lookup tienda */
+/** Helper: pad "08" */
+if (!function_exists('mg_quote_pad2')) {
+  function mg_quote_pad2($v)
+  {
+    $v = (string)$v;
+    $v = preg_replace('/[^0-9]/', '', $v);
+    if ($v === '') return '';
+    return str_pad($v, 2, '0', STR_PAD_LEFT);
+  }
+}
+
+/**
+ * Lookup tienda:
+ * devuelve: [nombre, codigoventa, codigocanal, RegionId, ProvinciaId, ComunaId]
+ */
 if (!function_exists('mg_quote_lookup_store_meta')) {
   function mg_quote_lookup_store_meta($store_id)
   {
     global $wpdb;
 
     $store_id = (int)$store_id;
-    if (!$store_id) return [null, null, null];
-    if (!mg_quote_table_exists('bp_tiendas')) return [null, null, null];
+    if (!$store_id) return [null, null, null, 0, 0, 0];
+    if (!mg_quote_table_exists('bp_tiendas')) return [null, null, null, 0, 0, 0];
 
     $wpdb->hide_errors();
     $wpdb->suppress_errors(true);
@@ -106,14 +120,21 @@ if (!function_exists('mg_quote_lookup_store_meta')) {
     $colVenta  = $hasCol('CodigoVenta') ? 'CodigoVenta' : '';
     $colCanal  = $hasCol('codigoCanal') ? 'codigoCanal' : '';
 
+    $colRegion = $hasCol('RegionId') ? 'RegionId' : '';
+    $colProv   = $hasCol('ProvinciaId') ? 'ProvinciaId' : '';
+    $colComuna = $hasCol('ComunaId') ? 'ComunaId' : '';
+
     $select = [];
     if ($colNombre) $select[] = "`$colNombre` AS nombre";
     if ($colVenta)  $select[] = "`$colVenta` AS codigoventa";
     if ($colCanal)  $select[] = "`$colCanal` AS codigocanal";
+    if ($colRegion) $select[] = "`$colRegion` AS region_id";
+    if ($colProv)   $select[] = "`$colProv` AS provincia_id";
+    if ($colComuna) $select[] = "`$colComuna` AS comuna_id";
 
     if (empty($select)) {
       $wpdb->suppress_errors(false);
-      return [null, null, null];
+      return [null, null, null, 0, 0, 0];
     }
 
     $sql = $wpdb->prepare(
@@ -127,13 +148,119 @@ if (!function_exists('mg_quote_lookup_store_meta')) {
     $row = $wpdb->get_row($sql, ARRAY_A);
     $wpdb->suppress_errors(false);
 
-    if (!$row) return [null, null, null];
+    if (!$row) return [null, null, null, 0, 0, 0];
 
     $nombre = isset($row['nombre']) ? trim((string)$row['nombre']) : null;
     $venta  = isset($row['codigoventa']) ? trim((string)$row['codigoventa']) : null;
     $canal  = isset($row['codigocanal']) ? trim((string)$row['codigocanal']) : null;
 
-    return [$nombre ?: null, $venta ?: null, $canal ?: null];
+    $region_id    = isset($row['region_id']) ? (int)$row['region_id'] : 0;
+    $provincia_id = isset($row['provincia_id']) ? (int)$row['provincia_id'] : 0;
+    $comuna_id    = isset($row['comuna_id']) ? (int)$row['comuna_id'] : 0;
+
+    return [$nombre ?: null, $venta ?: null, $canal ?: null, $region_id, $provincia_id, $comuna_id];
+  }
+}
+
+/**
+ * Map GEO:
+ * - dpto: match bp_regiones.RegionId -> devuelve bp_regiones.regionIdAG
+ * - prov: match bp_provincias.ProvinciaId -> devuelve bp_provincias.CodigoAG
+ * - dist: match bp_comunas.ComunaId -> devuelve bp_comunas.RegionId (según pedido)
+ *   fallback: bp_comunas.ComunaIdGildemeister (si RegionId viene vacío/0)
+ */
+if (!function_exists('mg_quote_geo_from_store_ids')) {
+  function mg_quote_geo_from_store_ids($regionId, $provinciaId, $comunaId)
+  {
+    global $wpdb;
+
+    $regionId = (int)$regionId;
+    $provinciaId = (int)$provinciaId;
+    $comunaId = (int)$comunaId;
+
+    $out = ['dpto' => '', 'prov' => '', 'dist' => '', 'raw' => []];
+
+    // ===== DPTO =====
+    if ($regionId && mg_quote_table_exists('bp_regiones')) {
+      $cols = $wpdb->get_results("SHOW COLUMNS FROM bp_regiones", ARRAY_A);
+      $has = function ($f) use ($cols) {
+        foreach ((array)$cols as $c) if (!empty($c['Field']) && $c['Field'] === $f) return true;
+        return false;
+      };
+
+      if ($has('RegionId') && $has('regionIdAG')) {
+        $sql = $wpdb->prepare(
+          "SELECT regionIdAG FROM bp_regiones WHERE RegionId = %d LIMIT 1",
+          $regionId
+        );
+        $val = $wpdb->get_var($sql);
+        $out['dpto'] = mg_quote_pad2($val);
+        $out['raw']['regionIdAG'] = $val;
+      }
+    }
+
+    // ===== PROV =====
+    if ($provinciaId && mg_quote_table_exists('bp_provincias')) {
+      $cols = $wpdb->get_results("SHOW COLUMNS FROM bp_provincias", ARRAY_A);
+      $has = function ($f) use ($cols) {
+        foreach ((array)$cols as $c) if (!empty($c['Field']) && $c['Field'] === $f) return true;
+        return false;
+      };
+
+      if ($has('ProvinciaId') && $has('CodigoAG')) {
+        $sql = $wpdb->prepare(
+          "SELECT CodigoAG FROM bp_provincias WHERE ProvinciaId = %d LIMIT 1",
+          $provinciaId
+        );
+        $val = $wpdb->get_var($sql);
+        $out['prov'] = mg_quote_pad2($val);
+        $out['raw']['CodigoAG'] = $val;
+      }
+    }
+
+    // ===== DIST =====
+    if ($comunaId && mg_quote_table_exists('bp_comunas')) {
+      $cols = $wpdb->get_results("SHOW COLUMNS FROM bp_comunas", ARRAY_A);
+      $has = function ($f) use ($cols) {
+        foreach ((array)$cols as $c) if (!empty($c['Field']) && $c['Field'] === $f) return true;
+        return false;
+      };
+
+      // pedido: enviar RegionId
+      $selectDist = [];
+      if ($has('RegionId')) $selectDist[] = "RegionId";
+      if ($has('ComunaIdGildemeister')) $selectDist[] = "ComunaIdGildemeister";
+
+      if (!empty($selectDist) && $has('ComunaId')) {
+        $sql = $wpdb->prepare(
+          "SELECT " . implode(',', $selectDist) . " FROM bp_comunas WHERE ComunaId = %d LIMIT 1",
+          $comunaId
+        );
+        $row = $wpdb->get_row($sql, ARRAY_A);
+
+        $dist = '';
+        if ($row) {
+          // primero RegionId (según pedido)
+          $regionDist = isset($row['RegionId']) ? (string)$row['RegionId'] : '';
+          $regionDist = preg_replace('/[^0-9]/', '', $regionDist);
+
+          if ($regionDist !== '' && (int)$regionDist > 0) {
+            $dist = $regionDist;
+            $out['raw']['bp_comunas.RegionId'] = $row['RegionId'];
+          } else {
+            // fallback
+            $gid = isset($row['ComunaIdGildemeister']) ? (string)$row['ComunaIdGildemeister'] : '';
+            $gid = preg_replace('/[^0-9]/', '', $gid);
+            $dist = $gid;
+            $out['raw']['bp_comunas.ComunaIdGildemeister'] = $row['ComunaIdGildemeister'] ?? '';
+          }
+        }
+
+        $out['dist'] = mg_quote_pad2($dist);
+      }
+    }
+
+    return $out;
   }
 }
 
@@ -228,10 +355,26 @@ add_action('wpcf7_before_send_mail', function ($contact_form) {
   $store_id_int          = mg_quote_parse_store_id($cot_store_raw);
   $cot_store             = (string)$store_id_int;
 
-  // Meta tienda
-  [$nombre_comercial_de_la_tienda, $codigo_venta_de_la_tienda, $codigo_canal_db] = mg_quote_lookup_store_meta($store_id_int);
+  // Meta tienda + ids geo internos (RegionId/ProvinciaId/ComunaId)
+  [
+    $nombre_comercial_de_la_tienda,
+    $codigo_venta_de_la_tienda,
+    $codigo_canal_db,
+    $store_region_id,
+    $store_provincia_id,
+    $store_comuna_id
+  ] = mg_quote_lookup_store_meta($store_id_int);
+
   $nombre_comercial_de_la_tienda = $nombre_comercial_de_la_tienda ?: '';
   $codigo_venta_de_la_tienda     = $codigo_venta_de_la_tienda ?: '';
+
+  // GEO codes (AG)
+  $geo = mg_quote_geo_from_store_ids($store_region_id, $store_provincia_id, $store_comuna_id);
+
+  // Si no logra mapear, conserva valores por defecto (los que tenías)
+  $Coddpto = $geo['dpto'] ?: "08";
+  $Codprov = $geo['prov'] ?: "01";
+  $Coddist = $geo['dist'] ?: "01";
 
   // IDs API (strings)
   $nid_modelo = (string) $get('nid_modelo');
@@ -294,10 +437,10 @@ add_action('wpcf7_before_send_mail', function ($contact_form) {
     'nu_celular' => $cot_phone,
     'no_correo'  => $cot_email,
 
-    // TODO: por ahora fijo mientras corriges geo IDs
-    'Coddpto' => "08",
-    'Codprov' => "01",
-    'Coddist' => "01",
+    // ✅ GEO dinámico desde tienda -> regiones/provincias/comunas
+    'Coddpto' => (string)$Coddpto,
+    'Codprov' => (string)$Codprov,
+    'Coddist' => (string)$Coddist,
 
     'no_direccion'     => "",
     'nid_marca'        => "GEE",
@@ -360,8 +503,133 @@ add_action('wpcf7_before_send_mail', function ($contact_form) {
       'NombreComercial' => $nombre_comercial_de_la_tienda,
       'CodigoVenta' => $codigo_venta_de_la_tienda,
       'co_canal' => $co_canal,
+
+      // ✅ debug GEO
+      'store.RegionId' => (int)$store_region_id,
+      'store.ProvinciaId' => (int)$store_provincia_id,
+      'store.ComunaId' => (int)$store_comuna_id,
+      'geo.Coddpto' => (string)$Coddpto,
+      'geo.Codprov' => (string)$Codprov,
+      'geo.Coddist' => (string)$Coddist,
+      'geo.raw' => $geo['raw'] ?? [],
     ],
   ];
+}, 10, 1);
+
+/** =========================
+ *  2) Meter mg_api + mg_payload en respuesta AJAX CF7
+ *  ========================= */
+add_filter('wpcf7_ajax_json_echo', function ($response, $result) {
+
+  if (!is_array($response)) $response = [];
+
+  $response['mg_api'] = $GLOBALS['mg_quote_last_api'] ?? null;
+  $response['mg_payload'] = !empty($GLOBALS['mg_quote_last_payload']) ? $GLOBALS['mg_quote_last_payload'] : null;
+
+  return $response;
+}, 10, 2);
+
+/** =========================
+ *  3) Cuando el mail YA SE ENVIÓ: guardar CPT + guardar respuesta API en ACF
+ *  ========================= */
+add_action('wpcf7_mail_sent', function ($contact_form) {
+
+  $submission = WPCF7_Submission::get_instance();
+  if (!$submission) return;
+
+  $data = $submission->get_posted_data();
+  if (empty($data) || !is_array($data)) return;
+
+  // helper para obtener string "limpio"
+  $get = function ($key) use ($data) {
+    $v = $data[$key] ?? '';
+    if (is_array($v)) $v = reset($v);
+    return is_string($v) ? trim($v) : $v;
+  };
+
+  // =========================
+  // Datos del form
+  // =========================
+  $cot_product_id        = (int) $get('product_id');
+  $cot_product_title     = (string) $get('product_title');
+  $cot_model_slug        = (string) $get('model_slug');
+  $cot_model_name        = (string) $get('model_name');
+  $cot_model_year        = (string) $get('model_year');
+  $cot_model_price_usd   = (string) $get('model_price_usd');
+  $cot_model_price_local = (string) $get('model_price_local');
+
+  $cot_color_name        = (string) $get('color_name');
+  $cot_color_hex         = (string) $get('color_hex');
+
+  $cot_names             = sanitize_text_field($get('cot_names'));
+  $cot_lastnames         = sanitize_text_field($get('cot_lastnames'));
+  $cot_document_type     = sanitize_text_field($get('cot_document_type'));
+  $cot_document          = sanitize_text_field($get('cot_document'));
+  $cot_phone             = sanitize_text_field($get('cot_phone'));
+  $cot_email             = sanitize_email($get('cot_email'));
+  $cot_department        = sanitize_text_field($get('cot_department'));
+  $cot_store             = sanitize_text_field($get('cot_store'));
+
+  // =========================
+  // 1) Crear CPT
+  // =========================
+  $post_id = wp_insert_post([
+    'post_type'   => 'cotizacion',
+    'post_status' => 'publish',
+    'post_title'  => "Cotización - {$cot_names} {$cot_lastnames} ({$cot_product_title})",
+  ], true);
+
+  if (is_wp_error($post_id) || !$post_id) {
+    if (function_exists('mg_quote_log')) {
+      mg_quote_log('CPT ERROR', [
+        'err' => is_wp_error($post_id) ? $post_id->get_error_message() : 'post_id empty'
+      ]);
+    }
+    return;
+  }
+
+  // =========================
+  // 2) Guardar ACF (según tu grupo "Cotizacion - Datos")
+  // =========================
+  if (function_exists('update_field')) {
+    update_field('cot_product_id', $cot_product_id, $post_id);
+    update_field('cot_product_title', $cot_product_title, $post_id);
+    update_field('cot_model_slug', $cot_model_slug, $post_id);
+    update_field('cot_model_name', $cot_model_name, $post_id);
+    update_field('cot_model_year', $cot_model_year, $post_id);
+    update_field('cot_model_price_usd', $cot_model_price_usd, $post_id);
+    update_field('cot_model_price_local', $cot_model_price_local, $post_id);
+
+    update_field('cot_color_name', $cot_color_name, $post_id);
+    update_field('cot_color_hex', $cot_color_hex, $post_id);
+
+    update_field('cot_names', $cot_names, $post_id);
+    update_field('cot_lastnames', $cot_lastnames, $post_id);
+    update_field('cot_document_type', $cot_document_type, $post_id);
+    update_field('cot_document', $cot_document, $post_id);
+    update_field('cot_phone', $cot_phone, $post_id);
+    update_field('cot_email', $cot_email, $post_id);
+    update_field('cot_department', $cot_department, $post_id);
+    update_field('cot_store', $cot_store, $post_id);
+    update_field('cot_notes', '', $post_id);
+  }
+
+  // =========================
+  // 3) Guardar respuesta del API en ACF
+  // =========================
+  $api_last = $GLOBALS['mg_quote_last_api'] ?? null;
+
+  if (function_exists('update_field')) {
+    update_field('cot_api_ok', (string)($api_last['ok'] ?? ''), $post_id);
+    update_field('cot_api_status', (string)($api_last['status'] ?? ''), $post_id);
+    update_field('cot_api_response', (string)($api_last['response'] ?? ''), $post_id);
+    update_field('cot_api_error', (string)($api_last['error'] ?? ''), $post_id);
+  }
+
+  // (Opcional) también lo guardo como meta crudo por auditoría
+  if ($api_last) {
+    update_post_meta($post_id, '_mg_api_result', wp_json_encode($api_last, JSON_UNESCAPED_UNICODE));
+  }
 }, 10, 1);
 
 /** =========================
@@ -507,10 +775,23 @@ add_filter('wpcf7_form_tag', function ($tag) {
   };
 
   $ensure_placeholder = function (&$values, &$labels) {
-    $values = is_array($values) ? $values : [''];
-    $labels = is_array($labels) ? $labels : ['Selecciona una opción'];
-    $values[0] = '';
-    $labels[0] = 'Selecciona una opción';
+    $values = is_array($values) ? array_values($values) : [''];
+    $labels = is_array($labels) ? array_values($labels) : ['Selecciona una opción'];
+
+    foreach ($labels as $i => $lab) {
+      $t = strtolower(trim((string)$lab));
+      if (strpos($t, 'seleccion') !== false) { // selecciona/seleccionar
+        unset($labels[$i], $values[$i]);
+      }
+    }
+
+    // reindex
+    $values = array_values($values);
+    $labels = array_values($labels);
+
+    // fuerza placeholder final
+    array_unshift($values, '');
+    array_unshift($labels, 'Selecciona una opción');
   };
 
   $get_columns = function ($table) use ($wpdb) {

@@ -61,7 +61,7 @@
   };
 
   /** =========================
-   *  2) CF7 logs (FIX: no usa "form" undefined)
+   *  2) CF7 logs
    * ========================= */
   const initCf7Logs = () => {
     document.addEventListener("wpcf7beforesubmit", (e) => {
@@ -106,69 +106,6 @@
       const btn = e.target.closest('input.wpcf7-submit, button.wpcf7-submit, .geely-cotiza-submit');
       if (!btn) return;
       console.log("[MG_QUOTE] CLICK Cotizar", btn);
-    });
-  };
-
-  /** =========================
-   *  3) Carga dinámica: Tiendas por Departamento
-   * ========================= */
-  const initDeptStoreDynamic = () => {
-    const form = document.querySelector(".wpcf7 form");
-    if (!form) return;
-
-    const deptEl = form.querySelector('select[name="cot_department"]');
-    const storeEl = form.querySelector('select[name="cot_store"]');
-    if (!deptEl || !storeEl) return;
-
-    const setLoadingStores = (loading) => {
-      storeEl.disabled = !!loading;
-      storeEl.classList.toggle("is-loading", !!loading);
-    };
-
-    const fillStoreOptions = (items) => {
-      const placeholderText = "Selecciona una opción";
-      storeEl.innerHTML = "";
-      const ph = document.createElement("option");
-      ph.value = "";
-      ph.textContent = placeholderText;
-      ph.disabled = true;
-      ph.hidden = true;
-      ph.selected = true;
-      storeEl.appendChild(ph);
-
-      (items || []).forEach((it) => {
-        const opt = document.createElement("option");
-        // OJO: aquí usas el value que te devuelve el endpoint (id|name)
-        opt.value = it.value || "";
-        opt.textContent = it.label || it.name || "";
-        storeEl.appendChild(opt);
-      });
-    };
-
-    const loadStoresByDept = async (deptValue) => {
-      if (!deptValue) {
-        fillStoreOptions([]);
-        return;
-      }
-
-      setLoadingStores(true);
-      try {
-        const res = await ajaxPost("mg_quote_get_stores", { department: deptValue });
-        const items = res?.success ? (res.data?.items || []) : [];
-        fillStoreOptions(items);
-      } catch (err) {
-        console.warn("[MG_QUOTE] Error loading stores:", err);
-        fillStoreOptions([]);
-      } finally {
-        setLoadingStores(false);
-      }
-    };
-
-    // expone función por si luego quieres usarla
-    form.__mgLoadStoresByDept = loadStoresByDept;
-
-    deptEl.addEventListener("change", () => {
-      loadStoresByDept(deptEl.value || "");
     });
   };
 
@@ -271,7 +208,6 @@
       setFieldById(lngId, String(lng), true);
     };
 
-    // helpers para setear tienda en el select sin depender del departamento
     const ensureOption = (selectEl, value, label) => {
       if (!selectEl || !value) return false;
 
@@ -296,11 +232,7 @@
       return true;
     };
 
-    // IMPORTANTE: aquí solo seteamos la TIENDA
-    // porque el usuario aún no ha elegido dept/tienda
     const setRecommendedStore = async (storeItem) => {
-      // storeItem viene del backend con:
-      // { id, name, department, distance_km, value: "id|name", label: name }
       const raw = String(storeItem?.value || "");
       if (!raw) return;
 
@@ -310,14 +242,7 @@
 
       if (!storeId) return;
 
-      // como tu select principal maneja value=ID, seteamos ID
-      setSelectValue(storeEl, storeId, storeName);
-
-      // (OPCIONAL) si quieres setear dept SOLO si está vacío:
-      // if (storeItem?.department && !deptEl.value) {
-      //   deptEl.value = String(storeItem.department);
-      //   deptEl.dispatchEvent(new Event("change", { bubbles: true }));
-      // }
+      setSelectValue(form.querySelector('select[name="cot_store"]'), storeId, storeName);
     };
 
     const showNearestStores = async (lat, lng) => {
@@ -393,70 +318,43 @@
     };
 
     const requestGeo = async () => {
-      console.clear();
-      console.log("[MG_GEO] location.origin:", location.origin);
-      console.log("[MG_GEO] location.href:", location.href);
-
-      const hasGeo = !!navigator.geolocation;
-      console.log("[MG_GEO] navigator.geolocation exists:", hasGeo);
-
       let state = "unsupported";
       try {
         if (navigator.permissions?.query) {
           const st = await navigator.permissions.query({ name: "geolocation" });
           state = st?.state || "unknown";
-          console.log("[MG_GEO] permissions.query state:", state);
-          st.onchange = () => console.log("[MG_GEO] permissions state changed ->", st.state);
-        } else {
-          console.log("[MG_GEO] Permissions API not available");
         }
-      } catch (e) {
-        console.warn("[MG_GEO] permissions.query error:", e);
+      } catch {
         state = "error";
       }
 
       if (state === "denied") {
-        console.warn("[MG_GEO] Blocked by browser -> showing denied modal");
         openDeniedModal();
         return;
       }
 
-      console.log("[MG_GEO] Calling getCurrentPosition...");
       navigator.geolocation.getCurrentPosition(
         async (pos) => {
-          console.log("[MG_GEO] SUCCESS coords:", pos.coords);
           const { latitude, longitude } = pos.coords;
           setGeoHidden(latitude, longitude);
           await showNearestStores(latitude, longitude);
         },
         (err) => {
-          console.warn("[MG_GEO] ERROR:", err, "code:", err?.code, "message:", err?.message);
+          if (err?.code === 1) return openDeniedModal();
 
-          if (err?.code === 1) {
-            openDeniedModal();
-            return;
-          }
-
-          if (err?.code === 2) {
-            openGeoErrorModal(
+          if (err?.code === 2)
+            return openGeoErrorModal(
               "No se pudo obtener tu ubicación",
-              "Tu dispositivo/navegador no pudo determinar la ubicación. Verifica que la ubicación esté activada en tu sistema y vuelve a intentar."
+              "Tu dispositivo/navegador no pudo determinar la ubicación. Verifica que la ubicación esté activada y vuelve a intentar."
             );
-            return;
-          }
 
-          if (err?.code === 3) {
-            openGeoErrorModal(
+          if (err?.code === 3)
+            return openGeoErrorModal(
               "Tiempo de espera agotado",
-              "No se pudo obtener tu ubicación a tiempo. Intenta nuevamente o prueba con otra red."
+              "No se pudo obtener tu ubicación a tiempo. Intenta nuevamente."
             );
-            return;
-          }
 
-          openGeoErrorModal(
-            "No se pudo obtener tu ubicación",
-            "Ocurrió un error inesperado al obtener la ubicación. Intenta nuevamente."
-          );
+          openGeoErrorModal("No se pudo obtener tu ubicación", "Ocurrió un error inesperado. Intenta nuevamente.");
         },
         { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
       );
@@ -467,7 +365,6 @@
       requestGeo();
     });
   };
-
 
   /** =========================
    *  5) Bloque de cotización (tabs/steps/selección modelos/colores)
@@ -600,6 +497,7 @@
       const root = document.querySelector(sel);
       if (!root) return;
 
+      // Mantiene placeholder como "no seleccionable"
       makeFirstOptionPlaceholder(root.querySelector('select[name="cot_department"]'));
       makeFirstOptionPlaceholder(root.querySelector('select[name="cot_store"]'));
 
@@ -672,9 +570,7 @@
 
         root.__mgSelected = selected;
 
-        if (selected.colors && selected.colors.length) {
-          renderColorsStep1(root, selected.colors, pickColor);
-        }
+        if (selected.colors && selected.colors.length) renderColorsStep1(root, selected.colors, pickColor);
 
         applyLeftSummary(root, selected);
         fillCf7Hidden(selected);
@@ -682,7 +578,6 @@
       };
 
       if (cards[0]) selectCard(cards[0]);
-
       cards.forEach((btn) => btn.addEventListener("click", () => selectCard(btn)));
 
       tabs.forEach((btn) => {
@@ -731,14 +626,13 @@
   };
 
   /** =========================
-   *  6) Validaciones (primer click + en vivo)
+   *  6) Validaciones + Botón disabled mientras falte algo
    * ========================= */
   const initCotizaValidation = () => {
     const MAX_TRIES = 60;
     const TRY_EVERY = 250;
 
     const findForm = () => document.querySelector(".wpcf7 form");
-    const findActionsWrap = (form) => form?.querySelector(".geely-cotiza-actions") || null;
 
     const boot = (form) => {
       if (form.__mgValidationMounted) return true;
@@ -758,8 +652,13 @@
       const storeEl = form.querySelector('select[name="cot_store"]');
       const submitBtn = form.querySelector(".wpcf7-submit");
 
-      if (!docTypeEl || !docEl) {
-        console.warn("[MG_VALIDATE] No encontró docType/doc input aún.");
+      // Acceptance (si existe) -> para bloquear Cotizar hasta que acepte.
+      // CHANGE: lo incluimos en el "disabled" general.
+      const acceptanceChk =
+        form.querySelector('.wpcf7-acceptance input[type="checkbox"]') ||
+        form.querySelector('input[type="checkbox"][name*="accept"]');
+
+      if (!docTypeEl || !docEl || !submitBtn) {
         form.__mgValidationMounted = false;
         return false;
       }
@@ -793,12 +692,16 @@
         if (errEl) errEl.textContent = message || "";
       };
 
-      const setFieldError = (fieldEl, message) => {
+      // CHANGE: ahora setFieldError soporta modo silencioso (no pinta),
+      // para poder deshabilitar el botón sin ensuciar la UI mientras escribe.
+      const setFieldError = (fieldEl, message, silent = false) => {
+        if (silent) return !!message ? false : true;
         if (!showErrors) {
           if (!message) paintError(fieldEl, "");
-          return;
+          return !!message ? false : true;
         }
         paintError(fieldEl, message);
+        return !!message ? false : true;
       };
 
       const clearFieldError = (fieldEl) => paintError(fieldEl, "");
@@ -813,18 +716,18 @@
         if (v !== before) docEl.value = v;
       };
 
-      const validateDoc = () => {
+      const validateDoc = (silent = false) => {
         const t = docType();
         const v = (docEl.value || "").trim();
         const maxLen = getDocMaxLen();
 
-        if (!v) return (setFieldError(docEl, "Ingresa tu número de documento."), false);
-        if ((t === "DNI" || t === "RUC") && !/^\d+$/.test(v)) return (setFieldError(docEl, "Solo se permiten números."), false);
-        if (t === "DNI" && v.length !== 8) return (setFieldError(docEl, "DNI debe tener 8 dígitos."), false);
-        if (t === "RUC" && v.length !== 11) return (setFieldError(docEl, "RUC debe tener 11 dígitos."), false);
-        if (v.length > maxLen) return (setFieldError(docEl, `Máximo ${maxLen} caracteres.`), false);
+        if (!v) return setFieldError(docEl, "Ingresa tu número de documento.", silent);
+        if ((t === "DNI" || t === "RUC") && !/^\d+$/.test(v)) return setFieldError(docEl, "Solo se permiten números.", silent);
+        if (t === "DNI" && v.length !== 8) return setFieldError(docEl, "DNI debe tener 8 dígitos.", silent);
+        if (t === "RUC" && v.length !== 11) return setFieldError(docEl, "RUC debe tener 11 dígitos.", silent);
+        if (v.length > maxLen) return setFieldError(docEl, `Máximo ${maxLen} caracteres.`, silent);
 
-        setFieldError(docEl, "");
+        setFieldError(docEl, "", silent);
         return true;
       };
 
@@ -835,60 +738,108 @@
         if (v !== before) el.value = v;
       };
 
-      const validateNameField = (el, label) => {
+      const validateNameField = (el, label, silent = false) => {
         if (!el) return true;
         const v = (el.value || "").trim();
-        if (!v) return (setFieldError(el, `Ingresa ${label}.`), false);
-        setFieldError(el, "");
+        if (!v) return setFieldError(el, `Ingresa ${label}.`, silent);
+        setFieldError(el, "", silent);
         return true;
       };
 
+      // CHANGE: Celular SOLO 9 dígitos y debe empezar con 9 (sin +51)
       const sanitizePhone = () => {
         if (!phoneEl) return;
         const before = phoneEl.value || "";
-        let v = before.replace(/[^\d+]/g, "");
-        if (v.includes("+")) {
-          v = v.replace(/\+/g, "");
-          v = "+" + v;
-        }
-        if (/^51\d/.test(v)) v = "+" + v;
-        if (v.length > 13) v = v.slice(0, 13);
+        let v = before.replace(/\D/g, ""); // solo dígitos
+        if (v.length > 9) v = v.slice(0, 9);
         if (v !== before) phoneEl.value = v;
+        phoneEl.setAttribute("maxlength", "9");
+        phoneEl.setAttribute("inputmode", "numeric");
       };
 
-      const validatePhone = () => {
+      // CHANGE: regla nueva del celular
+      const validatePhone = (silent = false) => {
         if (!phoneEl) return true;
         const v = (phoneEl.value || "").trim();
-        if (!v) return (setFieldError(phoneEl, "Ingresa tu celular."), false);
-        if (!/^\+51\d{9}$/.test(v)) return (setFieldError(phoneEl, "Celular precisa del +51 y 9 numeros."), false);
-        setFieldError(phoneEl, "");
+        if (!v) return setFieldError(phoneEl, "Ingresa tu celular.", silent);
+        if (!/^\d{9}$/.test(v)) return setFieldError(phoneEl, "Celular debe tener 9 dígitos.", silent);
+        if (!v.startsWith("9")) return setFieldError(phoneEl, "Celular debe iniciar con 9.", silent);
+        setFieldError(phoneEl, "", silent);
         return true;
       };
 
-      const validateEmail = () => {
+      const validateEmail = (silent = false) => {
         if (!emailEl) return true;
         const v = (emailEl.value || "").trim();
         const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-        if (!v) return (setFieldError(emailEl, "Ingresa tu email."), false);
-        if (!emailOk) return (setFieldError(emailEl, "Ingresa un email válido."), false);
-        setFieldError(emailEl, "");
+        if (!v) return setFieldError(emailEl, "Ingresa tu email.", silent);
+        if (!emailOk) return setFieldError(emailEl, "Ingresa un email válido.", silent);
+        setFieldError(emailEl, "", silent);
         return true;
       };
 
-      const validateDept = () => {
+      const validateDept = (silent = false) => {
         if (!deptEl) return true;
         const v = (deptEl.value || "").trim();
-        if (!v || v.toLowerCase().includes("selecciona")) return (setFieldError(deptEl, "Selecciona un departamento."), false);
-        setFieldError(deptEl, "");
+        if (!v) return setFieldError(deptEl, "Selecciona un departamento.", silent);
+        if (v.toLowerCase().includes("selecciona")) return setFieldError(deptEl, "Selecciona un departamento.", silent);
+        setFieldError(deptEl, "", silent);
         return true;
       };
 
-      const validateStore = () => {
+      const validateStore = (silent = false) => {
         if (!storeEl) return true;
         const v = (storeEl.value || "").trim();
-        if (!v || v.toLowerCase().includes("selecciona")) return (setFieldError(storeEl, "Selecciona una tienda."), false);
-        setFieldError(storeEl, "");
+        if (!v) return setFieldError(storeEl, "Selecciona una tienda.", silent);
+        if (v.toLowerCase().includes("selecciona")) return setFieldError(storeEl, "Selecciona una tienda.", silent);
+        setFieldError(storeEl, "", silent);
         return true;
+      };
+
+      const validateAcceptance = (silent = false) => {
+        if (!acceptanceChk) return true;
+        const ok = !!acceptanceChk.checked;
+        if (!ok) return silent ? false : false; // no pintamos error, CF7 ya lo hace
+        return true;
+      };
+
+      // CHANGE: valida en modo silencioso para controlar el disabled del botón
+      const isAllValidSilent = () => {
+        sanitizeDoc();
+        sanitizePhone();
+        sanitizeNameField(namesEl);
+        sanitizeNameField(lastnamesEl);
+
+        const ok1 = validateNameField(namesEl, "tus nombres", true);
+        const ok2 = validateNameField(lastnamesEl, "tus apellidos", true);
+        const ok3 = validateDoc(true);
+        const ok4 = validatePhone(true);
+        const ok5 = validateEmail(true);
+        const ok6 = validateDept(true);
+        const ok7 = validateStore(true);
+        const ok8 = validateAcceptance(true);
+
+        return ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8;
+      };
+
+      // CHANGE: deshabilita/ habilita visualmente el botón
+      const syncSubmitDisabled = () => {
+        if (!submitBtn) return;
+
+        const allOk = isAllValidSilent();
+
+        // Solo forzamos "disabled=true" cuando NO está ok.
+        // Cuando está ok, NO forzamos enabled, porque CF7 podría tenerlo disabled (acceptance u otra regla).
+        if (!allOk) {
+          submitBtn.disabled = true;
+          submitBtn.setAttribute("aria-disabled", "true");
+          submitBtn.classList.add("is-disabled-by-mg");
+        } else {
+          // Si CF7 lo tiene disabled por aceptación u otra cosa, lo respetamos.
+          // Solo quitamos nuestras marcas visuales.
+          submitBtn.classList.remove("is-disabled-by-mg");
+          submitBtn.removeAttribute("aria-disabled");
+        }
       };
 
       const validateAllCustom = () => {
@@ -897,126 +848,105 @@
         sanitizeNameField(namesEl);
         sanitizeNameField(lastnamesEl);
 
-        const ok1 = validateNameField(namesEl, "tus nombres");
-        const ok2 = validateNameField(lastnamesEl, "tus apellidos");
-        const ok3 = validateDoc();
-        const ok4 = validatePhone();
-        const ok5 = validateEmail();
-        const ok6 = validateDept();
-        const ok7 = validateStore();
+        const ok1 = validateNameField(namesEl, "tus nombres", false);
+        const ok2 = validateNameField(lastnamesEl, "tus apellidos", false);
+        const ok3 = validateDoc(false);
+        const ok4 = validatePhone(false);
+        const ok5 = validateEmail(false);
+        const ok6 = validateDept(false);
+        const ok7 = validateStore(false);
+        const ok8 = validateAcceptance(false);
 
-        return ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7;
+        return ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8;
       };
 
       form.__mgValidateAll = () => {
         showErrors = true;
-        return validateAllCustom();
+        const ok = validateAllCustom();
+        syncSubmitDisabled(); // CHANGE: refresca disabled luego de mostrar errores
+        return ok;
       };
 
+      // Eventos (input/change) + refresco del disabled
       docEl.addEventListener("input", () => {
         sanitizeDoc();
-        if (showErrors) validateDoc();
+        if (showErrors) validateDoc(false);
+        else clearFieldError(docEl);
+        syncSubmitDisabled(); // CHANGE
       });
+
       docTypeEl.addEventListener("change", () => {
         sanitizeDoc();
-        if (showErrors) validateDoc();
+        if (showErrors) validateDoc(false);
+        syncSubmitDisabled(); // CHANGE
       });
 
       namesEl?.addEventListener("input", () => {
         sanitizeNameField(namesEl);
-        if (showErrors) validateNameField(namesEl, "tus nombres");
+        if (showErrors) validateNameField(namesEl, "tus nombres", false);
         else clearFieldError(namesEl);
+        syncSubmitDisabled(); // CHANGE
       });
+
       lastnamesEl?.addEventListener("input", () => {
         sanitizeNameField(lastnamesEl);
-        if (showErrors) validateNameField(lastnamesEl, "tus apellidos");
+        if (showErrors) validateNameField(lastnamesEl, "tus apellidos", false);
         else clearFieldError(lastnamesEl);
+        syncSubmitDisabled(); // CHANGE
       });
 
       phoneEl?.addEventListener("input", () => {
         sanitizePhone();
-        if (showErrors) validatePhone();
+        if (showErrors) validatePhone(false);
         else clearFieldError(phoneEl);
+        syncSubmitDisabled(); // CHANGE
       });
+
       emailEl?.addEventListener("input", () => {
-        if (showErrors) validateEmail();
+        if (showErrors) validateEmail(false);
         else clearFieldError(emailEl);
+        syncSubmitDisabled(); // CHANGE
       });
 
       deptEl?.addEventListener("change", () => {
-        if (showErrors) validateDept();
+        if (showErrors) validateDept(false);
         else clearFieldError(deptEl);
+        syncSubmitDisabled(); // CHANGE
       });
+
       storeEl?.addEventListener("change", () => {
-        if (showErrors) validateStore();
+        if (showErrors) validateStore(false);
         else clearFieldError(storeEl);
+        syncSubmitDisabled(); // CHANGE
       });
 
-      const syncPointerEvents = () => {
-        const actionsWrap = findActionsWrap(form);
-        if (!actionsWrap || !submitBtn) return;
-
-        const isDisabled = submitBtn.disabled || submitBtn.getAttribute("disabled") !== null;
-
-        if (isDisabled) {
-          actionsWrap.style.pointerEvents = "auto";
-          submitBtn.style.pointerEvents = "none";
-        } else {
-          actionsWrap.style.pointerEvents = "";
-          submitBtn.style.pointerEvents = "";
-        }
-      };
-
-      const attachClickHandler = () => {
-        const actionsWrap = findActionsWrap(form);
-        if (!actionsWrap) return false;
-        if (actionsWrap.__mgClickMounted) return true;
-        actionsWrap.__mgClickMounted = true;
-
-        syncPointerEvents();
-
-        actionsWrap.addEventListener(
-          "click",
-          (e) => {
-            showErrors = true;
-
-            const ok = validateAllCustom();
-            if (!ok) {
-              e.preventDefault();
-              e.stopPropagation();
-              const first = form.querySelector(".is-invalid");
-              first?.scrollIntoView({ behavior: "smooth", block: "center" });
-              first?.focus?.();
-              return;
-            }
-
-            if (submitBtn && !submitBtn.disabled) return;
-
-            console.warn("[MG_VALIDATE] Todo OK, pero CF7 mantiene el botón disabled (acceptance u otra regla).");
-          },
-          true
-        );
-
-        return true;
-      };
-
-      attachClickHandler();
-
-      if (submitBtn && !submitBtn.__mgBtnObserved) {
-        submitBtn.__mgBtnObserved = true;
-        const btnObs = new MutationObserver(() => syncPointerEvents());
-        btnObs.observe(submitBtn, { attributes: true, attributeFilter: ["disabled", "class"] });
-      }
-
-      const obs = new MutationObserver(() => {
-        attachClickHandler();
-        syncPointerEvents();
+      acceptanceChk?.addEventListener("change", () => {
+        syncSubmitDisabled(); // CHANGE
       });
-      obs.observe(form, { childList: true, subtree: true, attributes: true });
 
+      // Click en submit: si algo falla, bloquea y muestra el primer error
+      submitBtn.addEventListener(
+        "click",
+        (e) => {
+          showErrors = true;
+          const ok = validateAllCustom();
+          syncSubmitDisabled(); // CHANGE
+
+          if (!ok) {
+            e.preventDefault();
+            e.stopPropagation();
+            const first = form.querySelector(".is-invalid");
+            first?.scrollIntoView({ behavior: "smooth", block: "center" });
+            first?.focus?.();
+          }
+        },
+        true
+      );
+
+      // Inicial
       sanitizeDoc();
       sanitizePhone();
-      syncPointerEvents();
+      syncSubmitDisabled(); // CHANGE
 
       return true;
     };
@@ -1025,13 +955,10 @@
     const timer = setInterval(() => {
       tries++;
       const form = findForm();
-      const actions = findActionsWrap(form);
-
-      if (form && actions) {
+      if (form) {
         const ok = boot(form);
         if (ok) clearInterval(timer);
       }
-
       if (tries >= MAX_TRIES) {
         clearInterval(timer);
         console.warn("[MG_VALIDATE] No se pudo montar en el tiempo esperado.");
@@ -1040,8 +967,8 @@
   };
 
   /** =========================
- *  7) Modal: Política de Datos
- * ========================= */
+   *  7) Modal: Política de Datos
+   * ========================= */
   const initDataPolicyModal = () => {
     const roots = window.__MG_QUOTE_BLOCKS__ || [];
     if (!roots.length) return;
@@ -1064,52 +991,33 @@
       const root = document.querySelector(sel);
       if (!root) return;
 
-      // El modal vive en el DOM del bloque (lo pegaste en el PHP)
       const modal = root.querySelector("[data-data-policy-modal]") || document.querySelector("[data-data-policy-modal]");
       if (!modal) return;
 
-      // Cierra con botones overlay / X / Cerrar
       modal.querySelectorAll("[data-policy-close]").forEach((btn) => {
         btn.addEventListener("click", () => close(modal));
       });
 
-      // Cierra con ESC
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") close(modal);
       });
 
-      /**
-       * 1) Caso ideal: tu link tiene clase o data-attr
-       *    Ejemplo: <a href="#" class="mg-open-data-policy">Política...</a>
-       */
       root.addEventListener("click", (e) => {
-        const a =
-          e.target.closest(".mg-open-data-policy") ||
-          e.target.closest("[data-open-data-policy]");
-
+        const a = e.target.closest(".mg-open-data-policy") || e.target.closest("[data-open-data-policy]");
         if (a) {
           e.preventDefault();
           open(modal);
         }
       });
 
-      /**
-       * 2) Caso “sin tocar CF7”: buscamos el link por texto (fallback)
-       *    (Por si CF7 te genera el link sin clases)
-       */
       root.addEventListener("click", (e) => {
         const link = e.target.closest("a");
         if (!link) return;
 
         const txt = (link.textContent || "").toLowerCase();
-        const looksLikePolicy =
-          txt.includes("política") &&
-          (txt.includes("datos") || txt.includes("protección"));
-
+        const looksLikePolicy = txt.includes("política") && (txt.includes("datos") || txt.includes("protección"));
         if (!looksLikePolicy) return;
 
-        // si el link es externo real, NO lo bloquees
-        // aquí solo abrimos modal si es anchor "#" o vacío
         const href = (link.getAttribute("href") || "").trim();
         const isFake = href === "" || href === "#" || href.startsWith("javascript:");
 
@@ -1128,7 +1036,6 @@
     fillTrackingHidden();
     initCf7Logs();
     initQuoteBlocks();
-    initDeptStoreDynamic();
     initGeo();
     initDataPolicyModal();
     initCotizaValidation();

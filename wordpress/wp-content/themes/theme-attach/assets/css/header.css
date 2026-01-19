@@ -398,7 +398,6 @@ header.site-header.wp-block-template-part {
   color: #fff;
 }
 
-.mg-header--overlay img,
 .mg-header--overlay .custom-logo {
   filter: invert(1) brightness(2);
 }
