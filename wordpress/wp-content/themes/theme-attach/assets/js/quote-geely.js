@@ -110,6 +110,91 @@
   };
 
   /** =========================
+   *  3) Carga dinámica: Tiendas por Departamento
+   *  FIX: al cambiar departamento, TIENDA se resetea a placeholder (sin valor)
+   * ========================= */
+  const initDeptStoreDynamic = () => {
+    const form = document.querySelector(".wpcf7 form");
+    if (!form) return;
+
+    const deptEl = form.querySelector('select[name="cot_department"]');
+    const storeEl = form.querySelector('select[name="cot_store"]');
+    if (!deptEl || !storeEl) return;
+
+    const PLACEHOLDER_TEXT = "Selecciona una opción";
+
+    const setLoadingStores = (loading) => {
+      storeEl.disabled = !!loading;
+      storeEl.classList.toggle("is-loading", !!loading);
+    };
+
+    const resetStoreToPlaceholder = () => {
+      storeEl.innerHTML = "";
+
+      const ph = document.createElement("option");
+      ph.value = "";
+      ph.textContent = PLACEHOLDER_TEXT;
+      ph.disabled = true;
+      ph.hidden = true;
+      ph.selected = true;
+
+      storeEl.appendChild(ph);
+
+      // fuerza value vacío + dispara eventos para validación/botón
+      storeEl.value = "";
+      storeEl.dispatchEvent(new Event("change", { bubbles: true }));
+      storeEl.dispatchEvent(new Event("input", { bubbles: true }));
+    };
+
+    const fillStoreOptions = (items) => {
+      // primero resetea
+      resetStoreToPlaceholder();
+
+      // luego agrega opciones
+      (items || []).forEach((it) => {
+        const opt = document.createElement("option");
+        opt.value = (it.id ?? it.value ?? "");       // ✅ SOLO ID
+        opt.textContent = it.label || it.name || "";
+        if (!opt.value) return;
+        storeEl.appendChild(opt);
+      });
+    };
+
+    const loadStoresByDept = async (deptValue) => {
+      if (!deptValue) {
+        resetStoreToPlaceholder();
+        return;
+      }
+
+      resetStoreToPlaceholder();
+
+      setLoadingStores(true);
+
+      try {
+        const res = await ajaxPost("mg_quote_get_stores", { department: deptValue });
+        console.log("[MG_QUOTE] stores res:", res);
+
+        const items = res?.success ? (res.data?.items || []) : [];
+        fillStoreOptions(items);
+      } catch (err) {
+        console.warn("[MG_QUOTE] Error loading stores:", err);
+        resetStoreToPlaceholder();
+      } finally {
+        setLoadingStores(false);
+      }
+    };
+
+    // expone función por si luego quieres usarla
+    form.__mgLoadStoresByDept = loadStoresByDept;
+
+    deptEl.addEventListener("change", () => {
+      loadStoresByDept(deptEl.value || "");
+    });
+
+    resetStoreToPlaceholder();
+  };
+
+  /** =========================
    *  4) GEO + recomendación tienda cercana
    * ========================= */
   const initGeo = () => {
@@ -233,17 +318,18 @@
     };
 
     const setRecommendedStore = async (storeItem) => {
-      const raw = String(storeItem?.value || "");
+      const raw = String(storeItem?.value || storeItem?.id || "");
       if (!raw) return;
 
-      const [id, name] = raw.includes("|") ? raw.split("|") : [raw, storeItem?.name || ""];
-      const storeId = (id || "").trim();
-      const storeName = (name || storeItem?.name || storeItem?.label || "").trim();
+      // ahora raw debe ser SOLO ID
+      const storeId = raw.trim();
+      const storeName = String(storeItem?.name || storeItem?.label || "").trim();
 
       if (!storeId) return;
 
       setSelectValue(form.querySelector('select[name="cot_store"]'), storeId, storeName);
     };
+
 
     const showNearestStores = async (lat, lng) => {
       const box = ensureNearStoresBox();
@@ -706,7 +792,7 @@
       };
 
       /**
-       * ✅ Cambio clave:
+       * Cambio clave:
        * - Antes: si silent==false pero showErrors==false => limpiabas el error.
        * - Ahora:
        *    - Si showErrors==true: siempre muestra.
@@ -933,7 +1019,7 @@
           if (t === docEl) {
             sanitizeDoc();
             if (showErrors) validateDoc(false);
-            else validateDoc(false); // ✅ si ya escribió algo inválido, que se vea
+            else validateDoc(false); // si ya escribió algo inválido, que se vea
           }
           if (t === namesEl) {
             sanitizeNameField(namesEl);
@@ -947,7 +1033,6 @@
           }
           if (t === phoneEl) {
             sanitizePhone();
-            // ✅ aquí está tu fix: aunque showErrors=false, si el número es inválido se muestra
             validatePhone(false);
           }
           if (t === emailEl) {
@@ -1008,8 +1093,6 @@
       // Inicial
       sanitizeDoc();
       sanitizePhone();
-
-      // ✅ importante: si llega prellenado (autofill), valida
       validatePhone(false);
 
       scheduleSync();
@@ -1104,6 +1187,7 @@
     fillTrackingHidden();
     initCf7Logs();
     initQuoteBlocks();
+    initDeptStoreDynamic();
     initGeo();
     initDataPolicyModal();
     initCotizaValidation();

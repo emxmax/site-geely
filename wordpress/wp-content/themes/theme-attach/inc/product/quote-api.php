@@ -437,7 +437,7 @@ add_action('wpcf7_before_send_mail', function ($contact_form) {
     'nu_celular' => $cot_phone,
     'no_correo'  => $cot_email,
 
-    // ✅ GEO dinámico desde tienda -> regiones/provincias/comunas
+    // GEO dinámico desde tienda -> regiones/provincias/comunas
     'Coddpto' => (string)$Coddpto,
     'Codprov' => (string)$Codprov,
     'Coddist' => (string)$Coddist,
@@ -504,7 +504,7 @@ add_action('wpcf7_before_send_mail', function ($contact_form) {
       'CodigoVenta' => $codigo_venta_de_la_tienda,
       'co_canal' => $co_canal,
 
-      // ✅ debug GEO
+      // debug GEO
       'store.RegionId' => (int)$store_region_id,
       'store.ProvinciaId' => (int)$store_provincia_id,
       'store.ComunaId' => (int)$store_comuna_id,
@@ -690,7 +690,7 @@ add_action('wpcf7_mail_sent', function ($contact_form) {
   // 1) Crear CPT
   // =========================
   $post_id = wp_insert_post([
-    'post_type'   => 'cotizacion',  // ✅ tu slug real
+    'post_type'   => 'cotizacion',
     'post_status' => 'publish',
     'post_title'  => "Cotización - {$cot_names} {$cot_lastnames} ({$cot_product_title})",
   ], true);
@@ -1038,3 +1038,149 @@ if (!function_exists('mg_quote_ajax_nearest_stores')) {
 }
 add_action('wp_ajax_mg_quote_nearest_stores', 'mg_quote_ajax_nearest_stores');
 add_action('wp_ajax_nopriv_mg_quote_nearest_stores', 'mg_quote_ajax_nearest_stores');
+
+// ==============================
+// AJAX: tiendas por departamento (REGIONID) - value SOLO ID
+// ==============================
+if (!function_exists('mg_quote_ajax_get_stores_by_department')) {
+  function mg_quote_ajax_get_stores_by_department()
+  {
+    if (!check_ajax_referer('mg_quote_ajax', 'nonce', false)) {
+      wp_send_json_error(['message' => 'Nonce inválido'], 403);
+    }
+
+    global $wpdb;
+
+    $dept_raw = isset($_POST['department']) ? sanitize_text_field(wp_unslash($_POST['department'])) : '';
+    $dept_raw = trim($dept_raw);
+
+    // El select envía RegionId => int
+    $regionId = (int) preg_replace('/[^0-9]/', '', $dept_raw);
+    if ($regionId <= 0) {
+      wp_send_json_success(['items' => []]);
+    }
+
+    if (!function_exists('mg_quote_table_exists') || !mg_quote_table_exists('bp_tiendas')) {
+      wp_send_json_success(['items' => []]);
+    }
+
+    // Detectar columnas reales en bp_tiendas
+    $wpdb->hide_errors();
+    $wpdb->suppress_errors(true);
+    $cols = $wpdb->get_results("SHOW COLUMNS FROM `bp_tiendas`", ARRAY_A);
+    $wpdb->suppress_errors(false);
+
+    $fields = array_map(function ($c) {
+      return (string)($c['Field'] ?? '');
+    }, (array)$cols);
+
+    $has = function ($f) use ($fields) {
+      return in_array($f, $fields, true);
+    };
+
+    // Elegir expresión de nombre (prioridad: NombreComercial > Tienda > Nombre)
+    $nameExpr = "''";
+    if ($has('NombreComercial') && $has('Tienda')) {
+      $nameExpr = "COALESCE(NULLIF(TRIM(t.`NombreComercial`),''), NULLIF(TRIM(t.`Tienda`),''))";
+    } elseif ($has('NombreComercial')) {
+      $nameExpr = "NULLIF(TRIM(t.`NombreComercial`),'')";
+    } elseif ($has('Tienda')) {
+      $nameExpr = "NULLIF(TRIM(t.`Tienda`),'')";
+    } elseif ($has('Nombre')) {
+      $nameExpr = "NULLIF(TRIM(t.`Nombre`),'')";
+    }
+
+    $items = [];
+
+    // =========================================
+    // Caso 1: bp_tiendas ya tiene RegionId
+    // =========================================
+    if ($has('RegionId')) {
+      $sql = $wpdb->prepare(
+        "SELECT
+           t.`TiendaId` AS id,
+           {$nameExpr} AS name
+         FROM `bp_tiendas` t
+         WHERE t.`RegionId` = %d
+         ORDER BY name ASC",
+        $regionId
+      );
+
+      $wpdb->hide_errors();
+      $wpdb->suppress_errors(true);
+      $rows = $wpdb->get_results($sql, ARRAY_A);
+      $wpdb->suppress_errors(false);
+
+      foreach ((array)$rows as $r) {
+        $id = (string)((int)($r['id'] ?? 0));
+        $name = trim((string)($r['name'] ?? ''));
+
+        if ($id === '0' || $name === '') continue;
+
+        $items[] = [
+          'id'    => $id,
+          'name'  => $name,
+          'label' => $name,
+          'value' => $id, // SOLO ID (sin pipes)
+        ];
+      }
+
+      wp_send_json_success(['items' => $items]);
+    }
+
+    // =========================================
+    // Caso 2: fallback con JOINS (si NO hay RegionId en bp_tiendas)
+    // =========================================
+    if (
+      !mg_quote_table_exists('bp_comunas') ||
+      !mg_quote_table_exists('bp_provincias') ||
+      !mg_quote_table_exists('bp_regiones')
+    ) {
+      wp_send_json_success(['items' => []]);
+    }
+
+    // Necesitamos ComunaId en bp_tiendas para poder joinear
+    if (!$has('ComunaId')) {
+      wp_send_json_success(['items' => []]);
+    }
+
+    $sql = $wpdb->prepare(
+      "SELECT
+         t.`TiendaId` AS id,
+         {$nameExpr} AS name
+       FROM `bp_tiendas` t
+       INNER JOIN `bp_comunas` c ON c.`ComunaId` = t.`ComunaId`
+       INNER JOIN `bp_provincias` p ON p.`ProvinciaId` = c.`ProvinciaId`
+       INNER JOIN `bp_regiones` r ON r.`RegionId` = p.`RegionId`
+       WHERE r.`RegionId` = %d
+       ORDER BY name ASC",
+      $regionId
+    );
+
+    $wpdb->hide_errors();
+    $wpdb->suppress_errors(true);
+    $rows = $wpdb->get_results($sql, ARRAY_A);
+    $wpdb->suppress_errors(false);
+
+    foreach ((array)$rows as $r) {
+      $id = (string)((int)($r['id'] ?? 0));
+      $name = trim((string)($r['name'] ?? ''));
+
+      if ($id === '0' || $name === '') continue;
+
+      $items[] = [
+        'id'    => $id,
+        'name'  => $name,
+        'label' => $name,
+        'value' => $id, // SOLO ID (sin pipes)
+      ];
+    }
+
+    wp_send_json_success(['items' => $items]);
+  }
+}
+
+if (!has_action('wp_ajax_mg_quote_get_stores')) {
+  add_action('wp_ajax_mg_quote_get_stores', 'mg_quote_ajax_get_stores_by_department');
+  add_action('wp_ajax_nopriv_mg_quote_get_stores', 'mg_quote_ajax_get_stores_by_department');
+}
