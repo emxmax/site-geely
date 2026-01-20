@@ -110,7 +110,7 @@
   }
 
   .faq-item__question {
-    padding: 24px 24px 16px;
+    padding: 24px 0px 16px;
   }
 
   .faq-item__question-text {
@@ -118,7 +118,7 @@
   }
 
   .faq-item__answer {
-    padding: 0 24px 24px;
+    padding: 0 0px 24px;
   }
 
   .faq-item__answer p {

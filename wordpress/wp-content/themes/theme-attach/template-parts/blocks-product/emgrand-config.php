@@ -295,8 +295,7 @@ if (! function_exists('emg_get_file_url')) {
 
                                             data-autoplay="0"
                                             data-full-screen="0"
-                                            data-mouse-wheel-step="1"
-                                            >
+                                            data-mouse-wheel-step="1">
                                         </div>
                                     <?php elseif ($img_url) : ?>
                                         <!-- Fallback: imagen estática -->
@@ -350,21 +349,23 @@ if (! function_exists('emg_get_file_url')) {
                                     <p class="emg-config__price-label">
                                         <?php echo esc_html($price_label); ?>
                                     </p>
+
                                     <p class="emg-config__price-line">
                                         <?php if ($price_usd) : ?>
                                             <span class="emg-config__price-usd">
-                                                USD <?php echo esc_html($price_usd); ?>
+                                                USD <?php echo esc_html(number_format((float)$price_usd, 0, '.', ',')); ?>
                                                 <span class="emg-config__price-or">o</span>
                                             </span>
                                         <?php endif; ?>
 
                                         <?php if ($price_local) : ?>
                                             <span class="emg-config__price-local">
-                                                PEN <?php echo esc_html($price_local); ?>
+                                                PEN <?php echo esc_html(number_format((float)$price_local, 0, '.', ',')); ?>
                                             </span>
                                         <?php endif; ?>
                                     </p>
                                 </div>
+
 
                                 <div class="emg-config__specs">
                                     <?php if ($wheels_size || $wheels_material) : ?>

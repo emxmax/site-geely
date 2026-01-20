@@ -91,7 +91,9 @@ $uid = 'exp-' . uniqid();
             src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-arrow.png'); ?>"
             alt="Prev">
         </button>
+
         <div class="exp-carousel__pagination"></div>
+
         <button class="exp-carousel__nav exp-carousel__nav--next" type="button" aria-label="Siguiente">
           <img
             src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-arrow.png'); ?>"

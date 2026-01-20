@@ -72,11 +72,14 @@ $payload = [
     <?php endif; ?>
 
     <div class="mf-card__body">
-        <div class="mf-card__label"><?php echo esc_html($c['label']); ?></div>
+        <div class="mf-card__label">
+            <?php echo esc_html(!empty($c['label']) ? $c['label'] : 'Precio desde'); ?>
+        </div>
+
         <div class="mf-card__prices">
-            <span class="mf-card__usd">USD <?php echo esc_html($c['usd']); ?></span>
+            <span class="mf-card__usd">USD <?php echo esc_html(number_format((float)$c['usd'], 0, '.', ',')); ?></span>
             <span class="mf-card__dot">o</span>
-            <span class="mf-card__local">PEN <?php echo esc_html($c['local']); ?></span>
+            <span class="mf-card__local">PEN <?php echo esc_html(number_format((float)$c['local'], 0, '.', ',')); ?></span>
         </div>
     </div>
 
