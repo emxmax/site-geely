@@ -819,85 +819,94 @@ add_filter('wpcf7_form_tag', function ($tag) {
     $values = [''];
     $labels = ['Selecciona una opción'];
 
-    if (mg_quote_table_exists('bp_regiones')) {
-      $cols = $get_columns('bp_regiones');
-      $colId   = $pick_first_existing($cols, ['RegionId']);
-      $colName = $pick_first_existing($cols, ['Descripcion']);
+    // Validaciones mínimas de tablas
+    if (mg_quote_table_exists('bp_regiones') && mg_quote_table_exists('bp_tiendas')) {
+
+      $colsReg = $get_columns('bp_regiones');
+      $colId   = $pick_first_existing($colsReg, ['RegionId']);
+      $colName = $pick_first_existing($colsReg, ['Descripcion']);
+
+      // columnas bp_tiendas para decidir si existe RegionId o toca fallback
+      $colsStores = $get_columns('bp_tiendas');
+      $storesHasRegionId = in_array('RegionId', $colsStores, true);
+
+      // opcional: filtrar solo tiendas activas si existe Activo
+      $storesHasActivo = in_array('Activo', $colsStores, true);
+      $storesActivoCond = $storesHasActivo ? " AND (t.`Activo` = 1 OR t.`Activo` IS NULL)" : "";
 
       if ($colId && $colName) {
-        $wpdb->hide_errors();
-        $wpdb->suppress_errors(true);
 
-        $rows = $wpdb->get_results(
-          "SELECT `$colId` AS code, `$colName` AS name
-           FROM `bp_regiones`
-           ORDER BY `$colName` ASC",
-          ARRAY_A
-        );
+        // ==========================
+        // Caso 1: bp_tiendas tiene RegionId
+        // ==========================
+        if ($storesHasRegionId) {
+          $sql = "
+          SELECT r.`$colId` AS code, r.`$colName` AS name
+          FROM `bp_regiones` r
+          WHERE EXISTS (
+            SELECT 1
+            FROM `bp_tiendas` t
+            WHERE t.`RegionId` = r.`$colId`
+            $storesActivoCond
+          )
+          ORDER BY r.`$colName` ASC
+        ";
 
-        $wpdb->suppress_errors(false);
+          $wpdb->hide_errors();
+          $wpdb->suppress_errors(true);
+          $rows = $wpdb->get_results($sql, ARRAY_A);
+          $wpdb->suppress_errors(false);
 
-        foreach ((array)$rows as $r) {
-          $code = trim((string)($r['code'] ?? ''));
-          $lab  = trim((string)($r['name'] ?? ''));
-          if ($code === '' || $lab === '') continue;
-          $values[] = $code;
-          $labels[] = $lab;
+          foreach ((array)$rows as $r) {
+            $code = trim((string)($r['code'] ?? ''));
+            $lab  = trim((string)($r['name'] ?? ''));
+            if ($code === '' || $lab === '') continue;
+            $values[] = $code;
+            $labels[] = $lab;
+          }
         }
-      }
-    }
 
-    $ensure_placeholder($values, $labels);
+        // ==========================
+        // Caso 2: fallback sin RegionId en bp_tiendas
+        // ==========================
+        else {
+          // Requiere tablas intermedias y ComunaId en tiendas
+          $storesHasComunaId = in_array('ComunaId', $colsStores, true);
 
-    $set_prop('raw_values', $values);
-    $set_prop('values', $values);
-    $set_prop('labels', $labels);
+          if (
+            $storesHasComunaId &&
+            mg_quote_table_exists('bp_comunas') &&
+            mg_quote_table_exists('bp_provincias') &&
+            mg_quote_table_exists('bp_regiones')
+          ) {
 
-    if (class_exists('WPCF7_Pipes')) $set_prop('pipes', new WPCF7_Pipes($values));
+            $sql = "
+            SELECT r.`$colId` AS code, r.`$colName` AS name
+            FROM `bp_regiones` r
+            WHERE EXISTS (
+              SELECT 1
+              FROM `bp_tiendas` t
+              INNER JOIN `bp_comunas` c ON c.`ComunaId` = t.`ComunaId`
+              INNER JOIN `bp_provincias` p ON p.`ProvinciaId` = c.`ProvinciaId`
+              WHERE p.`RegionId` = r.`$colId`
+              $storesActivoCond
+            )
+            ORDER BY r.`$colName` ASC
+          ";
 
-    return $tag;
-  }
+            $wpdb->hide_errors();
+            $wpdb->suppress_errors(true);
+            $rows = $wpdb->get_results($sql, ARRAY_A);
+            $wpdb->suppress_errors(false);
 
-  /** TIENDA: bp_tiendas */
-  if ($name === 'cot_store') {
-    $values = [''];
-    $labels = ['Selecciona una opción'];
-
-    if (mg_quote_table_exists('bp_tiendas')) {
-      $cols = $get_columns('bp_tiendas');
-
-      $colId   = $pick_first_existing($cols, ['TiendaId']);
-      $colName = $pick_first_existing($cols, ['Tienda', 'NombreComercial']);
-
-      $hasActivo = in_array('Activo', $cols, true);
-      $hasOrden  = in_array('TiendaOrden', $cols, true);
-
-      if ($colId && $colName) {
-        $where = $hasActivo ? "WHERE (`Activo` = 1 OR `Activo` IS NULL)" : "";
-        $order = $hasOrden
-          ? "ORDER BY (CASE WHEN `TiendaOrden` IS NULL THEN 999999 ELSE `TiendaOrden` END) ASC, `$colName` ASC"
-          : "ORDER BY `$colName` ASC";
-
-        $wpdb->hide_errors();
-        $wpdb->suppress_errors(true);
-
-        $rows = $wpdb->get_results(
-          "SELECT `$colId` AS id, `$colName` AS name
-           FROM `bp_tiendas`
-           $where
-           $order",
-          ARRAY_A
-        );
-
-        $wpdb->suppress_errors(false);
-
-        foreach ((array)$rows as $r) {
-          $id  = trim((string)($r['id'] ?? ''));
-          $lab = trim((string)($r['name'] ?? ''));
-          if ($id === '' || $lab === '') continue;
-
-          $values[] = $id;   // SOLO ID
-          $labels[] = $lab;
+            foreach ((array)$rows as $r) {
+              $code = trim((string)($r['code'] ?? ''));
+              $lab  = trim((string)($r['name'] ?? ''));
+              if ($code === '' || $lab === '') continue;
+              $values[] = $code;
+              $labels[] = $lab;
+            }
+          }
         }
       }
     }
