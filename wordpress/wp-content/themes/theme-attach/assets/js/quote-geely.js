@@ -110,26 +110,39 @@
   };
 
   /** =========================
-   *  3) Carga dinámica: Tiendas por Departamento
-   *  FIX: al cambiar departamento, TIENDA se resetea a placeholder (sin valor)
-   * ========================= */
+  *  3) Carga dinámica: Tiendas por Departamento (ROBUSTO)
+  *  - event delegation (no se pierde si CF7 re-renderiza)
+  *  - pinta opciones en #cot_store_ui (UI)
+  *  - copia el valor a #cot_store (hidden CF7)
+  * ========================= */
   const initDeptStoreDynamic = () => {
-    const form = document.querySelector(".wpcf7 form");
-    if (!form) return;
+    // montar una sola vez globalmente
+    if (window.__mgDeptStoreGlobalMounted) return true;
+    window.__mgDeptStoreGlobalMounted = true;
 
-    const deptEl = form.querySelector('select[name="cot_department"]');
-    const storeEl = form.querySelector('select[name="cot_store"]');
-    if (!deptEl || !storeEl) return;
-
+    const STORE_UI_ID = "cot_store_ui";
+    const STORE_HIDDEN_ID = "cot_store";
     const PLACEHOLDER_TEXT = "Selecciona una opción";
 
-    const setLoadingStores = (loading) => {
-      storeEl.disabled = !!loading;
-      storeEl.classList.toggle("is-loading", !!loading);
+    const getCtx = () => {
+      const form = document.querySelector(".wpcf7 form");
+      const deptEl = form?.querySelector('select[name="cot_department"]') || null;
+      const storeUiEl = document.getElementById(STORE_UI_ID);
+      const storeHiddenEl = document.getElementById(STORE_HIDDEN_ID);
+      return { form, deptEl, storeUiEl, storeHiddenEl };
+    };
+
+    const setLoadingStores = (storeUiEl, loading) => {
+      if (!storeUiEl) return;
+      storeUiEl.disabled = !!loading;
+      storeUiEl.classList.toggle("is-loading", !!loading);
     };
 
     const resetStoreToPlaceholder = () => {
-      storeEl.innerHTML = "";
+      const { storeUiEl, storeHiddenEl } = getCtx();
+      if (!storeUiEl) return;
+
+      storeUiEl.innerHTML = "";
 
       const ph = document.createElement("option");
       ph.value = "";
@@ -137,41 +150,52 @@
       ph.disabled = true;
       ph.hidden = true;
       ph.selected = true;
+      storeUiEl.appendChild(ph);
 
-      storeEl.appendChild(ph);
+      storeUiEl.value = "";
 
-      // fuerza value vacío + dispara eventos para validación/botón
-      storeEl.value = "";
-      storeEl.dispatchEvent(new Event("change", { bubbles: true }));
-      storeEl.dispatchEvent(new Event("input", { bubbles: true }));
+      if (storeHiddenEl) {
+        storeHiddenEl.value = "";
+        storeHiddenEl.dispatchEvent(new Event("input", { bubbles: true }));
+        storeHiddenEl.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+
+      storeUiEl.dispatchEvent(new Event("change", { bubbles: true }));
+      storeUiEl.dispatchEvent(new Event("input", { bubbles: true }));
     };
 
     const fillStoreOptions = (items) => {
-      // primero resetea
+      const { storeUiEl } = getCtx();
+      if (!storeUiEl) return;
+
       resetStoreToPlaceholder();
 
-      // luego agrega opciones
       (items || []).forEach((it) => {
         const opt = document.createElement("option");
-        opt.value = (it.id ?? it.value ?? "");       // ✅ SOLO ID
+        opt.value = String(it.id ?? it.value ?? "").trim(); // SOLO ID
         opt.textContent = it.label || it.name || "";
         if (!opt.value) return;
-        storeEl.appendChild(opt);
+        storeUiEl.appendChild(opt);
       });
     };
 
     const loadStoresByDept = async (deptValue) => {
-      if (!deptValue) {
+      const { storeUiEl } = getCtx();
+      if (!storeUiEl) return;
+
+      const dept = String(deptValue || "").trim();
+      console.log("[MG_QUOTE] loadStoresByDept ->", dept);
+
+      if (!dept) {
         resetStoreToPlaceholder();
         return;
       }
 
       resetStoreToPlaceholder();
-
-      setLoadingStores(true);
+      setLoadingStores(storeUiEl, true);
 
       try {
-        const res = await ajaxPost("mg_quote_get_stores", { department: deptValue });
+        const res = await ajaxPost("mg_quote_get_stores", { department: dept });
         console.log("[MG_QUOTE] stores res:", res);
 
         const items = res?.success ? (res.data?.items || []) : [];
@@ -180,26 +204,71 @@
         console.warn("[MG_QUOTE] Error loading stores:", err);
         resetStoreToPlaceholder();
       } finally {
-        setLoadingStores(false);
+        setLoadingStores(storeUiEl, false);
       }
     };
 
-    // expone función por si luego quieres usarla
-    form.__mgLoadStoresByDept = loadStoresByDept;
-
-    deptEl.addEventListener("change", () => {
-      loadStoresByDept(deptEl.value || "");
+    // Exponer para otros módulos
+    Object.defineProperty(window, "__mgLoadStoresByDept", {
+      value: loadStoresByDept,
+      configurable: true,
     });
 
+    document.addEventListener(
+      "change",
+      (e) => {
+        const t = e.target;
+        if (!(t instanceof HTMLSelectElement)) return;
+        if (!t.matches('select[name="cot_department"]')) return;
+
+        console.log("[MG_QUOTE] dept change detected:", t.value);
+        loadStoresByDept(t.value || "");
+      },
+      true
+    );
+
+    document.addEventListener(
+      "change",
+      (e) => {
+        const t = e.target;
+        if (!(t instanceof HTMLSelectElement)) return;
+        if (t.id !== STORE_UI_ID) return;
+
+        const v = (t.value || "").trim();
+        const { storeHiddenEl } = getCtx();
+
+        console.log("[MG_QUOTE] store_ui change -> hidden:", v);
+
+        if (storeHiddenEl) {
+          storeHiddenEl.value = v; // ID
+          storeHiddenEl.dispatchEvent(new Event("input", { bubbles: true }));
+          storeHiddenEl.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+      },
+      true
+    );
+
     resetStoreToPlaceholder();
+
+    const { deptEl } = getCtx();
+    if (deptEl?.value) {
+      loadStoresByDept(deptEl.value);
+    }
+
+    return true;
   };
+
 
   /** =========================
    *  4) GEO + recomendación tienda cercana
    * ========================= */
   const initGeo = () => {
     const form = document.querySelector(".wpcf7 form");
-    if (!form) return;
+    if (!form) return false;
+
+    // evita duplicar listeners
+    if (form.__mgGeoMounted) return true;
+    form.__mgGeoMounted = true;
 
     const root = form.closest(".mg-quote") || document.querySelector(".mg-quote");
 
@@ -208,9 +277,10 @@
     const lngId = "geely-cotiza-lng";
 
     const deptEl = form.querySelector('select[name="cot_department"]');
-    const storeEl = form.querySelector('select[name="cot_store"]');
+    const storeUiEl = document.getElementById("cot_store_ui");
+    const storeHiddenId = "cot_store";
 
-    if (!geoBtn || !deptEl || !storeEl) return;
+    if (!geoBtn || !deptEl || !storeUiEl) return false;
 
     const ensureDeniedModal = () => {
       let modal = document.querySelector(".mg-geoModal");
@@ -314,6 +384,10 @@
       selectEl.value = value;
       selectEl.dispatchEvent(new Event("change", { bubbles: true }));
       selectEl.dispatchEvent(new Event("input", { bubbles: true }));
+
+      // sincroniza hidden CF7
+      setFieldById(storeHiddenId, value, true);
+
       return true;
     };
 
@@ -321,15 +395,13 @@
       const raw = String(storeItem?.value || storeItem?.id || "");
       if (!raw) return;
 
-      // ahora raw debe ser SOLO ID
-      const storeId = raw.trim();
+      const storeId = raw.trim(); // SOLO ID
       const storeName = String(storeItem?.name || storeItem?.label || "").trim();
 
       if (!storeId) return;
 
-      setSelectValue(form.querySelector('select[name="cot_store"]'), storeId, storeName);
+      setSelectValue(storeUiEl, storeId, storeName);
     };
-
 
     const showNearestStores = async (lat, lng) => {
       const box = ensureNearStoresBox();
@@ -434,8 +506,7 @@
               "Tu dispositivo/navegador no pudo determinar la ubicación. Verifica que la ubicación esté activada y vuelve a intentar."
             );
 
-          if (err?.code === 3)
-            return openGeoErrorModal("Tiempo de espera agotado", "No se pudo obtener tu ubicación a tiempo. Intenta nuevamente.");
+          if (err?.code === 3) return openGeoErrorModal("Tiempo de espera agotado", "No se pudo obtener tu ubicación a tiempo. Intenta nuevamente.");
 
           openGeoErrorModal("No se pudo obtener tu ubicación", "Ocurrió un error inesperado. Intenta nuevamente.");
         },
@@ -447,6 +518,8 @@
       e.preventDefault();
       requestGeo();
     });
+
+    return true;
   };
 
   /** =========================
@@ -557,6 +630,8 @@
       if (step === 2 && root.__mgSelected) {
         applyLeftSummary(root, root.__mgSelected);
         fillCf7Hidden(root.__mgSelected);
+
+        setTimeout(() => waitAndMountCf7Features(), 0);
       }
     };
 
@@ -579,7 +654,6 @@
       if (!root) return;
 
       makeFirstOptionPlaceholder(root.querySelector('select[name="cot_department"]'));
-      makeFirstOptionPlaceholder(root.querySelector('select[name="cot_store"]'));
 
       const productId = root.getAttribute("data-product-id") || "";
       const productTitle = q(root, ".mg-quote__productName")?.textContent?.trim() || "";
@@ -640,7 +714,7 @@
           co_articulo: btn.getAttribute("data-co-articulo") || "",
           co_configuracion: btn.getAttribute("data-co-configuracion") || "",
           co_transmision: btn.getAttribute("data-co-transmision") || "",
-          gp_version: btn.getAttribute("data-gp-version") || (btn.getAttribute("data-model-name") || ""),
+          gp_version: btn.getAttribute("data-gp-version") || btn.getAttribute("data-model-name") || "",
 
           model_image: firstColor?.imgD || btn.getAttribute("data-model-image") || "",
           color_name: firstColor?.name || "",
@@ -707,13 +781,7 @@
 
   /** =========================
    *  6) Validaciones + Botón disabled
-   *
-   *  FIX (tu caso):
-   *   - El error del celular NO salía porque en modo "silent" estabas limpiando el error
-   *     con clearFieldError() cuando showErrors=false.
-   *   - Ahora: aunque showErrors=false, si el campo tiene valor inválido mostramos error
-   *     (y si está vacío, no mostramos hasta intentar enviar).
-   *   - Regla celular: EXACTO 9 dígitos y debe empezar con 9.
+   *  Store: valida select UI (#cot_store_ui)
    * ========================= */
   const initCotizaValidation = () => {
     const MAX_TRIES = 80;
@@ -736,7 +804,8 @@
       const phoneEl = form.querySelector('input[name="cot_phone"]');
       const emailEl = form.querySelector('input[name="cot_email"]');
       const deptEl = form.querySelector('select[name="cot_department"]');
-      const storeEl = form.querySelector('select[name="cot_store"]');
+
+      const storeUiEl = document.getElementById("cot_store_ui");
 
       const submitBtns = $$(".wpcf7-submit", form);
 
@@ -752,7 +821,6 @@
       const getDocMaxLen = () => (docType() === "DNI" ? 8 : docType() === "RUC" ? 11 : 20);
       const getDocDisallowedRegex = () => (isNumericDocType() ? /[^0-9]/g : /[^a-zA-Z0-9&]/g);
 
-      // ---- scheduler para correr DESPUÉS de CF7
       let _syncQueued = false;
       const scheduleSync = () => {
         if (_syncQueued) return;
@@ -787,31 +855,20 @@
         if (!fieldEl) return;
         const errEl = ensureErrorEl(fieldEl);
         fieldEl.classList.toggle("is-invalid", !!message);
-        fieldEl.setCustomValidity(message || "");
+        fieldEl.setCustomValidity?.(message || "");
         if (errEl) errEl.textContent = message || "";
       };
 
-      /**
-       * Cambio clave:
-       * - Antes: si silent==false pero showErrors==false => limpiabas el error.
-       * - Ahora:
-       *    - Si showErrors==true: siempre muestra.
-       *    - Si showErrors==false:
-       *        - NO muestra error si el campo está vacío.
-       *        - SÍ muestra error si el usuario ya escribió algo y está inválido.
-       */
       const setFieldError = (fieldEl, message, silent = false) => {
         if (silent) return !message;
 
         const hasValue = !!String(fieldEl?.value || "").trim();
 
         if (!showErrors) {
-          // si está vacío, no molestamos aún
           if (!hasValue) {
             paintError(fieldEl, "");
             return !message;
           }
-          // si tiene valor y está inválido, sí mostramos (tu caso celular)
           if (message) {
             paintError(fieldEl, message);
             return false;
@@ -823,8 +880,6 @@
         paintError(fieldEl, message);
         return !message;
       };
-
-      const clearFieldError = (fieldEl) => paintError(fieldEl, "");
 
       const sanitizeDoc = () => {
         const maxLen = getDocMaxLen();
@@ -881,13 +936,8 @@
         if (!phoneEl) return true;
         const v = (phoneEl.value || "").trim();
 
-        // regla exacta: si está vacío
         if (!v) return setFieldError(phoneEl, "Ingresa tu celular.", silent);
-
-        // exacto 9
         if (!/^\d{9}$/.test(v)) return setFieldError(phoneEl, "Celular debe tener 9 dígitos.", silent);
-
-        // empieza con 9
         if (!/^9\d{8}$/.test(v)) return setFieldError(phoneEl, "Celular debe iniciar con 9.", silent);
 
         setFieldError(phoneEl, "", silent);
@@ -914,15 +964,14 @@
       };
 
       const validateStore = (silent = false) => {
-        if (!storeEl) return true;
-        const v = (storeEl.value || "").trim();
-        if (!v) return setFieldError(storeEl, "Selecciona una tienda.", silent);
-        if (v.toLowerCase().includes("selecciona")) return setFieldError(storeEl, "Selecciona una tienda.", silent);
-        setFieldError(storeEl, "", silent);
+        if (!storeUiEl) return true;
+        const v = (storeUiEl.value || "").trim();
+        if (!v) return setFieldError(storeUiEl, "Selecciona una tienda.", silent);
+        if (v.toLowerCase().includes("selecciona")) return setFieldError(storeUiEl, "Selecciona una tienda.", silent);
+        setFieldError(storeUiEl, "", silent);
         return true;
       };
 
-      // checkbox no bloquea
       const validateAcceptance = () => true;
 
       const isAllValidSilent = () => {
@@ -947,9 +996,7 @@
         btn.disabled = false;
         btn.removeAttribute("disabled");
         btn.removeAttribute("aria-disabled");
-        btn.classList.remove("is-disabled-by-mg");
-        btn.classList.remove("disabled");
-        btn.classList.remove("wpcf7-disabled");
+        btn.classList.remove("is-disabled-by-mg", "disabled", "wpcf7-disabled");
         btn.style.pointerEvents = "";
         btn.style.opacity = "";
         btn.style.filter = "";
@@ -964,10 +1011,7 @@
 
       const syncSubmitDisabled = () => {
         const allOk = isAllValidSilent();
-        submitBtns.forEach((btn) => {
-          if (allOk) forceEnableBtn(btn);
-          else forceDisableBtn(btn);
-        });
+        submitBtns.forEach((btn) => (allOk ? forceEnableBtn(btn) : forceDisableBtn(btn)));
       };
 
       const validateAllCustom = () => {
@@ -995,22 +1039,18 @@
         return ok;
       };
 
-      // MutationObserver en CADA submit (CF7/tema lo pisan)
       submitBtns.forEach((btn) => {
         const moBtn = new MutationObserver(() => scheduleSync());
         moBtn.observe(btn, { attributes: true, attributeFilter: ["disabled", "class", "aria-disabled", "style"] });
       });
 
-      // MutationObserver en el FORM (por si reemplazan el submit o re-render)
       const moForm = new MutationObserver(() => scheduleSync());
       moForm.observe(form, { childList: true, subtree: true });
 
-      // Eventos CF7 que pueden tocar el botón
       ["wpcf7invalid", "wpcf7submit", "wpcf7reset", "wpcf7init"].forEach((evt) => {
         document.addEventListener(evt, () => scheduleSync(), true);
       });
 
-      // Delegación: cualquier cambio dentro del form => sync
       form.addEventListener(
         "input",
         (e) => {
@@ -1018,26 +1058,22 @@
 
           if (t === docEl) {
             sanitizeDoc();
-            if (showErrors) validateDoc(false);
-            else validateDoc(false); // si ya escribió algo inválido, que se vea
+            validateDoc(false);
           }
           if (t === namesEl) {
             sanitizeNameField(namesEl);
-            if (showErrors) validateNameField(namesEl, "tus nombres", false);
-            else validateNameField(namesEl, "tus nombres", false);
+            validateNameField(namesEl, "tus nombres", false);
           }
           if (t === lastnamesEl) {
             sanitizeNameField(lastnamesEl);
-            if (showErrors) validateNameField(lastnamesEl, "tus apellidos", false);
-            else validateNameField(lastnamesEl, "tus apellidos", false);
+            validateNameField(lastnamesEl, "tus apellidos", false);
           }
           if (t === phoneEl) {
             sanitizePhone();
             validatePhone(false);
           }
           if (t === emailEl) {
-            if (showErrors) validateEmail(false);
-            else validateEmail(false);
+            validateEmail(false);
           }
 
           scheduleSync();
@@ -1052,16 +1088,13 @@
 
           if (t === docTypeEl) {
             sanitizeDoc();
-            if (showErrors) validateDoc(false);
-            else validateDoc(false);
+            validateDoc(false);
           }
           if (t === deptEl) {
-            if (showErrors) validateDept(false);
-            else validateDept(false);
+            validateDept(false);
           }
-          if (t === storeEl) {
-            if (showErrors) validateStore(false);
-            else validateStore(false);
+          if (t === storeUiEl) {
+            validateStore(false);
           }
 
           scheduleSync();
@@ -1069,7 +1102,6 @@
         true
       );
 
-      // Click: bloquea submit si algo inválido
       submitBtns.forEach((btn) => {
         btn.addEventListener(
           "click",
@@ -1090,7 +1122,6 @@
         );
       });
 
-      // Inicial
       sanitizeDoc();
       sanitizePhone();
       validatePhone(false);
@@ -1181,15 +1212,46 @@
   };
 
   /** =========================
+   *  CF7 mount (Paso 2) - 
+   *  Monta cosas que dependen de ".wpcf7 form"
+   * ========================= */
+  const mountCf7FeaturesWhenReady = () => {
+    const form = document.querySelector(".wpcf7 form");
+    if (!form) return false;
+
+    if (form.__mgCf7FeaturesMounted) return true;
+    form.__mgCf7FeaturesMounted = true;
+
+    // Montar features dependientes de CF7
+    initDeptStoreDynamic();
+    initGeo();
+    initCotizaValidation();
+
+    return true;
+  };
+
+  const waitAndMountCf7Features = () => {
+    let tries = 0;
+    const maxTries = 80;
+    const timer = setInterval(() => {
+      tries++;
+      if (mountCf7FeaturesWhenReady() || tries >= maxTries) clearInterval(timer);
+    }, 200);
+  };
+
+  /** =========================
    *  BOOT
    * ========================= */
   document.addEventListener("DOMContentLoaded", () => {
     fillTrackingHidden();
     initCf7Logs();
     initQuoteBlocks();
-    initDeptStoreDynamic();
-    initGeo();
     initDataPolicyModal();
-    initCotizaValidation();
+
+    waitAndMountCf7Features();
+  });
+
+  document.addEventListener("wpcf7init", () => {
+    waitAndMountCf7Features();
   });
 })();
