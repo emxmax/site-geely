@@ -22,7 +22,7 @@ $co_configuracion = (string) (get_field('product_code_config', $product_id) ?: '
 $GPVersion = (string) (get_field('product_code_sale', $product_id) ?: '');
 $co_transmision = (string) (get_field('spec_transmission', $product_id) ?: '');
 
-$bg_modal_url = get_stylesheet_directory_uri() . '/assets/img/bg-modal.png'; 
+$bg_modal_url = get_stylesheet_directory_uri() . '/assets/img/bg-modal.png';
 
 $models = get_field('product_models', $product_id);
 if (empty($models) || !is_array($models)) {
@@ -402,7 +402,10 @@ $default_hero_img = (string)(
                 </p>
 
                 <div class="mg-quoteConfirm__btns">
-                  <a class="mg-quote__btn mg-quote__btn--ghost" href="<?php echo esc_url(home_url('/')); ?>">Ver modelos</a>
+                  <a class="mg-quote__btn mg-quote__btn--ghost"
+                    href="<?php echo esc_url(home_url('/catalogo/')); ?>">
+                    Ver modelos
+                  </a>
                   <a class="mg-quote__btn mg-quote__btn--tec" href="<?php echo esc_url(get_permalink($product_id)); ?>">Ficha técnica</a>
                 </div>
               </div>
