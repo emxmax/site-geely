@@ -318,6 +318,19 @@ if (!function_exists('mg_quote_send_api')) {
 }
 
 /** =========================
+ *  0) CF7 SKIP MAIL (NO ENVIAR CORREO)
+ *  - Mantiene el submit AJAX
+ *  - Mantiene wpcf7_before_send_mail (API + guardar cotización)
+ *  - Evita mail_failed en QA
+ * ========================= */
+add_filter('wpcf7_skip_mail', function ($skip, $contact_form) {
+  if ($contact_form && (int) $contact_form->id() === 646) {
+    return true;
+  }
+  return $skip;
+}, 10, 2);
+
+/** =========================
  *  1) CF7 BEFORE SEND MAIL: llama API + prepara globals para AJAX
  *  ========================= */
 add_action('wpcf7_before_send_mail', function ($contact_form) {
@@ -516,242 +529,6 @@ add_action('wpcf7_before_send_mail', function ($contact_form) {
   ];
 }, 10, 1);
 
-/** =========================
- *  2) Meter mg_api + mg_payload en respuesta AJAX CF7
- *  ========================= */
-add_filter('wpcf7_ajax_json_echo', function ($response, $result) {
-
-  if (!is_array($response)) $response = [];
-
-  $response['mg_api'] = $GLOBALS['mg_quote_last_api'] ?? null;
-  $response['mg_payload'] = !empty($GLOBALS['mg_quote_last_payload']) ? $GLOBALS['mg_quote_last_payload'] : null;
-
-  return $response;
-}, 10, 2);
-
-/** =========================
- *  3) Cuando el mail YA SE ENVIÓ: guardar CPT + guardar respuesta API en ACF
- *  ========================= */
-add_action('wpcf7_mail_sent', function ($contact_form) {
-
-  $submission = WPCF7_Submission::get_instance();
-  if (!$submission) return;
-
-  $data = $submission->get_posted_data();
-  if (empty($data) || !is_array($data)) return;
-
-  // helper para obtener string "limpio"
-  $get = function ($key) use ($data) {
-    $v = $data[$key] ?? '';
-    if (is_array($v)) $v = reset($v);
-    return is_string($v) ? trim($v) : $v;
-  };
-
-  // =========================
-  // Datos del form
-  // =========================
-  $cot_product_id        = (int) $get('product_id');
-  $cot_product_title     = (string) $get('product_title');
-  $cot_model_slug        = (string) $get('model_slug');
-  $cot_model_name        = (string) $get('model_name');
-  $cot_model_year        = (string) $get('model_year');
-  $cot_model_price_usd   = (string) $get('model_price_usd');
-  $cot_model_price_local = (string) $get('model_price_local');
-
-  $cot_color_name        = (string) $get('color_name');
-  $cot_color_hex         = (string) $get('color_hex');
-
-  $cot_names             = sanitize_text_field($get('cot_names'));
-  $cot_lastnames         = sanitize_text_field($get('cot_lastnames'));
-  $cot_document_type     = sanitize_text_field($get('cot_document_type'));
-  $cot_document          = sanitize_text_field($get('cot_document'));
-  $cot_phone             = sanitize_text_field($get('cot_phone'));
-  $cot_email             = sanitize_email($get('cot_email'));
-  $cot_department        = sanitize_text_field($get('cot_department'));
-  $cot_store             = sanitize_text_field($get('cot_store'));
-
-  // =========================
-  // 1) Crear CPT
-  // =========================
-  $post_id = wp_insert_post([
-    'post_type'   => 'cotizacion',
-    'post_status' => 'publish',
-    'post_title'  => "Cotización - {$cot_names} {$cot_lastnames} ({$cot_product_title})",
-  ], true);
-
-  if (is_wp_error($post_id) || !$post_id) {
-    if (function_exists('mg_quote_log')) {
-      mg_quote_log('CPT ERROR', [
-        'err' => is_wp_error($post_id) ? $post_id->get_error_message() : 'post_id empty'
-      ]);
-    }
-    return;
-  }
-
-  // =========================
-  // 2) Guardar ACF (según tu grupo "Cotizacion - Datos")
-  // =========================
-  if (function_exists('update_field')) {
-    update_field('cot_product_id', $cot_product_id, $post_id);
-    update_field('cot_product_title', $cot_product_title, $post_id);
-    update_field('cot_model_slug', $cot_model_slug, $post_id);
-    update_field('cot_model_name', $cot_model_name, $post_id);
-    update_field('cot_model_year', $cot_model_year, $post_id);
-    update_field('cot_model_price_usd', $cot_model_price_usd, $post_id);
-    update_field('cot_model_price_local', $cot_model_price_local, $post_id);
-
-    update_field('cot_color_name', $cot_color_name, $post_id);
-    update_field('cot_color_hex', $cot_color_hex, $post_id);
-
-    update_field('cot_names', $cot_names, $post_id);
-    update_field('cot_lastnames', $cot_lastnames, $post_id);
-    update_field('cot_document_type', $cot_document_type, $post_id);
-    update_field('cot_document', $cot_document, $post_id);
-    update_field('cot_phone', $cot_phone, $post_id);
-    update_field('cot_email', $cot_email, $post_id);
-    update_field('cot_department', $cot_department, $post_id);
-    update_field('cot_store', $cot_store, $post_id);
-    update_field('cot_notes', '', $post_id);
-  }
-
-  // =========================
-  // 3) Guardar respuesta del API en ACF
-  // =========================
-  $api_last = $GLOBALS['mg_quote_last_api'] ?? null;
-
-  if (function_exists('update_field')) {
-    update_field('cot_api_ok', (string)($api_last['ok'] ?? ''), $post_id);
-    update_field('cot_api_status', (string)($api_last['status'] ?? ''), $post_id);
-    update_field('cot_api_response', (string)($api_last['response'] ?? ''), $post_id);
-    update_field('cot_api_error', (string)($api_last['error'] ?? ''), $post_id);
-  }
-
-  // (Opcional) también lo guardo como meta crudo por auditoría
-  if ($api_last) {
-    update_post_meta($post_id, '_mg_api_result', wp_json_encode($api_last, JSON_UNESCAPED_UNICODE));
-  }
-}, 10, 1);
-
-/** =========================
- *  2) Meter mg_api + mg_payload en respuesta AJAX CF7
- *  ========================= */
-add_filter('wpcf7_ajax_json_echo', function ($response, $result) {
-
-  if (!is_array($response)) $response = [];
-
-  $response['mg_api'] = $GLOBALS['mg_quote_last_api'] ?? null;
-  $response['mg_payload'] = !empty($GLOBALS['mg_quote_last_payload']) ? $GLOBALS['mg_quote_last_payload'] : null;
-
-  return $response;
-}, 10, 2);
-
-/** =========================
- *  3) Cuando el mail YA SE ENVIÓ: guardar CPT + guardar respuesta API en ACF
- *  ========================= */
-add_action('wpcf7_mail_sent', function ($contact_form) {
-
-  $submission = WPCF7_Submission::get_instance();
-  if (!$submission) return;
-
-  $data = $submission->get_posted_data();
-  if (empty($data) || !is_array($data)) return;
-
-  // helper para obtener string "limpio"
-  $get = function ($key) use ($data) {
-    $v = $data[$key] ?? '';
-    if (is_array($v)) $v = reset($v);
-    return is_string($v) ? trim($v) : $v;
-  };
-
-  // =========================
-  // Datos del form
-  // =========================
-  $cot_product_id        = (int) $get('product_id');
-  $cot_product_title     = (string) $get('product_title');
-  $cot_model_slug        = (string) $get('model_slug');
-  $cot_model_name        = (string) $get('model_name');
-  $cot_model_year        = (string) $get('model_year');
-  $cot_model_price_usd   = (string) $get('model_price_usd');
-  $cot_model_price_local = (string) $get('model_price_local');
-
-  $cot_color_name        = (string) $get('color_name');
-  $cot_color_hex         = (string) $get('color_hex');
-
-  $cot_names             = sanitize_text_field($get('cot_names'));
-  $cot_lastnames         = sanitize_text_field($get('cot_lastnames'));
-  $cot_document_type     = sanitize_text_field($get('cot_document_type'));
-  $cot_document          = sanitize_text_field($get('cot_document'));
-  $cot_phone             = sanitize_text_field($get('cot_phone'));
-  $cot_email             = sanitize_email($get('cot_email'));
-  $cot_department        = sanitize_text_field($get('cot_department'));
-  $cot_store             = sanitize_text_field($get('cot_store'));
-
-  // =========================
-  // 1) Crear CPT
-  // =========================
-  $post_id = wp_insert_post([
-    'post_type'   => 'cotizacion',
-    'post_status' => 'publish',
-    'post_title'  => "Cotización - {$cot_names} {$cot_lastnames} ({$cot_product_title})",
-  ], true);
-
-  if (is_wp_error($post_id) || !$post_id) {
-    if (function_exists('mg_quote_log')) {
-      mg_quote_log('CPT ERROR', [
-        'err' => is_wp_error($post_id) ? $post_id->get_error_message() : 'post_id empty'
-      ]);
-    }
-    return;
-  }
-
-  // =========================
-  // 2) Guardar ACF (según tu grupo "Cotizacion - Datos")
-  // =========================
-  if (function_exists('update_field')) {
-    update_field('cot_product_id', $cot_product_id, $post_id);
-    update_field('cot_product_title', $cot_product_title, $post_id);
-    update_field('cot_model_slug', $cot_model_slug, $post_id);
-    update_field('cot_model_name', $cot_model_name, $post_id);
-    update_field('cot_model_year', $cot_model_year, $post_id);
-    update_field('cot_model_price_usd', $cot_model_price_usd, $post_id);
-    update_field('cot_model_price_local', $cot_model_price_local, $post_id);
-
-    update_field('cot_color_name', $cot_color_name, $post_id);
-    update_field('cot_color_hex', $cot_color_hex, $post_id);
-
-    update_field('cot_names', $cot_names, $post_id);
-    update_field('cot_lastnames', $cot_lastnames, $post_id);
-    update_field('cot_document_type', $cot_document_type, $post_id);
-    update_field('cot_document', $cot_document, $post_id);
-    update_field('cot_phone', $cot_phone, $post_id);
-    update_field('cot_email', $cot_email, $post_id);
-    update_field('cot_department', $cot_department, $post_id);
-    update_field('cot_store', $cot_store, $post_id);
-
-    // Estado/Notas (opcional)
-    // OJO: "cot_status" es un SELECT: el valor debe existir en las opciones del campo.
-    // Si no estás segura del value exacto, déjalo vacío.
-    // update_field('cot_status', 'nuevo', $post_id);
-    update_field('cot_notes', '', $post_id);
-  }
-
-  // =========================
-  // 3) Guardar respuesta del API en ACF
-  // =========================
-  $api_last = $GLOBALS['mg_quote_last_api'] ?? null;
-
-  if (function_exists('update_field')) {
-    update_field('cot_api_ok', (string)($api_last['ok'] ?? ''), $post_id);
-    update_field('cot_api_status', (string)($api_last['status'] ?? ''), $post_id);
-    update_field('cot_api_response', (string)($api_last['response'] ?? ''), $post_id);
-    update_field('cot_api_error', (string)($api_last['error'] ?? ''), $post_id);
-  }
-
-  // (Opcional) también lo guardo como meta crudo por auditoría
-  if ($api_last) {
-    update_post_meta($post_id, '_mg_api_result', wp_json_encode($api_last, JSON_UNESCAPED_UNICODE));
-  }
-}, 10, 1);
 
 /** =========================================
  *  4) CF7 Dynamic Selects (bp_regiones / bp_tiendas)
