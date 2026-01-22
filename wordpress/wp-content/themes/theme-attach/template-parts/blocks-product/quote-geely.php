@@ -32,8 +32,68 @@ if (empty($models) || !is_array($models)) {
 
 global $wpdb;
 
+/** =========================================================
+ *  0) Helpers de seguridad / utilitarios
+ * ========================================================= */
+if (!function_exists('mg_quote_ajax_check')) {
+  function mg_quote_ajax_check() {
+    // nonce viene desde window.MG_QUOTE_AJAX.nonce
+    $ok = check_ajax_referer('mg_quote_ajax', 'nonce', false);
+    if (!$ok) {
+      wp_send_json_error(['message' => 'Nonce inválido'], 403);
+    }
+  }
+}
+
+if (!function_exists('mg_quote_float')) {
+  function mg_quote_float($v, $default = null) {
+    if ($v === null || $v === '') return $default;
+    $v = str_replace(',', '.', (string)$v);
+    if (!is_numeric($v)) return $default;
+    return (float)$v;
+  }
+}
+
+if (!function_exists('mg_quote_int')) {
+  function mg_quote_int($v, $default = null) {
+    if ($v === null || $v === '') return $default;
+    if (!is_numeric($v)) return $default;
+    return (int)$v;
+  }
+}
+
+/** =========================================================
+ *  1) Dynamic Selects (CF7): Departamentos desde DB
+ *     - cot_department se llena aquí (servidor)
+ *     - cot_store puede ir vacío porque se manejará por JS + UI
+ * ========================================================= */
 $mg_quote_dynamic_departments = [];
 $mg_quote_dynamic_stores = [];
+
+// Cargar departamentos desde bp_regiones (excluir RegionId=1 si es "Seleccionar Departamento")
+try {
+  $regions = $wpdb->get_results("
+    SELECT RegionId, Descripcion
+    FROM geely.bp_regiones
+    WHERE RegionId <> 1
+    ORDER BY Descripcion ASC
+  ", ARRAY_A);
+
+  if (is_array($regions)) {
+    foreach ($regions as $r) {
+      $rid = (int)($r['RegionId'] ?? 0);
+      $descR = trim((string)($r['Descripcion'] ?? ''));
+      if ($rid > 0 && $descR !== '') {
+        $mg_quote_dynamic_departments[] = [
+          'value' => (string)$rid,
+          'label' => $descR
+        ];
+      }
+    }
+  }
+} catch (Exception $e) {
+  // si falla, no bloquea el render
+}
 
 if (!function_exists('mg_quote_cf7_dynamic_selects')) {
   function mg_quote_cf7_dynamic_selects($tag)
@@ -90,6 +150,7 @@ if (!function_exists('mg_quote_cf7_dynamic_selects')) {
       return $apply($tag, is_array($deps) ? $deps : [], 'Selecciona una opción');
     }
     if ($tag_name === 'cot_store') {
+      // dejamos este select hidden en blanco o con placeholder; el UI real es #cot_store_ui
       return $apply($tag, is_array($stores) ? $stores : [], 'Selecciona una opción');
     }
     return $tag;
@@ -103,7 +164,9 @@ if (!has_filter('wpcf7_form_tag', 'mg_quote_cf7_dynamic_selects')) {
   add_filter('wpcf7_form_tag', 'mg_quote_cf7_dynamic_selects', 10, 1);
 }
 
-/** Helpers: ACF image -> URL */
+/** =========================================================
+ *  5) Helpers: ACF image -> URL
+ * ========================================================= */
 if (!function_exists('mg_quote_get_image')) {
   function mg_quote_get_image($img)
   {
@@ -402,8 +465,7 @@ $default_hero_img = (string)(
                 </p>
 
                 <div class="mg-quoteConfirm__btns">
-                  <a class="mg-quote__btn mg-quote__btn--ghost"
-                    href="<?php echo esc_url(home_url('/catalogo/')); ?>">
+                  <a class="mg-quote__btn mg-quote__btn--ghost" href="<?php echo esc_url(home_url('/catalogo/')); ?>">
                     Ver modelos
                   </a>
                   <a class="mg-quote__btn mg-quote__btn--tec" href="<?php echo esc_url(get_permalink($product_id)); ?>">Ficha técnica</a>
@@ -418,7 +480,6 @@ $default_hero_img = (string)(
   </div><!-- /inner -->
 
   <?php
-
   $policy_id = 'mg-data-policy-modal-' . $block_id;
   get_template_part('template-parts/blocks-product/partials/data-policy-modal', null, [
     'policy_id'   => $policy_id,

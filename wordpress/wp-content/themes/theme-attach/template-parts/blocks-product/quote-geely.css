@@ -848,16 +848,16 @@
 }
 
 .mg-quote__cf7 .geely-cotiza-select:has(option:checked[value=""]) {
-  color: #AFB6B9;
+  color: #afb6b9;
 }
 
 /* Estado con valor real */
 .mg-quote__cf7 .geely-cotiza-select:has(option:checked:not([value=""])) {
-  color: #0B0C0C;
+  color: #0b0c0c;
 }
 
 .mg-quote__cf7 .geely-cotiza-select option {
-  color: #0B0C0C;
+  color: #0b0c0c;
 }
 
 /* Documento (select + input en una fila) */
@@ -995,7 +995,7 @@
 }
 
 .wpcf7 .wpcf7-submit:disabled {
-  background: #AFB6B9 !important;
+  background: #afb6b9 !important;
 }
 /* ===============================
    Error debajo SOLO en Documento
@@ -1024,6 +1024,12 @@
 /* (Opcional) ocultar el tip rojo de CF7 si no lo quieres */
 .geely-cotiza-form .wpcf7-not-valid-tip {
   display: none !important;
+}
+
+.mg-nearStores__row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 /* Responsive */
