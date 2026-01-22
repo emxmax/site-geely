@@ -1342,7 +1342,7 @@
 }
 
 .mg-nearStores__link {
-  display: block;
+  display: block !important;
   margin-top: 16px;
   font-size: 16px;
   color: #027bff;
