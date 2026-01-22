@@ -41,10 +41,10 @@ $total_pages = (int) $q->max_num_pages;
       wp_reset_postdata(); ?>
     </div>
     <?php if ($total_pages > 1): ?>
-      <div class="blog-news__cta">
-        <button type="button" class="blog-news__btn js-blog-news-loadmore" data-page="1">
-          <?php echo esc_html($blog_btn_text); ?>
-        </button>
+      <div class="blog-news__cta">        
+        <a class="blog-news__btn js-blog-news-loadmore" data-page="1" href="<?= home_url('/noticias'); ?>">
+          <?= esc_html($blog_btn_text); ?>
+        </a>
       </div>
     <?php endif; ?>
   </div>
