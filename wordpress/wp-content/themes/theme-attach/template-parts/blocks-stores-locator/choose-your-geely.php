@@ -139,6 +139,7 @@ if (post_type_exists('producto')) {
         'link_quote' => $link_model . '#cotizar',
         'class' => 'stores-locator',
         'id' => 'producto-' . $post_id,
+        'uid' => $post_id,
       ];
     }
     wp_reset_postdata();

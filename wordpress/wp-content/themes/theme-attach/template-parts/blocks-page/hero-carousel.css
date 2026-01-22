@@ -27,6 +27,7 @@
   display: block;
   text-decoration: none;
   color: inherit;
+  position: relative;
 }
 
 .hero-carousel__picture,
@@ -39,6 +40,28 @@
   height: 800px;
   object-fit: cover;
   object-position: center;
+}
+
+.hero-carousel__a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 126px;
+  height: 48px;
+  padding: 12px 32px;
+  background: #0b0c0c;
+  color: #fff;
+  border: 0;
+  cursor: pointer;
+  font-family: var(--font-geely);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 16px;
+  line-height: 1.5;
+  /*  */
+  position: absolute;
+  bottom: calc(134px + 41px);
+  left: 68px;
 }
 
 /* =========================
@@ -97,7 +120,7 @@
   height: 7px;
   margin: 0 4px !important;
   opacity: 1;
-  background: #E7E6E6
+  background: #e7e6e6;
 }
 
 .hero-carousel__pagination--h .swiper-pagination-bullet-active {
@@ -160,10 +183,16 @@
 
   .hero-carousel__pagination--h {
     display: block;
-    bottom: 12px  !important;
+    bottom: 12px !important;
   }
 
   .hero-carousel__pagination--v {
     display: none;
+  }
+
+  .hero-carousel__a {
+    top: calc(134px + 41px);
+    bottom: 0;
+    left: 24px;
   }
 }

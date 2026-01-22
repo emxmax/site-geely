@@ -192,3 +192,48 @@ function theme_attach_parse_coordinates(
     'lng' => $lng
   ];
 }
+
+
+/**
+ * Verificar si se debe ocultar el botón "Ver versiones"
+ * 
+ * Revisa si todos los campos de especificaciones técnicas del CPT "producto"
+ * están vacíos. Si están vacíos, el botón "Ver versiones" debe ocultarse.
+ * 
+ * @param int $post_id ID del post a verificar
+ * @return bool true si debe OCULTAR el botón (campos vacíos), false si debe MOSTRARLO
+ */
+function should_hide_versions_button(int $post_id): bool
+{
+  // Verificar que ACF esté activo
+  if (!function_exists('get_field')) {
+    return true; // Si no hay ACF, considerar como vacío
+  }
+
+  // Verificar que el post sea del CPT "producto"
+  if (get_post_type($post_id) !== 'producto') {
+    return true; // Si no es un producto, considerar como vacío
+  }
+
+  // Lista de campos de especificaciones a verificar
+  $spec_fields = [
+    'spec_maximum_power',
+    'spec_transmission',
+    'spec_security',
+    'spec_seating',
+    'spec_sush_button',
+  ];
+
+  // Verificar cada campo
+  foreach ($spec_fields as $field) {
+    $value = get_field($field, $post_id);
+
+    // Si al menos un campo tiene valor (no vacío), retornar false
+    if (!empty($value)) {
+      return false;
+    }
+  }
+
+  // Si llegamos aquí, todos los campos están vacíos
+  return true;
+}
