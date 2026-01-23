@@ -1360,3 +1360,90 @@
   align-items: end;
   margin-top: 16px;
 }
+
+.mg-storesMapModal {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: none;
+}
+.mg-storesMapModal.is-open {
+  display: block;
+}
+.mg-storesMapModal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+.mg-storesMapModal__card {
+  position: relative;
+  max-width: 1200px;
+  width: 92vw;
+  height: 86vh;
+  margin: 4vh auto;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.mg-storesMapModal__close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  border: 0;
+  background: transparent;
+  font-size: 28px;
+  cursor: pointer;
+}
+.mg-storesMapModal__head {
+  padding: 18px 22px;
+  border-bottom: 1px solid #eee;
+}
+.mg-storesMapModal__title {
+  text-align: left;
+  color: #000000;
+  font-weight: 700;
+  width: 100%;
+  height: 5%;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  font-family: var(--font-geely);
+}
+.mg-storesMapModal__body {
+  height: calc(86vh - 120px);
+  padding: 14px 18px;
+}
+.mg-storesMapModal__map {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.mg-storesMapModal__foot {
+  padding: 16px 22px;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: center;
+}
+.mg-storesMapModal__btn {
+  min-width: 160px;
+  padding: 10px 16px;
+  border: 0;
+  background: #0B0C0C;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-geely);
+}
+.mg-no-scroll {
+  overflow: hidden;
+}
+.gm-style .gm-style-iw-c {
+  max-width: 225px !important;
+}
+@media (max-width: 768px) {
+  .mg-nearStores__title, .mg-nearStores__link {
+    font-size: 14px;
+    line-height: 20px;
+  }
+}

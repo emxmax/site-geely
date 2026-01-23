@@ -200,16 +200,20 @@ if (!function_exists('mg_quote_ajax_get_store_recommendations')) {
 
         // OJO: tu query correcta usa NombreComercial
         $sql = $wpdb->prepare("
-      SELECT
-        tsub.TiendaId AS id,
-        tsub.NombreComercial AS name
-      FROM geely.bp_tiendas_recomendaciones r
-      INNER JOIN geely.bp_tiendas tsub ON tsub.TiendaId = r.TiendaSubId
-      WHERE r.RegionId = %d
-        AND r.TiendaMainId = %d
-        AND r.Activo = 1
-      ORDER BY tsub.NombreComercial
-    ", $regionId, $mainId);
+  SELECT
+    tsub.TiendaId AS id,
+    tsub.NombreComercial AS name,
+    tsub.latitud AS lat,
+    tsub.longitud AS lng,
+    tsub.direccion AS address
+  FROM geely.bp_tiendas_recomendaciones r
+  INNER JOIN geely.bp_tiendas tsub ON tsub.TiendaId = r.TiendaSubId
+  WHERE r.RegionId = %d
+    AND r.TiendaMainId = %d
+    AND r.Activo = 1
+  ORDER BY tsub.NombreComercial
+", $regionId, $mainId);
+
 
         $rows = $wpdb->get_results($sql, ARRAY_A);
 
@@ -218,8 +222,20 @@ if (!function_exists('mg_quote_ajax_get_store_recommendations')) {
             foreach ($rows as $r) {
                 $id = (int)($r['id'] ?? 0);
                 $name = trim((string)($r['name'] ?? ''));
+
+                $lat = isset($r['lat']) ? (float)$r['lat'] : null;
+                $lng = isset($r['lng']) ? (float)$r['lng'] : null;
+                $address = trim((string)($r['address'] ?? ''));
+
                 if ($id > 0 && $name !== '') {
-                    $items[] = ['id' => $id, 'name' => $name, 'label' => $name];
+                    $items[] = [
+                        'id'      => $id,
+                        'name'    => $name,
+                        'label'   => $name,
+                        'lat'     => $lat,
+                        'lng'     => $lng,
+                        'address' => $address,
+                    ];
                 }
             }
         }

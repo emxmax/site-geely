@@ -44,6 +44,189 @@
   };
 
   /** =========================
+   *  GLOBALS (para evitar duplicados y compartir estado entre módulos)
+   * ========================= */
+  if (typeof window.__mgStoreChangeInternal !== "boolean") window.__mgStoreChangeInternal = false;
+  if (typeof window.__mgLastRecommendationsKey !== "string") window.__mgLastRecommendationsKey = "";
+  if (!window.__mgStoreCacheByDept) window.__mgStoreCacheByDept = {}; // deptId -> items[]
+
+  /** =========================
+   *  MODAL MAPA: Concesionarios recomendados
+   * ========================= */
+  const __mgNormalizeStore = (x) => {
+    const id = String(x?.id ?? x?.value ?? "").trim();
+    const name = String(x?.name ?? x?.label ?? "").trim();
+    const address = String(x?.address ?? x?.direccion ?? x?.dir ?? "").trim();
+
+    const latRaw = x?.lat ?? x?.latitude ?? x?.Latitud ?? x?.latitud;
+    const lngRaw = x?.lng ?? x?.longitude ?? x?.Longitud ?? x?.longitud;
+
+    const lat = latRaw !== undefined && latRaw !== null ? Number(latRaw) : null;
+    const lng = lngRaw !== undefined && lngRaw !== null ? Number(lngRaw) : null;
+
+    return {
+      id,
+      name,
+      address,
+      lat: Number.isFinite(lat) ? lat : null,
+      lng: Number.isFinite(lng) ? lng : null,
+      raw: x,
+    };
+  };
+
+  const __mgEnsureStoresMapModal = () => {
+    let modal = document.querySelector(".mg-storesMapModal");
+    if (modal) return modal;
+
+    modal = document.createElement("div");
+    modal.className = "mg-storesMapModal";
+    modal.setAttribute("aria-hidden", "true");
+    modal.innerHTML = `
+      <div class="mg-storesMapModal__backdrop" data-close="1"></div>
+
+      <div class="mg-storesMapModal__card" role="dialog" aria-modal="true" aria-label="Concesionarios disponibles">
+        <button type="button" class="mg-storesMapModal__close" aria-label="Cerrar" data-close="1">×</button>
+
+        <div class="mg-storesMapModal__head">
+          <div class="mg-storesMapModal__title">Concesionarios disponibles</div>
+        </div>
+
+        <div class="mg-storesMapModal__body">
+          <div class="mg-storesMapModal__map" id="mgStoresMap"></div>
+          <div class="mg-storesMapModal__list" style="display:none"></div>
+        </div>
+
+        <div class="mg-storesMapModal__foot">
+          <button type="button" class="mg-storesMapModal__btn" data-close="1">Continuar</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    const close = () => {
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+      document.documentElement.classList.remove("mg-no-scroll");
+    };
+
+    modal.addEventListener("click", (e) => {
+      const t = e.target;
+      if (t?.getAttribute?.("data-close") === "1") close();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal.classList.contains("is-open")) close();
+    });
+
+    modal.__mgClose = close;
+    return modal;
+  };
+
+  const __mgOpenStoresMapModal = ({ title = "Concesionarios disponibles", items = [] }) => {
+    const modal = __mgEnsureStoresMapModal();
+
+    const titleEl = modal.querySelector(".mg-storesMapModal__title");
+    const mapEl = modal.querySelector("#mgStoresMap");
+    const listEl = modal.querySelector(".mg-storesMapModal__list");
+
+    if (titleEl) titleEl.textContent = title || "Concesionarios disponibles";
+
+    // limpiar
+    if (mapEl) mapEl.innerHTML = "";
+    if (listEl) listEl.innerHTML = "";
+
+    // normalizar + filtrar
+    const stores = (items || [])
+      .map(__mgNormalizeStore)
+      .filter((s) => s.id || s.name);
+
+    // abrir modal
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden", "false");
+    document.documentElement.classList.add("mg-no-scroll");
+
+    const hasGoogleMaps = !!(window.google && window.google.maps);
+    const storesWithCoords = stores.filter((s) => Number.isFinite(s.lat) && Number.isFinite(s.lng));
+
+    // fallback lista
+    if (!hasGoogleMaps || !storesWithCoords.length) {
+      if (mapEl) mapEl.style.display = "none";
+      if (listEl) listEl.style.display = "block";
+
+      if (listEl) {
+        const ul = document.createElement("ul");
+        ul.className = "mg-storesMapModal__ul";
+
+        stores.forEach((s) => {
+          const li = document.createElement("li");
+          li.className = "mg-storesMapModal__li";
+
+          const name = s.name || "Concesionario";
+          const q = s.lat && s.lng ? `${s.lat},${s.lng}` : encodeURIComponent(`${name} ${s.address || ""}`);
+
+          li.innerHTML = `
+            <div class="mg-storesMapModal__liTitle">${name}</div>
+            <div class="mg-storesMapModal__liAddr">${s.address || ""}</div>
+            <a class="mg-storesMapModal__liLink" href="https://www.google.com/maps?q=${q}" target="_blank" rel="noopener">
+              Ver en Google Maps
+            </a>
+          `;
+          ul.appendChild(li);
+        });
+
+        listEl.appendChild(ul);
+      }
+      return;
+    }
+
+    // Maps OK
+    if (mapEl) mapEl.style.display = "block";
+    if (listEl) listEl.style.display = "none";
+
+    setTimeout(() => {
+      const map = new window.google.maps.Map(mapEl, {
+        zoom: 12,
+        center: { lat: storesWithCoords[0].lat, lng: storesWithCoords[0].lng },
+        mapTypeControl: true,
+        fullscreenControl: true,
+        streetViewControl: false,
+      });
+
+      const bounds = new window.google.maps.LatLngBounds();
+      const info = new window.google.maps.InfoWindow();
+
+      storesWithCoords.forEach((s) => {
+        const pos = { lat: s.lat, lng: s.lng };
+        bounds.extend(pos);
+
+        const marker = new window.google.maps.Marker({
+          position: pos,
+          map,
+          title: s.name || "Concesionario",
+        });
+
+        marker.addListener("click", () => {
+          const name = s.name || "Concesionario";
+          const addr = s.address || "";
+          const q = `${s.lat},${s.lng}`;
+
+          info.setContent(`
+            <div style="min-width:220px">
+              <div style="font-weight:600;margin-bottom:6px">${name}</div>
+              ${addr ? `<div style="margin-bottom:8px">${addr}</div>` : ""}
+              <a href="https://www.google.com/maps?q=${q}" target="_blank" rel="noopener">Cómo llegar</a>
+            </div>
+          `);
+          info.open({ map, anchor: marker });
+        });
+      });
+
+      if (storesWithCoords.length > 1) map.fitBounds(bounds);
+    }, 0);
+  };
+
+  /** =========================
    *  1) Tracking + product_id por URL
    * ========================= */
   const params = getUrlParams();
@@ -110,13 +293,12 @@
   };
 
   /** =========================
-  *  3) Carga dinámica: Tiendas por Departamento (ROBUSTO)
-  *  - event delegation (no se pierde si CF7 re-renderiza)
-  *  - pinta opciones en #cot_store_ui (UI)
-  *  - copia el valor a #cot_store (hidden CF7)
-  * ========================= */
+   *  3) Carga dinámica: Tiendas por Departamento (ROBUSTO)
+   *  - FIX duplicados recomendaciones
+   *  - storeCacheByDept global
+   *  - __mgStoreChangeInternal global
+   * ========================= */
   const initDeptStoreDynamic = () => {
-    // montar una sola vez globalmente
     if (window.__mgDeptStoreGlobalMounted) return true;
     window.__mgDeptStoreGlobalMounted = true;
 
@@ -124,8 +306,7 @@
     const STORE_HIDDEN_ID = "cot_store";
     const PLACEHOLDER_TEXT = "Selecciona una opción";
 
-    // cache: departmentId -> items (stores)
-    const storeCacheByDept = {};
+    const storeCacheByDept = window.__mgStoreCacheByDept; // GLOBAL
 
     const getCtx = () => {
       const form = document.querySelector(".wpcf7 form");
@@ -141,35 +322,31 @@
       storeUiEl.classList.toggle("is-loading", !!loading);
     };
 
-    // ====== UI bloque recomendaciones (compartido) ======
     const ensureNearStoresBox = (form) => {
       if (!form) return null;
 
       let box = form.querySelector(".mg-nearStores");
       if (box) return box;
 
-      const geoWrap = form.querySelector(".geely-cotiza-geo"); // si existe, lo insertamos debajo
+      const geoWrap = form.querySelector(".geely-cotiza-geo");
 
       box = document.createElement("div");
       box.className = "mg-nearStores";
       box.style.display = "none";
       box.innerHTML = `
-      <div class="mg-nearStores__title">
-        También contamos con estos concesionarios a tu disposición:
-      </div>
+        <div class="mg-nearStores__title">
+          También contamos con estos concesionarios a tu disposición:
+        </div>
 
-      <div class="mg-nearStores__row js-nearStores-row"></div>
+        <div class="mg-nearStores__row js-nearStores-row"></div>
 
-      <button type="button" class="mg-nearStores__link js-nearStores-more" style="display:none;">
-        Ver más concesionarios
-      </button>
-    `;
+        <button type="button" class="mg-nearStores__link js-nearStores-more" style="display:none;">
+          Ver más concesionarios
+        </button>
+      `;
 
-      if (geoWrap && geoWrap.parentNode) {
-        geoWrap.parentNode.insertBefore(box, geoWrap.nextSibling);
-      } else {
-        form.appendChild(box);
-      }
+      if (geoWrap && geoWrap.parentNode) geoWrap.parentNode.insertBefore(box, geoWrap.nextSibling);
+      else form.appendChild(box);
 
       return box;
     };
@@ -187,7 +364,7 @@
     };
 
     const renderRecommendationsUI = (items, mainStoreId, opts = {}) => {
-      const { form } = getCtx();
+      const { form, storeUiEl } = getCtx();
       const box = ensureNearStoresBox(form);
       if (!box) return;
 
@@ -213,21 +390,40 @@
 
       box.style.display = "block";
 
-      // Si luego quieres modal/mapa, lo dejas aquí:
       link.style.display = "inline-flex";
       link.onclick = (e) => {
         e.preventDefault();
-        console.log("[MG_QUOTE] click Ver más concesionarios (TODO modal)", opts);
+
+        const deptId = String(opts?.deptId || "").trim();
+        const mainId = String(mainStoreId || "").trim();
+
+        const cached = (storeCacheByDept[deptId] || []).map(__mgNormalizeStore);
+        const mainFromCache = cached.find((s) => String(s.id) === mainId);
+
+        const mainFallback = __mgNormalizeStore({
+          id: mainId,
+          name: storeUiEl?.selectedOptions?.[0]?.textContent || "Tienda seleccionada",
+        });
+
+        const mainStore = mainFromCache || mainFallback;
+
+        const recsAll = (items || [])
+          .map(__mgNormalizeStore)
+          .filter((x) => x.id && String(x.id) !== mainId)
+          .slice(0, 50);
+
+        __mgOpenStoresMapModal({
+          title: `Concesionarios disponibles en ${deptId === "16" ? "LIMA" : "tu zona"}`,
+          items: [mainStore, ...recsAll],
+        });
       };
 
-      // Click en recomendado => setea combo tienda + refresca recomendaciones (si aplica)
       const onPickRecommendation = async (storeId, storeName) => {
         const ok = setStoreByIdOnUI(storeId) || (await waitForStoreOptionThenSelect(storeId));
         if (!ok) {
           ensureOption(storeUiEl, storeId, storeName || storeId);
           setStoreByIdOnUI(storeId);
         }
-        // Al cambiar tienda, el listener de change disparará refreshRecommendations()
       };
 
       recs.forEach((it) => {
@@ -240,7 +436,6 @@
       });
     };
 
-    // ====== helpers select ======
     const ensureOption = (selectEl, value, label) => {
       if (!selectEl || !value) return false;
       const exists = Array.from(selectEl.options).some((o) => o.value === value);
@@ -267,6 +462,9 @@
       ph.selected = true;
       storeUiEl.appendChild(ph);
 
+      // IMPORTANTE: marcar como cambio interno
+      window.__mgStoreChangeInternal = true;
+
       storeUiEl.value = "";
 
       if (storeHiddenEl) {
@@ -277,6 +475,10 @@
 
       storeUiEl.dispatchEvent(new Event("change", { bubbles: true }));
       storeUiEl.dispatchEvent(new Event("input", { bubbles: true }));
+
+      setTimeout(() => {
+        window.__mgStoreChangeInternal = false;
+      }, 0);
     };
 
     const fillStoreOptions = (items) => {
@@ -287,7 +489,7 @@
 
       (items || []).forEach((it) => {
         const opt = document.createElement("option");
-        opt.value = String(it.id ?? it.value ?? "").trim(); // SOLO ID
+        opt.value = String(it.id ?? it.value ?? "").trim();
         opt.textContent = it.label || it.name || "";
         if (!opt.value) return;
         storeUiEl.appendChild(opt);
@@ -295,7 +497,7 @@
     };
 
     const setStoreByIdOnUI = (storeId) => {
-      const { storeUiEl } = getCtx();
+      const { storeUiEl, storeHiddenEl } = getCtx();
       if (!storeUiEl || !storeId) return false;
 
       const v = String(storeId).trim();
@@ -304,9 +506,23 @@
       const opt = storeUiEl.querySelector(`option[value="${CSS.escape(v)}"]`);
       if (!opt) return false;
 
+      // marcar cambio interno global
+      window.__mgStoreChangeInternal = true;
+
       storeUiEl.value = v;
       storeUiEl.dispatchEvent(new Event("change", { bubbles: true }));
       storeUiEl.dispatchEvent(new Event("input", { bubbles: true }));
+
+      if (storeHiddenEl) {
+        storeHiddenEl.value = v;
+        storeHiddenEl.dispatchEvent(new Event("input", { bubbles: true }));
+        storeHiddenEl.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+
+      setTimeout(() => {
+        window.__mgStoreChangeInternal = false;
+      }, 0);
+
       return true;
     };
 
@@ -329,12 +545,11 @@
       });
     };
 
-    // ====== recomendaciones: Lima = API, No Lima = resto de tiendas del dept ======
     const fetchRecommendationsLima = async ({ regionId, mainStoreId }) => {
       try {
         const r = await ajaxPost("mg_quote_get_store_recommendations", {
           regionId,
-          tiendaMainId: mainStoreId, // 👈 tu PHP lo lee así
+          tiendaMainId: mainStoreId,
         });
         return r?.success ? (r.data?.items || []) : [];
       } catch (e) {
@@ -350,16 +565,21 @@
       const deptId = String(dept || "").trim();
       const storeId = String(selectedStoreId || "").trim();
 
-      // sin dept o sin tienda => ocultar
+      // Guard anti-duplicado (dept|store)
+      const key = `${deptId}|${storeId}`;
+      if (window.__mgLastRecommendationsKey === key) {
+        // console.log("[MG_QUOTE] refreshRecommendations SKIP duplicate:", key);
+        return;
+      }
+      window.__mgLastRecommendationsKey = key;
+
       if (!deptId || !storeId) {
         clearRecommendationsUI();
         return;
       }
 
-      // LIMA => API
       if (deptId === "16") {
         const items = await fetchRecommendationsLima({ regionId: "16", mainStoreId: storeId });
-        // si no hay recs, ocultar
         if (!items || !items.length) {
           clearRecommendationsUI();
           return;
@@ -368,12 +588,11 @@
         return;
       }
 
-      // NO LIMA => usar stores del dept en cache (resto)
       const stores = storeCacheByDept[deptId] || [];
       const recs = stores.filter((x) => String(x.id ?? x.value ?? "").trim() !== storeId);
 
       if (!recs.length) {
-        clearRecommendationsUI(); // 👈 si solo hay 1 tienda, NO se ve el bloque
+        clearRecommendationsUI(); // si solo hay 1 tienda, NO se muestra
         return;
       }
 
@@ -393,23 +612,25 @@
         return;
       }
 
-      // si no existe opción aún, la aseguramos
       ensureOption(storeUiEl, firstId, firstLabel);
+
+      // marcar cambio interno global
+      window.__mgStoreChangeInternal = true;
 
       storeUiEl.value = firstId;
       storeUiEl.dispatchEvent(new Event("change", { bubbles: true }));
       storeUiEl.dispatchEvent(new Event("input", { bubbles: true }));
 
-      // sync hidden
       if (storeHiddenEl) {
         storeHiddenEl.value = firstId;
         storeHiddenEl.dispatchEvent(new Event("input", { bubbles: true }));
         storeHiddenEl.dispatchEvent(new Event("change", { bubbles: true }));
       }
 
-      // 👇 aquí aplicamos la regla:
-      // - si items.length === 1 => ocultar bloque
-      // - si items.length > 1 => mostrar recomendaciones (No Lima = resto, Lima = API)
+      setTimeout(() => {
+        window.__mgStoreChangeInternal = false;
+      }, 0);
+
       if ((items || []).length <= 1) {
         clearRecommendationsUI();
         return;
@@ -425,6 +646,9 @@
       const dept = String(deptValue || "").trim();
       console.log("[MG_QUOTE] loadStoresByDept ->", dept);
 
+      // reset dedupe key al cambiar dept
+      window.__mgLastRecommendationsKey = "";
+
       if (!dept) {
         resetStoreToPlaceholder();
         clearRecommendationsUI();
@@ -432,7 +656,7 @@
       }
 
       resetStoreToPlaceholder();
-      clearRecommendationsUI(); // mientras carga, ocultamos
+      clearRecommendationsUI();
       setLoadingStores(storeUiEl, true);
 
       try {
@@ -440,11 +664,9 @@
         console.log("[MG_QUOTE] stores res:", res);
 
         const items = res?.success ? (res.data?.items || []) : [];
-        storeCacheByDept[dept] = items;
+        storeCacheByDept[dept] = items; // cache global
 
         fillStoreOptions(items);
-
-        // regla nueva: auto-setear 1ra tienda si existe
         await autoSelectFirstStoreIfAny(dept, items);
       } catch (err) {
         console.warn("[MG_QUOTE] Error loading stores:", err);
@@ -455,15 +677,12 @@
       }
     };
 
-    // Exponer para otros módulos (como tu GEO)
     Object.defineProperty(window, "__mgLoadStoresByDept", {
       value: loadStoresByDept,
       configurable: true,
     });
 
-    // ===== listeners =====
-
-    // cambio dept => cargar stores + auto-select + recomendaciones según regla
+    // Dept change
     document.addEventListener(
       "change",
       (e) => {
@@ -477,7 +696,7 @@
       true
     );
 
-    // cambio tienda UI => sync hidden + refrescar recomendaciones (Lima: API / No Lima: resto)
+    // Store change (único punto de refresh) + sync hidden
     document.addEventListener(
       "change",
       async (e) => {
@@ -488,15 +707,16 @@
         const v = (t.value || "").trim();
         const { storeHiddenEl, deptEl } = getCtx();
 
-        console.log("[MG_QUOTE] store_ui change -> hidden:", v);
-
+        // sync hidden siempre
         if (storeHiddenEl) {
-          storeHiddenEl.value = v; // ID
+          storeHiddenEl.value = v;
           storeHiddenEl.dispatchEvent(new Event("input", { bubbles: true }));
           storeHiddenEl.dispatchEvent(new Event("change", { bubbles: true }));
         }
 
-        // NUEVO: al cambiar tienda manualmente, disparar recomendaciones
+        // Si el cambio lo hace el script (auto/geo), NO refrescamos para evitar duplicados.
+        if (window.__mgStoreChangeInternal) return;
+
         const deptNow = String(deptEl?.value || "").trim();
         await refreshRecommendations({ dept: deptNow, selectedStoreId: v });
       },
@@ -508,22 +728,29 @@
     clearRecommendationsUI();
 
     const { deptEl } = getCtx();
-    if (deptEl?.value) {
-      loadStoresByDept(deptEl.value);
-    }
+    if (deptEl?.value) loadStoresByDept(deptEl.value);
 
     return true;
   };
 
-
   /** =========================
-   *  4) GEO + recomendación tienda cercana (NUEVA LÓGICA)
-   *  - obtiene 1 tienda cercana
-   *  - setea departamento (dispara mg_quote_get_stores)
-   *  - espera carga y setea tienda cercana en #cot_store_ui
-   *  - recomendaciones: action nuevo mg_quote_get_store_recommendations (si existe)
-   *    fallback: usa items.slice(1) del action antiguo mg_quote_nearest_stores
-   *  - NUEVO: si cambia el combo TIENDA manualmente, refresca recomendaciones (LIMA)
+   *  Polyfill / helpers
+   * ========================= */
+  if (typeof window.CSS === "undefined") window.CSS = {};
+  if (typeof window.CSS.escape !== "function") {
+    window.CSS.escape = (value) => {
+      const s = String(value);
+      return s.replace(/["\\#.;?%&,+*~':!^$[\]()=>|/@]/g, "\\$&");
+    };
+  }
+
+  // ====== (La Parte 2/3 continúa con GEO + QuoteBlocks completo) ======
+  /** =========================
+   *  4) GEO + recomendación tienda cercana (CORREGIDO)
+   *  - NO duplica recomendaciones (usa dedupe global)
+   *  - NO agrega listener extra a tienda (ya lo hace DeptStoreDynamic)
+   *  - comparte cache global window.__mgStoreCacheByDept
+   *  - usa flag global window.__mgStoreChangeInternal
    * ========================= */
   const initGeo = () => {
     const form = document.querySelector(".wpcf7 form");
@@ -545,6 +772,8 @@
 
     if (!geoBtn || !deptEl || !storeUiEl) return false;
 
+    const storeCacheByDept = window.__mgStoreCacheByDept; // GLOBAL
+
     const setGeoHidden = (lat, lng) => {
       setFieldById(latId, String(lat), true);
       setFieldById(lngId, String(lng), true);
@@ -559,19 +788,19 @@
       modal = document.createElement("div");
       modal.className = "mg-geoModal";
       modal.innerHTML = `
-      <div class="mg-geoModal__card" role="dialog" aria-modal="true" aria-label="Permiso de ubicación desactivado">
-        <button class="mg-geoModal__close" type="button" aria-label="Cerrar">×</button>
-        <div class="mg-geoModal__body">
-          <div class="mg-geoModal__title">Permiso de ubicación desactivado</div>
-          <p class="mg-geoModal__text">
-            Has bloqueado previamente el acceso a la ubicación para este sitio.
-            Para continuar, permite el acceso en la configuración de tu navegador,
-            recarga la página y vuelve a intentarlo.
-          </p>
-          <button class="mg-geoModal__btn" type="button">Aceptar</button>
+        <div class="mg-geoModal__card" role="dialog" aria-modal="true" aria-label="Permiso de ubicación desactivado">
+          <button class="mg-geoModal__close" type="button" aria-label="Cerrar">×</button>
+          <div class="mg-geoModal__body">
+            <div class="mg-geoModal__title">Permiso de ubicación desactivado</div>
+            <p class="mg-geoModal__text">
+              Has bloqueado previamente el acceso a la ubicación para este sitio.
+              Para continuar, permite el acceso en la configuración de tu navegador,
+              recarga la página y vuelve a intentarlo.
+            </p>
+            <button class="mg-geoModal__btn" type="button">Aceptar</button>
+          </div>
         </div>
-      </div>
-    `;
+      `;
       document.body.appendChild(modal);
 
       const card = modal.querySelector(".mg-geoModal__card");
@@ -621,23 +850,19 @@
       box.style.display = "none";
 
       box.innerHTML = `
-      <div class="mg-nearStores__title">
-        También contamos con estos concesionarios a tu disposición:
-      </div>
+        <div class="mg-nearStores__title">
+          También contamos con estos concesionarios a tu disposición:
+        </div>
 
-      <!-- botones de recomendaciones (1 a 5) -->
-      <div class="mg-nearStores__row js-nearStores-row"></div>
+        <div class="mg-nearStores__row js-nearStores-row"></div>
 
-      <button type="button" class="mg-nearStores__link js-nearStores-more" style="display:none;">
-        Ver más concesionarios
-      </button>
-    `;
+        <button type="button" class="mg-nearStores__link js-nearStores-more" style="display:none;">
+          Ver más concesionarios
+        </button>
+      `;
 
-      if (geoWrap && geoWrap.parentNode) {
-        geoWrap.parentNode.insertBefore(box, geoWrap.nextSibling);
-      } else {
-        form.appendChild(box);
-      }
+      if (geoWrap && geoWrap.parentNode) geoWrap.parentNode.insertBefore(box, geoWrap.nextSibling);
+      else form.appendChild(box);
 
       return box;
     };
@@ -665,48 +890,50 @@
       return true;
     };
 
-    // FLAG para no duplicar llamadas cuando el script setea tienda
-    let __mgStoreChangeInternal = false;
-
-    const setStoreByIdOnUI = (storeId) => {
+    const setStoreByIdOnUI = (storeId, storeName) => {
       if (!storeUiEl || !storeId) return false;
 
       const v = String(storeId).trim();
       if (!v) return false;
 
       const opt = storeUiEl.querySelector(`option[value="${CSS.escape(v)}"]`);
-      if (!opt) return false;
+      if (!opt) {
+        // si no existe aún, lo agregamos (fallback)
+        ensureOption(storeUiEl, v, storeName || v);
+      }
 
-      __mgStoreChangeInternal = true;
+      // cambio interno global
+      window.__mgStoreChangeInternal = true;
 
       storeUiEl.value = v;
       storeUiEl.dispatchEvent(new Event("change", { bubbles: true }));
       storeUiEl.dispatchEvent(new Event("input", { bubbles: true }));
 
-      // sincroniza hidden CF7
       setFieldById(storeHiddenId, v, true);
 
-      // liberar flag en el próximo tick
       setTimeout(() => {
-        __mgStoreChangeInternal = false;
+        window.__mgStoreChangeInternal = false;
       }, 0);
 
       return true;
     };
 
-    const waitForStoreOptionThenSelect = (storeId, triesMax = 40, everyMs = 200) => {
+    const waitForStoreOptionThenSelect = (storeId, storeName, triesMax = 40, everyMs = 200) => {
       return new Promise((resolve) => {
         let tries = 0;
         const t = setInterval(() => {
           tries++;
-          const ok = setStoreByIdOnUI(storeId);
-          if (ok) {
+          const opt = storeUiEl.querySelector(`option[value="${CSS.escape(String(storeId))}"]`);
+          if (opt) {
             clearInterval(t);
+            setStoreByIdOnUI(storeId, storeName);
             resolve(true);
             return;
           }
           if (tries >= triesMax) {
             clearInterval(t);
+            // fallback: agregar option y setear
+            setStoreByIdOnUI(storeId, storeName);
             resolve(false);
           }
         }, everyMs);
@@ -731,6 +958,9 @@
         .map((x) => ({
           id: String(x.id ?? x.value ?? "").trim(),
           name: (x.name || x.label || "").trim(),
+          address: (x.address || x.direccion || x.dir || "").trim(),
+          lat: x.lat ?? x.latitude ?? x.latitud ?? null,
+          lng: x.lng ?? x.longitude ?? x.longitud ?? null,
         }))
         .filter((x) => x.id && x.id !== String(mainStoreId))
         .slice(0, 5);
@@ -740,28 +970,35 @@
       link.style.display = "inline-flex";
       link.onclick = (e) => {
         e.preventDefault();
-        console.log("[MG_QUOTE] click Ver más concesionarios (TODO modal)");
+
+        const regionId = String(opts?.regionId || "").trim();
+        const mainId = String(mainStoreId || "").trim();
+
+        const cached = (storeCacheByDept[regionId] || []).map(__mgNormalizeStore);
+        const mainFromCache = cached.find((s) => String(s.id) === mainId);
+
+        const mainFallback = __mgNormalizeStore({
+          id: mainId,
+          name: storeUiEl?.selectedOptions?.[0]?.textContent || "Tienda seleccionada",
+        });
+
+        const mainStore = mainFromCache || mainFallback;
+
+        const recsAll = (items || [])
+          .map(__mgNormalizeStore)
+          .filter((x) => x.id && String(x.id) !== mainId)
+          .slice(0, 50);
+
+        __mgOpenStoresMapModal({
+          title: `Concesionarios disponibles en ${regionId === "16" ? "LIMA" : "tu zona"}`,
+          items: [mainStore, ...recsAll],
+        });
       };
 
       const onPickRecommendation = async (storeId, storeName) => {
-        const ok = setStoreByIdOnUI(storeId) || (await waitForStoreOptionThenSelect(storeId));
-        if (!ok) {
-          ensureOption(storeUiEl, storeId, storeName || storeId);
-          setStoreByIdOnUI(storeId);
-        }
-
-        const deptNow = String(deptEl?.value || "").trim();
-        if (deptNow === "16") {
-          try {
-            const newItems = await fetchRecommendations({
-              regionId: "16",
-              mainStoreId: storeId,
-            });
-            renderRecommendationsUI(box, newItems, storeId, opts);
-          } catch (err) {
-            console.warn("[MG_QUOTE] Error refrescando recomendaciones:", err);
-          }
-        }
+        await waitForStoreOptionThenSelect(storeId, storeName);
+        // OJO: no refrescamos recomendaciones aquí. El refresh se hace en el listener ÚNICO del DeptStoreDynamic
+        // y además está protegido por __mgStoreChangeInternal para no duplicar.
       };
 
       recs.forEach((it) => {
@@ -778,7 +1015,7 @@
       try {
         const r1 = await ajaxPost("mg_quote_get_nearest_store", { lat, lng });
         if (r1?.success && r1?.data?.item) return { mode: "new", item: r1.data.item };
-      } catch { }
+      } catch {}
 
       const r2 = await ajaxPost("mg_quote_nearest_stores", { lat, lng });
       const items = r2?.success ? r2.data?.items || [] : [];
@@ -787,13 +1024,19 @@
     };
 
     const fetchRecommendations = async ({ mode = "new", regionId, mainStoreId, fallbackItems }) => {
+      // SOLO LIMA usa recommendations endpoint
       if (String(regionId) !== "16") return [];
+
+      // dedupe global (region|store)
+      const key = `${regionId}|${mainStoreId}`;
+      if (window.__mgLastRecommendationsKey === key) return [];
+      window.__mgLastRecommendationsKey = key;
 
       if (mode === "new") {
         try {
           const r = await ajaxPost("mg_quote_get_store_recommendations", {
             regionId,
-            tiendaMainId: mainStoreId, // IMPORTANTE
+            tiendaMainId: mainStoreId,
           });
           return r?.success ? (r.data?.items || []) : [];
         } catch {
@@ -818,14 +1061,14 @@
         return false;
       }
 
+      // reset dedupe al cambiar dept
+      window.__mgLastRecommendationsKey = "";
+
+      // set dept (esto disparará mg_quote_get_stores desde DeptStoreDynamic)
       setSelectValue(deptEl, regionId);
 
-      const ok = await waitForStoreOptionThenSelect(storeId);
-
-      if (!ok) {
-        ensureOption(storeUiEl, storeId, storeName || storeId);
-        setStoreByIdOnUI(storeId);
-      }
+      // esperar que carguen options y setear tienda
+      await waitForStoreOptionThenSelect(storeId, storeName);
 
       return true;
     };
@@ -848,6 +1091,7 @@
       const regionId = String(nearest.regionId ?? nearest.RegionId ?? nearest.region_id ?? "").trim();
       const mainStoreId = String(nearest.id ?? nearest.value ?? "").trim();
 
+      // NO LIMA => no mostrar recomendaciones (la regla la maneja DeptStoreDynamic con cache)
       if (regionId !== "16") {
         clearRecommendationsUI(box);
         return;
@@ -916,62 +1160,16 @@
       requestGeo();
     });
 
-    /** NUEVO: Si cambia el combo TIENDA manualmente, refresca recomendaciones (solo Lima) */
-    let __mgRecsDebounce = null;
-    storeUiEl.addEventListener(
-      "change",
-      () => {
-        // si el script está seteando la tienda (GEO / auto), no duplicar
-        if (__mgStoreChangeInternal) return;
-
-        const regionId = String(deptEl.value || "").trim();
-        const mainStoreId = String(storeUiEl.value || "").trim();
-
-        if (regionId !== "16" || !mainStoreId) return;
-
-        // Debounce chiquito por si hay múltiples change seguidos
-        clearTimeout(__mgRecsDebounce);
-        __mgRecsDebounce = setTimeout(async () => {
-          try {
-            const box = ensureNearStoresBox();
-            box.style.display = "block"; // si quieres que siempre se vea al cambiar tienda
-
-            const recs = await fetchRecommendations({
-              mode: "new",
-              regionId: "16",
-              mainStoreId,
-              fallbackItems: [],
-            });
-
-            renderRecommendationsUI(box, recs, mainStoreId, { regionId: "16", mode: "new" });
-          } catch (err) {
-            console.warn("[MG_QUOTE] Error al refrescar recomendaciones por cambio de tienda:", err);
-          }
-        }, 150);
-      },
-      true
-    );
+    // IMPORTANTE:
+    // Aquí YA NO ponemos listener de storeUiEl change, porque:
+    // - DeptStoreDynamic ya hace sync y refresh
+    // - y está protegido contra cambios internos
 
     return true;
   };
 
   /** =========================
- *  Polyfill / helpers (para evitar que se rompa el JS)
- *  - Si CSS.escape no existe, lo creamos.
- * ========================= */
-  if (typeof window.CSS === "undefined") window.CSS = {};
-  if (typeof window.CSS.escape !== "function") {
-    window.CSS.escape = (value) => {
-      const s = String(value);
-      // escape básico suficiente para option[value="..."]
-      return s.replace(/["\\#.;?%&,+*~':!^$[\]()=>|/@]/g, "\\$&");
-    };
-  }
-
-  /** =========================
-   *  5) Bloque de cotización (COLORES + CONTINUAR)
-   *  - NO se quita nada: solo se hace más robusto
-   *  - FIX: click en radio de año no debe resetear selección por el click del card
+   *  5) Bloque de cotización (COLORES + CONTINUAR) - IGUAL (no se recorta)
    * ========================= */
   const initQuoteBlocks = () => {
     const roots = window.__MG_QUOTE_BLOCKS__ || [];
@@ -1038,7 +1236,9 @@
         btn.setAttribute("aria-label", c.name || "Color");
 
         btn.addEventListener("click", () => {
-          Array.from(dotsWrap.querySelectorAll(".mg-quote__colorDotBtn")).forEach((x) => x.classList.remove("is-active"));
+          Array.from(dotsWrap.querySelectorAll(".mg-quote__colorDotBtn")).forEach((x) =>
+            x.classList.remove("is-active")
+          );
           btn.classList.add("is-active");
           if (nameEl) nameEl.textContent = c.name || "";
           onPick(c);
@@ -1185,10 +1385,8 @@
         updateTabsUI(root, Number(root.getAttribute("data-step") || "1"));
       };
 
-      // Selección inicial
       if (cards[0]) selectCard(cards[0]);
 
-      // FIX: si haces click en radio de año dentro del card, NO disparar selectCard por el click del card
       cards.forEach((cardEl) => {
         cardEl.addEventListener("click", (e) => {
           const inYear = e.target?.closest?.("[data-year-radio]");
@@ -1197,7 +1395,6 @@
         });
       });
 
-      // Tabs
       tabs.forEach((btn) => {
         btn.addEventListener("click", () => {
           const tabStep = Number(btn.getAttribute("data-step-tab") || "1");
@@ -1206,7 +1403,6 @@
         });
       });
 
-      // Botón "Continuar"
       if (nextBtn) {
         nextBtn.addEventListener("click", () => {
           if (!root.__mgSelected) return;
@@ -1215,10 +1411,8 @@
         });
       }
 
-      // Paso inicial
       setStep(root, 1);
 
-      // Cambio de año
       root.addEventListener("change", (e) => {
         const t = e.target;
         if (!(t instanceof HTMLInputElement)) return;
@@ -1235,11 +1429,10 @@
         if (root.__mgSelected) {
           root.__mgSelected.model_year = t.value || "";
           applyLeftSummary(root, root.__mgSelected);
-          fillCf7Hidden(root.__mgSelected);
+          fillCf7Hidden(root, root.__mgSelected);
         }
       });
 
-      // Después de enviar CF7: ir a paso 3
       document.addEventListener("wpcf7mailsent", () => {
         const step2 = q(root, '.mg-quote__panel[data-step="2"]');
         if (!step2 || !step2.classList.contains("is-active")) return;
@@ -1248,6 +1441,7 @@
     });
   };
 
+  // ====== (La Parte 3/3 continúa con Validaciones + PolicyModal + AutoGeo + mount + boot y cierre del IIFE) ======
   /** =========================
    *  6) Validaciones + Botón disabled
    *  Store: valida select UI (#cot_store_ui)
@@ -1680,23 +1874,18 @@
   };
 
   /** =========================
- *  8) GEO AUTO INIT (NUEVO)
- *  - Si el navegador YA tiene permiso
- *  - Ejecuta el flujo GEO automáticamente
- *  - NO pisa selección manual
- * ========================= */
+   *  8) GEO AUTO INIT
+   * ========================= */
   const initAutoGeoIfPermitted = () => {
     const form = document.querySelector(".wpcf7 form");
     if (!form) return;
 
-    // evitar ejecutar más de una vez
     if (window.__mgAutoGeoExecuted) return;
     window.__mgAutoGeoExecuted = true;
 
     const deptEl = form.querySelector('select[name="cot_department"]');
     const storeUiEl = document.getElementById("cot_store_ui");
 
-    // Si el usuario YA seleccionó algo, no auto-geo
     const hasDept = deptEl && deptEl.value;
     const hasStore = storeUiEl && storeUiEl.value;
 
@@ -1707,9 +1896,7 @@
 
     if (!navigator.geolocation) return;
 
-    // Verificamos estado del permiso
     if (!navigator.permissions?.query) {
-      // fallback: intentamos igual
       tryAutoGeo();
       return;
     }
@@ -1725,7 +1912,6 @@
         }
       })
       .catch(() => {
-        // fallback silencioso
         tryAutoGeo();
       });
 
@@ -1734,19 +1920,12 @@
         async (pos) => {
           const { latitude, longitude } = pos.coords;
 
-          // reutilizamos la lógica GEO ya existente
-          if (typeof window.__mgLoadStoresByDept !== "function") {
-            console.warn("[MG_GEO] loadStoresByDept no disponible aún");
-          }
-
-          // usamos el mismo flujo que el botón GEO
           const fakeClick = document.getElementById("geely-cotiza-geo-btn");
           if (fakeClick) {
             fakeClick.click();
             return;
           }
 
-          // fallback directo (por si el botón no existe)
           try {
             const r = await ajaxPost("mg_quote_get_nearest_store", {
               lat: latitude,
@@ -1756,32 +1935,29 @@
             if (r?.success && r.data?.item) {
               const nearest = r.data.item;
 
-              const regionId =
-                nearest.regionId ??
-                nearest.RegionId ??
-                nearest.region_id ??
-                "";
+              const regionId = nearest.regionId ?? nearest.RegionId ?? nearest.region_id ?? "";
+              const storeId = nearest.id ?? nearest.value ?? "";
 
-              const storeId =
-                nearest.id ?? nearest.value ?? "";
+              if (!regionId || !storeId || !deptEl || !storeUiEl) return;
 
-              if (!regionId || !storeId) return;
-
-              // set departamento (dispara mg_quote_get_stores)
               deptEl.value = String(regionId);
               deptEl.dispatchEvent(new Event("change", { bubbles: true }));
 
-              // esperar tiendas y setear tienda
               let tries = 0;
               const t = setInterval(() => {
                 tries++;
-                const opt = storeUiEl?.querySelector(
-                  `option[value="${CSS.escape(String(storeId))}"]`
-                );
+                const opt = storeUiEl?.querySelector(`option[value="${CSS.escape(String(storeId))}"]`);
                 if (opt) {
+                  window.__mgStoreChangeInternal = true;
+
                   storeUiEl.value = String(storeId);
                   storeUiEl.dispatchEvent(new Event("change", { bubbles: true }));
                   storeUiEl.dispatchEvent(new Event("input", { bubbles: true }));
+
+                  setTimeout(() => {
+                    window.__mgStoreChangeInternal = false;
+                  }, 0);
+
                   clearInterval(t);
                 }
                 if (tries > 40) clearInterval(t);
@@ -1791,9 +1967,7 @@
             console.warn("[MG_GEO] AutoGeo fallback error:", e);
           }
         },
-        () => {
-          // silencio: no molestamos al usuario
-        },
+        () => {},
         { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 }
       );
     }

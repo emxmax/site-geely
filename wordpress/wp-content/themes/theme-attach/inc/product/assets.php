@@ -143,5 +143,13 @@ function product_blocks_assets()
         'ajaxUrl' => admin_url('admin-ajax.php'),
         'nonce'   => wp_create_nonce('mf_finder_nonce'),
     ]);
+
+    wp_enqueue_script(
+        'google-maps',
+        'https://maps.googleapis.com/maps/api/js?key=AIzaSyBoj8gwBBd4OV9f06jlR_klaUYYWAKNEDY&language=es&region=PE',
+        [],
+        null,
+        true
+    );
 }
 add_action('wp_enqueue_scripts', 'product_blocks_assets');
