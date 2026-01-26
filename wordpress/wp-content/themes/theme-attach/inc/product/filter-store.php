@@ -77,7 +77,7 @@ if (!function_exists('mg_quote_ajax_get_stores')) {
 
         $sql = $wpdb->prepare("
       SELECT t.TiendaId, t.Tienda
-      FROM geely.bp_tiendas t
+      FROM bp_tiendas t
       WHERE t.RegionId = %d
         AND (t.Activo = 1 OR t.Activo IS NULL)
       ORDER BY t.TiendaOrden ASC, t.Tienda ASC
@@ -145,7 +145,7 @@ if (!function_exists('mg_quote_ajax_get_nearest_store')) {
             SIN(RADIANS(%f)) * SIN(RADIANS(t.latitud))
           )
         ) AS distanceKm
-      FROM geely.bp_tiendas t
+      FROM bp_tiendas t
       WHERE t.latitud IS NOT NULL
         AND t.longitud IS NOT NULL
         AND (t.Activo = 1 OR t.Activo IS NULL)
@@ -217,8 +217,8 @@ if (!function_exists('mg_quote_ajax_get_store_recommendations')) {
     tsub.latitud AS lat,
     tsub.longitud AS lng,
     tsub.direccion AS address
-  FROM geely.bp_tiendas_recomendaciones r
-  INNER JOIN geely.bp_tiendas tsub ON tsub.TiendaId = r.TiendaSubId
+  FROM bp_tiendas_recomendaciones r
+  INNER JOIN bp_tiendas tsub ON tsub.TiendaId = r.TiendaSubId
   WHERE r.RegionId = %d
     AND r.TiendaMainId = %d
     AND r.Activo = 1
