@@ -36,7 +36,8 @@ global $wpdb;
  *  0) Helpers de seguridad / utilitarios
  * ========================================================= */
 if (!function_exists('mg_quote_ajax_check')) {
-  function mg_quote_ajax_check() {
+  function mg_quote_ajax_check()
+  {
     // nonce viene desde window.MG_QUOTE_AJAX.nonce
     $ok = check_ajax_referer('mg_quote_ajax', 'nonce', false);
     if (!$ok) {
@@ -46,7 +47,8 @@ if (!function_exists('mg_quote_ajax_check')) {
 }
 
 if (!function_exists('mg_quote_float')) {
-  function mg_quote_float($v, $default = null) {
+  function mg_quote_float($v, $default = null)
+  {
     if ($v === null || $v === '') return $default;
     $v = str_replace(',', '.', (string)$v);
     if (!is_numeric($v)) return $default;
@@ -55,7 +57,8 @@ if (!function_exists('mg_quote_float')) {
 }
 
 if (!function_exists('mg_quote_int')) {
-  function mg_quote_int($v, $default = null) {
+  function mg_quote_int($v, $default = null)
+  {
     if ($v === null || $v === '') return $default;
     if (!is_numeric($v)) return $default;
     return (int)$v;
@@ -437,12 +440,24 @@ $default_hero_img = (string)(
         <div class="mg-quote__panel" data-step="2">
           <?php if ($cf7_shortcode): ?>
             <div class="mg-quote__cf7">
-              <?php echo do_shortcode($cf7_shortcode); ?>
+              <?php
+              get_template_part(
+                'template-parts/blocks-product/partials/geely-quote-form',
+                null,
+                [
+                  'root_selector' => $root_selector,
+                  'form_shortcode' => $cf7_shortcode,
+                  // opcional:
+                  // 'include_terms_modal' => true,
+                ]
+              );
+              ?>
             </div>
           <?php else: ?>
             <p class="mg-quote__error">Falta configurar el shortcode de Contact Form 7 en el bloque (quote_cf7_shortcode).</p>
           <?php endif; ?>
         </div>
+
 
         <div class="mg-quote__panel" data-step="3">
           <div class="mg-quoteConfirm" aria-live="polite">
@@ -504,13 +519,4 @@ $default_hero_img = (string)(
       grid-template-columns: 1fr !important;
     }
   </style>
-
-  <script>
-    window.__MG_QUOTE_BLOCKS__ = window.__MG_QUOTE_BLOCKS__ || [];
-    window.MG_QUOTE_AJAX = window.MG_QUOTE_AJAX || {
-      url: '<?php echo esc_url(admin_url('admin-ajax.php')); ?>',
-      nonce: '<?php echo esc_js(wp_create_nonce('mg_quote_ajax')); ?>'
-    };
-    window.__MG_QUOTE_BLOCKS__.push('<?php echo esc_js($root_selector); ?>');
-  </script>
 </section>

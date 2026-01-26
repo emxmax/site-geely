@@ -26,19 +26,41 @@ function promotions_blocks_assets()
     'promotions-hero',
     'promotions-grid',
     'promotions-single-hero',
+
+    // base del formulario
+    'geely-quote-form',
+
+    // bloques que usan el form
     'promotions-single',
     'promotions-form',
   ];
 
   foreach ($css_blocks as $handle) {
-    $rel = "/template-parts/blocks-promotions/{$handle}.css";
+
+    if ($handle === 'geely-quote-form') {
+      $rel = "/template-parts/blocks-product/partials/{$handle}.css";
+    } else {
+      $rel = "/template-parts/blocks-promotions/{$handle}.css";
+    }
+
     $abs = get_stylesheet_directory() . $rel;
+
+    if (!file_exists($abs)) {
+      continue;
+    }
+
+    $deps = [];
+
+    // dependencias correctas
+    if (in_array($handle, ['promotions-single', 'promotions-form'], true)) {
+      $deps = ['geely-quote-form-css'];
+    }
 
     wp_enqueue_style(
       "{$handle}-css",
       get_stylesheet_directory_uri() . $rel,
-      [],
-      file_exists($abs) ? filemtime($abs) : null
+      $deps,
+      filemtime($abs)
     );
   }
 
@@ -55,15 +77,38 @@ function promotions_blocks_assets()
     'promotions-form',
   ];
 
+  /** 1) FORM (base) para promociones */
+  $quote_form_js_rel = '/assets/js/quote-form.js';
+  $quote_form_js_abs = get_stylesheet_directory() . $quote_form_js_rel;
+
+  if (file_exists($quote_form_js_abs)) {
+    wp_enqueue_script(
+      'quote-form-js',
+      get_stylesheet_directory_uri() . $quote_form_js_rel,
+      [],
+      filemtime($quote_form_js_abs),
+      true
+    );
+  }
+
+  /** 2) Bloques promociones (promotions-form depende del base) */
   foreach ($js_blocks as $handle) {
     $rel = "/assets/js/{$handle}.js";
     $abs = get_stylesheet_directory() . $rel;
 
+    if (!file_exists($abs)) continue;
+
+    $deps = [];
+
+    if ($handle === 'promotions-form' && wp_script_is('quote-form-js', 'enqueued')) {
+      $deps = ['quote-form-js'];
+    }
+
     wp_enqueue_script(
       "{$handle}-js",
       get_stylesheet_directory_uri() . $rel,
-      [],
-      file_exists($abs) ? filemtime($abs) : null,
+      $deps,
+      filemtime($abs),
       true
     );
   }
@@ -236,7 +281,7 @@ function promotions_filter_by_category()
     if (empty($link_url)) {
       $link_url = get_permalink($post_id);
     }
-    ?>
+?>
     <div class="promotions-grid__item js-promo-item" data-page="<?php echo esc_attr($page_number); ?>"
       style="<?php echo $page_number > 1 ? 'display: none;' : ''; ?>">
       <div class="promotions-grid__card">
@@ -267,7 +312,7 @@ function promotions_filter_by_category()
 
       </div>
     </div>
-    <?php
+<?php
     $index++;
   endwhile;
   wp_reset_postdata();

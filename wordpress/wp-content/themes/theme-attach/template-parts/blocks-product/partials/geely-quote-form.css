@@ -1,0 +1,341 @@
+/* =========================
+   CF7 - Form estilo Figma
+   ========================= */
+.mg-quote__cf7 .geely-cotiza-form {
+  width: 100%;
+}
+
+.mg-quote__cf7 .geely-cotiza-form-main {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  padding: 40px 32px 40px;
+  margin-bottom: 40px;
+}
+
+.mg-quote__cf7 .geely-cotiza-form__title {
+  margin: 0 0 8px;
+  text-align: center;
+  font-family: var(--font-geely);
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 24px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #0b0c0c;
+}
+
+/* CF7 reseteos */
+.mg-quote__cf7 .wpcf7 form,
+.mg-quote__cf7 .wpcf7-form {
+  margin: 0;
+}
+.mg-quote__cf7 .wpcf7-form p {
+  margin: 0;
+}
+.mg-quote__cf7 .wpcf7-spinner {
+  margin-left: 10px;
+}
+
+/* Filas */
+.mg-quote__cf7 .geely-cotiza-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 18px;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.mg-quote__cf7 .geely-cotiza-row--last {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+/* Label a la izquierda */
+.mg-quote__cf7 .geely-cotiza-row__label {
+  font-family: var(--font-inter);
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 32px;
+  color: #0b0c0c;
+  padding-left: 16px;
+}
+
+/* Control a la derecha */
+.mg-quote__cf7 .geely-cotiza-row__control {
+  display: flex;
+  align-items: start;
+  padding-left: 16px;
+}
+
+/* Inputs & Select minimal */
+.mg-quote__cf7 .geely-cotiza-input,
+.mg-quote__cf7 .geely-cotiza-select {
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-inter);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+  color: #0b0c0c;
+  padding: 6px 0;
+}
+
+.mg-quote__cf7 .geely-cotiza-input::placeholder {
+  color: rgba(11, 12, 12, 0.45);
+}
+
+/* Select con flechita tipo Figma */
+.mg-quote__cf7 .geely-cotiza-select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding-right: 28px;
+  background-repeat: no-repeat;
+  background-position: right 2px center;
+  background-size: 18px 18px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M7 10l5 5 5-5' stroke='%23027BFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.mg-quote__cf7 .geely-cotiza-select:has(option:checked[value=""]) {
+  color: #afb6b9;
+}
+
+/* Estado con valor real */
+.mg-quote__cf7 .geely-cotiza-select:has(option:checked:not([value=""])) {
+  color: #0b0c0c;
+}
+
+.mg-quote__cf7 .geely-cotiza-select option {
+  color: #0b0c0c;
+}
+
+/* Documento (select + input en una fila) */
+.mg-quote__cf7 .geely-cotiza-row__control--doc {
+  gap: 16px;
+}
+.mg-quote__cf7 .geely-cotiza-row__control--doc .geely-cotiza-select {
+  width: 92px;
+  background-color: rgba(0, 0, 0, 0.06);
+  border-radius: 2px;
+  padding: 6px 28px 6px 10px;
+  font-weight: 700;
+  font-size: 12px;
+  font-family: var(--font-geely);
+}
+.mg-quote__cf7 .geely-cotiza-input--doc {
+  width: calc(100% - 108px);
+}
+
+/* Mensajes de error CF7 */
+.mg-quote__cf7 .wpcf7-not-valid-tip {
+  margin-top: 6px;
+  font-family: var(--font-inter);
+  font-size: 12px;
+}
+.mg-quote__cf7 .wpcf7-response-output {
+  margin: 14px 0 0;
+  font-family: var(--font-inter);
+}
+
+/* Geo */
+.mg-quote__cf7 .geely-cotiza-geo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 0 4px;
+}
+
+.mg-quote__cf7 .geely-cotiza-geo__pin {
+  width: 16px;
+  height: 16px;
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 21s7-4.5 7-11a7 7 0 10-14 0c0 6.5 7 11 7 11z' stroke='%23027BFF' stroke-width='2'/%3E%3Ccircle cx='12' cy='10' r='2.5' stroke='%23027BFF' stroke-width='2'/%3E%3C/svg%3E");
+}
+
+.mg-quote__cf7 .geely-cotiza-geo__btn {
+  font-family: var(--font-inter);
+  font-weight: 500;
+  font-size: 13px;
+  color: #027bff;
+  text-decoration: underline;
+}
+
+.mg-quote__cf7 .geely-cotiza-geo__status {
+  font-family: var(--font-inter);
+  font-size: 12px;
+  color: rgba(11, 12, 12, 0.7);
+}
+
+/* Footer (consent + botón a la derecha) */
+.mg-quote__cf7 .geely-cotiza-form__footer {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  align-items: center;
+}
+
+.mg-quote__cf7 .geely-cotiza-consent {
+  font-family: var(--font-inter);
+  font-size: 16px;
+  line-height: 22px;
+  color: #0b0c0c;
+}
+
+.mg-quote__cf7 .geely-cotiza-consent a {
+  color: #027bff;
+  text-decoration: underline;
+}
+
+/* CF7 acceptance wrap */
+.mg-quote__cf7 .wpcf7-form-control-wrap {
+  display: block;
+}
+.mg-quote__cf7 .wpcf7-acceptance .wpcf7-list-item {
+  margin: 0;
+}
+.mg-quote__cf7 .wpcf7-acceptance label {
+  display: inline-flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+/* Submit */
+.mg-quote__cf7 .geely-cotiza-submit,
+.mg-quote__cf7 input[type="submit"].geely-cotiza-submit {
+  border: 0;
+  background: #0b0c0c;
+  color: #fff;
+  font-family: var(--font-geely);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+  width: 126px;
+  height: 48px;
+  cursor: pointer;
+}
+
+.mg-quote__cf7 .geely-cotiza-row__control--doc p {
+  display: grid;
+  grid-template-columns: 100px 10px 1fr;
+}
+
+.mg-quote__cf7 .geely-cotiza-geo p {
+  display: grid;
+  grid-template-columns: 16px 10px 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.mg-quote__cf7 .geely-cotiza-actions {
+  text-align: end;
+}
+
+.geely-field-error {
+  display: block;
+  font-size: 12px;
+  margin-top: 6px;
+  color: #d32f2f;
+}
+
+.geely-cotiza-input.is-invalid,
+.geely-cotiza-select.is-invalid {
+  border-color: #d32f2f !important;
+}
+
+.wpcf7 .wpcf7-submit:disabled {
+  background: #afb6b9 !important;
+}
+/* ===============================
+   Error debajo SOLO en Documento
+   =============================== */
+/* Fuerza a que todo mensaje custom se apile debajo */
+.geely-cotiza-row__control {
+  display: flex;
+  flex-direction: column;
+}
+
+.geely-cotiza-row__control > p {
+  margin: 0; /* CF7 mete <p> con márgenes */
+  width: 100%;
+}
+
+/* Tu mensaje Geely debajo */
+.geely-field-error {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #d32f2f;
+  line-height: 1.2;
+  font-family: var(--font-inter);
+}
+
+/* (Opcional) ocultar el tip rojo de CF7 si no lo quieres */
+.geely-cotiza-form .wpcf7-not-valid-tip {
+  display: none !important;
+}
+
+.mg-nearStores__row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .mg-quote__cf7 .geely-cotiza-form-main {
+    max-width: 100%;
+    padding: 20px 18px 14px;
+  }
+
+  .mg-quote__cf7 .geely-cotiza-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 12px 0 12px;
+  }
+
+  .mg-quote__cf7 .geely-cotiza-form__footer {
+    grid-template-columns: 1fr;
+  }
+
+  .mg-quote__cf7 .geely-cotiza-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .mg-quote__cf7 .geely-cotiza-row__label {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .mg-quote__cf7 .geely-cotiza-input,
+  .mg-quote__cf7 .geely-cotiza-select {
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  .mg-quote__cf7 .geely-cotiza-actions p,
+  .mg-quote__cf7 .geely-cotiza-submit,
+  .mg-quote__cf7 input[type="submit"].geely-cotiza-submit {
+    width: 100%;
+    height: 44px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .mg-quote__cf7 .geely-cotiza-consent {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .mg-quote__cf7 .geely-cotiza-input--doc {
+    width: 100%;
+  }
+  .mg-nearStores__title, .mg-nearStores__link {
+    font-size: 14px;
+    line-height: 20px;
+  }
+}

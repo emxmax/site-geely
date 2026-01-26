@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Bloque: Contenido Single Promoción
  * 
@@ -30,7 +31,11 @@ if (empty($image)) {
 } else {
   $image_url = isset($image['url']) ? $image['url'] : '';
   $image_alt = isset($image['alt']) ? $image['alt'] : get_the_title($post_id);
-} ?>
+} 
+
+$block_id = !empty($block['anchor']) ? $block['anchor'] : ('mg-quote-' . ($block['id'] ?? uniqid()));
+$root_selector = '#' . $block_id;
+?>
 
 <section class="promotions-single-section">
   <div class="promotions-single-section__inner">
@@ -75,7 +80,24 @@ if (empty($image)) {
             </h2>
           <?php endif; ?> -->
 
-          <?php echo do_shortcode($form_shortcode); ?>
+          <?php if ($form_shortcode): ?>
+            <div class="mg-quote__cf7">
+              <?php
+              get_template_part(
+                'template-parts/blocks-product/partials/geely-quote-form',
+                null,
+                [
+                  'root_selector' => $root_selector,
+                  'form_shortcode' => $form_shortcode,
+                  // opcional:
+                  // 'include_terms_modal' => true,
+                ]
+              );
+              ?>
+            </div>
+          <?php else: ?>
+            <p class="mg-quote__error">Falta configurar el shortcode de Contact Form 7 en el bloque (quote_cf7_shortcode).</p>
+          <?php endif; ?>
         </div>
       </div>
     </div>

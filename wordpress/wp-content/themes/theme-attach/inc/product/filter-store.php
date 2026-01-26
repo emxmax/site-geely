@@ -85,6 +85,17 @@ if (!function_exists('mg_quote_ajax_get_stores')) {
 
         $rows = $wpdb->get_results($sql, ARRAY_A);
 
+        if ($wpdb->last_error) {
+            wp_send_json_error([
+                'message' => 'SQL error',
+                'error'   => $wpdb->last_error,
+                'query'   => $wpdb->last_query,
+            ], 500);
+        }
+
+        $items = [];
+
+
         $items = [];
         if (is_array($rows)) {
             foreach ($rows as $r) {
@@ -216,6 +227,17 @@ if (!function_exists('mg_quote_ajax_get_store_recommendations')) {
 
 
         $rows = $wpdb->get_results($sql, ARRAY_A);
+
+        if ($wpdb->last_error) {
+            wp_send_json_error([
+                'message' => 'SQL error',
+                'error'   => $wpdb->last_error,
+                'query'   => $wpdb->last_query,
+            ], 500);
+        }
+
+        $items = [];
+
 
         $items = [];
         if (is_array($rows)) {

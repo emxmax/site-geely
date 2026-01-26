@@ -7,7 +7,7 @@ if (! defined('ABSPATH')) exit;
 function product_blocks_assets()
 {
 
-    // --- CSS de bloques (asumiendo nombres product-*.css) ---
+    // --- CSS de bloques ---
     $css_blocks = [
         'emgrand-hero',
         'emgrand-config',
@@ -19,18 +19,35 @@ function product_blocks_assets()
         'emgrand-cta',
         'models-geely',
         'models-finder',
+
+        'geely-quote-form',
         'quote-geely',
     ];
 
     foreach ($css_blocks as $handle) {
-        $rel = "/template-parts/blocks-product/{$handle}.css";
+
+        if ($handle === 'geely-quote-form') {
+            $rel = "/template-parts/blocks-product/partials/{$handle}.css";
+        } else {
+            $rel = "/template-parts/blocks-product/{$handle}.css";
+        }
+
         $abs = get_stylesheet_directory() . $rel;
+
+        if (!file_exists($abs)) {
+            continue;
+        }
+
+        $deps = [];
+        if ($handle === 'quote-geely') {
+            $deps = ['geely-quote-form-css'];
+        }
 
         wp_enqueue_style(
             "{$handle}-css",
             get_stylesheet_directory_uri() . $rel,
-            [],
-            file_exists($abs) ? filemtime($abs) : null
+            $deps,
+            filemtime($abs)
         );
     }
 
@@ -116,13 +133,26 @@ function product_blocks_assets()
         true
     );
     // MODELS GEELY
+    // FORM (base)
+    $quote_form_js_rel = '/assets/js/quote-form.js';
+    $quote_form_js_abs = get_stylesheet_directory() . $quote_form_js_rel;
+
+    wp_enqueue_script(
+        'quote-form-js',
+        get_stylesheet_directory_uri() . $quote_form_js_rel,
+        [],
+        file_exists($quote_form_js_abs) ? filemtime($quote_form_js_abs) : null,
+        true
+    );
+
+    // PAGE (geely) -> depende del base
     $quote_geely_js_rel = '/assets/js/quote-geely.js';
     $quote_geely_js_abs = get_stylesheet_directory() . $quote_geely_js_rel;
 
     wp_enqueue_script(
         'quote-geely-js',
         get_stylesheet_directory_uri() . $quote_geely_js_rel,
-        [],
+        ['quote-form-js'], // dependencia
         file_exists($quote_geely_js_abs) ? filemtime($quote_geely_js_abs) : null,
         true
     );
