@@ -247,6 +247,9 @@
    *  2) CF7 logs
    * ========================= */
   const initCf7Logs = () => {
+    // =========================
+    // 1) Antes de enviar: valida custom y bloquea submit si hay errores
+    // =========================
     document.addEventListener("wpcf7beforesubmit", (e) => {
       const form = e.target;
       if (!(form instanceof HTMLFormElement)) return;
@@ -262,6 +265,9 @@
       }
     });
 
+    // =========================
+    // 2) Submit (siempre): logs de respuesta + payload/api que venga del backend
+    // =========================
     document.addEventListener("wpcf7submit", (e) => {
       const res = e.detail?.apiResponse;
       console.log("[MG_QUOTE] wpcf7submit apiResponse:", res);
@@ -273,18 +279,113 @@
       else console.warn("[MG_QUOTE] No llegó mg_api. Revisa el filtro wpcf7_ajax_json_echo.");
     });
 
+    // =========================
+    // 3) Enviado OK: log + LIMPIEZA (cot_store_ui + recomendaciones)
+    // =========================
     document.addEventListener("wpcf7mailsent", (e) => {
       console.log("[MG_QUOTE] wpcf7mailsent (OK)", e.detail?.apiResponse);
+
+      const form = e.target;
+      if (!(form instanceof HTMLFormElement)) return;
+
+      console.log("[MG_QUOTE] mailsent -> limpiar tienda UI + recomendaciones");
+
+      // Reset dedupe keys y marca cambio interno para no disparar refresh extra
+      window.__mgLastRecommendationsKey = "";
+      window.__mgStoreChangeInternal = true;
+
+      // 1) Limpiar y ocultar "También contamos..."
+      const nearBox = form.querySelector(".mg-nearStores");
+      if (nearBox) {
+        const row = nearBox.querySelector(".js-nearStores-row");
+        const more = nearBox.querySelector(".js-nearStores-more");
+
+        if (row) row.innerHTML = "";
+        if (more) {
+          more.style.display = "none";
+          more.onclick = null;
+        }
+
+        nearBox.style.display = "none";
+      }
+
+      // Helpers para limpiar error visual del select
+      const clearFieldError = (fieldEl) => {
+        if (!fieldEl) return;
+        fieldEl.classList.remove("is-invalid");
+        fieldEl.setCustomValidity?.("");
+        const wrap = fieldEl.closest(".geely-cotiza-row__control") || fieldEl.parentElement;
+        const err = wrap?.querySelector(".geely-field-error");
+        if (err) err.textContent = "";
+      };
+
+      // 2) Resetear Tienda UI (#cot_store_ui) A SOLO PLACEHOLDER (lo más confiable)
+      const storeUiEl = document.getElementById("cot_store_ui");
+      const storeHiddenEl = document.getElementById("cot_store"); // hidden real que envía CF7
+
+      if (storeUiEl) {
+        // Reemplaza TODAS las opciones y deja el placeholder seleccionado
+        storeUiEl.innerHTML = "";
+        const ph = document.createElement("option");
+        ph.value = "";
+        ph.textContent = "Selecciona una opción";
+        ph.selected = true;
+        ph.disabled = true;
+        ph.hidden = true;
+        storeUiEl.appendChild(ph);
+
+        // Forzar value vacío
+        storeUiEl.value = "";
+
+        // Quitar error de "Selecciona una tienda."
+        clearFieldError(storeUiEl);
+
+        // Disparar eventos para que validación/botón se sincronicen
+        storeUiEl.dispatchEvent(new Event("change", { bubbles: true }));
+        storeUiEl.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+
+      // 3) Limpiar hidden store también
+      if (storeHiddenEl) {
+        storeHiddenEl.value = "";
+        storeHiddenEl.dispatchEvent(new Event("change", { bubbles: true }));
+        storeHiddenEl.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+
+      // 4) (Opcional) mostrar "Habilitar ubicación actual" si la ocultaste en GEO
+      const geoWrap = form.querySelector(".geely-cotiza-geo");
+      if (geoWrap) geoWrap.style.display = "";
+
+      // 5) Si tu validación usa scheduleSync, esto ayuda a re-evaluar disabled
+      if (typeof form.__mgValidateAll === "function") {
+        // no mostramos errores, solo fuerza recalcular estados si tu lógica lo hace
+        // (si no hace nada, igual no afecta)
+        try { form.__mgValidateAll(); } catch { }
+      }
+
+      // Liberar flag interno
+      setTimeout(() => {
+        window.__mgStoreChangeInternal = false;
+      }, 0);
     });
 
+    // =========================
+    // 4) Envío fallido: log
+    // =========================
     document.addEventListener("wpcf7mailfailed", (e) => {
       console.warn("[MG_QUOTE] wpcf7mailfailed", e.detail?.apiResponse);
     });
 
+    // =========================
+    // 5) Invalid: log
+    // =========================
     document.addEventListener("wpcf7invalid", (e) => {
       console.warn("[MG_QUOTE] wpcf7invalid (validación)", e.detail?.apiResponse);
     });
 
+    // =========================
+    // 6) Click en botón: log del estado disabled/aria
+    // =========================
     document.addEventListener("click", (e) => {
       const btn = e.target.closest('input.wpcf7-submit, button.wpcf7-submit, .geely-cotiza-submit');
       if (!btn) return;
@@ -351,6 +452,32 @@
       return box;
     };
 
+    const openAllStoresModalForDept = (deptId) => {
+      const { deptEl, storeUiEl } = getCtx();
+      const dept = String(deptId || deptEl?.value || "").trim();
+      if (!dept) return;
+
+      const items = (storeCacheByDept[dept] || []).map(__mgNormalizeStore);
+
+      // título: usa el texto del option del dept si existe
+      const deptName =
+        deptEl?.selectedOptions?.[0]?.textContent?.trim() ||
+        (dept === "16" ? "LIMA" : "tu zona");
+
+      // si quieres centrar en la tienda seleccionada primero
+      const selectedId = String(storeUiEl?.value || "").trim();
+      const mainFromCache = items.find((x) => String(x.id) === selectedId);
+      const listForModal = mainFromCache
+        ? [mainFromCache, ...items.filter((x) => String(x.id) !== selectedId)]
+        : items;
+
+      __mgOpenStoresMapModal({
+        title: `Concesionarios disponibles en ${deptName}`,
+        items: listForModal,
+      });
+    };
+
+
     const clearRecommendationsUI = () => {
       const { form } = getCtx();
       const box = ensureNearStoresBox(form);
@@ -393,29 +520,7 @@
       link.style.display = "inline-flex";
       link.onclick = (e) => {
         e.preventDefault();
-
-        const deptId = String(opts?.deptId || "").trim();
-        const mainId = String(mainStoreId || "").trim();
-
-        const cached = (storeCacheByDept[deptId] || []).map(__mgNormalizeStore);
-        const mainFromCache = cached.find((s) => String(s.id) === mainId);
-
-        const mainFallback = __mgNormalizeStore({
-          id: mainId,
-          name: storeUiEl?.selectedOptions?.[0]?.textContent || "Tienda seleccionada",
-        });
-
-        const mainStore = mainFromCache || mainFallback;
-
-        const recsAll = (items || [])
-          .map(__mgNormalizeStore)
-          .filter((x) => x.id && String(x.id) !== mainId)
-          .slice(0, 50);
-
-        __mgOpenStoresMapModal({
-          title: `Concesionarios disponibles en ${deptId === "16" ? "LIMA" : "tu zona"}`,
-          items: [mainStore, ...recsAll],
-        });
+        openAllStoresModalForDept(opts?.deptId);
       };
 
       const onPickRecommendation = async (storeId, storeName) => {
@@ -667,6 +772,20 @@
         storeCacheByDept[dept] = items; // cache global
 
         fillStoreOptions(items);
+
+        const { form } = getCtx();
+        const box = ensureNearStoresBox(form);
+        if (box) {
+          const more = box.querySelector(".js-nearStores-more");
+          if (more) {
+            more.style.display = items.length ? "inline-flex" : "none";
+            more.onclick = (e) => {
+              e.preventDefault();
+              openAllStoresModalForDept(dept);
+            };
+          }
+        }
+
         await autoSelectFirstStoreIfAny(dept, items);
       } catch (err) {
         console.warn("[MG_QUOTE] Error loading stores:", err);
@@ -1015,7 +1134,7 @@
       try {
         const r1 = await ajaxPost("mg_quote_get_nearest_store", { lat, lng });
         if (r1?.success && r1?.data?.item) return { mode: "new", item: r1.data.item };
-      } catch {}
+      } catch { }
 
       const r2 = await ajaxPost("mg_quote_nearest_stores", { lat, lng });
       const items = r2?.success ? r2.data?.items || [] : [];
@@ -1694,7 +1813,7 @@
             console.warn("[MG_GEO] AutoGeo fallback error:", e);
           }
         },
-        () => {},
+        () => { },
         { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 }
       );
     }

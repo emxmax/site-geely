@@ -417,11 +417,14 @@ add_action('wpcf7_before_send_mail', function ($contact_form) {
   $co_configuracion = (string) $get('co_configuracion');
   $gp_version       = (string) $get('gp_version');
 
-  if ($co_articulo === '') $co_articulo = $cot_model_slug ?: (string)$cot_product_id;
+  //if ($co_articulo === '') $co_articulo = $cot_model_slug ?: (string)$cot_product_id;
   if ($gp_version === '')  $gp_version  = $cot_model_name;
+  if ($cot_model_price_usd === '')  $cot_model_price_usd  = '0';
+  if ($cot_model_price_local === '')  $cot_model_price_local  = '0';
 
   // Validación mínima
-  if (!$cot_product_id || !$cot_names || !$cot_lastnames || !$cot_phone || !$cot_email) {
+  //if (!$cot_product_id || !$cot_names || !$cot_lastnames || !$cot_phone || !$cot_email) {
+  if (!$cot_names || !$cot_lastnames || !$cot_phone || !$cot_email) {
     mg_quote_log('VALIDATION: missing required fields', [
       'product_id' => $cot_product_id,
       'names' => $cot_names,
@@ -701,3 +704,20 @@ add_filter('wpcf7_form_tag', function ($tag) {
 
   return $tag;
 }, 20, 1);
+
+/** =========================
+ *  DEVOLVER mg_payload y mg_api al front (AJAX)
+ * ========================= */
+add_filter('wpcf7_ajax_json_echo', function ($response, $result) {
+
+  // El ID que ves en consola es 646, así que usamos ese
+  $form_id = 0;
+  if (!empty($result['contact_form_id'])) $form_id = (int) $result['contact_form_id'];
+
+  if ($form_id === 646) {
+    $response['mg_payload'] = $GLOBALS['mg_quote_last_payload'] ?? null;
+    $response['mg_api']     = $GLOBALS['mg_quote_last_api'] ?? null;
+  }
+
+  return $response;
+}, 10, 2);

@@ -59,10 +59,12 @@ if (!function_exists('mg_quote_normalize_store_row')) {
 }
 
 /** =========================
- * 1) Tiendas por RegionId
+ * 1) Tiendas por RegionId (con lat/lng opcional)
  * Action: mg_quote_get_stores
- * Input: department (RegionId)
- * Output: items [{id, name, label}]
+ * Input:
+ *  - department (RegionId) [required]
+ *  - lat, lng              [optional]
+ * Output: items [{id, name, label, lat?, lng?, address?, distanceKm?}]
  * ========================= */
 if (!function_exists('mg_quote_ajax_get_stores')) {
     function mg_quote_ajax_get_stores()
@@ -75,13 +77,51 @@ if (!function_exists('mg_quote_ajax_get_stores')) {
             wp_send_json_success(['items' => []], 200);
         }
 
-        $sql = $wpdb->prepare("
-      SELECT t.TiendaId, t.Tienda
-      FROM bp_tiendas t
-      WHERE t.RegionId = %d
-        AND (t.Activo = 1 OR t.Activo IS NULL)
-      ORDER BY t.TiendaOrden ASC, t.Tienda ASC
-    ", $dept);
+        // lat/lng opcional (si vienen, calculamos distancia)
+        $lat = isset($_POST['lat']) ? mg_quote_float($_POST['lat']) : null;
+        $lng = isset($_POST['lng']) ? mg_quote_float($_POST['lng']) : null;
+        $hasGeo = ($lat !== null && $lng !== null);
+
+        // OJO: aquí uso campos comunes. Ajusta si tu tabla usa otros nombres.
+        // - Nombre visible: Tienda
+        // - Coordenadas: latitud / longitud
+        // - Dirección: direccion
+        if ($hasGeo) {
+            $sql = $wpdb->prepare("
+              SELECT
+                t.TiendaId,
+                t.Tienda,
+                t.latitud,
+                t.longitud,
+                t.direccion,
+                (
+                  6371 * ACOS(
+                    COS(RADIANS(%f)) * COS(RADIANS(t.latitud)) *
+                    COS(RADIANS(t.longitud) - RADIANS(%f)) +
+                    SIN(RADIANS(%f)) * SIN(RADIANS(t.latitud))
+                  )
+                ) AS distanceKm
+              FROM bp_tiendas t
+              WHERE t.RegionId = %d
+                AND t.latitud IS NOT NULL
+                AND t.longitud IS NOT NULL
+                AND (t.Activo = 1 OR t.Activo IS NULL)
+              ORDER BY t.TiendaOrden ASC, distanceKm ASC, t.Tienda ASC
+            ", $lat, $lng, $lat, $dept);
+        } else {
+            $sql = $wpdb->prepare("
+              SELECT
+                t.TiendaId,
+                t.Tienda,
+                t.latitud,
+                t.longitud,
+                t.direccion
+              FROM bp_tiendas t
+              WHERE t.RegionId = %d
+                AND (t.Activo = 1 OR t.Activo IS NULL)
+              ORDER BY t.TiendaOrden ASC, t.Tienda ASC
+            ", $dept);
+        }
 
         $rows = $wpdb->get_results($sql, ARRAY_A);
 
@@ -94,23 +134,48 @@ if (!function_exists('mg_quote_ajax_get_stores')) {
         }
 
         $items = [];
-
-
-        $items = [];
         if (is_array($rows)) {
             foreach ($rows as $r) {
-                $norm = mg_quote_normalize_store_row($r);
-                if ($norm) $items[] = $norm;
+                $id = (int)($r['TiendaId'] ?? 0);
+                $name = trim((string)($r['Tienda'] ?? ''));
+                if ($id <= 0 || $name === '') continue;
+
+                $latRow = isset($r['latitud']) ? mg_quote_float($r['latitud']) : null;
+                $lngRow = isset($r['longitud']) ? mg_quote_float($r['longitud']) : null;
+                $addr   = trim((string)($r['direccion'] ?? ''));
+
+                $item = [
+                    'id'    => $id,
+                    'name'  => $name,
+                    'label' => $name,
+                ];
+
+                // Siempre devolvemos coords/address si están (te sirve para mapa)
+                if ($latRow !== null) $item['lat'] = (float)$latRow;
+                if ($lngRow !== null) $item['lng'] = (float)$lngRow;
+                if ($addr !== '')     $item['address'] = $addr;
+
+                // Solo si vino geo desde el cliente
+                if ($hasGeo && isset($r['distanceKm'])) {
+                    $item['distanceKm'] = round((float)$r['distanceKm'], 2);
+                }
+
+                $items[] = $item;
             }
         }
 
-        wp_send_json_success(['items' => $items], 200);
+        wp_send_json_success([
+            'items' => $items,
+            'meta' => [
+                'department' => (int)$dept,
+                'geo' => $hasGeo ? ['lat' => $lat, 'lng' => $lng] : null,
+            ]
+        ], 200);
     }
 }
 
 add_action('wp_ajax_mg_quote_get_stores', 'mg_quote_ajax_get_stores');
 add_action('wp_ajax_nopriv_mg_quote_get_stores', 'mg_quote_ajax_get_stores');
-
 
 /** =========================
  * 2) Tienda más cercana (1 sola)

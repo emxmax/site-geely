@@ -299,3 +299,7 @@
     padding-inline: 16px;
   }
 }
+
+.gm-style .gm-style-iw-c {
+  max-width: 225px !important;
+}
