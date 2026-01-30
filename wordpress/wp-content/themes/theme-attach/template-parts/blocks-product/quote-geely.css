@@ -506,7 +506,7 @@
 
 .mg-quote[data-step="3"] .mg-quote__content {
   display: block;
-  margin-top: 22px;
+  margin-top: 0px;
 }
 
 .mg-quote[data-step="3"] .mg-quote__left {
@@ -523,6 +523,10 @@
 .mg-quoteConfirm__hero {
   width: 100%;
   background: #fff;
+  background-image: var(--quote-step-bg);
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: cover;
 }
 
 .mg-quoteConfirm__heroImg {
@@ -532,6 +536,7 @@
   max-height: 520px;
   object-fit: cover;
   margin: auto;
+  padding-top: 20px;
 }
 
 /* BODY (gris) */
@@ -563,6 +568,7 @@
   font-size: 24px;
   line-height: 24px;
   color: #0b0c0c;
+  letter-spacing: 1px;
 }
 
 .mg-quoteConfirm__text {
@@ -743,6 +749,9 @@
   .mg-quote[data-step="3"] {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
+  }
+  .mg-quote[data-step="3"] .mg-quote__content {
+    margin-top: 0px;
   }
 }
 
@@ -1091,7 +1100,7 @@
   min-width: 160px;
   padding: 10px 16px;
   border: 0;
-  background: #0B0C0C;
+  background: #0b0c0c;
   color: #fff;
   border-radius: 4px;
   cursor: pointer;

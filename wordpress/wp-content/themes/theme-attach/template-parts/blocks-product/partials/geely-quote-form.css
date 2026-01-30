@@ -80,7 +80,11 @@
   font-size: 16px;
   line-height: 22px;
   color: #0b0c0c;
-  padding: 6px 0;
+  padding: 6px 10px;
+}
+
+.geely-cotiza-row__control.geely-cotiza-row__control--doc {
+  padding-left: 26px;
 }
 
 .mg-quote__cf7 .geely-cotiza-input::placeholder {
@@ -321,7 +325,7 @@
   .mg-quote__cf7 .geely-cotiza-submit,
   .mg-quote__cf7 input[type="submit"].geely-cotiza-submit {
     width: 100%;
-    height: 44px;
+    height: 60px;
     font-size: 14px;
     line-height: 20px;
   }
@@ -334,8 +338,70 @@
   .mg-quote__cf7 .geely-cotiza-input--doc {
     width: 100%;
   }
-  .mg-nearStores__title, .mg-nearStores__link {
+  .mg-nearStores__title,
+  .mg-nearStores__link {
     font-size: 14px;
     line-height: 20px;
   }
+}
+
+/* =========================
+   Checkbox CF7 – estado base
+========================= */
+.mg-quote__cf7 .wpcf7-acceptance input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+
+  width: 18px;
+  height: 18px;
+
+  border: 2px solid #0b0c0c;
+  border-radius: 2px;
+  background-color: #fff;
+
+  display: inline-grid;
+  place-content: center;
+
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+/* =========================
+   Check (icono)
+========================= */
+.mg-quote__cf7 .wpcf7-acceptance input[type="checkbox"]::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  transform: scale(0);
+  transition: transform 0.12s ease-in-out;
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  /* CHECK EN CELESTE */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M20 6L9 17l-5-5' stroke='%23027BFF' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* =========================
+   ESTADO CHECKED
+========================= */
+.mg-quote__cf7 .wpcf7-acceptance input[type="checkbox"]:checked {
+  background-color: transparent;   /* sin fondo */
+  border-color: #027BFF;            /* borde celeste */
+}
+
+.mg-quote__cf7 .wpcf7-acceptance input[type="checkbox"]:checked::after {
+  transform: scale(1);
+}
+
+/* =========================
+   Focus accesible
+========================= */
+.mg-quote__cf7 .wpcf7-acceptance input[type="checkbox"]:focus-visible {
+  outline: 2px solid rgba(2, 123, 255, 0.35);
+  outline-offset: 2px;
 }

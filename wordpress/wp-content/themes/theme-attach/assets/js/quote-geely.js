@@ -48,6 +48,16 @@
       setVal("gp_version", data.gp_version);
     };
 
+    const scrollToInner = (root) => {
+      const el = root.querySelector("#mg-quote__inner") || document.getElementById("mg-quote__inner");
+      if (!el) return;
+
+      requestAnimationFrame(() => {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    };
+
+
     const applyLeftSummary = (root, data) => {
       const modelNameEl = q(root, "[data-selected-model-name]");
       const modelYearEl = q(root, "[data-selected-model-year]");
@@ -133,6 +143,10 @@
         applyLeftSummary(root, root.__mgSelected);
         fillCf7Hidden(root.__mgSelected);
         setTimeout(() => waitAndMountCf7Features(), 0);
+      }
+
+      if (step === 3) {
+        scrollToInner(root);
       }
     };
 

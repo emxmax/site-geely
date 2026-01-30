@@ -150,10 +150,20 @@ function passport_filter_by_category()
         $pdf_url = $service_passport;
       }
     }
-    ?>
+?>
     <div class="passport-catalog__item js-passport-item" data-page="<?php echo esc_attr($page_number); ?>"
       style="<?php echo $page_number > 1 ? 'display: none;' : ''; ?>">
       <div class="passport-catalog__card">
+
+        <?php if ($pdf_url): ?>
+          <a
+            href="<?php echo esc_url($pdf_url); ?>"
+            class="passport-catalog__link-overlay"
+            target="_blank"
+            rel="noopener"
+            aria-label="<?php echo esc_attr($title ?: 'Pasaporte de servicios'); ?>">
+          </a>
+        <?php endif; ?>
 
         <?php if ($title): ?>
           <h3 class="passport-catalog__title title-6 title-mobile-sm-4">
@@ -186,7 +196,7 @@ function passport_filter_by_category()
 
       </div>
     </div>
-    <?php
+<?php
     $index++;
   endwhile;
   wp_reset_postdata();
@@ -326,8 +336,3 @@ add_action(
 
 
 /*==================================================================*/
-
-
-
-
-

@@ -51,6 +51,7 @@
   font-size: 20px;
   line-height: 24px;
   font-family: var(--font-geely);
+  letter-spacing: 1px;
 }
 
 .mg-footer__titleLink {

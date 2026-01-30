@@ -16,6 +16,7 @@ if (!$product_id || get_post_status($product_id) !== 'publish') {
 
 $product_title = get_the_title($product_id);
 $image_url = get_stylesheet_directory_uri() . '/assets/img/fondo-cotiza.png';
+$image_step3_url = get_stylesheet_directory_uri() . '/assets/img/bg-step3-cotiza.png';
 $nid_marca = (string) (get_field('api_nid_marca', $product_id) ?: '');
 $co_articulo = (string) (get_field('product_code', $product_id) ?: '');
 $co_configuracion = (string) (get_field('product_code_config', $product_id) ?: '');
@@ -277,7 +278,7 @@ $default_hero_img = (string)(
   data-nid-marca="<?php echo (int)$nid_marca; ?>"
   data-geo-bg="<?php echo esc_url($bg_modal_url); ?>"
   data-step="1">
-  <div class="mg-quote__inner">
+  <div class="mg-quote__inner" id="mg-quote__inner">
 
     <header class="mg-quote__header">
       <h1 class="mg-quote__title"><?php echo esc_html($title); ?></h1>
@@ -461,7 +462,7 @@ $default_hero_img = (string)(
 
         <div class="mg-quote__panel" data-step="3">
           <div class="mg-quoteConfirm" aria-live="polite">
-            <div class="mg-quoteConfirm__hero">
+            <div class="mg-quoteConfirm__hero" style="--quote-step-bg: url('<?php echo esc_url($image_step3_url); ?>');">
               <img class="mg-quoteConfirm__heroImg" data-confirm-hero src="<?php echo esc_url($default_hero_img); ?>" alt="<?php echo esc_attr($product_title); ?>" loading="lazy">
             </div>
 

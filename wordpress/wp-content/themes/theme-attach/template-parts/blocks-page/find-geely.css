@@ -2,7 +2,8 @@
   padding: 80px 24px;
   /* background: #f7f9fb; */
   margin-block-start: 0px !important;
-  overflow: hidden; /* importante: recorta el circulo como en el diseño */
+  overflow: hidden;
+  max-width: 1740px;
 }
 
 .find-geely__inner {
@@ -55,7 +56,7 @@
   background: #000;
   color: #fff;
   font-family: var(--font-geely);
-  font-weight: 600;
+  font-weight: 700;
   text-decoration: none;
   border: 0;
   font-size: 16px;
@@ -80,7 +81,7 @@
   width: 100%;
   height: auto;
   display: block;
-  opacity: 0.95;
+  opacity: 1;
 }
 
 /* =========================
@@ -124,8 +125,10 @@
   }
 
   .find-geely__btn {
-    width: 83%;
+    width: 100%;
     max-width: 100%;
+    height: 40px;
+    font-size: 14px;
   }
 
   .find-geely__media {

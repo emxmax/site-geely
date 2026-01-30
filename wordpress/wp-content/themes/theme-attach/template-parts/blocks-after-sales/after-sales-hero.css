@@ -153,6 +153,7 @@
   .after-sales-hero__actions {
     margin-top: 16px;
     gap: 10px;
+    justify-content: space-between;
   }
 
   /*  */

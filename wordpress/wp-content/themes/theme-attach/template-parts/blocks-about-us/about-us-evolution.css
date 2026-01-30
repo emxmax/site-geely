@@ -72,6 +72,7 @@
 .about-evolution__year.is-active .about-evolution__year-text {
   color: var(--c-greely-blue);
   font-weight: 700;
+  letter-spacing: 2px;
 }
 
 .about-evolution__milestone {

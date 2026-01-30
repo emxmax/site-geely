@@ -20,11 +20,31 @@ $title = get_field('block_tech_title');
 $desc = get_field('block_tech_description');
 $image = get_field('block_tech_image');
 $cards = get_field('block_tech_cards');
+// Fondos administrables
+$bg_desktop_field = get_field('block_tech_bg_desktop');
+$bg_mobile_field  = get_field('block_tech_bg_mobile');
+
+$bg_desktop_url = is_array($bg_desktop_field)
+    ? ($bg_desktop_field['url'] ?? '')
+    : ($bg_desktop_field ?: '');
+
+$bg_mobile_url  = is_array($bg_mobile_field)
+    ? ($bg_mobile_field['url'] ?? '')
+    : ($bg_mobile_field ?: '');
+
+// CSS variables inline
+$style_attr = "";
+if ($bg_desktop_url) {
+    $style_attr .= "--emg-tech-bg-desktop:url('" . esc_url($bg_desktop_url) . "');";
+}
+if ($bg_mobile_url) {
+    $style_attr .= "--emg-tech-bg-mobile:url('" . esc_url($bg_mobile_url) . "');";
+}
 
 if (!$title) return;
 ?>
 
-<section class="emg-tech" id="<?php echo esc_attr($block_id); ?>">
+<section class="emg-tech" id="<?php echo esc_attr($block_id); ?>" style="<?php echo esc_attr($style_attr); ?>">
     <div class="emg-tech__inner">
 
         <!-- Header -->

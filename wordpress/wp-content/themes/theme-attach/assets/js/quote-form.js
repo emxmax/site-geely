@@ -760,6 +760,7 @@
         return;
       }
 
+      // al cambiar dept: dejar tienda vacía (sin autoselección)
       resetStoreToPlaceholder();
       clearRecommendationsUI();
       setLoadingStores(storeUiEl, true);
@@ -771,8 +772,19 @@
         const items = res?.success ? (res.data?.items || []) : [];
         storeCacheByDept[dept] = items; // cache global
 
+        // carga opciones en el combo
         fillStoreOptions(items);
 
+        // IMPORTANTE: dejar placeholder seleccionado (sin filtrar/auto-seleccionar)
+        // (fillStoreOptions actualmente llama resetStoreToPlaceholder() dentro,
+        // pero igual aseguramos que quede vacío)
+        window.__mgStoreChangeInternal = true;
+        storeUiEl.value = "";
+        storeUiEl.dispatchEvent(new Event("change", { bubbles: true }));
+        storeUiEl.dispatchEvent(new Event("input", { bubbles: true }));
+        setTimeout(() => (window.__mgStoreChangeInternal = false), 0);
+
+        // el botón "Ver más concesionarios" puede seguir mostrándose si hay items
         const { form } = getCtx();
         const box = ensureNearStoresBox(form);
         if (box) {
@@ -786,7 +798,6 @@
           }
         }
 
-        await autoSelectFirstStoreIfAny(dept, items);
       } catch (err) {
         console.warn("[MG_QUOTE] Error loading stores:", err);
         resetStoreToPlaceholder();

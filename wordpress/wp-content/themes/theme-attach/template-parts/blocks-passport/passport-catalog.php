@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Bloque: Catálogo de Pasaportes de Servicio
  * 
@@ -64,7 +65,7 @@ $has_categories = !empty($categories);
         foreach ($categories as $category):
           if (!is_object($category))
             continue;
-          ?>
+        ?>
           <button type="button" class="paragraph-2 paragraph-sm-4 passport-catalog__tab js-passport-tab"
             data-tab="<?= esc_attr($category->slug); ?>">
             <span><?= esc_html($category->name); ?></span>
@@ -99,11 +100,21 @@ $has_categories = !empty($categories);
             $pdf_url = $service_passport;
           }
         }
-        ?>
+      ?>
         <div class="passport-catalog__item js-passport-item" data-page="<?= esc_attr($page_number); ?>"
           style="<?= $page_number > 1 ? 'display: none;' : ''; ?>">
 
           <div class="passport-catalog__card">
+
+            <?php if ($pdf_url): ?>
+              <a
+                href="<?php echo esc_url($pdf_url); ?>"
+                class="passport-catalog__link-overlay"
+                target="_blank"
+                rel="noopener"
+                aria-label="<?php echo esc_attr($title ?: 'Pasaporte de servicios'); ?>">
+              </a>
+            <?php endif; ?>
 
             <?php if ($title): ?>
               <h3 class="passport-catalog__title title-6 title-mobile-sm-4">
@@ -136,7 +147,7 @@ $has_categories = !empty($categories);
 
           </div>
         </div>
-        <?php
+      <?php
         $index++;
       endwhile;
       wp_reset_postdata();

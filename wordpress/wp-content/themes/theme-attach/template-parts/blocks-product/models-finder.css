@@ -311,8 +311,8 @@ body.mf-modal-open {
   background-color: #ffffff;
   background-image: url("/wp-content/themes/theme-attach/assets/img/fondo-modal-versiones.png");
   background-repeat: no-repeat;
-  background-position: right bottom;
-  background-size: 420px auto;
+  background-position: top center !important;
+  background-size: cover !important;
 
   border-radius: 36px;
   overflow: hidden;
@@ -468,14 +468,16 @@ body.mf-modal-open {
   .mf-modal__dialog {
     background-size: 520px auto;
     background-position: right -40px bottom -40px;
+    background-size: cover !important;
+    background-position: center top !important;
   }
 }
 
 @media (max-width: 768px) {
   .mf-modal__dialog {
     padding: 24px;
-    background-size: 260px auto;
-    background-position: center bottom;
+    background-size: cover !important;
+    background-position: center top !important;
   }
   .mf-modal[data-open="1"] {
     padding: 0;
