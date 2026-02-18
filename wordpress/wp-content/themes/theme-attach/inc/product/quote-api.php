@@ -11,9 +11,20 @@ if (!defined('MG_QUOTE_API_DEBUG')) {
   define('MG_QUOTE_API_DEBUG', true);
 }
 
+/** CPT destino (Entidad Cotización) */
+if (!defined('MG_QUOTE_CPT')) {
+  define('MG_QUOTE_CPT', 'cotizacion'); // <-- si tu post_type tiene otro slug, cámbialo aquí
+}
+
+/** Estado por defecto para ACF select cot_status */
+if (!defined('MG_QUOTE_DEFAULT_STATUS')) {
+  define('MG_QUOTE_DEFAULT_STATUS', 'recibida'); // si tu select usa otro value, cámbialo
+}
+
 /** Globals para devolver al front */
 $GLOBALS['mg_quote_last_api'] = null;
 $GLOBALS['mg_quote_last_payload'] = null;
+$GLOBALS['mg_quote_last_post_id'] = null;
 
 /** Helper debug */
 if (!function_exists('mg_quote_log')) {
@@ -318,6 +329,112 @@ if (!function_exists('mg_quote_send_api')) {
 }
 
 /** =========================
+ *  Guardar cotización (CPT + ACF)
+ *  - Guarda SIEMPRE (haya ok o no en API) para trazabilidad
+ * ========================= */
+if (!function_exists('mg_quote_save_cotizacion')) {
+  function mg_quote_save_cotizacion(array $fields, array $api, array $debug = [])
+  {
+    $post_type = MG_QUOTE_CPT;
+
+    if (!post_type_exists($post_type)) {
+      mg_quote_log('CPT no existe, no se guardó cotización', ['post_type' => $post_type]);
+      return 0;
+    }
+
+    $sanitize_text = function ($v) {
+      if (is_array($v)) $v = reset($v);
+      return is_string($v) ? sanitize_text_field($v) : $v;
+    };
+
+    $product_title = $sanitize_text($fields['cot_product_title'] ?? '');
+    $model_name    = $sanitize_text($fields['cot_model_name'] ?? '');
+    $names         = $sanitize_text($fields['cot_names'] ?? '');
+    $lastnames     = $sanitize_text($fields['cot_lastnames'] ?? '');
+
+    $title_bits = array_filter([
+      'Cotización',
+      ($names || $lastnames) ? trim($names . ' ' . $lastnames) : '',
+      $model_name ? '(' . $model_name . ')' : ($product_title ? '(' . $product_title . ')' : ''),
+    ]);
+
+    $post_title = implode(' - ', $title_bits);
+    if ($post_title === '') $post_title = 'Cotización';
+
+    $post_id = wp_insert_post([
+      'post_type'   => $post_type,
+      'post_status' => 'publish',
+      'post_title'  => $post_title,
+      'post_content' => '',
+    ], true);
+
+    if (is_wp_error($post_id) || !$post_id) {
+      mg_quote_log('No se pudo crear post cotización', ['error' => is_wp_error($post_id) ? $post_id->get_error_message() : '']);
+      return 0;
+    }
+
+    // helper: set ACF si existe, sino post_meta normal
+    $set = function ($key, $value) use ($post_id) {
+      if (function_exists('update_field')) {
+        // ACF guarda por "name" (como lo tienes en tu grupo: cot_product_id, etc.)
+        update_field($key, $value, $post_id);
+      } else {
+        update_post_meta($post_id, $key, $value);
+      }
+    };
+
+    // ====== Campos ACF (según tu grupo "Cotizacion - Datos") ======
+    $set('cot_product_id',        (int)($fields['cot_product_id'] ?? 0));
+    $set('cot_product_title',     $sanitize_text($fields['cot_product_title'] ?? ''));
+    $set('cot_model_slug',        $sanitize_text($fields['cot_model_slug'] ?? ''));
+    $set('cot_model_name',        $sanitize_text($fields['cot_model_name'] ?? ''));
+    $set('cot_model_year',        $sanitize_text($fields['cot_model_year'] ?? ''));
+    $set('cot_model_price_usd',   $sanitize_text($fields['cot_model_price_usd'] ?? '0'));
+    $set('cot_model_price_local', $sanitize_text($fields['cot_model_price_local'] ?? '0'));
+    $set('cot_color_name',        $sanitize_text($fields['cot_color_name'] ?? ''));
+    $set('cot_color_hex',         $sanitize_text($fields['cot_color_hex'] ?? ''));
+
+    $set('cot_names',             $sanitize_text($fields['cot_names'] ?? ''));
+    $set('cot_lastnames',         $sanitize_text($fields['cot_lastnames'] ?? ''));
+    $set('cot_document_type',     $sanitize_text($fields['cot_document_type'] ?? ''));
+    $set('cot_document',          $sanitize_text($fields['cot_document'] ?? ''));
+    $set('cot_phone',             $sanitize_text($fields['cot_phone'] ?? ''));
+    $set('cot_email',             sanitize_email($fields['cot_email'] ?? ''));
+
+    $set('cot_department',        $sanitize_text($fields['cot_department'] ?? ''));
+    $set('cot_store',             $sanitize_text($fields['cot_store'] ?? ''));
+
+    // Respuesta API
+    $set('cot_api_ok',       (string)((int)($api['ok'] ?? 0)));
+    $set('cot_api_status',   (string)((int)($api['status'] ?? 0)));
+
+    // response puede ser json grande: lo guardo como texto "seguro" sin romper (no html)
+    $api_response = $api['response'] ?? '';
+    if (is_array($api_response) || is_object($api_response)) $api_response = wp_json_encode($api_response);
+    $set('cot_api_response', (string)$api_response);
+
+    $set('cot_api_error',    $sanitize_text($api['error'] ?? ''));
+
+    // Estado / notas (si tu form manda cot_status o notas, se respeta; sino default)
+    $status = $sanitize_text($fields['cot_status'] ?? MG_QUOTE_DEFAULT_STATUS);
+    if ($status !== '') $set('cot_status', $status);
+
+    $notes = $fields['cot_notes'] ?? '';
+    if (is_array($notes)) $notes = reset($notes);
+    $notes = is_string($notes) ? wp_strip_all_tags($notes) : '';
+    if ($notes !== '') $set('cot_notes', $notes);
+
+    // Extra trazabilidad en notes si quieres (NO pisa cot_notes si ya vino del form)
+    if ($notes === '' && !empty($debug)) {
+      $dbg_txt = '[DEBUG] ' . wp_json_encode($debug, JSON_UNESCAPED_UNICODE);
+      $set('cot_notes', $dbg_txt);
+    }
+
+    return (int)$post_id;
+  }
+}
+
+/** =========================
  *  0) CF7 SKIP MAIL (NO ENVIAR CORREO)
  *  - Mantiene el submit AJAX
  *  - Mantiene wpcf7_before_send_mail (API + guardar cotización)
@@ -530,6 +647,49 @@ add_action('wpcf7_before_send_mail', function ($contact_form) {
       'geo.raw' => $geo['raw'] ?? [],
     ],
   ];
+
+  /** =========================
+   *  Guardar cotización (Entidad Cotización)
+   *  ========================= */
+  $cot_store_for_save = $cot_store;
+  if ($nombre_comercial_de_la_tienda !== '') {
+    // lo guardamos más legible, y tu parser igual soporta "ID|Nombre"
+    $cot_store_for_save = $cot_store . '|' . $nombre_comercial_de_la_tienda;
+  }
+
+  $post_id = mg_quote_save_cotizacion(
+    [
+      'cot_product_id'        => $cot_product_id,
+      'cot_product_title'     => $cot_product_title,
+      'cot_model_slug'        => $cot_model_slug,
+      'cot_model_name'        => $cot_model_name,
+      'cot_model_year'        => $cot_model_year,
+      'cot_model_price_usd'   => $cot_model_price_usd,
+      'cot_model_price_local' => $cot_model_price_local,
+
+      'cot_names'             => $cot_names,
+      'cot_lastnames'         => $cot_lastnames,
+      'cot_document_type'     => $cot_document_type_raw, // guardo lo que eligió el usuario
+      'cot_document'          => $cot_document,
+      'cot_phone'             => $cot_phone,
+      'cot_email'             => $cot_email,
+
+      'cot_store'             => $cot_store_for_save,
+
+      // opcionales si los mandas desde el form:
+      'cot_status'            => (string)$get('cot_status'),
+      'cot_notes'             => (string)$get('cot_notes'),
+    ],
+    [
+      'ok'       => (int)$api['ok'],
+      'status'   => (int)$api['status'],
+      'response' => (string)$api['response'],
+      'error'    => (string)$api['error'],
+    ],
+    $GLOBALS['mg_quote_last_api']['debug'] ?? []
+  );
+
+  $GLOBALS['mg_quote_last_post_id'] = (int)$post_id;
 }, 10, 1);
 
 
