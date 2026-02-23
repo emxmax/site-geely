@@ -19,6 +19,8 @@ $hero_video = get_field('sec_big_image'); // ACF File (mp4) -> keep same key
 // Commitments
 $commitments_title = get_field('commitments_title') ?: '';
 $items = get_field('commitments_items'); // repeater
+$items_count = (is_array($items)) ? count($items) : 0;
+$show_nav = $items_count > 2; 
 
 $uid = 'ic-' . uniqid();
 
@@ -148,6 +150,7 @@ $rel    = $btn_newtab ? 'noopener noreferrer' : '';
                     </div>
 
 
+                    <?php if ($show_nav): ?>
                     <div class="ic-block__controls">
                         <button class="ic-block__nav ic-block__prev" type="button">
                             <img
@@ -161,9 +164,12 @@ $rel    = $btn_newtab ? 'noopener noreferrer' : '';
                                 alt="Next">
                         </button>
                     </div>
+                    <?php endif; ?>
 
+                    <?php if ($show_nav): ?>
                     <!-- Mobile paginations -->
                     <div class="swiper-pagination ic-block__pagination"></div>
+                    <?php endif; ?>
 
                 </div>
             </div>

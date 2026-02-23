@@ -5,6 +5,9 @@ $title    = get_field('experience_title') ?: '';
 $subtitle = get_field('experience_subtitle') ?: '';
 $slides   = get_field('experience_slides');
 
+$items_count = (is_array($slides)) ? count($slides) : 0;
+$show_nav = $items_count > 2; 
+
 $uid = 'exp-' . uniqid();
 ?>
 
@@ -85,6 +88,7 @@ $uid = 'exp-' . uniqid();
         </div>
       </div>
 
+      <?php if ($show_nav): ?>
       <div class="exp-carousel__controls">
         <button class="exp-carousel__nav exp-carousel__nav--prev" type="button" aria-label="Anterior">
           <img
@@ -100,6 +104,8 @@ $uid = 'exp-' . uniqid();
             alt="Next">
         </button>
       </div>
+      <?php endif; ?>
+
     </div>
 
   </div>

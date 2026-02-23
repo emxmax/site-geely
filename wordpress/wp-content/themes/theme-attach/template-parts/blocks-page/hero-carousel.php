@@ -114,6 +114,7 @@ $uid = 'hc-' . wp_unique_id();
                   alt="<?php echo esc_attr($alt); ?>"
                   loading="lazy"
                   decoding="async"
+                  draggable="false"
                   <?php if ($w > 0 && $h > 0): ?>
                     width="<?php echo esc_attr($w); ?>"
                     height="<?php echo esc_attr($h); ?>"
@@ -126,6 +127,7 @@ $uid = 'hc-' . wp_unique_id();
                 <a
                   class="hero-carousel__overlay-link"
                   href="<?php echo esc_url($href); ?>"
+                  draggable="false"
                   <?php if (!empty($target)): ?>target="<?php echo esc_attr($target); ?>"<?php endif; ?>
                   <?php if (!empty($rel)): ?>rel="<?php echo esc_attr($rel); ?>"<?php endif; ?>
                   aria-label="<?php echo esc_attr($alt ?: 'Ir al enlace'); ?>"

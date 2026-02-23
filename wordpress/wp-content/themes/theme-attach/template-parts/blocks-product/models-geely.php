@@ -226,6 +226,9 @@ style="--bg-card: url('<?php echo esc_url($bg_card_url); ?>');">
 
         // Mobile: 4 por slide (1 columna x 4 cards)
         $mobileSlides = array_chunk($cards, 4);
+
+        $items_count = (is_array($cards)) ? count($cards) : 0;
+        $show_nav = $items_count > 4; 
         ?>
 
         <div class="mg-models__panel <?php echo $active ? 'is-active' : ''; ?>" data-mg-panel="<?php echo esc_attr($slug); ?>" role="tabpanel">
@@ -278,6 +281,7 @@ style="--bg-card: url('<?php echo esc_url($bg_card_url); ?>');">
                   <?php endforeach; ?>
                 </div>
 
+                <?php if ($show_nav): ?>
                 <div class="mg-models__controls mg-models__controls--desktop">
                   <button class="mg-models__nav mg-models__nav--prev" type="button" aria-label="Anterior">
                     <img
@@ -291,6 +295,8 @@ style="--bg-card: url('<?php echo esc_url($bg_card_url); ?>');">
                       alt="Next">
                   </button>
                 </div>
+                <?php endif; ?>
+
               </div>
             </div>
 

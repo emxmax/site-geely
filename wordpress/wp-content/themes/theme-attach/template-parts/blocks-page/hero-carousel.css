@@ -38,6 +38,14 @@
   max-width: 100%;
 }
 
+.hero-carousel__img,
+.hero-carousel__overlay-link {
+  -webkit-user-drag: none;
+  user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 /* overlay link: cubre toda el área del slide */
 .hero-carousel__overlay-link {
   position: absolute;
