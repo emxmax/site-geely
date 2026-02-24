@@ -20,7 +20,7 @@ $hero_video = get_field('sec_big_image'); // ACF File (mp4) -> keep same key
 $commitments_title = get_field('commitments_title') ?: '';
 $items = get_field('commitments_items'); // repeater
 $items_count = (is_array($items)) ? count($items) : 0;
-$show_nav = $items_count > 2; 
+$show_nav = $items_count > 2;
 
 $uid = 'ic-' . uniqid();
 
@@ -65,7 +65,42 @@ if (! function_exists('ta_ic_get_file_url')) {
 [$bg_desktop_url] = ta_ic_get_img_data($bg_desktop);
 [$bg_mobile_url]  = ta_ic_get_img_data($bg_mobile);
 
-$video_url = ta_ic_get_file_url($hero_video);
+// Right media (video o imagen) - MISMA KEY
+$hero_media = get_field('sec_big_image'); // puede ser File (mp4) o Image
+
+// Detectar tipo
+$media_is_video = false;
+$video_url = '';
+$hero_img_url = '';
+$hero_img_alt = '';
+
+// Si viene como array, podemos inferir por mime o url
+if (is_array($hero_media)) {
+    $mime = $hero_media['mime_type'] ?? '';
+    $url  = $hero_media['url'] ?? '';
+
+    if (strpos($mime, 'video/') === 0 || preg_match('/\.(mp4|webm|ogg)(\?.*)?$/i', $url)) {
+        $media_is_video = true;
+        $video_url = $url;
+    } else {
+        // tratarlo como imagen ACF image array
+        [$hero_img_url, $hero_img_alt] = ta_ic_get_img_data($hero_media);
+    }
+} else {
+    // Si no es array: puede ser ID o string
+    $url = ta_ic_get_file_url($hero_media);
+
+    // Heurística por extensión
+    if ($url && preg_match('/\.(mp4|webm|ogg)(\?.*)?$/i', $url)) {
+        $media_is_video = true;
+        $video_url = $url;
+    } else {
+        // podría ser ID de imagen o url de imagen
+        [$hero_img_url, $hero_img_alt] = ta_ic_get_img_data($hero_media);
+        // si venía como string URL y ta_ic_get_img_data lo devolvió vacío en url, usa $url
+        if (!$hero_img_url && $url) $hero_img_url = $url;
+    }
+}
 
 $target = $btn_newtab ? '_blank' : '_self';
 $rel    = $btn_newtab ? 'noopener noreferrer' : '';
@@ -151,32 +186,32 @@ $rel    = $btn_newtab ? 'noopener noreferrer' : '';
 
 
                     <?php if ($show_nav): ?>
-                    <div class="ic-block__controls">
-                        <button class="ic-block__nav ic-block__prev" type="button">
-                            <img
-                                src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-arrow.png'); ?>"
-                                alt="Prev">
-                        </button>
+                        <div class="ic-block__controls">
+                            <button class="ic-block__nav ic-block__prev" type="button">
+                                <img
+                                    src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-arrow.png'); ?>"
+                                    alt="Prev">
+                            </button>
 
-                        <button class="ic-block__nav ic-block__next" type="button">
-                            <img
-                                src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-arrow.png'); ?>"
-                                alt="Next">
-                        </button>
-                    </div>
+                            <button class="ic-block__nav ic-block__next" type="button">
+                                <img
+                                    src="<?php echo esc_url(get_stylesheet_directory_uri() . '/assets/img/icon-arrow.png'); ?>"
+                                    alt="Next">
+                            </button>
+                        </div>
                     <?php endif; ?>
 
                     <?php if ($show_nav): ?>
-                    <!-- Mobile paginations -->
-                    <div class="swiper-pagination ic-block__pagination"></div>
+                        <!-- Mobile paginations -->
+                        <div class="swiper-pagination ic-block__pagination"></div>
                     <?php endif; ?>
 
                 </div>
             </div>
 
             <div class="ic-block__right">
-                <?php if ($video_url): ?>
-                    <div class="ic-block__hero">
+                <div class="ic-block__hero">
+                    <?php if ($media_is_video && $video_url): ?>
                         <video
                             class="ic-block__hero-video"
                             muted
@@ -186,9 +221,16 @@ $rel    = $btn_newtab ? 'noopener noreferrer' : '';
                             preload="auto">
                             <source src="<?php echo esc_url($video_url); ?>" type="video/mp4">
                         </video>
-                    </div>
-                <?php endif; ?>
 
+                    <?php elseif ($hero_img_url): ?>
+                        <img
+                            class="ic-block__hero-img"
+                            src="<?php echo esc_url($hero_img_url); ?>"
+                            alt="<?php echo esc_attr($hero_img_alt ?: ''); ?>"
+                            loading="lazy"
+                            decoding="async" />
+                    <?php endif; ?>
+                </div>
             </div>
 
         </div>

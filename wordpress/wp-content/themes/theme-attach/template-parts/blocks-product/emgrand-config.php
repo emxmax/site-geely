@@ -243,7 +243,7 @@ if (! function_exists('emg_get_file_url')) {
                                             $base_dir = trailingslashit($upload['basedir']);
                                             $base_url = trailingslashit($upload['baseurl']);
 
-                                            $root_360_dir = $base_dir . 'emgrand-360/';
+                                            $root_360_dir = $base_dir . 'product-360/';
 
                                             $zip_filename      = pathinfo($zip_path, PATHINFO_FILENAME);
                                             $color_folder_slug = sanitize_title($zip_filename);
@@ -270,7 +270,7 @@ if (! function_exists('emg_get_file_url')) {
                                                 }
 
                                                 $ci_folder = trailingslashit(
-                                                    $base_url . 'emgrand-360/' . $post_id . '-' . $color_folder_slug . '/'
+                                                    $base_url . 'product-360/' . $post_id . '-' . $color_folder_slug . '/'
                                                 );
                                             }
                                         }
