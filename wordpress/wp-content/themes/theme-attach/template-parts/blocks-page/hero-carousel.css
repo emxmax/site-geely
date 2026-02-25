@@ -56,6 +56,27 @@
   background: transparent;
 }
 
+.hero-carousel__btn {
+  position: absolute;
+  left: 54px;
+  bottom: 150px;
+  z-index: 5;
+  width: 126px;
+  height: 48px;
+  background: #0b0c0c;
+  color: #ffffff;
+  border: 0;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  text-align: center;
+  vertical-align: middle;
+  font-family: var(--font-geely);
+  text-decoration: none;
+  padding: 10px 0;
+}
+
 /* =========================
    NAV (Desktop)
 ========================= */

@@ -86,8 +86,9 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 32px;
-  padding: 0 24px 78px;
+  gap: 20px;
+  padding: 0 16px 78px;
+  align-items: center;
 }
 
 .emg-hero__title {
@@ -96,7 +97,7 @@
   font-family: var(--font-geely);
   font-weight: 700;
   font-size: 64px;
-  line-height: 40px;
+  line-height: 64px;
 }
 
 .emg-hero__subtitle {
@@ -265,7 +266,7 @@
     font-size: 14px;
     width: 146px;
   }
-  .emg-hero__brand  {
+  .emg-hero__brand {
     font-size: 20px;
   }
 }

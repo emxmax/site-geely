@@ -142,7 +142,14 @@
       if (step === 2 && root.__mgSelected) {
         applyLeftSummary(root, root.__mgSelected);
         fillCf7Hidden(root.__mgSelected);
-        setTimeout(() => waitAndMountCf7Features(), 0);
+        const form = document.querySelector(".wpcf7 form");
+        const deptEl = form?.querySelector('select[name="cot_department"]');
+        if (deptEl) MGQuoteLoader.show(deptEl);
+
+        setTimeout(() => {
+          waitAndMountCf7Features();
+          if (deptEl) MGQuoteLoader.hide(deptEl);
+        }, 0);
       }
 
       if (step === 3) {
@@ -374,7 +381,6 @@
     if (form.__mgCf7FeaturesMounted) return true;
     form.__mgCf7FeaturesMounted = true;
 
-    initDeptStoreDynamic();
     initGeo();
     initCotizaValidation();
     initAutoGeoIfPermitted();
@@ -390,6 +396,7 @@
       if (mountCf7FeaturesWhenReady() || tries >= maxTries) clearInterval(timer);
     }, 200);
   };
+
   /** =========================
    *  BOOT
    * ========================= */

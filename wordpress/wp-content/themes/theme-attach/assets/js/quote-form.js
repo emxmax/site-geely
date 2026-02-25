@@ -745,11 +745,12 @@
     };
 
     const loadStoresByDept = async (deptValue) => {
-      const { storeUiEl } = getCtx();
+      const { storeUiEl, deptEl } = getCtx();
       if (!storeUiEl) return;
 
       const dept = String(deptValue || "").trim();
       console.log("[MG_QUOTE] loadStoresByDept ->", dept);
+      MGQuoteLoader.show(deptEl || storeUiEl);
 
       // reset dedupe key al cambiar dept
       window.__mgLastRecommendationsKey = "";
@@ -757,6 +758,7 @@
       if (!dept) {
         resetStoreToPlaceholder();
         clearRecommendationsUI();
+        MGQuoteLoader.hide(deptEl || storeUiEl);
         return;
       }
 
@@ -804,6 +806,7 @@
         clearRecommendationsUI();
       } finally {
         setLoadingStores(storeUiEl, false);
+        MGQuoteLoader.hide(deptEl || storeUiEl);
       }
     };
 
@@ -835,7 +838,7 @@
         if (t.id !== STORE_UI_ID) return;
 
         const v = (t.value || "").trim();
-        const { storeHiddenEl, deptEl } = getCtx();
+        const { storeHiddenEl, deptEl, storeUiEl } = getCtx();
 
         // sync hidden siempre
         if (storeHiddenEl) {
@@ -848,7 +851,15 @@
         if (window.__mgStoreChangeInternal) return;
 
         const deptNow = String(deptEl?.value || "").trim();
-        await refreshRecommendations({ dept: deptNow, selectedStoreId: v });
+
+        const needsLoader = deptNow === "16";
+        if (needsLoader) MGQuoteLoader.show(storeUiEl);
+
+        try {
+          await refreshRecommendations({ dept: deptNow, selectedStoreId: v });
+        } finally {
+          if (needsLoader) MGQuoteLoader.hide(storeUiEl);
+        }
       },
       true
     );
@@ -1247,6 +1258,8 @@
         return;
       }
 
+      MGQuoteLoader.show(geoBtn);
+
       navigator.geolocation.getCurrentPosition(
         async (pos) => {
           const { latitude, longitude } = pos.coords;
@@ -1262,32 +1275,43 @@
           } catch (e) {
             console.warn("[MG_QUOTE] Geo flow error:", e);
             openGeoErrorModal("Ocurrió un error", "No se pudo determinar el concesionario cercano. Intenta nuevamente.");
+          } finally {
+            MGQuoteLoader.hide(geoBtn);
           }
         },
         (err) => {
-          if (err?.code === 1) return openDeniedModal();
+          try {
+            if (err?.code === 1) return openDeniedModal();
 
-          if (err?.code === 2)
-            return openGeoErrorModal(
-              "No se pudo obtener tu ubicación",
-              "Tu dispositivo/navegador no pudo determinar la ubicación. Verifica que la ubicación esté activada y vuelve a intentar."
-            );
+            if (err?.code === 2)
+              return openGeoErrorModal(
+                "No se pudo obtener tu ubicación",
+                "Tu dispositivo/navegador no pudo determinar la ubicación. Verifica que la ubicación esté activada y vuelve a intentar."
+              );
 
-          if (err?.code === 3)
-            return openGeoErrorModal(
-              "Tiempo de espera agotado",
-              "No se pudo obtener tu ubicación a tiempo. Intenta nuevamente."
-            );
+            if (err?.code === 3)
+              return openGeoErrorModal(
+                "Tiempo de espera agotado",
+                "No se pudo obtener tu ubicación a tiempo. Intenta nuevamente."
+              );
 
-          openGeoErrorModal("No se pudo obtener tu ubicación", "Ocurrió un error inesperado. Intenta nuevamente.");
+            openGeoErrorModal("No se pudo obtener tu ubicación", "Ocurrió un error inesperado. Intenta nuevamente.");
+          } finally {
+            MGQuoteLoader.hide(geoBtn);
+          }
         },
         { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
       );
     };
 
-    geoBtn.addEventListener("click", (e) => {
+    geoBtn.addEventListener("click", async (e) => {
       e.preventDefault();
-      requestGeo();
+      MGQuoteLoader.show(geoBtn);
+
+      try {
+        await requestGeo();
+      } finally {
+      }
     });
 
     // IMPORTANTE:
@@ -1856,6 +1880,43 @@
       if (mountCf7FeaturesWhenReady() || tries >= maxTries) clearInterval(timer);
     }, 200);
   };
+
+
+  // ===== Loader helper (reusable) =====
+  const MGQuoteLoader = (() => {
+    const ensure = (anchorEl) => {
+      if (!anchorEl) return null;
+
+      // envolver para posicionar
+      const wrap = anchorEl.closest(".mg-hasLoader") || anchorEl.parentElement;
+      if (wrap && !wrap.classList.contains("mg-hasLoader")) wrap.classList.add("mg-hasLoader");
+
+      // crear spinner si no existe
+      let sp = wrap.querySelector(".mg-selectLoader");
+      if (!sp) {
+        sp = document.createElement("span");
+        sp.className = "mg-selectLoader";
+        wrap.appendChild(sp);
+      }
+      return { wrap, sp };
+    };
+
+    const show = (anchorEl) => {
+      const ctx = ensure(anchorEl);
+      if (!ctx) return;
+      ctx.wrap.classList.add("mg-isLoading");
+      ctx.sp.style.display = "block";
+    };
+
+    const hide = (anchorEl) => {
+      const ctx = ensure(anchorEl);
+      if (!ctx) return;
+      ctx.wrap.classList.remove("mg-isLoading");
+      ctx.sp.style.display = "none";
+    };
+
+    return { show, hide };
+  })();
 
   /** =========================
    *  BOOT

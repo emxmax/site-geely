@@ -41,6 +41,7 @@
     initMap();
     initFilters();
     initProductsCarousel();
+    toggleEmptyState();
   }
 
   /**
@@ -180,7 +181,7 @@
     const whatsapp =
       card.querySelector(".stores-locator__card-item--whatsapp a")
         ?.textContent || "";
-        
+
     const content = `
       <div class="stores-locator__map-info">
         <h4>${title}</h4>
@@ -240,6 +241,51 @@
       activeCard.classList.add("is-active");
       activeCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
+  }
+
+  /**
+   * Filtro vacio
+   */
+  function ensureEmptyNode() {
+    const list = document.querySelector(".stores-locator__list");
+    if (!list) return null;
+
+    let empty = list.querySelector(".stores-locator__empty");
+    if (!empty) {
+      empty = document.createElement("div");
+      empty.className = "stores-locator__empty";
+      empty.innerHTML = `
+      <p class="paragraph-4 paragraph-sm-5">
+        No hay tiendas para mostrar.
+      </p>
+    `;
+      // estilo mínimo para que sí o sí se vea (luego lo pasas a SCSS)
+      empty.style.background = "#fff";
+      empty.style.padding = "16px";
+      empty.style.borderRadius = "12px";
+      empty.style.color = "#111";
+      empty.style.display = "none";
+
+      list.appendChild(empty);
+    }
+
+    return empty;
+  }
+
+  function toggleEmptyState() {
+    const list = document.querySelector(".stores-locator__list");
+    if (!list) return;
+
+    const empty = ensureEmptyNode();
+    if (!empty) return;
+
+    const cards = list.querySelectorAll(".stores-locator__card");
+    const hasVisible = Array.from(cards).some(
+      (c) => !c.classList.contains("is-hidden")
+    );
+
+    // Si no hay cards en el DOM O todas están hidden -> muestra mensaje
+    empty.style.display = (!cards.length || !hasVisible) ? "block" : "none";
   }
 
   /**
@@ -344,6 +390,7 @@
     if (map) {
       fitMapToMarkers(visibleMarkers);
     }
+    toggleEmptyState();
   }
 
   /**
@@ -517,7 +564,7 @@
   }
 
   //
-  function initSelects() {}
+  function initSelects() { }
 
   // Auto-inicialización
   if (document.readyState === "loading") {

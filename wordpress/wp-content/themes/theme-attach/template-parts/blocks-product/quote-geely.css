@@ -1112,3 +1112,34 @@
 .gm-style .gm-style-iw-c {
   max-width: 225px !important;
 }
+
+/* ===== Loader mini para selects ===== */
+.mg-selectLoader {
+  position: absolute;
+  right: 34px;           /* deja espacio al chevron */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 2px solid rgba(0,0,0,.15);
+  border-top-color: rgba(2,123,255,1);
+  animation: mgSpin .7s linear infinite;
+  display: none;
+  pointer-events: none;
+}
+
+@keyframes mgSpin { to { transform: translateY(-50%) rotate(360deg); } }
+
+/* wrapper para posicionar el spinner (se lo ponemos por JS) */
+.mg-hasLoader {
+  position: relative;
+}
+
+/* estado "cargando": deshabilita interacción (opcional) */
+.mg-isLoading select,
+.mg-isLoading .mg-selectUiBtn,
+.mg-isLoading button {
+  pointer-events: none;
+  opacity: .75;
+}

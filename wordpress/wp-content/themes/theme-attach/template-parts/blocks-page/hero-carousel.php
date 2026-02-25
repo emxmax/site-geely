@@ -133,6 +133,12 @@ $uid = 'hc-' . wp_unique_id();
                   aria-label="<?php echo esc_attr($alt ?: 'Ir al enlace'); ?>"
                 ></a>
               <?php endif; ?>
+
+              <?php if (!empty($href)): ?>
+              <a href="<?php echo esc_url($href); ?>" draggable="false" class="hero-carousel__btn hero-carousel__btn--nav" type="button" aria-label="Cotizar">
+                Cotizar
+              </a>
+              <?php endif; ?>
             </div>
           </div>
 
