@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Columnas extra en el listado del CPT "cotizacion" (ACF fields).
  * Pegar en functions.php del child theme.
@@ -58,7 +59,7 @@ add_action('manage_cotizacion_posts_custom_column', function ($column, $post_id)
                 $badge = '';
                 if ($hex && preg_match('/^#?[0-9a-fA-F]{6}$/', $hex)) {
                     $hex = ltrim($hex, '#');
-                    $badge = '<span style="display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle;margin-right:6px;border:1px solid #ccc;background:#'.$hex.'"></span>';
+                    $badge = '<span style="display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle;margin-right:6px;border:1px solid #ccc;background:#' . $hex . '"></span>';
                 }
                 echo $badge . esc_html($color);
             } else {
@@ -115,14 +116,50 @@ add_action('pre_get_posts', function ($query) {
 add_action('admin_head', function () {
     $screen = function_exists('get_current_screen') ? get_current_screen() : null;
     if (!$screen || $screen->post_type !== 'cotizacion') return;
-    ?>
+?>
     <style>
-      .column-cot_product_title { width: 14%; }
-      .column-cot_model_name    { width: 14%; }
-      .column-cot_model_year    { width: 6%;  }
-      .column-cot_color_name    { width: 10%; }
-      .column-cot_customer      { width: 18%; }
-      .column-cot_document      { width: 14%; }
+        .wp-list-table .column-title {
+            width: 22% !important;
+            min-width: 220px;
+        }
+
+        /* Evita texto en vertical */
+        .wp-list-table .column-title strong,
+        .wp-list-table .column-title a {
+            white-space: normal !important;
+            word-break: break-word;
+            display: inline-block;
+        }
+
+        /* Checkbox alineado */
+        .wp-list-table .check-column {
+            width: 40px;
+        }
+
+        /* Tus columnas */
+        .column-cot_product_title {
+            width: 14%;
+        }
+
+        .column-cot_model_name {
+            width: 14%;
+        }
+
+        .column-cot_model_year {
+            width: 6%;
+        }
+
+        .column-cot_color_name {
+            width: 10%;
+        }
+
+        .column-cot_customer {
+            width: 18%;
+        }
+
+        .column-cot_document {
+            width: 14%;
+        }
     </style>
-    <?php
+<?php
 });

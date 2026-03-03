@@ -413,6 +413,15 @@ if (!function_exists('mg_quote_save_cotizacion')) {
     if (is_array($api_response) || is_object($api_response)) $api_response = wp_json_encode($api_response);
     $set('cot_api_response', (string)$api_response);
 
+    // ===== Guardar BODY enviado a la API (ACF: cot_api_body) =====
+    $api_body = $GLOBALS['mg_quote_last_payload'] ?? null;
+
+    if (is_array($api_body) || is_object($api_body)) {
+      $api_body = wp_json_encode($api_body, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    }
+
+    $set('cot_api_body', (string)($api_body ?: ''));
+
     $set('cot_api_error',    $sanitize_text($api['error'] ?? ''));
 
     // Estado / notas (si tu form manda cot_status o notas, se respeta; sino default)
@@ -472,6 +481,9 @@ add_action('wpcf7_before_send_mail', function ($contact_form) {
   $cot_model_year        = (string) $get('model_year');
   $cot_model_price_usd   = (string) $get('model_price_usd');
   $cot_model_price_local = (string) $get('model_price_local');
+  $cot_color_name        = (string) $get('color_name');
+  $cot_color_hex         = (string) $get('color_hex');
+
 
   $cot_names             = (string) $get('cot_names');
   $cot_lastnames         = (string) $get('cot_lastnames');
@@ -666,6 +678,8 @@ add_action('wpcf7_before_send_mail', function ($contact_form) {
       'cot_model_year'        => $cot_model_year,
       'cot_model_price_usd'   => $cot_model_price_usd,
       'cot_model_price_local' => $cot_model_price_local,
+      'color_name'            => $cot_color_name,
+      'color_hex'             => $cot_color_hex,
 
       'cot_names'             => $cot_names,
       'cot_lastnames'         => $cot_lastnames,
