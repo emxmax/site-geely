@@ -33,7 +33,6 @@ function mf_product_modal_ajax() {
     'spec_security'      => (string) get_field('spec_security', $id),
     'spec_seating'       => (string) get_field('spec_seating', $id),
     'spec_sush_button'   => (string) get_field('spec_sush_button', $id),
-    'spec_type'          => (string) get_field('spec_type', $id),
   ];
 
   // Versions desde product_models

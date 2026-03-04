@@ -164,9 +164,7 @@ if ($show_products_carousel && post_type_exists('producto')) {
       $usd = (string) ($model['model_price_usd'] ?? '');
       $local = (string) ($model['model_price_local'] ?? '');
 
-      // Tipo (Gasolina / Híbrido)
-      $type = (string) get_field('spec_type', $post_id);
-
+    
       $link_model = get_permalink();
 
       $products_carousel[] = [

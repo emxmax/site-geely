@@ -119,14 +119,16 @@ if (!function_exists('mf_get_cards_for_term')) {
         $local = (string)($model['model_price_local'] ?? '');
 
         // Tipo (Gasolina / Híbrido)
-        $type = (string) get_field('spec_type', $post_id);
+        $type_terms = get_the_terms($post_id, 'product_type');
+        $type_term  = (!empty($type_terms) && !is_wp_error($type_terms)) ? $type_terms[0] : null;
+
 
         $cards[] = [
           'id'    => $post_id,
           'title' => get_the_title(),
           'url'   => get_permalink(),
           'img'   => $img,
-          'type'  => $type,
+          'type_term'  => $type_term,
           'label' => $label,
           'usd'   => $usd,
           'local' => $local,
