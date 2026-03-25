@@ -16,6 +16,26 @@
   margin-inline: auto;
 }
 
+/* === Layout sin formulario === */
+.promotions-single-section--no-form .promotions-single-section__inner {
+  flex-direction: column;
+  align-items: center;
+}
+
+.promotions-single-section--no-form .promotions-single {
+  max-width: max-content;
+}
+
+.promotions-single-section--no-form .promotions-single__image {
+  max-width: max-content;
+  margin-inline: auto;
+}
+
+.promotions-single-section--no-form .promotions-single__content {
+  max-width: max-content;
+  text-align: left;
+}
+
 /* === Bloque: Contenido Single Promoción === */
 .promotions-single {
   width: 100%;

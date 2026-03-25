@@ -39,6 +39,7 @@ require_once get_stylesheet_directory() . '/inc/blog/assets.php';
 // Promotions domain
 require_once get_stylesheet_directory() . '/inc/promotions/assets.php';
 require_once get_stylesheet_directory() . '/inc/promotions/helpers.php';
+require_once get_stylesheet_directory() . '/inc/promotions/acf-fields.php';
 
 // After Sales | Postventa
 require_once get_stylesheet_directory() . '/inc/after-sales/assets.php';

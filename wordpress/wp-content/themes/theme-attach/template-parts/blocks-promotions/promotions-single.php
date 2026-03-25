@@ -35,9 +35,16 @@ if (empty($image)) {
 
 $block_id = !empty($block['anchor']) ? $block['anchor'] : ('mg-quote-' . ($block['id'] ?? uniqid()));
 $root_selector = '#' . $block_id;
+
+// Verificar si el formulario debe ocultarse (se usa más adelante)
+$hide_form = get_field('promocion_hide_form', $post_id);
+$section_class = 'promotions-single-section';
+if ($hide_form) {
+  $section_class .= ' promotions-single-section--no-form';
+}
 ?>
 
-<section class="promotions-single-section">
+<section class="<?= esc_attr($section_class); ?>">
   <div class="promotions-single-section__inner">
     <div class="promotions-single">
       <div class="promotions-single__inner">
@@ -56,20 +63,21 @@ $root_selector = '#' . $block_id;
     </div>
 
     <?php
-    // Campos ACF
-    $form_object = get_field('promocion_form_contact_form', $post_id) ?: null;
-    $form_title = get_field('promocion_form_title', $post_id) ?: 'COTIZA TU GEELY';
+    if (!$hide_form):
+      // Campos ACF
+      $form_object = get_field('promocion_form_contact_form', $post_id) ?: null;
+      $form_title = get_field('promocion_form_title', $post_id) ?: 'COTIZA TU GEELY';
 
-    // Generar shortcode
-    $form_shortcode = '';
-    if (!empty($form_object) && !empty($form_object->ID)) {
-      $form_id = $form_object->ID;
-      $form_shortcode = "[contact-form-7 id=\"{$form_id}\"]";
-    }
-    // Fallback a formulario
-    if (empty($form_shortcode)) {
-      $form_shortcode = '[contact-form-7 title="Cotiza tu Geely"]';
-    } ?>
+      // Generar shortcode
+      $form_shortcode = '';
+      if (!empty($form_object) && !empty($form_object->ID)) {
+        $form_id = $form_object->ID;
+        $form_shortcode = "[contact-form-7 id=\"{$form_id}\"]";
+      }
+      // Fallback a formulario
+      if (empty($form_shortcode)) {
+        $form_shortcode = '[contact-form-7 title="Cotiza tu Geely"]';
+      } ?>
     <div class="promotions-form">
       <div class="promotions-form__inner">
         <div class="geely-form">
@@ -101,6 +109,7 @@ $root_selector = '#' . $block_id;
         </div>
       </div>
     </div>
+    <?php endif; // end if !$hide_form ?>
   </div>
 </section>
 
