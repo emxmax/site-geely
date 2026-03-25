@@ -12,15 +12,12 @@ $root_selector = '#' . $block_id;
 $product_id = 0;
 $product_slug = isset($_GET['product']) ? sanitize_title((string)wp_unslash($_GET['product'])) : '';
 if ($product_slug !== '') {
-  $ids = get_posts([
-    'name' => $product_slug,
-    // Importante: buscar solo en el CPT de modelos (evita colisión con páginas del mismo slug)
-    'post_type' => 'producto',
-    'post_status' => 'publish',
-    'numberposts' => 1,
-    'fields' => 'ids',
-  ]);
-  $product_id = !empty($ids) ? (int)$ids[0] : 0;
+  // `get_page_by_path` suele ser más liviano que armar un WP_Query/get_posts.
+  // Además evita colisión con páginas/otros post_types.
+  $p = get_page_by_path($product_slug, OBJECT, 'producto');
+  if ($p && ($p->post_status ?? '') === 'publish') {
+    $product_id = (int)$p->ID;
+  }
 }
 
 if (!$product_id) {
