@@ -110,7 +110,7 @@ $has_nav = !empty($nav_items) || (!empty($cta_datasheet_text) && !empty($cta_dat
 
         <?php $product_id = get_the_ID(); ?>
         <a
-          href="<?php echo esc_url(home_url('/cotiza/?product_id=' . (int)$product_id)); ?>"
+          href="<?php echo esc_url(mg_quote_build_url($product_id)); ?>"
           class="emg-hero__btn emg-hero__btn--light"
         >
           Cotizar

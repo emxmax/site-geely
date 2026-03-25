@@ -8,7 +8,25 @@ $cf7_shortcode = get_field('quote_cf7_shortcode') ?: '[contact-form-7 id="36e9f7
 $block_id = !empty($block['anchor']) ? $block['anchor'] : ('mg-quote-' . ($block['id'] ?? uniqid()));
 $root_selector = '#' . $block_id;
 
-$product_id = isset($_GET['product_id']) ? (int) $_GET['product_id'] : 0;
+// SEO: preferimos `?product=<slug>`; mantenemos back-compat con `?product_id=<id>`
+$product_id = 0;
+$product_slug = isset($_GET['product']) ? sanitize_title((string)wp_unslash($_GET['product'])) : '';
+if ($product_slug !== '') {
+  $ids = get_posts([
+    'name' => $product_slug,
+    // Importante: buscar solo en el CPT de modelos (evita colisión con páginas del mismo slug)
+    'post_type' => 'producto',
+    'post_status' => 'publish',
+    'numberposts' => 1,
+    'fields' => 'ids',
+  ]);
+  $product_id = !empty($ids) ? (int)$ids[0] : 0;
+}
+
+if (!$product_id) {
+  $product_id = isset($_GET['product_id']) ? (int) $_GET['product_id'] : 0;
+}
+
 if (!$product_id || get_post_status($product_id) !== 'publish') {
   echo '<section id="' . esc_attr($block_id) . '" class="mg-quote"><div class="mg-quote__inner"><p class="mg-quote__error">No se encontró el producto a cotizar.</p></div></section>';
   return;

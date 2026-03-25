@@ -119,6 +119,6 @@ $payload = [
 
     <footer class="mf-card__actions">
         <a class="mf-btn mf-btn--ghost" href="<?php echo esc_url($c['url']); ?>">Ver modelo</a>
-        <a class="mf-btn mf-btn--solid" href="<?= esc_url(home_url('/cotiza?product_id=' . $c['id'])); ?>">Cotizar</a>
+        <a class="mf-btn mf-btn--solid" href="<?= esc_url(mg_quote_build_url($c['id'])); ?>">Cotizar</a>
     </footer>
 </article>

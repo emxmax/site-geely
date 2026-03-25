@@ -66,6 +66,6 @@ $price_label = !empty($price_label) ? $price_label : 'Precio desde';
 
   <footer class="mf-card__actions">
     <a class="mf-btn mf-btn--ghost" href="<?= esc_url($link_model); ?>">Ver modelo</a>
-    <a class="mf-btn mf-btn--solid" href="<?= esc_url(home_url('/cotiza?product_id=' . $args['uid'])); ?>">Cotizar</a>
+    <a class="mf-btn mf-btn--solid" href="<?= esc_url(mg_quote_build_url($args['uid'])); ?>">Cotizar</a>
   </footer>
 </article>

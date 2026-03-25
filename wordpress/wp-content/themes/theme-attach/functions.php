@@ -24,6 +24,7 @@ require_once get_stylesheet_directory() . '/inc/acf-blocks/index.php';
 require_once get_stylesheet_directory() . '/inc/product/assets.php';
 require_once get_stylesheet_directory() . '/inc/product/zip-360.php';
 require_once get_stylesheet_directory() . '/inc/product/quote-api.php';
+require_once get_stylesheet_directory() . '/inc/product/quote-routing.php';
 require_once get_stylesheet_directory() . '/inc/product/filter-store.php';
 
 // Page domain

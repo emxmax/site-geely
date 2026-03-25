@@ -299,7 +299,7 @@
         if (root.__mgSelected) {
           root.__mgSelected.model_year = t.value || "";
           applyLeftSummary(root, root.__mgSelected);
-          fillCf7Hidden(root, root.__mgSelected);
+          fillCf7Hidden(root.__mgSelected);
         }
       });
 
