@@ -80,14 +80,14 @@
 ------------------------------ */
 .emg-hero__top {
   position: relative;
-  max-width: 1120px;
+  max-width: 1160px;
   width: 100%;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 20px;
-  padding: 0 16px 78px;
+  padding-bottom: 78px;
   align-items: center;
 }
 
@@ -162,7 +162,7 @@
 }
 
 .emg-sticky-nav__inner {
-  max-width: 1120px;
+  max-width: 1160px;
   margin: 0 auto;
   padding: 0px;
 }
