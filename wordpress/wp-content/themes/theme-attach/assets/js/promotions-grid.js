@@ -242,20 +242,52 @@
      * Funcionalidad de tabs
      */
     const tabs = document.querySelectorAll(".js-promo-tab");
+    
+    /**
+     * Activar un tab específico por su slug
+     */
+    function activateTab(tabSlug) {
+      const targetTab = document.querySelector(`.js-promo-tab[data-tab="${tabSlug}"]`);
+      if (targetTab) {
+        // Remover clase activa de todos los tabs
+        tabs.forEach((t) => t.classList.remove("promotions-hero__tab--active"));
+        // Agregar clase activa al tab encontrado
+        targetTab.classList.add("promotions-hero__tab--active");
+        // Filtrar promociones
+        filterPromotions(tabSlug);
+      }
+    }
+
+    /**
+     * Verificar hash en URL al cargar la página
+     */
+    function checkUrlHash() {
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'ventas' || hash === 'postventa') {
+        activateTab(hash);
+      }
+    }
+
+    // Ejecutar al cargar la página
+    checkUrlHash();
+
+    // Escuchar cambios en el hash (navegación con botones atrás/adelante)
+    window.addEventListener('hashchange', checkUrlHash);
+
     tabs.forEach((tab) => {
       tab.addEventListener("click", function () {
         // Remover clase activa de todos los tabs
         tabs.forEach((t) => t.classList.remove("promotions-hero__tab--active"));
 
-        console.log("Tab clickeado:", tab);
         // Agregar clase activa al tab clickeado
         this.classList.add("promotions-hero__tab--active");
 
-        // Obtener categorÃ­a del tab
+        // Obtener categoría del tab
         const tabCategory = this.dataset.tab; // 'ventas' o 'postventa'
 
-        // Filtrar promociones por AJAX
+        // Actualizar hash en URL sin recargar
         if (tabCategory) {
+          history.replaceState(null, null, `#${tabCategory}`);
           filterPromotions(tabCategory);
         }
       });
