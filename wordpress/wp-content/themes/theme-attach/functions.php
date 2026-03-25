@@ -62,3 +62,13 @@ require_once get_stylesheet_directory() . '/inc/parts/footer.php';
 
 //Analytics
 require_once get_stylesheet_directory() . '/inc/analytics/gtm.php';
+
+// === Autocompletar campos ocultos en CF7 para promociones ===
+add_filter('wpcf7_form_hidden_fields', function($hidden_fields) {
+    if (!is_singular('promocion')) return $hidden_fields;
+    $post_id = get_the_ID();
+    $hidden_fields['co_articulo'] = get_field('promocion_codigo_producto', $post_id) ?: '';
+    $hidden_fields['co_configuracion'] = get_field('promocion_codigo_configuracion', $post_id) ?: '';
+    $hidden_fields['nid_punto_venta'] = get_field('promocion_codigo_punto_venta', $post_id) ?: '';
+    return $hidden_fields;
+});
