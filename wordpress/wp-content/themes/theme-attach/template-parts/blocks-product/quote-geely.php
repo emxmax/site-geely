@@ -10,7 +10,11 @@ $root_selector = '#' . $block_id;
 
 // SEO: preferimos `?product=<slug>`; mantenemos back-compat con `?product_id=<id>`
 $product_id = 0;
-$product_slug = isset($_GET['product']) ? sanitize_title((string)wp_unslash($_GET['product'])) : '';
+$product_slug = (string) get_query_var('product');
+if ($product_slug === '') {
+  $product_slug = isset($_GET['product']) ? sanitize_title((string)wp_unslash($_GET['product'])) : '';
+}
+$product_slug = sanitize_title($product_slug);
 if ($product_slug !== '') {
   // `get_page_by_path` suele ser más liviano que armar un WP_Query/get_posts.
   // Además evita colisión con páginas/otros post_types.
