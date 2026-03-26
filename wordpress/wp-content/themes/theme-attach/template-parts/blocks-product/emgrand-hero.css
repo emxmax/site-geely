@@ -307,6 +307,7 @@
     align-items: flex-start;
     gap: 20px;
     padding-bottom: 44px;
+    padding: 0 16px;
   }
 
   .emg-hero__title {
@@ -322,7 +323,7 @@
 
   /* Barra sticky en mobile: layout compacto */
   .emg-hero__bottom {
-    padding: 16px 24px;
+    padding: 16px;
     grid-template-columns: 1fr auto;
     gap: 12px;
   }

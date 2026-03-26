@@ -609,7 +609,7 @@
   .emg-config__colors {
     position: static;
     margin: 16px auto;
-    padding: 16px 24px;
+    padding: 16px;
     max-width: 157px;
     text-align: center;
   }
