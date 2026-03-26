@@ -21,7 +21,7 @@ header.site-header.wp-block-template-part {
 
 .mg-header__bar {
   min-height: 72px;
-  padding: 12px 16px;
+  padding: 12px 0;
   gap: 16px;
   height: 80px;
   position: relative; /* clave para que el mega se posicione bien */
