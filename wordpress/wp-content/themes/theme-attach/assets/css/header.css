@@ -351,6 +351,7 @@ header.site-header.wp-block-template-part {
 
   .mg-header__bar {
     height: 56px;
+    padding-left: 16px;
   }
   .wp-block-site-logo img {
     max-width: 100px;
