@@ -8,10 +8,10 @@ if (!defined('ABSPATH')) exit;
  */
 
 add_action('init', function () {
-  // /cotiza/<producto-slug>/
+  // /cotizar/<producto-slug>/
   add_rewrite_rule(
-    '^cotiza/([^/]+)/?$',
-    'index.php?pagename=cotiza&product=$matches[1]',
+    '^cotizar/([^/]+)/?$',
+    'index.php?pagename=cotizar&product=$matches[1]',
     'top'
   );
 });
@@ -23,7 +23,7 @@ add_filter('query_vars', function ($vars) {
 
 // Flush automático (1 sola vez) cuando se despliega este cambio y un admin entra al WP.
 add_action('admin_init', function () {
-  $ver = 1;
+  $ver = 2;
   $key = 'mg_quote_rewrite_ver';
   if ((int)get_option($key, 0) >= $ver) return;
   flush_rewrite_rules(false);
@@ -34,7 +34,7 @@ if (!function_exists('mg_quote_build_url')) {
   function mg_quote_build_url($product_id, array $extra_query = [])
   {
     $product_id = (int)$product_id;
-    $base = home_url('/cotiza/');
+    $base = home_url('/cotizar/');
 
     $query = is_array($extra_query) ? $extra_query : [];
     $query = array_filter($query, function ($v) {
@@ -51,7 +51,7 @@ if (!function_exists('mg_quote_build_url')) {
       unset($query['product'], $query['product_id']);
 
       // Respeta la configuración de trailing slash del sitio.
-      $path = user_trailingslashit('cotiza/' . $slug, 'page');
+      $path = user_trailingslashit('cotizar/' . $slug, 'page');
       $base = home_url('/' . ltrim($path, '/'));
     } elseif ($product_id > 0) {
       $query['product_id'] = $product_id;
@@ -67,8 +67,8 @@ add_action('template_redirect', function () {
   global $post;
   if (!$post || empty($post->post_name)) return;
 
-  // Página /cotiza/ (slug)
-  if ($post->post_name !== 'cotiza') return;
+  // Página /cotizar/ (slug)
+  if ($post->post_name !== 'cotizar') return;
 
   // Si ya está en la ruta canónica (sin querystring legacy) no hacemos nada.
   $has_legacy_product = isset($_GET['product']) && $_GET['product'] !== '';
@@ -91,7 +91,7 @@ add_action('template_redirect', function () {
     $query[$k] = $v;
   }
 
-  $path = user_trailingslashit('cotiza/' . $slug, 'page');
+  $path = user_trailingslashit('cotizar/' . $slug, 'page');
   $target = add_query_arg($query, home_url('/' . ltrim($path, '/')));
   wp_safe_redirect($target, 301);
   exit;
